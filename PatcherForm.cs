@@ -174,6 +174,23 @@ namespace CM0102Patcher
             {
                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["to1280x800"]);
                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["to1280x800part2"]);
+
+                // Convert the core gfx
+                var dir = Path.GetDirectoryName(labelFilename.Text);
+                var dataDir = Path.Combine(dir, "Data");
+                RGNConverter.RGN2RGN(Path.Combine(dataDir, "DEFAULT_PIC.RGN"), Path.Combine(dataDir, "bkg1280_800.rgn"), 1280, 800);
+                RGNConverter.RGN2RGN(Path.Combine(dataDir, "match.mbr"), Path.Combine(dataDir, "m800.mbr"), 126, 800);
+                RGNConverter.RGN2RGN(Path.Combine(dataDir, "game.mbr"), Path.Combine(dataDir, "g800.mbr"), 126, 800);
+
+                var yesNo = MessageBox.Show("Do you wish to convert your CM0102 Pictures directory to 1280x800 too?\r\n\r\nIf no, please turn off Background Changes in CM0102's Options else pictures will not appear correctly.\r\n\r\nIf yes, this takes a few moments.", "CM0102Patcher - Resolution Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (yesNo == DialogResult.Yes)
+                {
+                    var pf = new PictureConvertProgressForm(Path.Combine(dir, "Pictures"));
+
+                    pf.ShowDialog();
+
+                    // Convert the pictures directory
+                }
             }
             if (checkBoxFindAllPlayers.Checked)
                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["findallplayers"]);

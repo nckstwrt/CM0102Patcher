@@ -38,6 +38,16 @@ namespace CM0102Patcher
             return destImage;
         }
 
+        public static void GetRGNSize(string inFile, out int Width, out int Height)
+        {
+            using (var stream = File.OpenRead(inFile))
+            using (var br = new BinaryReader(stream))
+            {
+                Width = br.ReadInt32();
+                Height = br.ReadInt32();
+            }
+        }
+
         public static void RGN2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1)
         {
             using (var bmp = RGN2BMP(inFile, newWidth, newHeight))
@@ -56,7 +66,8 @@ namespace CM0102Patcher
 
         public static Bitmap RGN2BMP(string inFile, int newWidth = -1, int newHeight = -1)
         {
-            using (var br = new BinaryReader(File.OpenRead(inFile)))
+            using (var stream = File.OpenRead(inFile))
+            using (var br = new BinaryReader(stream))
             {
                 var width = br.ReadUInt32();
                 var height = br.ReadUInt32();
@@ -100,7 +111,8 @@ namespace CM0102Patcher
 
         public static void BMP2RGN(Bitmap bmp, string outFile)
         {
-            using (var rgnFile = new BinaryWriter(File.Create(outFile)))
+            using (var stream = File.Create(outFile))
+            using (var rgnFile = new BinaryWriter(stream))
             {
                 var width = bmp.Width;
                 var height = bmp.Height;

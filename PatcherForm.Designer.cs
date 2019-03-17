@@ -54,11 +54,11 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.checkBoxJobsAbroadBoost = new System.Windows.Forms.CheckBox();
+            this.checkBoxChangeResolution1280s800 = new System.Windows.Forms.CheckBox();
             this.checkBoxFindAllPlayers = new System.Windows.Forms.CheckBox();
             this.checkBoxRegenFixes = new System.Windows.Forms.CheckBox();
             this.checkBoxForceLoadAllPlayers = new System.Windows.Forms.CheckBox();
             this.checkBoxRemoveCDChecks = new System.Windows.Forms.CheckBox();
-            this.checkBoxChangeResolution1280s800 = new System.Windows.Forms.CheckBox();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.buttonAbout = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
@@ -382,11 +382,23 @@
         "n selected");
             this.checkBoxJobsAbroadBoost.UseVisualStyleBackColor = true;
             // 
+            // checkBoxChangeResolution1280s800
+            // 
+            this.checkBoxChangeResolution1280s800.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxChangeResolution1280s800.AutoSize = true;
+            this.checkBoxChangeResolution1280s800.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxChangeResolution1280s800.Location = new System.Drawing.Point(227, 146);
+            this.checkBoxChangeResolution1280s800.Name = "checkBoxChangeResolution1280s800";
+            this.checkBoxChangeResolution1280s800.Size = new System.Drawing.Size(207, 20);
+            this.checkBoxChangeResolution1280s800.TabIndex = 24;
+            this.checkBoxChangeResolution1280s800.Text = "Change resolution to 1280x800";
+            this.checkBoxChangeResolution1280s800.UseVisualStyleBackColor = true;
+            // 
             // checkBoxFindAllPlayers
             // 
             this.checkBoxFindAllPlayers.AutoSize = true;
             this.checkBoxFindAllPlayers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxFindAllPlayers.Location = new System.Drawing.Point(227, 146);
+            this.checkBoxFindAllPlayers.Location = new System.Drawing.Point(7, 198);
             this.checkBoxFindAllPlayers.Name = "checkBoxFindAllPlayers";
             this.checkBoxFindAllPlayers.Size = new System.Drawing.Size(118, 20);
             this.checkBoxFindAllPlayers.TabIndex = 25;
@@ -434,18 +446,6 @@
             this.checkBoxRemoveCDChecks.Text = "Remove CD Checks";
             this.checkBoxRemoveCDChecks.UseVisualStyleBackColor = true;
             this.checkBoxRemoveCDChecks.Visible = false;
-            // 
-            // checkBoxChangeResolution1280s800
-            // 
-            this.checkBoxChangeResolution1280s800.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
-            this.checkBoxChangeResolution1280s800.AutoSize = true;
-            this.checkBoxChangeResolution1280s800.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxChangeResolution1280s800.Location = new System.Drawing.Point(7, 198);
-            this.checkBoxChangeResolution1280s800.Name = "checkBoxChangeResolution1280s800";
-            this.checkBoxChangeResolution1280s800.Size = new System.Drawing.Size(207, 20);
-            this.checkBoxChangeResolution1280s800.TabIndex = 24;
-            this.checkBoxChangeResolution1280s800.Text = "Change resolution to 1280x800";
-            this.checkBoxChangeResolution1280s800.UseVisualStyleBackColor = true;
             // 
             // buttonAbout
             // 
