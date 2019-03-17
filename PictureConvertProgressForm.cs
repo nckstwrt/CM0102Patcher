@@ -23,18 +23,22 @@ namespace CM0102Patcher
             {
                 int converting = 1;
                 Thread.CurrentThread.IsBackground = true;
-                var picFiles = Directory.GetFiles(picturesDir, "*.rgn");
-                foreach (var picFile in picFiles)
+                if (Directory.Exists(picturesDir))
                 {
-                    SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, picFiles.Length, Path.GetFileName(picFile)));
-                    SetProgressPercent((int)(((double)(converting-1) / ((double)picFiles.Length)) * 100.0));
-                    int Width, Height;
-                    RGNConverter.GetRGNSize(picFile, out Width, out Height);
-                    if (Width == 800 && Height == 600)
+                    var picFiles = Directory.GetFiles(picturesDir, "*.rgn");
+                    foreach (var picFile in picFiles)
                     {
-                        RGNConverter.RGN2RGN(picFile, picFile + ".tmp", 1280, 800);
-                        File.Delete(picFile);
-                        File.Move(picFile + ".tmp", picFile);
+                        SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, picFiles.Length, Path.GetFileName(picFile)));
+                        SetProgressPercent((int)(((double)(converting - 1) / ((double)picFiles.Length)) * 100.0));
+                        int Width, Height;
+                        RGNConverter.GetRGNSize(picFile, out Width, out Height);
+                        if (Width == 800 && Height == 600)
+                        {
+                            RGNConverter.RGN2RGN(picFile, picFile + ".tmp", 1280, 800);
+                            File.SetAttributes(picFile, FileAttributes.Normal);
+                            File.Delete(picFile);
+                            File.Move(picFile + ".tmp", picFile);
+                        }
                     }
                 }
                 CloseForm();
