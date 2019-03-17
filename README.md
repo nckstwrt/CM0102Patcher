@@ -20,7 +20,7 @@ Also there is a little officials.dat patcher for patching up referees as per rec
 
 ## Updates
 v1.03 (not yet complete):
-* Instrinic Scout Editor
+* Instrinic Scout (Not yet fully functional)
 * Resizing to 1280x800 now working!
 * RGN (Pictures) Resizing
 
