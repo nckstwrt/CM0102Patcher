@@ -239,60 +239,68 @@ namespace CM0102Scout
 
             foreach (var player in players)
             {
-                var staff = staffList[player.ID];
-                var name = firstNames[staff.firstName] + " " + secondNames[staff.secondName];
-                var age = AgeCalc(staff.dob);
-                var club = "None";
-                if (clubs.ContainsKey(staff.clubID))
-                    club = clubs[staff.clubID].shortName;
-                var nationality = "Unknown";
-                nationality = nations[staff.nationID].nationality;
+                try
+                {
+                    var staff = staffList[player.ID];
+                    var name = firstNames[staff.firstName] + " " + secondNames[staff.secondName];
+                    var age = AgeCalc(staff.dob);
+                    var club = "None";
+                    if (clubs.ContainsKey(staff.clubID))
+                        club = clubs[staff.clubID].shortName;
+                    var nationality = "Unknown";
+                    if (nations.ContainsKey(staff.nationID))
+                        nationality = nations[staff.nationID].nationality;
 
-                dataTable.Rows.Add(name, age, club, nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, staff.value,
-                    player.Acceleration,
-                    player.Aggression,
-                    player.Agility,
-                    instrinsicsOn ? player.Anticipation : player.Convert(player.Anticipation),
-                    player.Balance,
-                    player.Bravery,
-                    player.Consistency,
-                    player.Corners,
-                    instrinsicsOn ? player.Crossing : player.Convert(player.Crossing, true),
-                    instrinsicsOn ? player.Decisions : player.Convert(player.Decisions),
-                    player.Dirtiness,
-                    instrinsicsOn ? player.Dribbling : player.Convert(player.Dribbling, true),
-                    instrinsicsOn ? player.Finishing : player.Convert(player.Finishing, true),
-                    player.Flair,
-                    player.FreeKicks,
-                    instrinsicsOn ? player.Handling : player.Convert(player.Handling, true, true),
-                    instrinsicsOn ? player.Heading : player.Convert(player.Heading),
-                    player.ImportantMatches,
-                    player.InjuryProneness,
-                    player.Jumping,
-                    player.Leadership,
-                    player.LeftFoot,
-                    instrinsicsOn ? player.LongShots : player.Convert(player.LongShots),
-                    instrinsicsOn ? player.Marking : player.Convert(player.Marking, true),
-                    instrinsicsOn ? player.Movement : player.Convert(player.Movement, true),
-                    player.NaturalFitness,
-                    instrinsicsOn ? player.OneOnOnes : player.Convert(player.OneOnOnes, true, true),
-                    player.PlayerPace,
-                    instrinsicsOn ? player.Passing : player.Convert(player.Passing),
-                    instrinsicsOn ? player.Penalties : player.Convert(player.Penalties),
-                    instrinsicsOn ? player.Positioning : player.Convert(player.Positioning),
-                    instrinsicsOn ? player.Reflexes : player.Convert(player.Reflexes, true, true),
-                    player.RightFoot,
-                    player.Stamina,
-                    player.Strength,
-                    instrinsicsOn ? player.Tackling : player.Convert(player.Tackling),
-                    player.Teamwork,
-                    player.Technique,
-                    instrinsicsOn ? player.ThrowIns : player.Convert(player.ThrowIns, true),
-                    player.Versatility,
-                    instrinsicsOn ? player.Vision : player.Convert(player.Vision, true),
-                    player.WorkRate,
-                    player.PlayerMorale
-                    );
+                    dataTable.Rows.Add(name, age, club, nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, staff.value,
+                        player.Acceleration,
+                        player.Aggression,
+                        player.Agility,
+                        instrinsicsOn ? player.Anticipation : player.Convert(player.Anticipation),
+                        player.Balance,
+                        player.Bravery,
+                        player.Consistency,
+                        player.Corners,
+                        instrinsicsOn ? player.Crossing : player.Convert(player.Crossing, true),
+                        instrinsicsOn ? player.Decisions : player.Convert(player.Decisions),
+                        player.Dirtiness,
+                        instrinsicsOn ? player.Dribbling : player.Convert(player.Dribbling, true),
+                        instrinsicsOn ? player.Finishing : player.Convert(player.Finishing, true),
+                        player.Flair,
+                        player.FreeKicks,
+                        instrinsicsOn ? player.Handling : player.Convert(player.Handling, true, true),
+                        instrinsicsOn ? player.Heading : player.Convert(player.Heading),
+                        player.ImportantMatches,
+                        player.InjuryProneness,
+                        player.Jumping,
+                        player.Leadership,
+                        player.LeftFoot,
+                        instrinsicsOn ? player.LongShots : player.Convert(player.LongShots),
+                        instrinsicsOn ? player.Marking : player.Convert(player.Marking, true),
+                        instrinsicsOn ? player.Movement : player.Convert(player.Movement, true),
+                        player.NaturalFitness,
+                        instrinsicsOn ? player.OneOnOnes : player.Convert(player.OneOnOnes, true, true),
+                        player.PlayerPace,
+                        instrinsicsOn ? player.Passing : player.Convert(player.Passing),
+                        instrinsicsOn ? player.Penalties : player.Convert(player.Penalties),
+                        instrinsicsOn ? player.Positioning : player.Convert(player.Positioning),
+                        instrinsicsOn ? player.Reflexes : player.Convert(player.Reflexes, true, true),
+                        player.RightFoot,
+                        player.Stamina,
+                        player.Strength,
+                        instrinsicsOn ? player.Tackling : player.Convert(player.Tackling),
+                        player.Teamwork,
+                        player.Technique,
+                        instrinsicsOn ? player.ThrowIns : player.Convert(player.ThrowIns, true),
+                        player.Versatility,
+                        instrinsicsOn ? player.Vision : player.Convert(player.Vision, true),
+                        player.WorkRate,
+                        player.PlayerMorale
+                        );
+                }
+                catch
+                {
+
+                }
             }
             return dataTable;
         }
