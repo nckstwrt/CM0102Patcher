@@ -36,7 +36,12 @@ namespace CM0102Patcher
                     new ComboboxItem("Max", 1)
                 });
                 comboBoxGameSpeed.SelectedIndex = 3;
-                numericGameStartYear.Value = DateTime.Now.Year;
+
+                // Set Default Start Year to this year if we're past July (else use last year) 
+                var currentYear = DateTime.Now.Year;
+                if (DateTime.Now.Month < 7) 
+                    currentYear--;
+                numericGameStartYear.Value = currentYear;
             }
             catch (Exception ex)
             {

@@ -53,6 +53,8 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBoxNewRegenCode = new System.Windows.Forms.CheckBox();
             this.checkBoxJobsAbroadBoost = new System.Windows.Forms.CheckBox();
             this.checkBoxChangeResolution1280s800 = new System.Windows.Forms.CheckBox();
             this.checkBoxFindAllPlayers = new System.Windows.Forms.CheckBox();
@@ -285,7 +287,7 @@
             this.checkBox7Subs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox7Subs.Location = new System.Drawing.Point(16, 225);
             this.checkBox7Subs.Name = "checkBox7Subs";
-            this.checkBox7Subs.Size = new System.Drawing.Size(212, 20);
+            this.checkBox7Subs.Size = new System.Drawing.Size(146, 20);
             this.checkBox7Subs.TabIndex = 13;
             this.checkBox7Subs.Text = "Enable 7 substitutes";
             this.toolTips.SetToolTip(this.checkBox7Subs, "Enables 7 substitutes for England, Italy and France");
@@ -356,17 +358,46 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBox1);
+            this.groupBox3.Controls.Add(this.checkBoxNewRegenCode);
             this.groupBox3.Controls.Add(this.checkBoxJobsAbroadBoost);
             this.groupBox3.Controls.Add(this.checkBoxChangeResolution1280s800);
             this.groupBox3.Controls.Add(this.checkBoxFindAllPlayers);
             this.groupBox3.Controls.Add(this.checkBoxRegenFixes);
             this.groupBox3.Controls.Add(this.checkBoxForceLoadAllPlayers);
-            this.groupBox3.Controls.Add(this.checkBoxRemoveCDChecks);
             this.groupBox3.Location = new System.Drawing.Point(9, 131);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(447, 224);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox1.Location = new System.Drawing.Point(226, 198);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(166, 20);
+            this.checkBox1.TabIndex = 28;
+            this.checkBox1.Text = "Update Names (BETA)";
+            this.toolTips.SetToolTip(this.checkBox1, "Update some older names\r\ni.e.\r\nHolland -> Netherlands\r\nEuropean Champions Cup -> " +
+        "UEFA Champions League\r\netc\r\n\r\nCURRENTLY UNFINISHED!!!");
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxNewRegenCode
+            // 
+            this.checkBoxNewRegenCode.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxNewRegenCode.AutoSize = true;
+            this.checkBoxNewRegenCode.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxNewRegenCode.Location = new System.Drawing.Point(227, 172);
+            this.checkBoxNewRegenCode.Name = "checkBoxNewRegenCode";
+            this.checkBoxNewRegenCode.Size = new System.Drawing.Size(180, 20);
+            this.checkBoxNewRegenCode.TabIndex = 27;
+            this.checkBoxNewRegenCode.Text = "Add Tapani\'s regen code";
+            this.toolTips.SetToolTip(this.checkBoxNewRegenCode, "Tapani\'s Regen code ensures Regens do not get ever increasing Positioning ability" +
+        ".\r\nPreferred by those that play long games (5+ years)");
+            this.checkBoxNewRegenCode.UseVisualStyleBackColor = true;
             // 
             // checkBoxJobsAbroadBoost
             // 
@@ -440,7 +471,7 @@
             // 
             this.checkBoxRemoveCDChecks.AutoSize = true;
             this.checkBoxRemoveCDChecks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(227, 172);
+            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(134, 370);
             this.checkBoxRemoveCDChecks.Name = "checkBoxRemoveCDChecks";
             this.checkBoxRemoveCDChecks.Size = new System.Drawing.Size(149, 20);
             this.checkBoxRemoveCDChecks.TabIndex = 23;
@@ -471,6 +502,7 @@
             this.Controls.Add(this.checkBoxChangeStartYear);
             this.Controls.Add(this.checkBoxShowStarPlayers);
             this.Controls.Add(this.checkBoxDisableSplashScreen);
+            this.Controls.Add(this.checkBoxRemoveCDChecks);
             this.Controls.Add(this.numericCurrencyInflation);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.checkBox7Subs);
@@ -493,7 +525,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v1.03";
+            this.Text = "Nick\'s CM0102Patcher v1.04";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
@@ -538,6 +570,8 @@
         private System.Windows.Forms.CheckBox checkBoxChangeResolution1280s800;
         private System.Windows.Forms.CheckBox checkBoxFindAllPlayers;
         private System.Windows.Forms.CheckBox checkBoxJobsAbroadBoost;
+        private System.Windows.Forms.CheckBox checkBoxNewRegenCode;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 
