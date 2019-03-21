@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ByteSearch.cs" />
     <Compile Include="ExceptionMsgBox.cs" />
     <Compile Include="NoCDPatch.cs" />
     <Compile Include="OffsetCalculator.cs">
