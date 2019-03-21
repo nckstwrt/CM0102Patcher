@@ -32,17 +32,17 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageGeneral = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.checkBox10 = new System.Windows.Forms.CheckBox();
-            this.checkBox11 = new System.Windows.Forms.CheckBox();
-            this.checkBox9 = new System.Windows.Forms.CheckBox();
-            this.checkBox7 = new System.Windows.Forms.CheckBox();
-            this.checkBox8 = new System.Windows.Forms.CheckBox();
-            this.checkBox6 = new System.Windows.Forms.CheckBox();
-            this.checkBox5 = new System.Windows.Forms.CheckBox();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBoxFreeRole = new System.Windows.Forms.CheckBox();
+            this.checkBoxWingBack = new System.Windows.Forms.CheckBox();
+            this.checkBoxAttMidfielder = new System.Windows.Forms.CheckBox();
+            this.checkBoxDefMidfielder = new System.Windows.Forms.CheckBox();
+            this.checkBoxSweeper = new System.Windows.Forms.CheckBox();
+            this.checkBoxRightSided = new System.Windows.Forms.CheckBox();
+            this.checkBoxCentralSided = new System.Windows.Forms.CheckBox();
+            this.checkBoxLeftSided = new System.Windows.Forms.CheckBox();
+            this.checkBoxAttacker = new System.Windows.Forms.CheckBox();
+            this.checkBoxMidfielder = new System.Windows.Forms.CheckBox();
+            this.checkBoxDefender = new System.Windows.Forms.CheckBox();
             this.checkBoxGoalKeeper = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -107,17 +107,17 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.checkBox10);
-            this.groupBox3.Controls.Add(this.checkBox11);
-            this.groupBox3.Controls.Add(this.checkBox9);
-            this.groupBox3.Controls.Add(this.checkBox7);
-            this.groupBox3.Controls.Add(this.checkBox8);
-            this.groupBox3.Controls.Add(this.checkBox6);
-            this.groupBox3.Controls.Add(this.checkBox5);
-            this.groupBox3.Controls.Add(this.checkBox4);
-            this.groupBox3.Controls.Add(this.checkBox3);
-            this.groupBox3.Controls.Add(this.checkBox2);
-            this.groupBox3.Controls.Add(this.checkBox1);
+            this.groupBox3.Controls.Add(this.checkBoxFreeRole);
+            this.groupBox3.Controls.Add(this.checkBoxWingBack);
+            this.groupBox3.Controls.Add(this.checkBoxAttMidfielder);
+            this.groupBox3.Controls.Add(this.checkBoxDefMidfielder);
+            this.groupBox3.Controls.Add(this.checkBoxSweeper);
+            this.groupBox3.Controls.Add(this.checkBoxRightSided);
+            this.groupBox3.Controls.Add(this.checkBoxCentralSided);
+            this.groupBox3.Controls.Add(this.checkBoxLeftSided);
+            this.groupBox3.Controls.Add(this.checkBoxAttacker);
+            this.groupBox3.Controls.Add(this.checkBoxMidfielder);
+            this.groupBox3.Controls.Add(this.checkBoxDefender);
             this.groupBox3.Controls.Add(this.checkBoxGoalKeeper);
             this.groupBox3.Location = new System.Drawing.Point(6, 170);
             this.groupBox3.Name = "groupBox3";
@@ -126,115 +126,115 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Positions";
             // 
-            // checkBox10
+            // checkBoxFreeRole
             // 
-            this.checkBox10.AutoSize = true;
-            this.checkBox10.Location = new System.Drawing.Point(108, 122);
-            this.checkBox10.Name = "checkBox10";
-            this.checkBox10.Size = new System.Drawing.Size(59, 17);
-            this.checkBox10.TabIndex = 11;
-            this.checkBox10.Text = "Central";
-            this.checkBox10.UseVisualStyleBackColor = true;
+            this.checkBoxFreeRole.AutoSize = true;
+            this.checkBoxFreeRole.Location = new System.Drawing.Point(108, 122);
+            this.checkBoxFreeRole.Name = "checkBoxFreeRole";
+            this.checkBoxFreeRole.Size = new System.Drawing.Size(72, 17);
+            this.checkBoxFreeRole.TabIndex = 11;
+            this.checkBoxFreeRole.Text = "Free Role";
+            this.checkBoxFreeRole.UseVisualStyleBackColor = true;
             // 
-            // checkBox11
+            // checkBoxWingBack
             // 
-            this.checkBox11.AutoSize = true;
-            this.checkBox11.Location = new System.Drawing.Point(108, 103);
-            this.checkBox11.Name = "checkBox11";
-            this.checkBox11.Size = new System.Drawing.Size(68, 17);
-            this.checkBox11.TabIndex = 10;
-            this.checkBox11.Text = "Left Side";
-            this.checkBox11.UseVisualStyleBackColor = true;
+            this.checkBoxWingBack.AutoSize = true;
+            this.checkBoxWingBack.Location = new System.Drawing.Point(108, 103);
+            this.checkBoxWingBack.Name = "checkBoxWingBack";
+            this.checkBoxWingBack.Size = new System.Drawing.Size(79, 17);
+            this.checkBoxWingBack.TabIndex = 10;
+            this.checkBoxWingBack.Text = "Wing Back";
+            this.checkBoxWingBack.UseVisualStyleBackColor = true;
             // 
-            // checkBox9
+            // checkBoxAttMidfielder
             // 
-            this.checkBox9.AutoSize = true;
-            this.checkBox9.Location = new System.Drawing.Point(7, 132);
-            this.checkBox9.Name = "checkBox9";
-            this.checkBox9.Size = new System.Drawing.Size(90, 17);
-            this.checkBox9.TabIndex = 9;
-            this.checkBox9.Text = "Att. Midfielder";
-            this.checkBox9.UseVisualStyleBackColor = true;
+            this.checkBoxAttMidfielder.AutoSize = true;
+            this.checkBoxAttMidfielder.Location = new System.Drawing.Point(7, 132);
+            this.checkBoxAttMidfielder.Name = "checkBoxAttMidfielder";
+            this.checkBoxAttMidfielder.Size = new System.Drawing.Size(90, 17);
+            this.checkBoxAttMidfielder.TabIndex = 9;
+            this.checkBoxAttMidfielder.Text = "Att. Midfielder";
+            this.checkBoxAttMidfielder.UseVisualStyleBackColor = true;
             // 
-            // checkBox7
+            // checkBoxDefMidfielder
             // 
-            this.checkBox7.AutoSize = true;
-            this.checkBox7.Location = new System.Drawing.Point(7, 115);
-            this.checkBox7.Name = "checkBox7";
-            this.checkBox7.Size = new System.Drawing.Size(94, 17);
-            this.checkBox7.TabIndex = 8;
-            this.checkBox7.Text = "Def. Midfielder";
-            this.checkBox7.UseVisualStyleBackColor = true;
+            this.checkBoxDefMidfielder.AutoSize = true;
+            this.checkBoxDefMidfielder.Location = new System.Drawing.Point(7, 115);
+            this.checkBoxDefMidfielder.Name = "checkBoxDefMidfielder";
+            this.checkBoxDefMidfielder.Size = new System.Drawing.Size(94, 17);
+            this.checkBoxDefMidfielder.TabIndex = 8;
+            this.checkBoxDefMidfielder.Text = "Def. Midfielder";
+            this.checkBoxDefMidfielder.UseVisualStyleBackColor = true;
             // 
-            // checkBox8
+            // checkBoxSweeper
             // 
-            this.checkBox8.AutoSize = true;
-            this.checkBox8.Location = new System.Drawing.Point(7, 98);
-            this.checkBox8.Name = "checkBox8";
-            this.checkBox8.Size = new System.Drawing.Size(68, 17);
-            this.checkBox8.TabIndex = 7;
-            this.checkBox8.Text = "Sweeper";
-            this.checkBox8.UseVisualStyleBackColor = true;
+            this.checkBoxSweeper.AutoSize = true;
+            this.checkBoxSweeper.Location = new System.Drawing.Point(7, 98);
+            this.checkBoxSweeper.Name = "checkBoxSweeper";
+            this.checkBoxSweeper.Size = new System.Drawing.Size(68, 17);
+            this.checkBoxSweeper.TabIndex = 7;
+            this.checkBoxSweeper.Text = "Sweeper";
+            this.checkBoxSweeper.UseVisualStyleBackColor = true;
             // 
-            // checkBox6
+            // checkBoxRightSided
             // 
-            this.checkBox6.AutoSize = true;
-            this.checkBox6.Location = new System.Drawing.Point(108, 62);
-            this.checkBox6.Name = "checkBox6";
-            this.checkBox6.Size = new System.Drawing.Size(75, 17);
-            this.checkBox6.TabIndex = 6;
-            this.checkBox6.Text = "Right Side";
-            this.checkBox6.UseVisualStyleBackColor = true;
+            this.checkBoxRightSided.AutoSize = true;
+            this.checkBoxRightSided.Location = new System.Drawing.Point(108, 62);
+            this.checkBoxRightSided.Name = "checkBoxRightSided";
+            this.checkBoxRightSided.Size = new System.Drawing.Size(75, 17);
+            this.checkBoxRightSided.TabIndex = 6;
+            this.checkBoxRightSided.Text = "Right Side";
+            this.checkBoxRightSided.UseVisualStyleBackColor = true;
             // 
-            // checkBox5
+            // checkBoxCentralSided
             // 
-            this.checkBox5.AutoSize = true;
-            this.checkBox5.Location = new System.Drawing.Point(108, 45);
-            this.checkBox5.Name = "checkBox5";
-            this.checkBox5.Size = new System.Drawing.Size(59, 17);
-            this.checkBox5.TabIndex = 5;
-            this.checkBox5.Text = "Central";
-            this.checkBox5.UseVisualStyleBackColor = true;
+            this.checkBoxCentralSided.AutoSize = true;
+            this.checkBoxCentralSided.Location = new System.Drawing.Point(108, 45);
+            this.checkBoxCentralSided.Name = "checkBoxCentralSided";
+            this.checkBoxCentralSided.Size = new System.Drawing.Size(59, 17);
+            this.checkBoxCentralSided.TabIndex = 5;
+            this.checkBoxCentralSided.Text = "Central";
+            this.checkBoxCentralSided.UseVisualStyleBackColor = true;
             // 
-            // checkBox4
+            // checkBoxLeftSided
             // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(108, 28);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(68, 17);
-            this.checkBox4.TabIndex = 4;
-            this.checkBox4.Text = "Left Side";
-            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBoxLeftSided.AutoSize = true;
+            this.checkBoxLeftSided.Location = new System.Drawing.Point(108, 28);
+            this.checkBoxLeftSided.Name = "checkBoxLeftSided";
+            this.checkBoxLeftSided.Size = new System.Drawing.Size(68, 17);
+            this.checkBoxLeftSided.TabIndex = 4;
+            this.checkBoxLeftSided.Text = "Left Side";
+            this.checkBoxLeftSided.UseVisualStyleBackColor = true;
             // 
-            // checkBox3
+            // checkBoxAttacker
             // 
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(7, 71);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(66, 17);
-            this.checkBox3.TabIndex = 3;
-            this.checkBox3.Text = "Attacker";
-            this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBoxAttacker.AutoSize = true;
+            this.checkBoxAttacker.Location = new System.Drawing.Point(7, 71);
+            this.checkBoxAttacker.Name = "checkBoxAttacker";
+            this.checkBoxAttacker.Size = new System.Drawing.Size(66, 17);
+            this.checkBoxAttacker.TabIndex = 3;
+            this.checkBoxAttacker.Text = "Attacker";
+            this.checkBoxAttacker.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // checkBoxMidfielder
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(7, 54);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(71, 17);
-            this.checkBox2.TabIndex = 2;
-            this.checkBox2.Text = "Midfielder";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBoxMidfielder.AutoSize = true;
+            this.checkBoxMidfielder.Location = new System.Drawing.Point(7, 54);
+            this.checkBoxMidfielder.Name = "checkBoxMidfielder";
+            this.checkBoxMidfielder.Size = new System.Drawing.Size(71, 17);
+            this.checkBoxMidfielder.TabIndex = 2;
+            this.checkBoxMidfielder.Text = "Midfielder";
+            this.checkBoxMidfielder.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // checkBoxDefender
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(7, 37);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(70, 17);
-            this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "Defender";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBoxDefender.AutoSize = true;
+            this.checkBoxDefender.Location = new System.Drawing.Point(7, 37);
+            this.checkBoxDefender.Name = "checkBoxDefender";
+            this.checkBoxDefender.Size = new System.Drawing.Size(70, 17);
+            this.checkBoxDefender.TabIndex = 1;
+            this.checkBoxDefender.Text = "Defender";
+            this.checkBoxDefender.UseVisualStyleBackColor = true;
             // 
             // checkBoxGoalKeeper
             // 
@@ -546,17 +546,17 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown numericUpDownAbilityMin;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.CheckBox checkBox10;
-        private System.Windows.Forms.CheckBox checkBox11;
-        private System.Windows.Forms.CheckBox checkBox9;
-        private System.Windows.Forms.CheckBox checkBox7;
-        private System.Windows.Forms.CheckBox checkBox8;
-        private System.Windows.Forms.CheckBox checkBox6;
-        private System.Windows.Forms.CheckBox checkBox5;
-        private System.Windows.Forms.CheckBox checkBox4;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox2;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBoxFreeRole;
+        private System.Windows.Forms.CheckBox checkBoxWingBack;
+        private System.Windows.Forms.CheckBox checkBoxAttMidfielder;
+        private System.Windows.Forms.CheckBox checkBoxDefMidfielder;
+        private System.Windows.Forms.CheckBox checkBoxSweeper;
+        private System.Windows.Forms.CheckBox checkBoxRightSided;
+        private System.Windows.Forms.CheckBox checkBoxCentralSided;
+        private System.Windows.Forms.CheckBox checkBoxLeftSided;
+        private System.Windows.Forms.CheckBox checkBoxAttacker;
+        private System.Windows.Forms.CheckBox checkBoxMidfielder;
+        private System.Windows.Forms.CheckBox checkBoxDefender;
         private System.Windows.Forms.CheckBox checkBoxGoalKeeper;
     }
 }
