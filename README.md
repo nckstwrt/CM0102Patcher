@@ -1,4 +1,4 @@
-# CM0102Patcher v1.03
+# CM0102Patcher v1.04
 
 https://champman0102.co.uk/showthread.php?t=11661
 
