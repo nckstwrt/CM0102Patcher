@@ -53,7 +53,7 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBoxUpdateNames = new System.Windows.Forms.CheckBox();
             this.checkBoxNewRegenCode = new System.Windows.Forms.CheckBox();
             this.checkBoxJobsAbroadBoost = new System.Windows.Forms.CheckBox();
             this.checkBoxChangeResolution1280s800 = new System.Windows.Forms.CheckBox();
@@ -358,7 +358,7 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.checkBox1);
+            this.groupBox3.Controls.Add(this.checkBoxUpdateNames);
             this.groupBox3.Controls.Add(this.checkBoxNewRegenCode);
             this.groupBox3.Controls.Add(this.checkBoxJobsAbroadBoost);
             this.groupBox3.Controls.Add(this.checkBoxChangeResolution1280s800);
@@ -371,19 +371,19 @@
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
             // 
-            // checkBox1
+            // checkBoxUpdateNames
             // 
-            this.checkBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox1.Location = new System.Drawing.Point(226, 198);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(166, 20);
-            this.checkBox1.TabIndex = 28;
-            this.checkBox1.Text = "Update Names (BETA)";
-            this.toolTips.SetToolTip(this.checkBox1, "Update some older names\r\ni.e.\r\nHolland -> Netherlands\r\nEuropean Champions Cup -> " +
+            this.checkBoxUpdateNames.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxUpdateNames.AutoSize = true;
+            this.checkBoxUpdateNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxUpdateNames.Location = new System.Drawing.Point(226, 198);
+            this.checkBoxUpdateNames.Name = "checkBoxUpdateNames";
+            this.checkBoxUpdateNames.Size = new System.Drawing.Size(166, 20);
+            this.checkBoxUpdateNames.TabIndex = 28;
+            this.checkBoxUpdateNames.Text = "Update Names (BETA)";
+            this.toolTips.SetToolTip(this.checkBoxUpdateNames, "Update some older names\r\ni.e.\r\nHolland -> Netherlands\r\nEuropean Champions Cup -> " +
         "UEFA Champions League\r\netc\r\n\r\nCURRENTLY UNFINISHED!!!");
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBoxUpdateNames.UseVisualStyleBackColor = true;
             // 
             // checkBoxNewRegenCode
             // 
@@ -571,7 +571,7 @@
         private System.Windows.Forms.CheckBox checkBoxFindAllPlayers;
         private System.Windows.Forms.CheckBox checkBoxJobsAbroadBoost;
         private System.Windows.Forms.CheckBox checkBoxNewRegenCode;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBoxUpdateNames;
     }
 }
 

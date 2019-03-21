@@ -92,6 +92,9 @@ namespace CM0102Patcher
                 return;
             }
 
+            var dir = Path.GetDirectoryName(labelFilename.Text);
+            var dataDir = Path.Combine(dir, "Data");
+
             // Start the patcher
             Patcher patcher = new Patcher();
             if (!patcher.CheckForV3968(labelFilename.Text))
@@ -111,8 +114,6 @@ namespace CM0102Patcher
             if (checkBoxChangeStartYear.Checked)
             {
                 // Assume Staff.data is in Data
-                var dir = Path.GetDirectoryName(labelFilename.Text);
-                var dataDir = Path.Combine(dir, "Data");
                 var staffFile = Path.Combine(dataDir,"staff.dat");
                 var indexFile = Path.Combine(dataDir, "index.dat");
                 var playerConfigFile = Path.Combine(dataDir, "player_setup.cfg");
@@ -178,11 +179,9 @@ namespace CM0102Patcher
             if (checkBoxChangeResolution1280s800.Checked)
             {
                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["to1280x800"]);
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["to1280x800part2"]);
+                patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
 
                 // Convert the core gfx
-                var dir = Path.GetDirectoryName(labelFilename.Text);
-                var dataDir = Path.Combine(dir, "Data");
                 RGNConverter.RGN2RGN(Path.Combine(dataDir, "DEFAULT_PIC.RGN"), Path.Combine(dataDir, "bkg1280_800.rgn"), 1280, 800);
                 RGNConverter.RGN2RGN(Path.Combine(dataDir, "match.mbr"), Path.Combine(dataDir, "m800.mbr"), 126, 800);
                 RGNConverter.RGN2RGN(Path.Combine(dataDir, "game.mbr"), Path.Combine(dataDir, "g800.mbr"), 126, 800);
@@ -199,7 +198,15 @@ namespace CM0102Patcher
             if (checkBoxJobsAbroadBoost.Checked)
                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["jobsabroadboost"]);
             if (checkBoxNewRegenCode.Checked)
+            {
                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapaninewregencode"]);
+                patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
+            }
+            if (checkBoxUpdateNames.Checked)
+            {
+                var namePatcher = new NamePatcher(labelFilename.Text, dataDir);
+                namePatcher.RunPatch();
+            }
 
             // NOCD Crack
             if (checkBoxRemoveCDChecks.Checked)

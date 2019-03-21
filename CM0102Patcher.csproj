@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="ByteSearch.cs" />
     <Compile Include="ExceptionMsgBox.cs" />
+    <Compile Include="NamePatcher.cs" />
     <Compile Include="NoCDPatch.cs" />
     <Compile Include="OffsetCalculator.cs">
       <SubType>Form</SubType>
