@@ -191,16 +191,15 @@ namespace CM0102Patcher
                 if (yesNo == DialogResult.Yes)
                 {
                     var pf = new PictureConvertProgressForm(Path.Combine(dir, "Pictures"));
-
                     pf.ShowDialog();
-
-                    // Convert the pictures directory
                 }
             }
             if (checkBoxFindAllPlayers.Checked)
                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["findallplayers"]);
             if (checkBoxJobsAbroadBoost.Checked)
                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["jobsabroadboost"]);
+            if (checkBoxNewRegenCode.Checked)
+                patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapaninewregencode"]);
 
             // NOCD Crack
             if (checkBoxRemoveCDChecks.Checked)
