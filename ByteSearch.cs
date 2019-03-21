@@ -19,6 +19,13 @@ namespace CM0102Patcher
             }
         }
 
+        public static int SearchBytes(byte[] toSearch, string searchText, int startIndex = 0)
+        {
+            Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
+            var stringBytes = latin1.GetBytes(searchText);
+            return SearchBytes(toSearch, stringBytes, startIndex);
+        }
+
         public static int SearchBytes(byte[] toSearch, byte[] searchBytes, int startIndex = 0)
         {
             int ptr = 0;
@@ -64,7 +71,7 @@ namespace CM0102Patcher
         {
             Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
             var stringBytes = latin1.GetBytes(s);
-            if (padTo > 0)
+            if (padTo > stringBytes.Length)
             {
                 var newString = new byte[padTo];
                 stringBytes.CopyTo(newString, 0);
@@ -79,29 +86,66 @@ namespace CM0102Patcher
             strBytes.CopyTo(block, idx);
         }
 
-        public static void WriteToBinaryWriter(BinaryWriter bw, int pos, string str, int padTo = 0)
+        public static int WriteToBinaryWriter(BinaryWriter bw, int pos, string str, int padTo = 0)
         {
             var strBytes = StringToBytePad(str, padTo);
             bw.BaseStream.Seek(pos, SeekOrigin.Begin);
             bw.Write(strBytes);
+            return strBytes.Length;
         }
 
-        public static void WriteToFile(string file, int pos, string str, int padTo = 0)
+        public static int WriteToFile(string file, int pos, string str, int padTo = 0)
         {
             File.SetAttributes(file, FileAttributes.Normal);
-            using (var fs = File.Open(file, FileMode.Open, FileAccess.Write))
+            using (var fs = File.Open(file, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
             {
                 using (var bw = new BinaryWriter(fs))
                 {
-                    WriteToBinaryWriter(bw, pos, str, padTo);
+                    return WriteToBinaryWriter(bw, pos, str, padTo);
                 }
             }
+        }
+
+        public static int WriteToFile(string file, int pos, byte[] bytes)
+        {
+            File.SetAttributes(file, FileAttributes.Normal);
+            using (var fs = File.Open(file, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
+            {
+                using (var bw = new BinaryWriter(fs))
+                {
+                    fs.Seek(pos, SeekOrigin.Begin);
+                    bw.Write(bytes);
+                    return bytes.Length;
+                }
+            }
+        }
+
+        public static int BinFileReplace(string file, string toReplace, string replaceWith, int startPosition = 0, int timesToReplace = 0)
+        {
+            int lastPosChanged = -1;
+            var bytes = ByteSearch.LoadFile(file);
+            Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
+            var stringBytes = latin1.GetBytes(toReplace);
+            var bytePositions = SearchBytesForAll(bytes, stringBytes);
+            int numberChanged = 0;
+            foreach (var pos in bytePositions)
+            {
+                if (pos >= startPosition)
+                {
+                    WriteToFile(file, pos, replaceWith, toReplace.Length);
+                    lastPosChanged = pos;
+                    numberChanged++;
+                    if (timesToReplace != 0 && numberChanged >= timesToReplace)
+                        break;
+                }
+            }
+            return lastPosChanged;
         }
 
         public static void TextFileReplace(string file, string toReplace, string replaceWith)
         {
             File.SetAttributes(file, FileAttributes.Normal);
-            using (var fs = File.Open(file, FileMode.Open, FileAccess.ReadWrite))
+            using (var fs = File.Open(file, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
                 using (var tr = new StreamReader(fs))
                 {

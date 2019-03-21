@@ -92,6 +92,18 @@ namespace CM0102Patcher
             }
         }
 
+        public void ApplyPatch(string fileName, int pos, string hexBytes)
+        {
+            using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                using (var bw = new BinaryWriter(file))
+                {
+                    bw.Seek(pos, SeekOrigin.Begin);
+                    bw.Write(HexStringToBytes(hexBytes));
+                }
+            }
+        }
+
         public void CurrencyInflationChanger(string fileName, double multiplier)
         {
             using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))

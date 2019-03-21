@@ -71,7 +71,7 @@ namespace CM0102Patcher
             {
                 var width = br.ReadUInt32();
                 var height = br.ReadUInt32();
-                var bmp = new Bitmap((int)width, (int)height);
+                var bmp = new Bitmap((int)width, (int)height, PixelFormat.Format24bppRgb);
                 br.BaseStream.Seek(40, SeekOrigin.Current);
                 var bmpBits = bmp.LockBits(new Rectangle(0, 0, (int)width, (int)height), ImageLockMode.WriteOnly, bmp.PixelFormat);
                 var bytes = new byte[bmpBits.Stride * bmpBits.Height];
