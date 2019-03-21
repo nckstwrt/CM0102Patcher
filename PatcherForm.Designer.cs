@@ -287,7 +287,8 @@
             this.checkBox7Subs.Name = "checkBox7Subs";
             this.checkBox7Subs.Size = new System.Drawing.Size(212, 20);
             this.checkBox7Subs.TabIndex = 13;
-            this.checkBox7Subs.Text = "Enable 7 substitutes (Eng+Italy)";
+            this.checkBox7Subs.Text = "Enable 7 substitutes";
+            this.toolTips.SetToolTip(this.checkBox7Subs, "Enables 7 substitutes for England, Italy and France");
             this.checkBox7Subs.UseVisualStyleBackColor = true;
             // 
             // checkBoxShowStarPlayers
