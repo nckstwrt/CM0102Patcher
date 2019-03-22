@@ -22,7 +22,24 @@ Also there is a little officials.dat patcher for patching up referees as per rec
 
 ![alt text](https://i.imgur.com/6q6ltuS.png)
 
+The RGN Image Converter:
+
+![alt text](https://i.imgur.com/8vuKuwq.png)
+
 ## Updates
+v1.05:
+
+* Transfer Window Patch (from Saturn's patches) added to "Update names"
+* New RGN Image converter in Tools (BMP/JPG/PNG/RGN -> RGN with resizing)
+* Inflation Multiplier can now be less than one
+
+v1.04:
+* Tapani's new regen code can now be added (preferred for long games)
+* Sped up the RGN converting
+* Option to update names (Beta! - Currently does English leagues, Europa and Champs League)
+* 7 Subs for French
+* Intrinsic Scouter updated (MadScientist's filter code)
+
 v1.03:
 * Added back the 1280x800 resolution patch! Now working and will resize all your 800x600 images to 1280x800 - so any graphics pack that works with 800x600 can automatically convert to working in 1280x800!
 * CM Scout inspired Save Scouter which also shows Intrinsic values - yet to be finished! So very Alpha!
