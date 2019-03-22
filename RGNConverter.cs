@@ -38,13 +38,24 @@ namespace CM0102Patcher
             return destImage;
         }
 
-        public static void GetRGNSize(string inFile, out int Width, out int Height)
+        public static void GetImageSize(string inFile, out int Width, out int Height)
         {
-            using (var stream = File.OpenRead(inFile))
-            using (var br = new BinaryReader(stream))
+            if (Path.GetExtension(inFile).ToLower() == ".rgn")
             {
-                Width = br.ReadInt32();
-                Height = br.ReadInt32();
+                using (var stream = File.OpenRead(inFile))
+                using (var br = new BinaryReader(stream))
+                {
+                    Width = br.ReadInt32();
+                    Height = br.ReadInt32();
+                }
+            }
+            else
+            {
+                using (var bmp = Bitmap.FromFile(inFile))
+                {
+                    Width = bmp.Width;
+                    Height = bmp.Height;
+                }
             }
         }
 
@@ -108,16 +119,20 @@ namespace CM0102Patcher
             }
         }
 
-        public static void BMP2RGN(string inFile, string outFile)
+        public static void BMP2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1)
         {
             using (var bmp = new Bitmap(inFile))
             {
-                BMP2RGN(bmp, outFile);
+                BMP2RGN(bmp, outFile, newWidth, newHeight);
             }
         }
 
-        public static void BMP2RGN(Bitmap bmp, string outFile)
+        public static void BMP2RGN(Bitmap bmp, string outFile, int newWidth = -1, int newHeight = -1)
         {
+            // Resize BMP if need be
+            if (newWidth != -1 && newHeight != -1)
+                bmp = ResizeImage(bmp, newWidth, newHeight);
+
             using (var stream = File.Create(outFile))
             using (var rgnFile = new BinaryWriter(stream))
             {
@@ -155,6 +170,10 @@ namespace CM0102Patcher
                     ptrStart += bmpBits.Stride;
                 }
             }
+
+            // If we created a new BMP dispose of it
+            if (newWidth != -1 && newHeight != -1)
+                bmp.Dispose();
         }
     }
 }

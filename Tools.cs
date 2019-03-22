@@ -124,5 +124,11 @@ namespace CM0102Patcher
             var sg = new ScoutGrid();
             sg.ShowDialog();
         }
+
+        private void buttonRGNImageConverter_Click(object sender, EventArgs e)
+        {
+            var imgConverter = new ImageConverterForm();
+            imgConverter.ShowDialog();
+        }
     }
 }

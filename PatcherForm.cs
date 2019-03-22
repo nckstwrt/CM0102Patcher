@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace CM0102Patcher
@@ -189,7 +190,34 @@ namespace CM0102Patcher
                 var yesNo = MessageBox.Show("Do you wish to convert your CM0102 Pictures directory to 1280x800 too?\r\n\r\nIf no, please turn off Background Changes in CM0102's Options else pictures will not appear correctly.\r\n\r\nIf yes, this takes a few moments.", "CM0102Patcher - Resolution Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (yesNo == DialogResult.Yes)
                 {
-                    var pf = new PictureConvertProgressForm(Path.Combine(dir, "Pictures"));
+                    var pf = new PictureConvertProgressForm();
+
+                    new Thread(() =>
+                    {
+                        var picturesDir = Path.Combine(dir, "Pictures");
+                        int converting = 1;
+                        Thread.CurrentThread.IsBackground = true;
+                        if (Directory.Exists(picturesDir))
+                        {
+                            var picFiles = Directory.GetFiles(picturesDir, "*.rgn");
+                            foreach (var picFile in picFiles)
+                            {
+                                pf.SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, picFiles.Length, Path.GetFileName(picFile)));
+                                pf.SetProgressPercent((int)(((double)(converting - 1) / ((double)picFiles.Length)) * 100.0));
+                                int Width, Height;
+                                RGNConverter.GetImageSize(picFile, out Width, out Height);
+                                if (Width == 800 && Height == 600)
+                                {
+                                    RGNConverter.RGN2RGN(picFile, picFile + ".tmp", 1280, 800);
+                                    File.SetAttributes(picFile, FileAttributes.Normal);
+                                    File.Delete(picFile);
+                                    File.Move(picFile + ".tmp", picFile);
+                                }
+                            }
+                        }
+                        pf.CloseForm();
+                    }).Start();
+
                     pf.ShowDialog();
                 }
             }

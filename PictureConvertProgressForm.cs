@@ -15,34 +15,9 @@ namespace CM0102Patcher
     {
         bool stopClose = true;
 
-        public PictureConvertProgressForm(string picturesDir)
+        public PictureConvertProgressForm()
         {
             InitializeComponent();
-
-            new Thread(() =>
-            {
-                int converting = 1;
-                Thread.CurrentThread.IsBackground = true;
-                if (Directory.Exists(picturesDir))
-                {
-                    var picFiles = Directory.GetFiles(picturesDir, "*.rgn");
-                    foreach (var picFile in picFiles)
-                    {
-                        SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, picFiles.Length, Path.GetFileName(picFile)));
-                        SetProgressPercent((int)(((double)(converting - 1) / ((double)picFiles.Length)) * 100.0));
-                        int Width, Height;
-                        RGNConverter.GetRGNSize(picFile, out Width, out Height);
-                        if (Width == 800 && Height == 600)
-                        {
-                            RGNConverter.RGN2RGN(picFile, picFile + ".tmp", 1280, 800);
-                            File.SetAttributes(picFile, FileAttributes.Normal);
-                            File.Delete(picFile);
-                            File.Move(picFile + ".tmp", picFile);
-                        }
-                    }
-                }
-                CloseForm();
-            }).Start();
         }
 
         public void CloseForm()
