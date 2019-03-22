@@ -67,6 +67,11 @@
             this.tabPageAttributes1 = new System.Windows.Forms.TabPage();
             this.buttonReset = new System.Windows.Forms.Button();
             this.buttonApply = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.numericUpDownValueMax = new System.Windows.Forms.NumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
+            this.numericUpDownValueMin = new System.Windows.Forms.NumericUpDown();
             this.tabControl.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -80,6 +85,9 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxAge)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinAge)).BeginInit();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValueMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValueMin)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -95,6 +103,7 @@
             // tabPageGeneral
             // 
             this.tabPageGeneral.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageGeneral.Controls.Add(this.groupBox4);
             this.tabPageGeneral.Controls.Add(this.groupBox3);
             this.tabPageGeneral.Controls.Add(this.groupBox2);
             this.tabPageGeneral.Controls.Add(this.groupBox1);
@@ -458,13 +467,13 @@
             // 
             // tabPageAttributes1
             // 
+            this.tabPageAttributes1.BackColor = System.Drawing.SystemColors.Control;
             this.tabPageAttributes1.Location = new System.Drawing.Point(4, 22);
             this.tabPageAttributes1.Name = "tabPageAttributes1";
             this.tabPageAttributes1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageAttributes1.Size = new System.Drawing.Size(395, 336);
             this.tabPageAttributes1.TabIndex = 1;
             this.tabPageAttributes1.Text = "Attributes1";
-            this.tabPageAttributes1.UseVisualStyleBackColor = true;
             // 
             // buttonReset
             // 
@@ -484,6 +493,61 @@
             this.buttonApply.Text = "Apply";
             this.buttonApply.UseVisualStyleBackColor = true;
             this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.label10);
+            this.groupBox4.Controls.Add(this.label11);
+            this.groupBox4.Controls.Add(this.numericUpDownValueMax);
+            this.groupBox4.Controls.Add(this.numericUpDownValueMin);
+            this.groupBox4.Location = new System.Drawing.Point(198, 118);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(191, 61);
+            this.groupBox4.TabIndex = 8;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Contract";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(92, 39);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(10, 13);
+            this.label10.TabIndex = 17;
+            this.label10.Text = "-";
+            // 
+            // numericUpDownValueMax
+            // 
+            this.numericUpDownValueMax.Location = new System.Drawing.Point(108, 35);
+            this.numericUpDownValueMax.Maximum = new decimal(new int[] {
+            200000000,
+            0,
+            0,
+            0});
+            this.numericUpDownValueMax.Name = "numericUpDownValueMax";
+            this.numericUpDownValueMax.Size = new System.Drawing.Size(77, 20);
+            this.numericUpDownValueMax.TabIndex = 16;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 18);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(37, 13);
+            this.label11.TabIndex = 15;
+            this.label11.Text = "Value:";
+            // 
+            // numericUpDownValueMin
+            // 
+            this.numericUpDownValueMin.Location = new System.Drawing.Point(9, 35);
+            this.numericUpDownValueMin.Maximum = new decimal(new int[] {
+            200000000,
+            0,
+            0,
+            0});
+            this.numericUpDownValueMin.Name = "numericUpDownValueMin";
+            this.numericUpDownValueMin.Size = new System.Drawing.Size(77, 20);
+            this.numericUpDownValueMin.TabIndex = 14;
             // 
             // PlayerSearch
             // 
@@ -514,6 +578,10 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxAge)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinAge)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValueMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValueMin)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -558,5 +626,10 @@
         private System.Windows.Forms.CheckBox checkBoxMidfielder;
         private System.Windows.Forms.CheckBox checkBoxDefender;
         private System.Windows.Forms.CheckBox checkBoxGoalKeeper;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.NumericUpDown numericUpDownValueMax;
+        private System.Windows.Forms.NumericUpDown numericUpDownValueMin;
     }
 }

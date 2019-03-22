@@ -203,6 +203,7 @@ namespace CM0102Scout
             dataTable.Columns.Add("Corners", typeof(sbyte));
             dataTable.Columns.Add("Crossing", typeof(sbyte));
             dataTable.Columns.Add("Decisions", typeof(sbyte));
+            dataTable.Columns.Add("Determination", typeof(sbyte));
             dataTable.Columns.Add("Dirtiness", typeof(sbyte));
             dataTable.Columns.Add("Dribbling", typeof(sbyte));
             dataTable.Columns.Add("Finishing", typeof(sbyte));
@@ -219,6 +220,7 @@ namespace CM0102Scout
             dataTable.Columns.Add("Marking", typeof(sbyte));
             dataTable.Columns.Add("Movement", typeof(sbyte));
             dataTable.Columns.Add("Natural Fitness", typeof(sbyte));
+            dataTable.Columns.Add("Off The Ball", typeof(sbyte));
             dataTable.Columns.Add("One On Ones", typeof(sbyte));
             dataTable.Columns.Add("Pace", typeof(sbyte));
             dataTable.Columns.Add("Passing", typeof(sbyte));
@@ -233,8 +235,6 @@ namespace CM0102Scout
             dataTable.Columns.Add("Technique", typeof(sbyte));
             dataTable.Columns.Add("Throw Ins", typeof(sbyte));
             dataTable.Columns.Add("Versatility", typeof(sbyte));
-            dataTable.Columns.Add("Vision", typeof(sbyte));
-            dataTable.Columns.Add("Work Rate", typeof(sbyte));
             dataTable.Columns.Add("Player Morale", typeof(byte));
 
             foreach (var player in players)
@@ -262,6 +262,7 @@ namespace CM0102Scout
                         player.Corners,
                         instrinsicsOn ? player.Crossing : player.Convert(player.Crossing, true),
                         instrinsicsOn ? player.Decisions : player.Convert(player.Decisions),
+                        player.WorkRate,
                         player.Dirtiness,
                         instrinsicsOn ? player.Dribbling : player.Convert(player.Dribbling, true),
                         instrinsicsOn ? player.Finishing : player.Convert(player.Finishing, true),
@@ -278,6 +279,7 @@ namespace CM0102Scout
                         instrinsicsOn ? player.Marking : player.Convert(player.Marking, true),
                         instrinsicsOn ? player.Movement : player.Convert(player.Movement, true),
                         player.NaturalFitness,
+                        instrinsicsOn ? player.Vision : player.Convert(player.Vision, true),
                         instrinsicsOn ? player.OneOnOnes : player.Convert(player.OneOnOnes, true, true),
                         player.PlayerPace,
                         instrinsicsOn ? player.Passing : player.Convert(player.Passing),
@@ -292,8 +294,6 @@ namespace CM0102Scout
                         player.Technique,
                         instrinsicsOn ? player.ThrowIns : player.Convert(player.ThrowIns, true),
                         player.Versatility,
-                        instrinsicsOn ? player.Vision : player.Convert(player.Vision, true),
-                        player.WorkRate,
                         player.PlayerMorale
                         );
                 }

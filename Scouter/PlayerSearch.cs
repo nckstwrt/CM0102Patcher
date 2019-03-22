@@ -16,6 +16,29 @@ namespace CM0102Patcher.Scouter
         public PlayerSearch()
         {
             InitializeComponent();
+
+            AddEnterKeyHook(this);
+        }
+
+        private void AddEnterKeyHook(Control controlContainer)
+        {
+            foreach (var control in controlContainer.Controls)
+            {
+                if (control is TextBox || control is NumericUpDown)
+                {
+                    var textBox = control as Control;
+                    textBox.KeyDown += (s, e) =>
+                    {
+                        if (e.KeyCode == Keys.Enter)
+                        {
+                            buttonApply_Click(this, new EventArgs());
+                        }
+                    };
+                }
+
+                if (control is GroupBox || control is TabPage || control is TabControl)
+                    AddEnterKeyHook(control as Control);
+            }
         }
 
         private void buttonApply_Click(object sender, EventArgs e)
@@ -48,6 +71,14 @@ namespace CM0102Patcher.Scouter
             if (numericUpDownPAMax.Value != 0)
             {
                 RowFilter += string.Format("AND [{0}] <= {1} ", "PA", numericUpDownPAMax.Value);
+            }
+            if (numericUpDownValueMin.Value != 0)
+            {
+                RowFilter += string.Format("AND [{0}] >= {1} ", "Value", numericUpDownPAMin.Value);
+            }
+            if (numericUpDownValueMax.Value != 0)
+            {
+                RowFilter += string.Format("AND [{0}] <= {1} ", "Value", numericUpDownPAMax.Value);
             }
 
             // MadScientist's Code

@@ -23,6 +23,7 @@ namespace CM0102Patcher.Scouter
         {
             InitializeComponent();
             EnableDoubleBuffering(true);
+            dataGridView.CellFormatting += DataGridView_CellFormatting;
             dataGridView.RowHeadersVisible = false;
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
@@ -31,7 +32,6 @@ namespace CM0102Patcher.Scouter
             dataGridView.AllowUserToResizeRows = false;
             dataGridView.AutoSize = false;
             dataGridView.ReadOnly = true;
-            dataGridView.CellFormatting += DataGridView_CellFormatting;
             dataGridView.VirtualMode = true;
 
             ScoutGrid_Resize(null, null);
@@ -197,17 +197,24 @@ namespace CM0102Patcher.Scouter
         {
             if (saveReader != null)
                 dataGridView.DataSource = saveReader.CreateDataTable(checkBoxShowIntrinstics.Checked);
+            RefreshGrid();
         }
 
         private void buttonColumns_Click(object sender, EventArgs e)
         {
             var CS = new ColumnSelector(dataGridView);
             CS.ShowDialog();
+            RefreshGrid();
         }
 
         private void buttonFilter_Click(object sender, EventArgs e)
         {
             ps.ShowDialog();
+            RefreshGrid();
+        }
+
+        private void RefreshGrid()
+        {
             if (dataGridView.DataSource != null)
             {
                 ((DataTable)dataGridView.DataSource).DefaultView.RowFilter = ps.RowFilter;
