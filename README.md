@@ -1,4 +1,4 @@
-# CM0102Patcher v1.04
+# CM0102Patcher v1.05
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,11 +8,11 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/rDmODU9.png)
+![alt text](https://i.imgur.com/ptUPzlC.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
-![alt text](https://i.imgur.com/uNxgWwg.png)
+![alt text](https://i.imgur.com/AW5dASG.png)
 
 An unfinished scouter, based on CM Scout, but allows you to view and sort by the "intrinsic" skills value (can load compressed and uncompressed saves)
 
@@ -22,7 +22,24 @@ Also there is a little officials.dat patcher for patching up referees as per rec
 
 ![alt text](https://i.imgur.com/6q6ltuS.png)
 
+The RGN Image Converter:
+
+![alt text](https://i.imgur.com/8vuKuwq.png)
+
 ## Updates
+v1.05:
+
+* Transfer Window Patch (from Saturn's patches) added to "Update names"
+* New RGN Image converter in Tools (BMP/JPG/PNG/RGN -> RGN with resizing)
+* Inflation Multiplier can now be less than one
+
+v1.04:
+* Tapani's new regen code can now be added (preferred for long games)
+* Sped up the RGN converting
+* Option to update names (Beta! - Currently does English leagues, Europa and Champs League)
+* 7 Subs for French
+* Intrinsic Scouter updated (MadScientist's filter code)
+
 v1.03:
 * Added back the 1280x800 resolution patch! Now working and will resize all your 800x600 images to 1280x800 - so any graphics pack that works with 800x600 can automatically convert to working in 1280x800!
 * CM Scout inspired Save Scouter which also shows Intrinsic values - yet to be finished! So very Alpha!
