@@ -376,8 +376,8 @@
             this.checkBoxUpdateNames.Size = new System.Drawing.Size(227, 20);
             this.checkBoxUpdateNames.TabIndex = 28;
             this.checkBoxUpdateNames.Text = "Update names + transfer windows";
-            this.toolTips.SetToolTip(this.checkBoxUpdateNames, "Update some older names\r\ni.e.\r\nHolland -> Netherlands\r\nEuropean Champions Cup -> " +
-        "UEFA Champions League\r\netc\r\n\r\nCURRENTLY UNFINISHED!!!");
+            this.toolTips.SetToolTip(this.checkBoxUpdateNames, "Update some older names:\r\ni.e.\r\nHolland -> Netherlands\r\nEuropean Champions Cup -> " +
+        "UEFA Champions League\r\netc\r\n\r\nTransfer windows will also be updated\r\n\r\nCURRENTLY UNFINISHED!!!");
             this.checkBoxUpdateNames.UseVisualStyleBackColor = true;
             // 
             // checkBoxNewRegenCode
