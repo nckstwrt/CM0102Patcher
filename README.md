@@ -12,7 +12,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
-![alt text](https://i.imgur.com/uNxgWwg.png)
+![alt text](https://i.imgur.com/AW5dASG.png)
 
 An unfinished scouter, based on CM Scout, but allows you to view and sort by the "intrinsic" skills value (can load compressed and uncompressed saves)
 
