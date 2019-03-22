@@ -22,51 +22,27 @@ namespace CM0102Patcher
 
         public void RunPatch()
         {
+            // Change game name :)
             YearChanger yearChanger = new YearChanger();
             var currentYear = yearChanger.GetCurrentExeYear(exeFile);
             var newGameName = currentYear.ToString() + "/" + (currentYear+1).ToString().Substring(2);
             ByteSearch.WriteToFile(exeFile, 0x68029d, newGameName);
 
+            // Add Transfer Window Patch (from Saturn's v3 Patches)
+            patcher.ApplyPatch(exeFile, patcher.patches["transferwindowpatch"]);
+
+            // Patch Holland
             PatchHolland();
 
-            int compChangePos;
-            compChangePos = PatchComp("European Champions Cup", "UEFA Champions League");
-            if (compChangePos != -1)
-                PatchComp("Champions Cup", "Champions League", compChangePos, -1);
+            // Patch Comps
+            PatchComp("European Champions Cup", "UEFA Champions League", "Champions Cup", "Champions League");
             PatchComp("UEFA Cup", "UEFA Europa League");
 
-            compChangePos = PatchComp("English Premier Division", "English Premier League");
-            if (compChangePos != -1)
-            {
-                PatchComp("Premier Division", "Premier League", compChangePos, -1);
-                PatchCompAcronym(compChangePos, "EPL");
-            }
-            
-            compChangePos = PatchComp("English First Division", "English Football League Championship");
-            if (compChangePos != -1)
-            {
-                PatchComp("First Division", "Championship", compChangePos, -1);
-                PatchCompAcronym(compChangePos, "FLC");
-            }
-
-            compChangePos = PatchComp("English Second Division", "English Football League One");
-            if (compChangePos != -1)
-            {
-                PatchComp("Second Division", "League One", compChangePos, -1);
-                PatchCompAcronym(compChangePos, "FL1");
-            }
-
-            compChangePos = PatchComp("English Third Division", "English Football League Two");
-            if (compChangePos != -1)
-            {
-                PatchComp("Third Division", "League Two", compChangePos, -1);
-                PatchCompAcronym(compChangePos, "FL2");
-            }
-        }
-
-        void PatchCompAcronym(int startPos, string acronym)
-        {
-            ByteSearch.WriteToFile(Path.Combine(dataDir, "club_comp.dat"), startPos + 79, acronym, 3);
+            // English
+            PatchComp("English Premier Division", "English Premier League", "Premier Division", "Premier League", "EPL");
+            PatchComp("English First Division", "English Football League Championship", "First Division", "Championship", "FLC");
+            PatchComp("English Second Division", "English Football League One", "Second Division", "League One", "FL1");
+            PatchComp("English Third Division", "English Football League Two", "Third Division", "League Two", "FL2");
         }
 
         // https://champman0102.co.uk/showthread.php?t=8267&highlight=Netherlands
@@ -84,13 +60,29 @@ namespace CM0102Patcher
             if (pos != -1)
             {
                 ByteSearch.WriteToFile(nationDatFilename, pos, "Netherlands", 52);
-                ByteSearch.WriteToFile(nationDatFilename, pos+52, "Netherlands", 27);
-                ByteSearch.WriteToFile(nationDatFilename, pos+52+27, "NED");
+                ByteSearch.WriteToFile(nationDatFilename, pos + 52, "Netherlands", 27);
+                ByteSearch.WriteToFile(nationDatFilename, pos + 52 + 27, "NED");
             }
             // nat_club.dat
             ByteSearch.BinFileReplace(Path.Combine(dataDir, "nat_club.dat"), "Holland", "Netherlands");
             // euro.cfg
             ByteSearch.TextFileReplace(Path.Combine(dataDir, "euro.cfg"), "Holland", "Netherlands");
+        }
+
+        void PatchComp(string oldName, string newName, string oldShortName, string newShortName, string newAcronym = null)
+        {
+            int compChangePos = PatchComp(oldName, newName);
+            if (compChangePos != -1)
+            {
+                PatchComp(oldShortName, newShortName, compChangePos, -1);
+                if (newAcronym != null)
+                    PatchCompAcronym(compChangePos, newAcronym);
+            }
+        }
+
+        void PatchCompAcronym(int startPos, string acronym)
+        {
+            ByteSearch.WriteToFile(Path.Combine(dataDir, "club_comp.dat"), startPos + 79, acronym, 3);
         }
 
         int PatchComp(string fromComp, string toComp, int clubCompStartPos = 0, int exeStartPos = 0x5d9590)

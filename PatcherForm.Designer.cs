@@ -185,7 +185,7 @@
             this.checkBoxDisableUnprotectedContracts.Checked = true;
             this.checkBoxDisableUnprotectedContracts.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxDisableUnprotectedContracts.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxDisableUnprotectedContracts.Location = new System.Drawing.Point(236, 147);
+            this.checkBoxDisableUnprotectedContracts.Location = new System.Drawing.Point(228, 147);
             this.checkBoxDisableUnprotectedContracts.Name = "checkBoxDisableUnprotectedContracts";
             this.checkBoxDisableUnprotectedContracts.Size = new System.Drawing.Size(205, 20);
             this.checkBoxDisableUnprotectedContracts.TabIndex = 9;
@@ -223,7 +223,7 @@
             this.checkBoxCDRemoval.Checked = true;
             this.checkBoxCDRemoval.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxCDRemoval.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxCDRemoval.Location = new System.Drawing.Point(236, 173);
+            this.checkBoxCDRemoval.Location = new System.Drawing.Point(228, 173);
             this.checkBoxCDRemoval.Name = "checkBoxCDRemoval";
             this.checkBoxCDRemoval.Size = new System.Drawing.Size(208, 20);
             this.checkBoxCDRemoval.TabIndex = 12;
@@ -241,11 +241,6 @@
             0,
             131072});
             this.numericCurrencyInflation.Location = new System.Drawing.Point(345, 95);
-            this.numericCurrencyInflation.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.numericCurrencyInflation.Name = "numericCurrencyInflation";
             this.numericCurrencyInflation.Size = new System.Drawing.Size(93, 22);
             this.numericCurrencyInflation.TabIndex = 15;
@@ -271,7 +266,7 @@
             this.checkBoxDisableSplashScreen.Checked = true;
             this.checkBoxDisableSplashScreen.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxDisableSplashScreen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxDisableSplashScreen.Location = new System.Drawing.Point(236, 199);
+            this.checkBoxDisableSplashScreen.Location = new System.Drawing.Point(228, 199);
             this.checkBoxDisableSplashScreen.Name = "checkBoxDisableSplashScreen";
             this.checkBoxDisableSplashScreen.Size = new System.Drawing.Size(161, 20);
             this.checkBoxDisableSplashScreen.TabIndex = 16;
@@ -327,7 +322,7 @@
             this.checkBoxAllowCloseWindow.Checked = true;
             this.checkBoxAllowCloseWindow.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxAllowCloseWindow.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxAllowCloseWindow.Location = new System.Drawing.Point(236, 225);
+            this.checkBoxAllowCloseWindow.Location = new System.Drawing.Point(228, 225);
             this.checkBoxAllowCloseWindow.Name = "checkBoxAllowCloseWindow";
             this.checkBoxAllowCloseWindow.Size = new System.Drawing.Size(190, 20);
             this.checkBoxAllowCloseWindow.TabIndex = 19;
@@ -358,13 +353,13 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.checkBoxUpdateNames);
             this.groupBox3.Controls.Add(this.checkBoxNewRegenCode);
             this.groupBox3.Controls.Add(this.checkBoxJobsAbroadBoost);
             this.groupBox3.Controls.Add(this.checkBoxChangeResolution1280s800);
             this.groupBox3.Controls.Add(this.checkBoxFindAllPlayers);
             this.groupBox3.Controls.Add(this.checkBoxRegenFixes);
             this.groupBox3.Controls.Add(this.checkBoxForceLoadAllPlayers);
+            this.groupBox3.Controls.Add(this.checkBoxUpdateNames);
             this.groupBox3.Location = new System.Drawing.Point(9, 131);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(447, 224);
@@ -376,11 +371,11 @@
             this.checkBoxUpdateNames.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxUpdateNames.AutoSize = true;
             this.checkBoxUpdateNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxUpdateNames.Location = new System.Drawing.Point(226, 198);
+            this.checkBoxUpdateNames.Location = new System.Drawing.Point(219, 198);
             this.checkBoxUpdateNames.Name = "checkBoxUpdateNames";
-            this.checkBoxUpdateNames.Size = new System.Drawing.Size(166, 20);
+            this.checkBoxUpdateNames.Size = new System.Drawing.Size(227, 20);
             this.checkBoxUpdateNames.TabIndex = 28;
-            this.checkBoxUpdateNames.Text = "Update names (BETA!)";
+            this.checkBoxUpdateNames.Text = "Update names + transfer windows";
             this.toolTips.SetToolTip(this.checkBoxUpdateNames, "Update some older names\r\ni.e.\r\nHolland -> Netherlands\r\nEuropean Champions Cup -> " +
         "UEFA Champions League\r\netc\r\n\r\nCURRENTLY UNFINISHED!!!");
             this.checkBoxUpdateNames.UseVisualStyleBackColor = true;
@@ -390,7 +385,7 @@
             this.checkBoxNewRegenCode.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxNewRegenCode.AutoSize = true;
             this.checkBoxNewRegenCode.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxNewRegenCode.Location = new System.Drawing.Point(227, 172);
+            this.checkBoxNewRegenCode.Location = new System.Drawing.Point(219, 172);
             this.checkBoxNewRegenCode.Name = "checkBoxNewRegenCode";
             this.checkBoxNewRegenCode.Size = new System.Drawing.Size(180, 20);
             this.checkBoxNewRegenCode.TabIndex = 27;
@@ -419,7 +414,7 @@
             this.checkBoxChangeResolution1280s800.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxChangeResolution1280s800.AutoSize = true;
             this.checkBoxChangeResolution1280s800.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxChangeResolution1280s800.Location = new System.Drawing.Point(227, 146);
+            this.checkBoxChangeResolution1280s800.Location = new System.Drawing.Point(219, 146);
             this.checkBoxChangeResolution1280s800.Name = "checkBoxChangeResolution1280s800";
             this.checkBoxChangeResolution1280s800.Size = new System.Drawing.Size(207, 20);
             this.checkBoxChangeResolution1280s800.TabIndex = 24;
@@ -445,7 +440,7 @@
             this.checkBoxRegenFixes.Checked = true;
             this.checkBoxRegenFixes.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxRegenFixes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxRegenFixes.Location = new System.Drawing.Point(227, 120);
+            this.checkBoxRegenFixes.Location = new System.Drawing.Point(219, 120);
             this.checkBoxRegenFixes.Name = "checkBoxRegenFixes";
             this.checkBoxRegenFixes.Size = new System.Drawing.Size(98, 20);
             this.checkBoxRegenFixes.TabIndex = 23;
