@@ -235,6 +235,8 @@ namespace CM0102Patcher
                 var namePatcher = new NamePatcher(labelFilename.Text, dataDir);
                 namePatcher.RunPatch();
             }
+            if (checkBoxManageAnyTeam.Checked)
+                patcher.ApplyPatch(labelFilename.Text, patcher.patches["manageanyteam"]);
 
             // NOCD Crack
             if (checkBoxRemoveCDChecks.Checked)

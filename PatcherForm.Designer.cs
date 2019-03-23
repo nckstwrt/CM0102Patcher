@@ -63,6 +63,7 @@
             this.checkBoxRemoveCDChecks = new System.Windows.Forms.CheckBox();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.buttonAbout = new System.Windows.Forms.Button();
+            this.checkBoxManageAnyTeam = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -353,10 +354,10 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBoxManageAnyTeam);
             this.groupBox3.Controls.Add(this.checkBoxNewRegenCode);
             this.groupBox3.Controls.Add(this.checkBoxJobsAbroadBoost);
             this.groupBox3.Controls.Add(this.checkBoxChangeResolution1280s800);
-            this.groupBox3.Controls.Add(this.checkBoxFindAllPlayers);
             this.groupBox3.Controls.Add(this.checkBoxRegenFixes);
             this.groupBox3.Controls.Add(this.checkBoxForceLoadAllPlayers);
             this.groupBox3.Controls.Add(this.checkBoxUpdateNames);
@@ -411,7 +412,7 @@
             // 
             this.checkBoxFindAllPlayers.AutoSize = true;
             this.checkBoxFindAllPlayers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxFindAllPlayers.Location = new System.Drawing.Point(7, 198);
+            this.checkBoxFindAllPlayers.Location = new System.Drawing.Point(257, 370);
             this.checkBoxFindAllPlayers.Name = "checkBoxFindAllPlayers";
             this.checkBoxFindAllPlayers.Size = new System.Drawing.Size(118, 20);
             this.checkBoxFindAllPlayers.TabIndex = 25;
@@ -419,6 +420,7 @@
             this.toolTips.SetToolTip(this.checkBoxFindAllPlayers, "This patch means the in-game Player Search will find all players regardless of re" +
         "putation");
             this.checkBoxFindAllPlayers.UseVisualStyleBackColor = true;
+            this.checkBoxFindAllPlayers.Visible = false;
             // 
             // checkBoxRegenFixes
             // 
@@ -486,6 +488,18 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
+            // checkBoxManageAnyTeam
+            // 
+            this.checkBoxManageAnyTeam.AutoSize = true;
+            this.checkBoxManageAnyTeam.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxManageAnyTeam.Location = new System.Drawing.Point(7, 198);
+            this.checkBoxManageAnyTeam.Name = "checkBoxManageAnyTeam";
+            this.checkBoxManageAnyTeam.Size = new System.Drawing.Size(210, 20);
+            this.checkBoxManageAnyTeam.TabIndex = 29;
+            this.checkBoxManageAnyTeam.Text = "Manage any background team";
+            this.toolTips.SetToolTip(this.checkBoxManageAnyTeam, "Manage any team, regardless of whether their league has been selected");
+            this.checkBoxManageAnyTeam.UseVisualStyleBackColor = true;
+            // 
             // PatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -494,6 +508,7 @@
             this.Controls.Add(this.buttonAbout);
             this.Controls.Add(this.checkBoxIdleSensitivity);
             this.Controls.Add(this.checkBoxAllowCloseWindow);
+            this.Controls.Add(this.checkBoxFindAllPlayers);
             this.Controls.Add(this.checkBoxChangeStartYear);
             this.Controls.Add(this.checkBoxShowStarPlayers);
             this.Controls.Add(this.checkBoxDisableSplashScreen);
@@ -520,7 +535,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v1.06";
+            this.Text = "Nick\'s CM0102Patcher v1.07";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
@@ -567,6 +582,7 @@
         private System.Windows.Forms.CheckBox checkBoxJobsAbroadBoost;
         private System.Windows.Forms.CheckBox checkBoxNewRegenCode;
         private System.Windows.Forms.CheckBox checkBoxUpdateNames;
+        private System.Windows.Forms.CheckBox checkBoxManageAnyTeam;
     }
 }
 
