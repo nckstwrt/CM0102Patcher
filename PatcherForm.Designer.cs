@@ -459,7 +459,7 @@
             this.checkBoxForceLoadAllPlayers.TabIndex = 23;
             this.checkBoxForceLoadAllPlayers.Text = "Force load all players";
             this.toolTips.SetToolTip(this.checkBoxForceLoadAllPlayers, "Force all players to be loaded from the database even if not all leagues have bee" +
-        "n selected");
+        "n selected.\r\nYou still need Maximum Database set in the game options though.\r\nExpect it to take a long time to start a new game!");
             this.checkBoxForceLoadAllPlayers.UseVisualStyleBackColor = true;
             // 
             // checkBoxRemoveCDChecks

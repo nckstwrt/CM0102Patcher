@@ -212,10 +212,11 @@ namespace CM0102Patcher
 
         public void UpdatePlayerConfig(string playerConfigFile, int yearIncrement)
         {
+            var latin1 = Encoding.GetEncoding("ISO-8859-1");
             using (var staffFile = File.Open(playerConfigFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
                 var lineList = new List<string>();
-                using (var sr = new StreamReader(staffFile))
+                using (var sr = new StreamReader(staffFile, latin1))
                 {
                     while (!sr.EndOfStream)
                     {
@@ -226,7 +227,7 @@ namespace CM0102Patcher
                     // Truncate
                     staffFile.SetLength(0);
 
-                    using (var sw = new StreamWriter(staffFile))
+                    using (var sw = new StreamWriter(staffFile, latin1))
                     {
                         // Write out all lines with the new date
                         foreach (var line in lineList)
@@ -247,30 +248,32 @@ namespace CM0102Patcher
                                 }
                             }
                             else
-                            if (line.Length > "\"LOAN\"".Length && line.Substring(0, "\"LOAN\"".Length).ToUpper() == "\"LOAN\"")
                             {
-                                var parts = ConfigLineSplitter(line);
-                                if (parts.Count() == 12)
+                                if (line.Length > "\"LOAN\"".Length && line.Substring(0, "\"LOAN\"".Length).ToUpper() == "\"LOAN\"")
                                 {
-                                    int year1;
-                                    if (int.TryParse(parts[8], out year1))
-                                    { 
-                                        var new_year1 = year1 + yearIncrement;
-                                        parts[8] = new_year1.ToString();
-                                    }
-
-                                    int year2;
-                                    if (int.TryParse(parts[11], out year2))
+                                    var parts = ConfigLineSplitter(line);
+                                    if (parts.Count() == 12)
                                     {
-                                        var new_year2 = year2 + yearIncrement;
-                                        parts[11] = new_year2.ToString();
-                                    }
+                                        int year1;
+                                        if (int.TryParse(parts[8], out year1))
+                                        {
+                                            var new_year1 = year1 + yearIncrement;
+                                            parts[8] = new_year1.ToString();
+                                        }
 
-                                    sw.WriteLine(string.Join(" ", parts.ToArray()));
+                                        int year2;
+                                        if (int.TryParse(parts[11], out year2))
+                                        {
+                                            var new_year2 = year2 + yearIncrement;
+                                            parts[11] = new_year2.ToString();
+                                        }
+
+                                        sw.WriteLine(string.Join(" ", parts.ToArray()));
+                                    }
                                 }
+                                else
+                                    sw.WriteLine(line);
                             }
-                            else
-                                sw.WriteLine(line);
                         }
                     }
                 }
@@ -285,10 +288,14 @@ namespace CM0102Patcher
                 var bytes = new byte[fileLength];
                 file.Read(bytes, 0, fileLength);
 
-                for (int i = 0; i != fileLength; i += blockSize)
+                for (int i = 0; i < fileLength; i += blockSize)
                 {
                     foreach (var yearOffset in yearOffsets)
                     {
+                        // March 2019 update seemed truncated, so don't except if it is
+                        if ((i + yearOffset + 1) >= bytes.Length)
+                            continue;
+
                         short year = BitConverter.ToInt16(bytes, i + yearOffset);
 
                         if (year > 1900 && year < 2100)
