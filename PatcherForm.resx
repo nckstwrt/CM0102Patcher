@@ -120,6 +120,11 @@
   <metadata name="toolTips.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="checkBoxForceLoadAllPlayers.ToolTip" xml:space="preserve">
+    <value>Force all players to be loaded from the database even if not all leagues have been selected.
+You still need Maximum Database set in the game options though.
+Expect it to take a long time to start a new game!</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

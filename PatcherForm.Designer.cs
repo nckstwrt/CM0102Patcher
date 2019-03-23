@@ -53,13 +53,13 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.checkBoxUpdateNames = new System.Windows.Forms.CheckBox();
             this.checkBoxNewRegenCode = new System.Windows.Forms.CheckBox();
             this.checkBoxJobsAbroadBoost = new System.Windows.Forms.CheckBox();
             this.checkBoxChangeResolution1280s800 = new System.Windows.Forms.CheckBox();
             this.checkBoxFindAllPlayers = new System.Windows.Forms.CheckBox();
             this.checkBoxRegenFixes = new System.Windows.Forms.CheckBox();
             this.checkBoxForceLoadAllPlayers = new System.Windows.Forms.CheckBox();
+            this.checkBoxUpdateNames = new System.Windows.Forms.CheckBox();
             this.checkBoxRemoveCDChecks = new System.Windows.Forms.CheckBox();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.buttonAbout = new System.Windows.Forms.Button();
@@ -366,20 +366,6 @@
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
             // 
-            // checkBoxUpdateNames
-            // 
-            this.checkBoxUpdateNames.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
-            this.checkBoxUpdateNames.AutoSize = true;
-            this.checkBoxUpdateNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxUpdateNames.Location = new System.Drawing.Point(219, 198);
-            this.checkBoxUpdateNames.Name = "checkBoxUpdateNames";
-            this.checkBoxUpdateNames.Size = new System.Drawing.Size(227, 20);
-            this.checkBoxUpdateNames.TabIndex = 28;
-            this.checkBoxUpdateNames.Text = "Update names + transfer windows";
-            this.toolTips.SetToolTip(this.checkBoxUpdateNames, "Update some older names:\r\ni.e.\r\nHolland -> Netherlands\r\nEuropean Champions Cup -> " +
-        "UEFA Champions League\r\netc\r\n\r\nTransfer windows will also be updated\r\n\r\nCURRENTLY UNFINISHED!!!");
-            this.checkBoxUpdateNames.UseVisualStyleBackColor = true;
-            // 
             // checkBoxNewRegenCode
             // 
             this.checkBoxNewRegenCode.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
@@ -458,9 +444,23 @@
             this.checkBoxForceLoadAllPlayers.Size = new System.Drawing.Size(157, 20);
             this.checkBoxForceLoadAllPlayers.TabIndex = 23;
             this.checkBoxForceLoadAllPlayers.Text = "Force load all players";
-            this.toolTips.SetToolTip(this.checkBoxForceLoadAllPlayers, "Force all players to be loaded from the database even if not all leagues have bee" +
-        "n selected.\r\nYou still need Maximum Database set in the game options though.\r\nExpect it to take a long time to start a new game!");
+            this.toolTips.SetToolTip(this.checkBoxForceLoadAllPlayers, resources.GetString("checkBoxForceLoadAllPlayers.ToolTip"));
             this.checkBoxForceLoadAllPlayers.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxUpdateNames
+            // 
+            this.checkBoxUpdateNames.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxUpdateNames.AutoSize = true;
+            this.checkBoxUpdateNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxUpdateNames.Location = new System.Drawing.Point(219, 198);
+            this.checkBoxUpdateNames.Name = "checkBoxUpdateNames";
+            this.checkBoxUpdateNames.Size = new System.Drawing.Size(227, 20);
+            this.checkBoxUpdateNames.TabIndex = 28;
+            this.checkBoxUpdateNames.Text = "Update names + transfer windows";
+            this.toolTips.SetToolTip(this.checkBoxUpdateNames, "Update some older names:\r\ni.e.\r\nHolland -> Netherlands\r\nEuropean Champions Cup ->" +
+        " UEFA Champions League\r\netc\r\n\r\nTransfer windows will also be updated\r\n\r\nCURRENTL" +
+        "Y UNFINISHED!!!");
+            this.checkBoxUpdateNames.UseVisualStyleBackColor = true;
             // 
             // checkBoxRemoveCDChecks
             // 
@@ -520,7 +520,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v1.05";
+            this.Text = "Nick\'s CM0102Patcher v1.06";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
