@@ -494,9 +494,9 @@
             this.checkBoxManageAnyTeam.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxManageAnyTeam.Location = new System.Drawing.Point(7, 198);
             this.checkBoxManageAnyTeam.Name = "checkBoxManageAnyTeam";
-            this.checkBoxManageAnyTeam.Size = new System.Drawing.Size(210, 20);
+            this.checkBoxManageAnyTeam.Size = new System.Drawing.Size(135, 20);
             this.checkBoxManageAnyTeam.TabIndex = 29;
-            this.checkBoxManageAnyTeam.Text = "Manage any background team";
+            this.checkBoxManageAnyTeam.Text = "Manage any team";
             this.toolTips.SetToolTip(this.checkBoxManageAnyTeam, "Manage any team, regardless of whether their league has been selected");
             this.checkBoxManageAnyTeam.UseVisualStyleBackColor = true;
             // 
