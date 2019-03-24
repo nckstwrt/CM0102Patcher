@@ -1,4 +1,4 @@
-# CM0102Patcher v1.06
+# CM0102Patcher v1.07
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/3A2xh3R.png)
+![alt text](https://i.imgur.com/Y7hWQNh.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,12 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.07:
+* Fix for Euro.cfg when updating Holland->Netherlands
+* Scouter now has presets for columns selection
+* Removed Player Search Finds All Players and changed with Manage Any Team
+
 v1.06:
 * Fixes for player_setup.cfg (which affected Loans and Injuries)
 * Fix to workaround any bad truncation in history data files
