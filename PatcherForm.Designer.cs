@@ -53,17 +53,17 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxManageAnyTeam = new System.Windows.Forms.CheckBox();
             this.checkBoxNewRegenCode = new System.Windows.Forms.CheckBox();
             this.checkBoxJobsAbroadBoost = new System.Windows.Forms.CheckBox();
             this.checkBoxChangeResolution1280s800 = new System.Windows.Forms.CheckBox();
-            this.checkBoxFindAllPlayers = new System.Windows.Forms.CheckBox();
             this.checkBoxRegenFixes = new System.Windows.Forms.CheckBox();
             this.checkBoxForceLoadAllPlayers = new System.Windows.Forms.CheckBox();
             this.checkBoxUpdateNames = new System.Windows.Forms.CheckBox();
+            this.checkBoxFindAllPlayers = new System.Windows.Forms.CheckBox();
             this.checkBoxRemoveCDChecks = new System.Windows.Forms.CheckBox();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.buttonAbout = new System.Windows.Forms.Button();
-            this.checkBoxManageAnyTeam = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -367,6 +367,19 @@
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
             // 
+            // checkBoxManageAnyTeam
+            // 
+            this.checkBoxManageAnyTeam.AutoSize = true;
+            this.checkBoxManageAnyTeam.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxManageAnyTeam.Location = new System.Drawing.Point(7, 198);
+            this.checkBoxManageAnyTeam.Name = "checkBoxManageAnyTeam";
+            this.checkBoxManageAnyTeam.Size = new System.Drawing.Size(135, 20);
+            this.checkBoxManageAnyTeam.TabIndex = 29;
+            this.checkBoxManageAnyTeam.Text = "Manage any team";
+            this.toolTips.SetToolTip(this.checkBoxManageAnyTeam, "Allows human managers to apply for jobs at clubs in inactive leagues. The Apply b" +
+        "utton will now always be displayed on a club\'s screen.");
+            this.checkBoxManageAnyTeam.UseVisualStyleBackColor = true;
+            // 
             // checkBoxNewRegenCode
             // 
             this.checkBoxNewRegenCode.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
@@ -392,8 +405,7 @@
             this.checkBoxJobsAbroadBoost.Size = new System.Drawing.Size(183, 20);
             this.checkBoxJobsAbroadBoost.TabIndex = 26;
             this.checkBoxJobsAbroadBoost.Text = "Obtain jobs abroad easier";
-            this.toolTips.SetToolTip(this.checkBoxJobsAbroadBoost, "Force all players to be loaded from the database even if not all leagues have bee" +
-        "n selected");
+            this.toolTips.SetToolTip(this.checkBoxJobsAbroadBoost, "Changes to allow managers to obtain jobs abroad easier");
             this.checkBoxJobsAbroadBoost.UseVisualStyleBackColor = true;
             // 
             // checkBoxChangeResolution1280s800
@@ -407,20 +419,6 @@
             this.checkBoxChangeResolution1280s800.TabIndex = 24;
             this.checkBoxChangeResolution1280s800.Text = "Change resolution to 1280x800";
             this.checkBoxChangeResolution1280s800.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxFindAllPlayers
-            // 
-            this.checkBoxFindAllPlayers.AutoSize = true;
-            this.checkBoxFindAllPlayers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxFindAllPlayers.Location = new System.Drawing.Point(257, 370);
-            this.checkBoxFindAllPlayers.Name = "checkBoxFindAllPlayers";
-            this.checkBoxFindAllPlayers.Size = new System.Drawing.Size(118, 20);
-            this.checkBoxFindAllPlayers.TabIndex = 25;
-            this.checkBoxFindAllPlayers.Text = "Find all players";
-            this.toolTips.SetToolTip(this.checkBoxFindAllPlayers, "This patch means the in-game Player Search will find all players regardless of re" +
-        "putation");
-            this.checkBoxFindAllPlayers.UseVisualStyleBackColor = true;
-            this.checkBoxFindAllPlayers.Visible = false;
             // 
             // checkBoxRegenFixes
             // 
@@ -464,6 +462,20 @@
         "Y UNFINISHED!!!");
             this.checkBoxUpdateNames.UseVisualStyleBackColor = true;
             // 
+            // checkBoxFindAllPlayers
+            // 
+            this.checkBoxFindAllPlayers.AutoSize = true;
+            this.checkBoxFindAllPlayers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxFindAllPlayers.Location = new System.Drawing.Point(257, 370);
+            this.checkBoxFindAllPlayers.Name = "checkBoxFindAllPlayers";
+            this.checkBoxFindAllPlayers.Size = new System.Drawing.Size(118, 20);
+            this.checkBoxFindAllPlayers.TabIndex = 25;
+            this.checkBoxFindAllPlayers.Text = "Find all players";
+            this.toolTips.SetToolTip(this.checkBoxFindAllPlayers, "This patch means the in-game Player Search will find all players regardless of re" +
+        "putation");
+            this.checkBoxFindAllPlayers.UseVisualStyleBackColor = true;
+            this.checkBoxFindAllPlayers.Visible = false;
+            // 
             // checkBoxRemoveCDChecks
             // 
             this.checkBoxRemoveCDChecks.AutoSize = true;
@@ -487,18 +499,6 @@
             this.buttonAbout.Text = "?";
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
-            // 
-            // checkBoxManageAnyTeam
-            // 
-            this.checkBoxManageAnyTeam.AutoSize = true;
-            this.checkBoxManageAnyTeam.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxManageAnyTeam.Location = new System.Drawing.Point(7, 198);
-            this.checkBoxManageAnyTeam.Name = "checkBoxManageAnyTeam";
-            this.checkBoxManageAnyTeam.Size = new System.Drawing.Size(135, 20);
-            this.checkBoxManageAnyTeam.TabIndex = 29;
-            this.checkBoxManageAnyTeam.Text = "Manage any team";
-            this.toolTips.SetToolTip(this.checkBoxManageAnyTeam, "Manage any team, regardless of whether their league has been selected");
-            this.checkBoxManageAnyTeam.UseVisualStyleBackColor = true;
             // 
             // PatcherForm
             // 

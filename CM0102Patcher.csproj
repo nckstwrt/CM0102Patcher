@@ -42,6 +42,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -73,6 +74,12 @@
     </Compile>
     <Compile Include="PatcherForm.Designer.cs">
       <DependentUpon>PatcherForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PresetNameForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PresetNameForm.Designer.cs">
+      <DependentUpon>PresetNameForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="PictureConvertProgressForm.cs">
@@ -130,6 +137,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PictureConvertProgressForm.resx">
       <DependentUpon>PictureConvertProgressForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PresetNameForm.resx">
+      <DependentUpon>PresetNameForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

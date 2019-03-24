@@ -202,14 +202,18 @@ namespace CM0102Patcher.Scouter
 
         private void buttonColumns_Click(object sender, EventArgs e)
         {
+            dataGridView.CellFormatting -= DataGridView_CellFormatting;
             var CS = new ColumnSelector(dataGridView);
             CS.ShowDialog();
+            dataGridView.CellFormatting += DataGridView_CellFormatting;
             RefreshGrid();
         }
 
         private void buttonFilter_Click(object sender, EventArgs e)
         {
+            dataGridView.CellFormatting -= DataGridView_CellFormatting;
             ps.ShowDialog();
+            dataGridView.CellFormatting += DataGridView_CellFormatting;
             RefreshGrid();
         }
 

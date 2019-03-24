@@ -144,12 +144,13 @@ namespace CM0102Patcher
 
         public static void TextFileReplace(string file, string toReplace, string replaceWith)
         {
+            Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
             File.SetAttributes(file, FileAttributes.Normal);
             using (var fs = File.Open(file, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
-                using (var tr = new StreamReader(fs))
+                using (var tr = new StreamReader(fs, latin1))
                 {
-                    using (var tw = new StreamWriter(fs))
+                    using (var tw = new StreamWriter(fs, latin1))
                     {
                         var text = tr.ReadToEnd();
                         text = text.Replace(toReplace, replaceWith);
