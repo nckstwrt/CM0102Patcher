@@ -81,7 +81,7 @@ namespace CM0102Scout
         public sbyte ImportantMatches;
         public sbyte InjuryProneness;
         public sbyte Jumping;
-        public sbyte Leadership;
+        public sbyte Leadership;         // Influence  
         public sbyte LeftFoot;
         public sbyte LongShots;
         public sbyte Marking;

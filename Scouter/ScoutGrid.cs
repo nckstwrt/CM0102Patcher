@@ -81,13 +81,13 @@ namespace CM0102Patcher.Scouter
                             case "Finishing":
                             case "Heading":
                             case "Long Shots":
-                            case "Movement":
+                            case "Off The Ball":
                             case "Marking":
                             case "Passing":
                             case "Penalties":
                             case "Positioning":
                             case "Throw Ins":
-                            case "Vision":
+                            case "Creativity":
                             case "Tackling":
                                 val = (sbyte)(((((int)val) + 127.0) / 230.0) * 20.0);
                                 break;

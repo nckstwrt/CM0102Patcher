@@ -31,6 +31,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PlayerSearch));
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageGeneral = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.numericUpDownValueMax = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownValueMin = new System.Windows.Forms.NumericUpDown();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.checkBoxFreeRole = new System.Windows.Forms.CheckBox();
             this.checkBoxWingBack = new System.Windows.Forms.CheckBox();
@@ -67,13 +72,43 @@
             this.tabPageAttributes1 = new System.Windows.Forms.TabPage();
             this.buttonReset = new System.Windows.Forms.Button();
             this.buttonApply = new System.Windows.Forms.Button();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.numericUpDownValueMax = new System.Windows.Forms.NumericUpDown();
-            this.label11 = new System.Windows.Forms.Label();
-            this.numericUpDownValueMin = new System.Windows.Forms.NumericUpDown();
+            this.comboBoxFilter1 = new System.Windows.Forms.ComboBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.numericUpDownFilter1Max = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownFilter1Min = new System.Windows.Forms.NumericUpDown();
+            this.label13 = new System.Windows.Forms.Label();
+            this.numericUpDownFilter2Max = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownFilter2Min = new System.Windows.Forms.NumericUpDown();
+            this.comboBoxFilter2 = new System.Windows.Forms.ComboBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.numericUpDownFilter3Max = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownFilter3Min = new System.Windows.Forms.NumericUpDown();
+            this.comboBoxFilter3 = new System.Windows.Forms.ComboBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.numericUpDownFilter4Max = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownFilter4Min = new System.Windows.Forms.NumericUpDown();
+            this.comboBoxFilter4 = new System.Windows.Forms.ComboBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.numericUpDownFilter8Max = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownFilter8Min = new System.Windows.Forms.NumericUpDown();
+            this.comboBoxFilter8 = new System.Windows.Forms.ComboBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.numericUpDownFilter7Max = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownFilter7Min = new System.Windows.Forms.NumericUpDown();
+            this.comboBoxFilter7 = new System.Windows.Forms.ComboBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.numericUpDownFilter6Max = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownFilter6Min = new System.Windows.Forms.NumericUpDown();
+            this.comboBoxFilter6 = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.numericUpDownFilter5Max = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownFilter5Min = new System.Windows.Forms.NumericUpDown();
+            this.comboBoxFilter5 = new System.Windows.Forms.ComboBox();
             this.tabControl.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValueMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValueMin)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScoutMax)).BeginInit();
@@ -85,9 +120,23 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxAge)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinAge)).BeginInit();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValueMax)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValueMin)).BeginInit();
+            this.tabPageAttributes1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter1Max)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter1Min)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter2Max)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter2Min)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter3Max)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter3Min)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter4Max)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter4Min)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter8Max)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter8Min)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter7Max)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter7Min)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter6Max)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter6Min)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter5Max)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter5Min)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -113,6 +162,61 @@
             this.tabPageGeneral.Size = new System.Drawing.Size(395, 336);
             this.tabPageGeneral.TabIndex = 0;
             this.tabPageGeneral.Text = "General";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.label10);
+            this.groupBox4.Controls.Add(this.label11);
+            this.groupBox4.Controls.Add(this.numericUpDownValueMax);
+            this.groupBox4.Controls.Add(this.numericUpDownValueMin);
+            this.groupBox4.Location = new System.Drawing.Point(198, 118);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(191, 61);
+            this.groupBox4.TabIndex = 8;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Contract";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(92, 39);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(10, 13);
+            this.label10.TabIndex = 17;
+            this.label10.Text = "-";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 18);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(37, 13);
+            this.label11.TabIndex = 15;
+            this.label11.Text = "Value:";
+            // 
+            // numericUpDownValueMax
+            // 
+            this.numericUpDownValueMax.Location = new System.Drawing.Point(108, 35);
+            this.numericUpDownValueMax.Maximum = new decimal(new int[] {
+            200000000,
+            0,
+            0,
+            0});
+            this.numericUpDownValueMax.Name = "numericUpDownValueMax";
+            this.numericUpDownValueMax.Size = new System.Drawing.Size(77, 20);
+            this.numericUpDownValueMax.TabIndex = 16;
+            // 
+            // numericUpDownValueMin
+            // 
+            this.numericUpDownValueMin.Location = new System.Drawing.Point(9, 35);
+            this.numericUpDownValueMin.Maximum = new decimal(new int[] {
+            200000000,
+            0,
+            0,
+            0});
+            this.numericUpDownValueMin.Name = "numericUpDownValueMin";
+            this.numericUpDownValueMin.Size = new System.Drawing.Size(77, 20);
+            this.numericUpDownValueMin.TabIndex = 14;
             // 
             // groupBox3
             // 
@@ -468,6 +572,38 @@
             // tabPageAttributes1
             // 
             this.tabPageAttributes1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageAttributes1.Controls.Add(this.label16);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter8Max);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter8Min);
+            this.tabPageAttributes1.Controls.Add(this.comboBoxFilter8);
+            this.tabPageAttributes1.Controls.Add(this.label17);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter7Max);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter7Min);
+            this.tabPageAttributes1.Controls.Add(this.comboBoxFilter7);
+            this.tabPageAttributes1.Controls.Add(this.label18);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter6Max);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter6Min);
+            this.tabPageAttributes1.Controls.Add(this.comboBoxFilter6);
+            this.tabPageAttributes1.Controls.Add(this.label19);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter5Max);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter5Min);
+            this.tabPageAttributes1.Controls.Add(this.comboBoxFilter5);
+            this.tabPageAttributes1.Controls.Add(this.label15);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter4Max);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter4Min);
+            this.tabPageAttributes1.Controls.Add(this.comboBoxFilter4);
+            this.tabPageAttributes1.Controls.Add(this.label14);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter3Max);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter3Min);
+            this.tabPageAttributes1.Controls.Add(this.comboBoxFilter3);
+            this.tabPageAttributes1.Controls.Add(this.label13);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter2Max);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter2Min);
+            this.tabPageAttributes1.Controls.Add(this.comboBoxFilter2);
+            this.tabPageAttributes1.Controls.Add(this.label12);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter1Max);
+            this.tabPageAttributes1.Controls.Add(this.numericUpDownFilter1Min);
+            this.tabPageAttributes1.Controls.Add(this.comboBoxFilter1);
             this.tabPageAttributes1.Location = new System.Drawing.Point(4, 22);
             this.tabPageAttributes1.Name = "tabPageAttributes1";
             this.tabPageAttributes1.Padding = new System.Windows.Forms.Padding(3);
@@ -494,60 +630,341 @@
             this.buttonApply.UseVisualStyleBackColor = true;
             this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
             // 
-            // groupBox4
+            // comboBoxFilter1
             // 
-            this.groupBox4.Controls.Add(this.label10);
-            this.groupBox4.Controls.Add(this.label11);
-            this.groupBox4.Controls.Add(this.numericUpDownValueMax);
-            this.groupBox4.Controls.Add(this.numericUpDownValueMin);
-            this.groupBox4.Location = new System.Drawing.Point(198, 118);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(191, 61);
-            this.groupBox4.TabIndex = 8;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Contract";
+            this.comboBoxFilter1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFilter1.FormattingEnabled = true;
+            this.comboBoxFilter1.Location = new System.Drawing.Point(6, 16);
+            this.comboBoxFilter1.Name = "comboBoxFilter1";
+            this.comboBoxFilter1.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxFilter1.TabIndex = 0;
             // 
-            // label10
+            // label12
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(92, 39);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(10, 13);
-            this.label10.TabIndex = 17;
-            this.label10.Text = "-";
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(180, 19);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(10, 13);
+            this.label12.TabIndex = 12;
+            this.label12.Text = "-";
             // 
-            // numericUpDownValueMax
+            // numericUpDownFilter1Max
             // 
-            this.numericUpDownValueMax.Location = new System.Drawing.Point(108, 35);
-            this.numericUpDownValueMax.Maximum = new decimal(new int[] {
-            200000000,
+            this.numericUpDownFilter1Max.Location = new System.Drawing.Point(193, 16);
+            this.numericUpDownFilter1Max.Minimum = new decimal(new int[] {
+            100,
             0,
             0,
-            0});
-            this.numericUpDownValueMax.Name = "numericUpDownValueMax";
-            this.numericUpDownValueMax.Size = new System.Drawing.Size(77, 20);
-            this.numericUpDownValueMax.TabIndex = 16;
+            -2147483648});
+            this.numericUpDownFilter1Max.Name = "numericUpDownFilter1Max";
+            this.numericUpDownFilter1Max.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter1Max.TabIndex = 11;
             // 
-            // label11
+            // numericUpDownFilter1Min
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 18);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(37, 13);
-            this.label11.TabIndex = 15;
-            this.label11.Text = "Value:";
-            // 
-            // numericUpDownValueMin
-            // 
-            this.numericUpDownValueMin.Location = new System.Drawing.Point(9, 35);
-            this.numericUpDownValueMin.Maximum = new decimal(new int[] {
-            200000000,
+            this.numericUpDownFilter1Min.Location = new System.Drawing.Point(137, 16);
+            this.numericUpDownFilter1Min.Minimum = new decimal(new int[] {
+            100,
             0,
             0,
-            0});
-            this.numericUpDownValueMin.Name = "numericUpDownValueMin";
-            this.numericUpDownValueMin.Size = new System.Drawing.Size(77, 20);
-            this.numericUpDownValueMin.TabIndex = 14;
+            -2147483648});
+            this.numericUpDownFilter1Min.Name = "numericUpDownFilter1Min";
+            this.numericUpDownFilter1Min.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter1Min.TabIndex = 10;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(180, 46);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(10, 13);
+            this.label13.TabIndex = 16;
+            this.label13.Text = "-";
+            // 
+            // numericUpDownFilter2Max
+            // 
+            this.numericUpDownFilter2Max.Location = new System.Drawing.Point(193, 43);
+            this.numericUpDownFilter2Max.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter2Max.Name = "numericUpDownFilter2Max";
+            this.numericUpDownFilter2Max.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter2Max.TabIndex = 15;
+            // 
+            // numericUpDownFilter2Min
+            // 
+            this.numericUpDownFilter2Min.Location = new System.Drawing.Point(137, 43);
+            this.numericUpDownFilter2Min.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter2Min.Name = "numericUpDownFilter2Min";
+            this.numericUpDownFilter2Min.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter2Min.TabIndex = 14;
+            // 
+            // comboBoxFilter2
+            // 
+            this.comboBoxFilter2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFilter2.FormattingEnabled = true;
+            this.comboBoxFilter2.Location = new System.Drawing.Point(6, 43);
+            this.comboBoxFilter2.Name = "comboBoxFilter2";
+            this.comboBoxFilter2.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxFilter2.TabIndex = 13;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(180, 73);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(10, 13);
+            this.label14.TabIndex = 20;
+            this.label14.Text = "-";
+            // 
+            // numericUpDownFilter3Max
+            // 
+            this.numericUpDownFilter3Max.Location = new System.Drawing.Point(193, 70);
+            this.numericUpDownFilter3Max.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter3Max.Name = "numericUpDownFilter3Max";
+            this.numericUpDownFilter3Max.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter3Max.TabIndex = 19;
+            // 
+            // numericUpDownFilter3Min
+            // 
+            this.numericUpDownFilter3Min.Location = new System.Drawing.Point(137, 70);
+            this.numericUpDownFilter3Min.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter3Min.Name = "numericUpDownFilter3Min";
+            this.numericUpDownFilter3Min.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter3Min.TabIndex = 18;
+            // 
+            // comboBoxFilter3
+            // 
+            this.comboBoxFilter3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFilter3.FormattingEnabled = true;
+            this.comboBoxFilter3.Location = new System.Drawing.Point(6, 70);
+            this.comboBoxFilter3.Name = "comboBoxFilter3";
+            this.comboBoxFilter3.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxFilter3.TabIndex = 17;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(180, 100);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(10, 13);
+            this.label15.TabIndex = 24;
+            this.label15.Text = "-";
+            // 
+            // numericUpDownFilter4Max
+            // 
+            this.numericUpDownFilter4Max.Location = new System.Drawing.Point(193, 97);
+            this.numericUpDownFilter4Max.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter4Max.Name = "numericUpDownFilter4Max";
+            this.numericUpDownFilter4Max.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter4Max.TabIndex = 23;
+            // 
+            // numericUpDownFilter4Min
+            // 
+            this.numericUpDownFilter4Min.Location = new System.Drawing.Point(137, 97);
+            this.numericUpDownFilter4Min.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter4Min.Name = "numericUpDownFilter4Min";
+            this.numericUpDownFilter4Min.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter4Min.TabIndex = 22;
+            // 
+            // comboBoxFilter4
+            // 
+            this.comboBoxFilter4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFilter4.FormattingEnabled = true;
+            this.comboBoxFilter4.Location = new System.Drawing.Point(6, 97);
+            this.comboBoxFilter4.Name = "comboBoxFilter4";
+            this.comboBoxFilter4.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxFilter4.TabIndex = 21;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(180, 208);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(10, 13);
+            this.label16.TabIndex = 40;
+            this.label16.Text = "-";
+            // 
+            // numericUpDownFilter8Max
+            // 
+            this.numericUpDownFilter8Max.Location = new System.Drawing.Point(193, 205);
+            this.numericUpDownFilter8Max.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter8Max.Name = "numericUpDownFilter8Max";
+            this.numericUpDownFilter8Max.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter8Max.TabIndex = 39;
+            // 
+            // numericUpDownFilter8Min
+            // 
+            this.numericUpDownFilter8Min.Location = new System.Drawing.Point(137, 205);
+            this.numericUpDownFilter8Min.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter8Min.Name = "numericUpDownFilter8Min";
+            this.numericUpDownFilter8Min.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter8Min.TabIndex = 38;
+            // 
+            // comboBoxFilter8
+            // 
+            this.comboBoxFilter8.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFilter8.FormattingEnabled = true;
+            this.comboBoxFilter8.Location = new System.Drawing.Point(6, 205);
+            this.comboBoxFilter8.Name = "comboBoxFilter8";
+            this.comboBoxFilter8.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxFilter8.TabIndex = 37;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(180, 181);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(10, 13);
+            this.label17.TabIndex = 36;
+            this.label17.Text = "-";
+            // 
+            // numericUpDownFilter7Max
+            // 
+            this.numericUpDownFilter7Max.Location = new System.Drawing.Point(193, 178);
+            this.numericUpDownFilter7Max.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter7Max.Name = "numericUpDownFilter7Max";
+            this.numericUpDownFilter7Max.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter7Max.TabIndex = 35;
+            // 
+            // numericUpDownFilter7Min
+            // 
+            this.numericUpDownFilter7Min.Location = new System.Drawing.Point(137, 178);
+            this.numericUpDownFilter7Min.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter7Min.Name = "numericUpDownFilter7Min";
+            this.numericUpDownFilter7Min.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter7Min.TabIndex = 34;
+            // 
+            // comboBoxFilter7
+            // 
+            this.comboBoxFilter7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFilter7.FormattingEnabled = true;
+            this.comboBoxFilter7.Location = new System.Drawing.Point(6, 178);
+            this.comboBoxFilter7.Name = "comboBoxFilter7";
+            this.comboBoxFilter7.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxFilter7.TabIndex = 33;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(180, 154);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(10, 13);
+            this.label18.TabIndex = 32;
+            this.label18.Text = "-";
+            // 
+            // numericUpDownFilter6Max
+            // 
+            this.numericUpDownFilter6Max.Location = new System.Drawing.Point(193, 151);
+            this.numericUpDownFilter6Max.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter6Max.Name = "numericUpDownFilter6Max";
+            this.numericUpDownFilter6Max.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter6Max.TabIndex = 31;
+            // 
+            // numericUpDownFilter6Min
+            // 
+            this.numericUpDownFilter6Min.Location = new System.Drawing.Point(137, 151);
+            this.numericUpDownFilter6Min.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter6Min.Name = "numericUpDownFilter6Min";
+            this.numericUpDownFilter6Min.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter6Min.TabIndex = 30;
+            // 
+            // comboBoxFilter6
+            // 
+            this.comboBoxFilter6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFilter6.FormattingEnabled = true;
+            this.comboBoxFilter6.Location = new System.Drawing.Point(6, 151);
+            this.comboBoxFilter6.Name = "comboBoxFilter6";
+            this.comboBoxFilter6.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxFilter6.TabIndex = 29;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(180, 127);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(10, 13);
+            this.label19.TabIndex = 28;
+            this.label19.Text = "-";
+            // 
+            // numericUpDownFilter5Max
+            // 
+            this.numericUpDownFilter5Max.Location = new System.Drawing.Point(193, 124);
+            this.numericUpDownFilter5Max.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter5Max.Name = "numericUpDownFilter5Max";
+            this.numericUpDownFilter5Max.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter5Max.TabIndex = 27;
+            // 
+            // numericUpDownFilter5Min
+            // 
+            this.numericUpDownFilter5Min.Location = new System.Drawing.Point(137, 124);
+            this.numericUpDownFilter5Min.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDownFilter5Min.Name = "numericUpDownFilter5Min";
+            this.numericUpDownFilter5Min.Size = new System.Drawing.Size(41, 20);
+            this.numericUpDownFilter5Min.TabIndex = 26;
+            // 
+            // comboBoxFilter5
+            // 
+            this.comboBoxFilter5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFilter5.FormattingEnabled = true;
+            this.comboBoxFilter5.Location = new System.Drawing.Point(6, 124);
+            this.comboBoxFilter5.Name = "comboBoxFilter5";
+            this.comboBoxFilter5.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxFilter5.TabIndex = 25;
             // 
             // PlayerSearch
             // 
@@ -564,6 +981,10 @@
             this.Text = "PlayerSearch";
             this.tabControl.ResumeLayout(false);
             this.tabPageGeneral.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValueMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValueMin)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -578,10 +999,24 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxAge)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinAge)).EndInit();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValueMax)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownValueMin)).EndInit();
+            this.tabPageAttributes1.ResumeLayout(false);
+            this.tabPageAttributes1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter1Max)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter1Min)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter2Max)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter2Min)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter3Max)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter3Min)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter4Max)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter4Min)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter8Max)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter8Min)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter7Max)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter7Min)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter6Max)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter6Min)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter5Max)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFilter5Min)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -631,5 +1066,37 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.NumericUpDown numericUpDownValueMax;
         private System.Windows.Forms.NumericUpDown numericUpDownValueMin;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter1Max;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter1Min;
+        private System.Windows.Forms.ComboBox comboBoxFilter1;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter4Max;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter4Min;
+        private System.Windows.Forms.ComboBox comboBoxFilter4;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter3Max;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter3Min;
+        private System.Windows.Forms.ComboBox comboBoxFilter3;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter2Max;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter2Min;
+        private System.Windows.Forms.ComboBox comboBoxFilter2;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter8Max;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter8Min;
+        private System.Windows.Forms.ComboBox comboBoxFilter8;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter7Max;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter7Min;
+        private System.Windows.Forms.ComboBox comboBoxFilter7;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter6Max;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter6Min;
+        private System.Windows.Forms.ComboBox comboBoxFilter6;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter5Max;
+        private System.Windows.Forms.NumericUpDown numericUpDownFilter5Min;
+        private System.Windows.Forms.ComboBox comboBoxFilter5;
     }
 }

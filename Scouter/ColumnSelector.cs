@@ -32,9 +32,13 @@ namespace CM0102Patcher.Scouter
 
             if (comboBoxPresets.Items.Count == 0)
             {
+                // https://champman0102.co.uk/showthread.php?t=6625
                 comboBoxPresets.Items.Add(new ColumnPreset("All", false, colNames.ToArray()));
                 comboBoxPresets.Items.Add(new ColumnPreset("None", false));
-                comboBoxPresets.Items.Add(new ColumnPreset("Attackers", true, "Determination", "Off The Ball", "Finishing", "Jumping"));
+                comboBoxPresets.Items.Add(new ColumnPreset("Goalkeepers", true, "Goalkeepers", "Handling", "Acceleration", "Agility", "Jumping", "Pace", "Passing", "Positioning", "Reflexes", "Strength"));
+                comboBoxPresets.Items.Add(new ColumnPreset("Defenders", true, "Acceleration", "Marking", "Passing", "Tackling", "Jumping", "Pace", "Passing", "Positioning", "Stamina", "Strength"));
+                comboBoxPresets.Items.Add(new ColumnPreset("Midfielders", true, "Determination", "Marking", "Passing", "Crossing", "Dribbling", "Heading", "Pace", "Strength", "Stamina" ));
+                comboBoxPresets.Items.Add(new ColumnPreset("Attackers", true, "Determination", "Off The Ball", "Finishing", "Jumping", "Pace", "Flair", "Long Shots", "Creativity"));
                 comboBoxPresets.SelectedIndex = 0;
             }
         }

@@ -18,6 +18,19 @@ namespace CM0102Patcher.Scouter
             InitializeComponent();
 
             AddEnterKeyHook(this);
+
+            var filterCols = new string[] { "", "Acceleration", "Aggression", "Agility", "Anticipation", "Balance", "Bravery", "Consistency", "Corners", "Creativity", "Crossing", "Decisions", "Determination",
+                                            "Dirtiness", "Dribbling", "Finishing", "Flair", "Free Kicks", "Handling", "Heading", "Important Matches", "Influence", "Injury Proneness", "Jumping", "Left Foot",
+                                            "Long Shots", "Marking", "Natural Fitness", "Off The Ball", "One On Ones", "Pace", "Passing", "Penalties", "Positioning", "Reflexes", "Right Foot", "Stamina", "Strength",
+                                            "Tackling", "Teamwork", "Technique", "Throw Ins", "Versatility","Work Rate", "Player Morale" };
+            comboBoxFilter1.Items.AddRange(filterCols);
+            comboBoxFilter2.Items.AddRange(filterCols);
+            comboBoxFilter3.Items.AddRange(filterCols);
+            comboBoxFilter4.Items.AddRange(filterCols);
+            comboBoxFilter5.Items.AddRange(filterCols);
+            comboBoxFilter6.Items.AddRange(filterCols);
+            comboBoxFilter7.Items.AddRange(filterCols);
+            comboBoxFilter8.Items.AddRange(filterCols);
         }
 
         private void AddEnterKeyHook(Control controlContainer)
@@ -79,6 +92,70 @@ namespace CM0102Patcher.Scouter
             if (numericUpDownValueMax.Value != 0)
             {
                 RowFilter += string.Format("AND [{0}] <= {1} ", "Value", numericUpDownPAMax.Value);
+            }
+            if (numericUpDownFilter1Min.Value != 0 && (comboBoxFilter1.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] >= {1} ", comboBoxFilter1.SelectedItem as string, numericUpDownFilter1Min.Value);
+            }
+            if (numericUpDownFilter1Max.Value != 0 && (comboBoxFilter1.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] <= {1} ", comboBoxFilter1.SelectedItem as string, numericUpDownFilter1Max.Value);
+            }
+            if (numericUpDownFilter2Min.Value != 0 && (comboBoxFilter2.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] >= {1} ", comboBoxFilter2.SelectedItem as string, numericUpDownFilter2Min.Value);
+            }
+            if (numericUpDownFilter2Max.Value != 0 && (comboBoxFilter2.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] <= {1} ", comboBoxFilter2.SelectedItem as string, numericUpDownFilter2Max.Value);
+            }
+            if (numericUpDownFilter3Min.Value != 0 && (comboBoxFilter3.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] >= {1} ", comboBoxFilter3.SelectedItem as string, numericUpDownFilter3Min.Value);
+            }
+            if (numericUpDownFilter3Max.Value != 0 && (comboBoxFilter3.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] <= {1} ", comboBoxFilter3.SelectedItem as string, numericUpDownFilter3Max.Value);
+            }
+            if (numericUpDownFilter4Min.Value != 0 && (comboBoxFilter4.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] >= {1} ", comboBoxFilter4.SelectedItem as string, numericUpDownFilter4Min.Value);
+            }
+            if (numericUpDownFilter4Max.Value != 0 && (comboBoxFilter4.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] <= {1} ", comboBoxFilter4.SelectedItem as string, numericUpDownFilter4Max.Value);
+            }
+            if (numericUpDownFilter5Min.Value != 0 && (comboBoxFilter5.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] >= {1} ", comboBoxFilter5.SelectedItem as string, numericUpDownFilter5Min.Value);
+            }
+            if (numericUpDownFilter5Max.Value != 0 && (comboBoxFilter5.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] <= {1} ", comboBoxFilter5.SelectedItem as string, numericUpDownFilter5Max.Value);
+            }
+            if (numericUpDownFilter6Min.Value != 0 && (comboBoxFilter6.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] >= {1} ", comboBoxFilter6.SelectedItem as string, numericUpDownFilter6Min.Value);
+            }
+            if (numericUpDownFilter6Max.Value != 0 && (comboBoxFilter6.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] <= {1} ", comboBoxFilter6.SelectedItem as string, numericUpDownFilter6Max.Value);
+            }
+            if (numericUpDownFilter7Min.Value != 0 && (comboBoxFilter7.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] >= {1} ", comboBoxFilter7.SelectedItem as string, numericUpDownFilter7Min.Value);
+            }
+            if (numericUpDownFilter7Max.Value != 0 && (comboBoxFilter7.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] <= {1} ", comboBoxFilter7.SelectedItem as string, numericUpDownFilter7Max.Value);
+            }
+            if (numericUpDownFilter8Min.Value != 0 && (comboBoxFilter8.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] >= {1} ", comboBoxFilter8.SelectedItem as string, numericUpDownFilter8Min.Value);
+            }
+            if (numericUpDownFilter8Max.Value != 0 && (comboBoxFilter8.SelectedItem as string) != "")
+            {
+                RowFilter += string.Format("AND [{0}] <= {1} ", comboBoxFilter8.SelectedItem as string, numericUpDownFilter8Max.Value);
             }
 
             // MadScientist's Code
