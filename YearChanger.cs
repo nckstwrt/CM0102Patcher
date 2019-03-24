@@ -91,6 +91,10 @@ namespace CM0102Patcher
                     bw.Seek(0x18B387, SeekOrigin.Begin);
                     int mod4year = ((year + 1) - ((year - 1) % 4));
                     bw.Write(YearToBytes(mod4year));
+
+                    // Special 2 (the calc for season selection can cause England 18/09 without this)
+                    bw.Seek(0x41e9ca, SeekOrigin.Begin);
+                    bw.Write((byte)0x64);
                 }
             }
         }

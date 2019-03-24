@@ -144,7 +144,11 @@ namespace CM0102Patcher
                         yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
                         yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8);
                         yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8);
-                        yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement, 0x8);
+
+                        // +1 for World cup to 2018? If odd number increment by 1
+                        if ((yearIncrement % 2) == 1)
+                            yearIncrement++;
+                        yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement, 0x8);   
                     }
                 }
                 catch (Exception ex)
