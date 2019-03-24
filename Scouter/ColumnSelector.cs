@@ -38,7 +38,7 @@ namespace CM0102Patcher.Scouter
                 comboBoxPresets.Items.Add(new ColumnPreset("Goalkeepers", true, "Goalkeepers", "Handling", "Acceleration", "Agility", "Jumping", "Pace", "Passing", "Positioning", "Reflexes", "Strength"));
                 comboBoxPresets.Items.Add(new ColumnPreset("Defenders", true, "Acceleration", "Marking", "Passing", "Tackling", "Jumping", "Pace", "Passing", "Positioning", "Stamina", "Strength"));
                 comboBoxPresets.Items.Add(new ColumnPreset("Midfielders", true, "Determination", "Marking", "Passing", "Crossing", "Dribbling", "Heading", "Pace", "Strength", "Stamina" ));
-                comboBoxPresets.Items.Add(new ColumnPreset("Attackers", true, "Determination", "Off The Ball", "Finishing", "Jumping", "Pace", "Flair", "Long Shots", "Creativity"));
+                comboBoxPresets.Items.Add(new ColumnPreset("Attackers", true, "Determination", "Acceleration", "Creativity", "Off The Ball", "Finishing", "Jumping", "Pace", "Flair", "Creativity"));
                 comboBoxPresets.SelectedIndex = 0;
             }
         }
@@ -158,7 +158,7 @@ namespace CM0102Patcher.Scouter
     {
         public string name;
         public List<string> columns = new List<string>();
-        string[] defaultColumns = new string[] { "Name", "Age", "Club", "Nationality", "CA", "PA", "Value" };
+        string[] defaultColumns = new string[] { "Name", "Age", "Club", "CA", "PA", "Value" };
 
         public ColumnPreset()
         {

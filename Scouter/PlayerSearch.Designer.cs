@@ -609,7 +609,7 @@
             this.tabPageAttributes1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageAttributes1.Size = new System.Drawing.Size(395, 336);
             this.tabPageAttributes1.TabIndex = 1;
-            this.tabPageAttributes1.Text = "Attributes1";
+            this.tabPageAttributes1.Text = "Attributes";
             // 
             // buttonReset
             // 
@@ -634,7 +634,7 @@
             // 
             this.comboBoxFilter1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFilter1.FormattingEnabled = true;
-            this.comboBoxFilter1.Location = new System.Drawing.Point(6, 16);
+            this.comboBoxFilter1.Location = new System.Drawing.Point(64, 37);
             this.comboBoxFilter1.Name = "comboBoxFilter1";
             this.comboBoxFilter1.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFilter1.TabIndex = 0;
@@ -642,7 +642,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(180, 19);
+            this.label12.Location = new System.Drawing.Point(253, 40);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(10, 13);
             this.label12.TabIndex = 12;
@@ -650,7 +650,7 @@
             // 
             // numericUpDownFilter1Max
             // 
-            this.numericUpDownFilter1Max.Location = new System.Drawing.Point(193, 16);
+            this.numericUpDownFilter1Max.Location = new System.Drawing.Point(266, 37);
             this.numericUpDownFilter1Max.Minimum = new decimal(new int[] {
             100,
             0,
@@ -662,7 +662,7 @@
             // 
             // numericUpDownFilter1Min
             // 
-            this.numericUpDownFilter1Min.Location = new System.Drawing.Point(137, 16);
+            this.numericUpDownFilter1Min.Location = new System.Drawing.Point(210, 37);
             this.numericUpDownFilter1Min.Minimum = new decimal(new int[] {
             100,
             0,
@@ -675,7 +675,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(180, 46);
+            this.label13.Location = new System.Drawing.Point(253, 67);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(10, 13);
             this.label13.TabIndex = 16;
@@ -683,7 +683,7 @@
             // 
             // numericUpDownFilter2Max
             // 
-            this.numericUpDownFilter2Max.Location = new System.Drawing.Point(193, 43);
+            this.numericUpDownFilter2Max.Location = new System.Drawing.Point(266, 64);
             this.numericUpDownFilter2Max.Minimum = new decimal(new int[] {
             100,
             0,
@@ -695,7 +695,7 @@
             // 
             // numericUpDownFilter2Min
             // 
-            this.numericUpDownFilter2Min.Location = new System.Drawing.Point(137, 43);
+            this.numericUpDownFilter2Min.Location = new System.Drawing.Point(210, 64);
             this.numericUpDownFilter2Min.Minimum = new decimal(new int[] {
             100,
             0,
@@ -709,7 +709,7 @@
             // 
             this.comboBoxFilter2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFilter2.FormattingEnabled = true;
-            this.comboBoxFilter2.Location = new System.Drawing.Point(6, 43);
+            this.comboBoxFilter2.Location = new System.Drawing.Point(64, 64);
             this.comboBoxFilter2.Name = "comboBoxFilter2";
             this.comboBoxFilter2.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFilter2.TabIndex = 13;
@@ -717,7 +717,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(180, 73);
+            this.label14.Location = new System.Drawing.Point(253, 94);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(10, 13);
             this.label14.TabIndex = 20;
@@ -725,7 +725,7 @@
             // 
             // numericUpDownFilter3Max
             // 
-            this.numericUpDownFilter3Max.Location = new System.Drawing.Point(193, 70);
+            this.numericUpDownFilter3Max.Location = new System.Drawing.Point(266, 91);
             this.numericUpDownFilter3Max.Minimum = new decimal(new int[] {
             100,
             0,
@@ -737,7 +737,7 @@
             // 
             // numericUpDownFilter3Min
             // 
-            this.numericUpDownFilter3Min.Location = new System.Drawing.Point(137, 70);
+            this.numericUpDownFilter3Min.Location = new System.Drawing.Point(210, 91);
             this.numericUpDownFilter3Min.Minimum = new decimal(new int[] {
             100,
             0,
@@ -751,7 +751,7 @@
             // 
             this.comboBoxFilter3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFilter3.FormattingEnabled = true;
-            this.comboBoxFilter3.Location = new System.Drawing.Point(6, 70);
+            this.comboBoxFilter3.Location = new System.Drawing.Point(64, 91);
             this.comboBoxFilter3.Name = "comboBoxFilter3";
             this.comboBoxFilter3.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFilter3.TabIndex = 17;
@@ -759,7 +759,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(180, 100);
+            this.label15.Location = new System.Drawing.Point(253, 121);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(10, 13);
             this.label15.TabIndex = 24;
@@ -767,7 +767,7 @@
             // 
             // numericUpDownFilter4Max
             // 
-            this.numericUpDownFilter4Max.Location = new System.Drawing.Point(193, 97);
+            this.numericUpDownFilter4Max.Location = new System.Drawing.Point(266, 118);
             this.numericUpDownFilter4Max.Minimum = new decimal(new int[] {
             100,
             0,
@@ -779,7 +779,7 @@
             // 
             // numericUpDownFilter4Min
             // 
-            this.numericUpDownFilter4Min.Location = new System.Drawing.Point(137, 97);
+            this.numericUpDownFilter4Min.Location = new System.Drawing.Point(210, 118);
             this.numericUpDownFilter4Min.Minimum = new decimal(new int[] {
             100,
             0,
@@ -793,7 +793,7 @@
             // 
             this.comboBoxFilter4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFilter4.FormattingEnabled = true;
-            this.comboBoxFilter4.Location = new System.Drawing.Point(6, 97);
+            this.comboBoxFilter4.Location = new System.Drawing.Point(64, 118);
             this.comboBoxFilter4.Name = "comboBoxFilter4";
             this.comboBoxFilter4.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFilter4.TabIndex = 21;
@@ -801,7 +801,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(180, 208);
+            this.label16.Location = new System.Drawing.Point(253, 229);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(10, 13);
             this.label16.TabIndex = 40;
@@ -809,7 +809,7 @@
             // 
             // numericUpDownFilter8Max
             // 
-            this.numericUpDownFilter8Max.Location = new System.Drawing.Point(193, 205);
+            this.numericUpDownFilter8Max.Location = new System.Drawing.Point(266, 226);
             this.numericUpDownFilter8Max.Minimum = new decimal(new int[] {
             100,
             0,
@@ -821,7 +821,7 @@
             // 
             // numericUpDownFilter8Min
             // 
-            this.numericUpDownFilter8Min.Location = new System.Drawing.Point(137, 205);
+            this.numericUpDownFilter8Min.Location = new System.Drawing.Point(210, 226);
             this.numericUpDownFilter8Min.Minimum = new decimal(new int[] {
             100,
             0,
@@ -835,7 +835,7 @@
             // 
             this.comboBoxFilter8.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFilter8.FormattingEnabled = true;
-            this.comboBoxFilter8.Location = new System.Drawing.Point(6, 205);
+            this.comboBoxFilter8.Location = new System.Drawing.Point(64, 226);
             this.comboBoxFilter8.Name = "comboBoxFilter8";
             this.comboBoxFilter8.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFilter8.TabIndex = 37;
@@ -843,7 +843,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(180, 181);
+            this.label17.Location = new System.Drawing.Point(253, 202);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(10, 13);
             this.label17.TabIndex = 36;
@@ -851,7 +851,7 @@
             // 
             // numericUpDownFilter7Max
             // 
-            this.numericUpDownFilter7Max.Location = new System.Drawing.Point(193, 178);
+            this.numericUpDownFilter7Max.Location = new System.Drawing.Point(266, 199);
             this.numericUpDownFilter7Max.Minimum = new decimal(new int[] {
             100,
             0,
@@ -863,7 +863,7 @@
             // 
             // numericUpDownFilter7Min
             // 
-            this.numericUpDownFilter7Min.Location = new System.Drawing.Point(137, 178);
+            this.numericUpDownFilter7Min.Location = new System.Drawing.Point(210, 199);
             this.numericUpDownFilter7Min.Minimum = new decimal(new int[] {
             100,
             0,
@@ -877,7 +877,7 @@
             // 
             this.comboBoxFilter7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFilter7.FormattingEnabled = true;
-            this.comboBoxFilter7.Location = new System.Drawing.Point(6, 178);
+            this.comboBoxFilter7.Location = new System.Drawing.Point(64, 199);
             this.comboBoxFilter7.Name = "comboBoxFilter7";
             this.comboBoxFilter7.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFilter7.TabIndex = 33;
@@ -885,7 +885,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(180, 154);
+            this.label18.Location = new System.Drawing.Point(253, 175);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(10, 13);
             this.label18.TabIndex = 32;
@@ -893,7 +893,7 @@
             // 
             // numericUpDownFilter6Max
             // 
-            this.numericUpDownFilter6Max.Location = new System.Drawing.Point(193, 151);
+            this.numericUpDownFilter6Max.Location = new System.Drawing.Point(266, 172);
             this.numericUpDownFilter6Max.Minimum = new decimal(new int[] {
             100,
             0,
@@ -905,7 +905,7 @@
             // 
             // numericUpDownFilter6Min
             // 
-            this.numericUpDownFilter6Min.Location = new System.Drawing.Point(137, 151);
+            this.numericUpDownFilter6Min.Location = new System.Drawing.Point(210, 172);
             this.numericUpDownFilter6Min.Minimum = new decimal(new int[] {
             100,
             0,
@@ -919,7 +919,7 @@
             // 
             this.comboBoxFilter6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFilter6.FormattingEnabled = true;
-            this.comboBoxFilter6.Location = new System.Drawing.Point(6, 151);
+            this.comboBoxFilter6.Location = new System.Drawing.Point(64, 172);
             this.comboBoxFilter6.Name = "comboBoxFilter6";
             this.comboBoxFilter6.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFilter6.TabIndex = 29;
@@ -927,7 +927,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(180, 127);
+            this.label19.Location = new System.Drawing.Point(253, 148);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(10, 13);
             this.label19.TabIndex = 28;
@@ -935,7 +935,7 @@
             // 
             // numericUpDownFilter5Max
             // 
-            this.numericUpDownFilter5Max.Location = new System.Drawing.Point(193, 124);
+            this.numericUpDownFilter5Max.Location = new System.Drawing.Point(266, 145);
             this.numericUpDownFilter5Max.Minimum = new decimal(new int[] {
             100,
             0,
@@ -947,7 +947,7 @@
             // 
             // numericUpDownFilter5Min
             // 
-            this.numericUpDownFilter5Min.Location = new System.Drawing.Point(137, 124);
+            this.numericUpDownFilter5Min.Location = new System.Drawing.Point(210, 145);
             this.numericUpDownFilter5Min.Minimum = new decimal(new int[] {
             100,
             0,
@@ -961,7 +961,7 @@
             // 
             this.comboBoxFilter5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFilter5.FormattingEnabled = true;
-            this.comboBoxFilter5.Location = new System.Drawing.Point(6, 124);
+            this.comboBoxFilter5.Location = new System.Drawing.Point(64, 145);
             this.comboBoxFilter5.Name = "comboBoxFilter5";
             this.comboBoxFilter5.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFilter5.TabIndex = 25;
