@@ -33,6 +33,7 @@ namespace CM0102Scout
         public int secondName;
         public int playerId;
         public int value;
+        public int determination;
         public DateTime dob;
         public short yearOfBirth;
         public int nationID;
@@ -84,7 +85,7 @@ namespace CM0102Scout
         public sbyte LeftFoot;
         public sbyte LongShots;
         public sbyte Marking;
-        public sbyte Movement;
+        public sbyte Movement;          // Off The Ball
         public sbyte NaturalFitness;
         public sbyte OneOnOnes;
         public sbyte PlayerPace;
@@ -100,7 +101,7 @@ namespace CM0102Scout
         public sbyte Technique;
         public sbyte ThrowIns;
         public sbyte Versatility;
-        public sbyte Vision;
+        public sbyte Vision;            // Creativity
         public sbyte WorkRate;
         public byte PlayerMorale;
 

@@ -108,6 +108,7 @@ namespace CM0102Scout
                 staff.secondName = BitConverter.ToInt32(staffBlock, 8);
                 staff.playerId = BitConverter.ToInt32(staffBlock, StaffSize - (1 + 4 + 4 + 4));
                 staff.value = BitConverter.ToInt32(staffBlock, StaffSize - (1 + 4 + 4 + 4 + 11 + 4));
+                staff.determination = staffBlock[StaffSize - (1 + 4 + 4 + 4 + 9)];
                 staff.dob = CMDate(staffBlock, 16);
                 staff.yearOfBirth = (short)(2001 - BitConverter.ToInt16(staffBlock, 24));
                 staff.nationID = BitConverter.ToInt32(staffBlock, 24 + 2);
@@ -201,6 +202,7 @@ namespace CM0102Scout
             dataTable.Columns.Add("Bravery", typeof(sbyte));
             dataTable.Columns.Add("Consistency", typeof(sbyte));
             dataTable.Columns.Add("Corners", typeof(sbyte));
+            dataTable.Columns.Add("Creativity", typeof(sbyte));
             dataTable.Columns.Add("Crossing", typeof(sbyte));
             dataTable.Columns.Add("Decisions", typeof(sbyte));
             dataTable.Columns.Add("Determination", typeof(sbyte));
@@ -212,13 +214,12 @@ namespace CM0102Scout
             dataTable.Columns.Add("Handling", typeof(sbyte));
             dataTable.Columns.Add("Heading", typeof(sbyte));
             dataTable.Columns.Add("Important Matches", typeof(sbyte));
+            dataTable.Columns.Add("Influence", typeof(sbyte));
             dataTable.Columns.Add("Injury Proneness", typeof(sbyte));
             dataTable.Columns.Add("Jumping", typeof(sbyte));
-            dataTable.Columns.Add("Leadership", typeof(sbyte));
             dataTable.Columns.Add("Left Foot", typeof(sbyte));
             dataTable.Columns.Add("Long Shots", typeof(sbyte));
             dataTable.Columns.Add("Marking", typeof(sbyte));
-            dataTable.Columns.Add("Movement", typeof(sbyte));
             dataTable.Columns.Add("Natural Fitness", typeof(sbyte));
             dataTable.Columns.Add("Off The Ball", typeof(sbyte));
             dataTable.Columns.Add("One On Ones", typeof(sbyte));
@@ -235,7 +236,11 @@ namespace CM0102Scout
             dataTable.Columns.Add("Technique", typeof(sbyte));
             dataTable.Columns.Add("Throw Ins", typeof(sbyte));
             dataTable.Columns.Add("Versatility", typeof(sbyte));
+            dataTable.Columns.Add("Work Rate", typeof(sbyte));
             dataTable.Columns.Add("Player Morale", typeof(byte));
+
+            // Creativity = Vision
+            // Movement = Off The Ball
 
             foreach (var player in players)
             {
@@ -260,9 +265,10 @@ namespace CM0102Scout
                         player.Bravery,
                         player.Consistency,
                         player.Corners,
+                        instrinsicsOn ? player.Vision : player.Convert(player.Vision, true),
                         instrinsicsOn ? player.Crossing : player.Convert(player.Crossing, true),
                         instrinsicsOn ? player.Decisions : player.Convert(player.Decisions),
-                        player.WorkRate,
+                        staff.determination,
                         player.Dirtiness,
                         instrinsicsOn ? player.Dribbling : player.Convert(player.Dribbling, true),
                         instrinsicsOn ? player.Finishing : player.Convert(player.Finishing, true),
@@ -271,15 +277,14 @@ namespace CM0102Scout
                         instrinsicsOn ? player.Handling : player.Convert(player.Handling, true, true),
                         instrinsicsOn ? player.Heading : player.Convert(player.Heading),
                         player.ImportantMatches,
+                        player.Leadership,
                         player.InjuryProneness,
                         player.Jumping,
-                        player.Leadership,
                         player.LeftFoot,
                         instrinsicsOn ? player.LongShots : player.Convert(player.LongShots),
                         instrinsicsOn ? player.Marking : player.Convert(player.Marking, true),
-                        instrinsicsOn ? player.Movement : player.Convert(player.Movement, true),
                         player.NaturalFitness,
-                        instrinsicsOn ? player.Vision : player.Convert(player.Vision, true),
+                        instrinsicsOn ? player.Movement : player.Convert(player.Movement, true),
                         instrinsicsOn ? player.OneOnOnes : player.Convert(player.OneOnOnes, true, true),
                         player.PlayerPace,
                         instrinsicsOn ? player.Passing : player.Convert(player.Passing),
@@ -294,6 +299,7 @@ namespace CM0102Scout
                         player.Technique,
                         instrinsicsOn ? player.ThrowIns : player.Convert(player.ThrowIns, true),
                         player.Versatility,
+                        player.WorkRate,
                         player.PlayerMorale
                         );
                 }
