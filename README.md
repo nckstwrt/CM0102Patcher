@@ -1,4 +1,4 @@
-# CM0102Patcher v1.07
+# CM0102Patcher v1.08
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/Y7hWQNh.png)
+![alt text](https://i.imgur.com/YAPZaUv.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,11 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.08:
+* Fixed the World Cup history being on odd years (didn't affect future world cup dates/years)
+* Fixed the League Selection text (would say England 18/09 - was just a cosmetic bug)
+* Save Scouter improved and fixed. Can now filter on attributes.
 
 v1.07:
 * Fix for Euro.cfg when updating Holland->Netherlands
