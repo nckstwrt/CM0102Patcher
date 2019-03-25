@@ -60,10 +60,12 @@
             this.checkBoxRegenFixes = new System.Windows.Forms.CheckBox();
             this.checkBoxForceLoadAllPlayers = new System.Windows.Forms.CheckBox();
             this.checkBoxUpdateNames = new System.Windows.Forms.CheckBox();
-            this.checkBoxFindAllPlayers = new System.Windows.Forms.CheckBox();
             this.checkBoxRemoveCDChecks = new System.Windows.Forms.CheckBox();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.buttonAbout = new System.Windows.Forms.Button();
+            this.checkBoxRemove3NonEULimit = new System.Windows.Forms.CheckBox();
+            this.buttonSave = new System.Windows.Forms.Button();
+            this.buttonRestore = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -158,7 +160,7 @@
             // 
             this.buttonApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonApply.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonApply.Location = new System.Drawing.Point(381, 364);
+            this.buttonApply.Location = new System.Drawing.Point(381, 394);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(75, 31);
             this.buttonApply.TabIndex = 7;
@@ -210,7 +212,7 @@
             // 
             this.buttonTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTools.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonTools.Location = new System.Drawing.Point(9, 364);
+            this.buttonTools.Location = new System.Drawing.Point(9, 394);
             this.buttonTools.Name = "buttonTools";
             this.buttonTools.Size = new System.Drawing.Size(75, 31);
             this.buttonTools.TabIndex = 11;
@@ -354,6 +356,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBoxRemove3NonEULimit);
             this.groupBox3.Controls.Add(this.checkBoxManageAnyTeam);
             this.groupBox3.Controls.Add(this.checkBoxNewRegenCode);
             this.groupBox3.Controls.Add(this.checkBoxJobsAbroadBoost);
@@ -361,9 +364,10 @@
             this.groupBox3.Controls.Add(this.checkBoxRegenFixes);
             this.groupBox3.Controls.Add(this.checkBoxForceLoadAllPlayers);
             this.groupBox3.Controls.Add(this.checkBoxUpdateNames);
+            this.groupBox3.Controls.Add(this.checkBoxRemoveCDChecks);
             this.groupBox3.Location = new System.Drawing.Point(9, 131);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(447, 224);
+            this.groupBox3.Size = new System.Drawing.Size(447, 257);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
             // 
@@ -371,7 +375,7 @@
             // 
             this.checkBoxManageAnyTeam.AutoSize = true;
             this.checkBoxManageAnyTeam.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxManageAnyTeam.Location = new System.Drawing.Point(7, 198);
+            this.checkBoxManageAnyTeam.Location = new System.Drawing.Point(7, 224);
             this.checkBoxManageAnyTeam.Name = "checkBoxManageAnyTeam";
             this.checkBoxManageAnyTeam.Size = new System.Drawing.Size(135, 20);
             this.checkBoxManageAnyTeam.TabIndex = 29;
@@ -413,7 +417,7 @@
             this.checkBoxChangeResolution1280s800.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxChangeResolution1280s800.AutoSize = true;
             this.checkBoxChangeResolution1280s800.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxChangeResolution1280s800.Location = new System.Drawing.Point(219, 146);
+            this.checkBoxChangeResolution1280s800.Location = new System.Drawing.Point(7, 172);
             this.checkBoxChangeResolution1280s800.Name = "checkBoxChangeResolution1280s800";
             this.checkBoxChangeResolution1280s800.Size = new System.Drawing.Size(207, 20);
             this.checkBoxChangeResolution1280s800.TabIndex = 24;
@@ -439,7 +443,7 @@
             // 
             this.checkBoxForceLoadAllPlayers.AutoSize = true;
             this.checkBoxForceLoadAllPlayers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxForceLoadAllPlayers.Location = new System.Drawing.Point(7, 172);
+            this.checkBoxForceLoadAllPlayers.Location = new System.Drawing.Point(7, 198);
             this.checkBoxForceLoadAllPlayers.Name = "checkBoxForceLoadAllPlayers";
             this.checkBoxForceLoadAllPlayers.Size = new System.Drawing.Size(157, 20);
             this.checkBoxForceLoadAllPlayers.TabIndex = 23;
@@ -462,25 +466,11 @@
         "Y UNFINISHED!!!");
             this.checkBoxUpdateNames.UseVisualStyleBackColor = true;
             // 
-            // checkBoxFindAllPlayers
-            // 
-            this.checkBoxFindAllPlayers.AutoSize = true;
-            this.checkBoxFindAllPlayers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxFindAllPlayers.Location = new System.Drawing.Point(257, 370);
-            this.checkBoxFindAllPlayers.Name = "checkBoxFindAllPlayers";
-            this.checkBoxFindAllPlayers.Size = new System.Drawing.Size(118, 20);
-            this.checkBoxFindAllPlayers.TabIndex = 25;
-            this.checkBoxFindAllPlayers.Text = "Find all players";
-            this.toolTips.SetToolTip(this.checkBoxFindAllPlayers, "This patch means the in-game Player Search will find all players regardless of re" +
-        "putation");
-            this.checkBoxFindAllPlayers.UseVisualStyleBackColor = true;
-            this.checkBoxFindAllPlayers.Visible = false;
-            // 
             // checkBoxRemoveCDChecks
             // 
             this.checkBoxRemoveCDChecks.AutoSize = true;
             this.checkBoxRemoveCDChecks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(134, 370);
+            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(219, 224);
             this.checkBoxRemoveCDChecks.Name = "checkBoxRemoveCDChecks";
             this.checkBoxRemoveCDChecks.Size = new System.Drawing.Size(149, 20);
             this.checkBoxRemoveCDChecks.TabIndex = 23;
@@ -492,7 +482,7 @@
             // 
             this.buttonAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAbout.Location = new System.Drawing.Point(95, 364);
+            this.buttonAbout.Location = new System.Drawing.Point(95, 394);
             this.buttonAbout.Name = "buttonAbout";
             this.buttonAbout.Size = new System.Drawing.Size(30, 31);
             this.buttonAbout.TabIndex = 23;
@@ -500,19 +490,61 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
+            // checkBoxRemove3NonEULimit
+            // 
+            this.checkBoxRemove3NonEULimit.AutoSize = true;
+            this.checkBoxRemove3NonEULimit.Checked = true;
+            this.checkBoxRemove3NonEULimit.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxRemove3NonEULimit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxRemove3NonEULimit.Location = new System.Drawing.Point(219, 146);
+            this.checkBoxRemove3NonEULimit.Name = "checkBoxRemove3NonEULimit";
+            this.checkBoxRemove3NonEULimit.Size = new System.Drawing.Size(200, 20);
+            this.checkBoxRemove3NonEULimit.TabIndex = 30;
+            this.checkBoxRemove3NonEULimit.Text = "Remove 3 foreign player limit";
+            this.toolTips.SetToolTip(this.checkBoxRemove3NonEULimit, "Removes the 3 non-EU player limit from England, Denmark and Sweden");
+            this.checkBoxRemove3NonEULimit.UseVisualStyleBackColor = true;
+            // 
+            // buttonSave
+            // 
+            this.buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSave.Location = new System.Drawing.Point(135, 394);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(66, 31);
+            this.buttonSave.TabIndex = 26;
+            this.buttonSave.Text = "Save";
+            this.toolTips.SetToolTip(this.buttonSave, "Saves a restore point of the Data, Pictures and cm0102.exe to restore later if re" +
+        "quired");
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
+            // buttonRestore
+            // 
+            this.buttonRestore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRestore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonRestore.Location = new System.Drawing.Point(211, 394);
+            this.buttonRestore.Name = "buttonRestore";
+            this.buttonRestore.Size = new System.Drawing.Size(66, 31);
+            this.buttonRestore.TabIndex = 27;
+            this.buttonRestore.Text = "Restore";
+            this.toolTips.SetToolTip(this.buttonRestore, "Restores a previously saved restore point to replace the Data, Pictures and cm010" +
+        "2.exe");
+            this.buttonRestore.UseVisualStyleBackColor = true;
+            this.buttonRestore.Click += new System.EventHandler(this.buttonRestore_Click);
+            // 
             // PatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(465, 402);
+            this.ClientSize = new System.Drawing.Size(465, 432);
+            this.Controls.Add(this.buttonRestore);
+            this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonAbout);
             this.Controls.Add(this.checkBoxIdleSensitivity);
             this.Controls.Add(this.checkBoxAllowCloseWindow);
-            this.Controls.Add(this.checkBoxFindAllPlayers);
             this.Controls.Add(this.checkBoxChangeStartYear);
             this.Controls.Add(this.checkBoxShowStarPlayers);
             this.Controls.Add(this.checkBoxDisableSplashScreen);
-            this.Controls.Add(this.checkBoxRemoveCDChecks);
             this.Controls.Add(this.numericCurrencyInflation);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.checkBox7Subs);
@@ -535,7 +567,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v1.08";
+            this.Text = "Nick\'s CM0102Patcher v1.09";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
@@ -578,11 +610,13 @@
         private System.Windows.Forms.ToolTip toolTips;
         private System.Windows.Forms.Button buttonAbout;
         private System.Windows.Forms.CheckBox checkBoxChangeResolution1280s800;
-        private System.Windows.Forms.CheckBox checkBoxFindAllPlayers;
         private System.Windows.Forms.CheckBox checkBoxJobsAbroadBoost;
         private System.Windows.Forms.CheckBox checkBoxNewRegenCode;
         private System.Windows.Forms.CheckBox checkBoxUpdateNames;
         private System.Windows.Forms.CheckBox checkBoxManageAnyTeam;
+        private System.Windows.Forms.CheckBox checkBoxRemove3NonEULimit;
+        private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.Button buttonRestore;
     }
 }
 

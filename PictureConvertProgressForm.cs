@@ -15,9 +15,11 @@ namespace CM0102Patcher
     {
         bool stopClose = true;
 
-        public PictureConvertProgressForm()
+        public PictureConvertProgressForm(string windowTitle = null)
         {
             InitializeComponent();
+            if (!string.IsNullOrEmpty(windowTitle))
+                this.Text = windowTitle;
         }
 
         public void CloseForm()
