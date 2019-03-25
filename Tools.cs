@@ -24,7 +24,7 @@ namespace CM0102Patcher
 
         private void buttonApplyPatchfile_Click(object sender, EventArgs e)
         {
-          //  try
+            try
             {
                 var ofd = new OpenFileDialog();
                 ofd.Filter = "CM0102.exe Patch|*.patch|Text Files|*.txt|All files (*.*)|*.*";
@@ -37,10 +37,10 @@ namespace CM0102Patcher
                     MessageBox.Show("Patch applied successfully!", "Patch Applied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
-            /*catch (Exception ex)
+            catch (Exception ex)
             {
                 ExceptionMsgBox.Show(ex);
-            }*/
+            }
         }
 
         private void buttonOffsetCalculator_Click(object sender, EventArgs e)
@@ -49,14 +49,33 @@ namespace CM0102Patcher
             oc.ShowDialog();
         }
 
-        private bool EECHack(string nationFile)
+        private bool EECHackSave(string saveFile)
         {
+            int blockCount;
+            int blockPos;
+            using (var sr = new CM0102Scout.SaveReader(saveFile))
+            {
+                if (sr.IsCompressed)
+                {
+                    MessageBox.Show("EEC Hack only works on uncompressed save files!", "EEC Hack", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
+                blockPos = sr.GetBlockPos("nation.dat", CM0102Scout.SaveReader.NationSize, out blockCount);
+            }
+            return EECHack(saveFile, blockPos, blockCount);
+        }
+
+        private bool EECHack(string nationFile, int seekTo = 0, int blockCount = 0)
+        {
+            int block = 0;
             using (var file = File.Open(nationFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
                 using (var bw = new BinaryWriter(file))
                 {
                     using (var br = new BinaryReader(file))
                     {
+                        file.Seek(seekTo, SeekOrigin.Begin);
                         while (true)
                         {
                             file.Seek(0x7f, SeekOrigin.Current);
@@ -73,6 +92,9 @@ namespace CM0102Patcher
                             }
                             file.Seek(-(0x7f + 1), SeekOrigin.Current);
                             file.Seek(0x122, SeekOrigin.Current);
+                            block++;
+                            if (blockCount != 0 && block == blockCount)
+                                break;
                             if (file.Position + 0x122 >= file.Length)
                                 break;
                         }
@@ -87,8 +109,8 @@ namespace CM0102Patcher
             try
             {
                 var ofd = new OpenFileDialog();
-                ofd.Filter = "CM0102 nation.dat file|nation.dat|All files (*.*)|*.*";
-                ofd.Title = "Select a CM0102 nation.dat file";
+                ofd.Filter = "CM0102 nation.dat file|nation.dat|Uncompressed Saves (*.sav)|*.sav|All files (*.*)|*.*";
+                ofd.Title = "Select a CM0102 nation.dat or uncompressed save game file";
                 try
                 {
                     var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
@@ -102,7 +124,12 @@ namespace CM0102Patcher
                     var yesNo = MessageBox.Show("This will make all countries EEC members removing the need for work permits. Continue?", "EEC Patcher", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (yesNo == DialogResult.Yes)
                     {
-                        if (EECHack(ofd.FileName))
+                        bool success;
+                        if (Path.GetExtension(ofd.FileName).ToLower() == ".sav")
+                            success = EECHackSave(ofd.FileName);
+                        else
+                            success = EECHack(ofd.FileName);
+                        if (success)
                             MessageBox.Show("EEC Hack applied successfully!", "EEC Hack Applied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }

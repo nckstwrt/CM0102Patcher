@@ -389,7 +389,7 @@
             this.checkBoxNewRegenCode.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxNewRegenCode.AutoSize = true;
             this.checkBoxNewRegenCode.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxNewRegenCode.Location = new System.Drawing.Point(219, 172);
+            this.checkBoxNewRegenCode.Location = new System.Drawing.Point(219, 198);
             this.checkBoxNewRegenCode.Name = "checkBoxNewRegenCode";
             this.checkBoxNewRegenCode.Size = new System.Drawing.Size(180, 20);
             this.checkBoxNewRegenCode.TabIndex = 27;
@@ -456,7 +456,7 @@
             this.checkBoxUpdateNames.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxUpdateNames.AutoSize = true;
             this.checkBoxUpdateNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxUpdateNames.Location = new System.Drawing.Point(219, 198);
+            this.checkBoxUpdateNames.Location = new System.Drawing.Point(219, 172);
             this.checkBoxUpdateNames.Name = "checkBoxUpdateNames";
             this.checkBoxUpdateNames.Size = new System.Drawing.Size(227, 20);
             this.checkBoxUpdateNames.TabIndex = 28;

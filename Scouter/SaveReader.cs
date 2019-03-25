@@ -9,9 +9,9 @@ namespace CM0102Scout
 {
     public class SaveReader : IDisposable
     {
+        public const int NationSize = 290;
         const int BlockSize = 268;
         const int PlayerSize = 70;
-        const int NationSize = 290;
         const int StaffSize = 110;
         const int NameSize = 60;
         const int ClubSize = 581;
@@ -27,15 +27,16 @@ namespace CM0102Scout
         Dictionary<int, Club> clubs = new Dictionary<int, Club>();
         DateTime gameDate;
 
+        public bool IsCompressed;
+
         public SaveReader(string saveFilename)
         {
-            bool isCompressed;
             int blockCount;
             using (var sr = new StreamReader(saveFilename))
             {
                 using (var br = new BinaryReader(sr.BaseStream))
                 {
-                    isCompressed = (br.ReadInt32() == 4);
+                    IsCompressed = (br.ReadInt32() == 4);
 
                     // Skip 4 byes
                     sr.BaseStream.Seek(4, SeekOrigin.Current);
@@ -52,7 +53,7 @@ namespace CM0102Scout
                 }
             }
 
-            cfs = new CMCompressedFileStream(saveFilename, isCompressed);
+            cfs = new CMCompressedFileStream(saveFilename, IsCompressed);
         }
 
         public void LoadNames()
@@ -337,6 +338,13 @@ namespace CM0102Scout
                 blocks.Add(blockBytes);
             }
             return blocks;
+        }
+
+        public int GetBlockPos(string blockName, int blockSize, out int blockCount)
+        {
+            var block = FlstBlock.FirstOrDefault(x => TBlock.GetName(x) == blockName);
+            blockCount = TBlock.GetSize(block) / blockSize;
+            return TBlock.GetPosition(block);
         }
     }
 }
