@@ -48,10 +48,21 @@
             this.buttonOutputSelectFile = new System.Windows.Forms.Button();
             this.textBoxOutput = new System.Windows.Forms.TextBox();
             this.buttonConvert = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBoxTop = new System.Windows.Forms.TextBox();
+            this.checkBoxCrop = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBoxLeft = new System.Windows.Forms.TextBox();
+            this.textBoxRight = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBoxBottom = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -148,7 +159,7 @@
             this.groupBox3.Controls.Add(this.textBoxResizeImageHeight);
             this.groupBox3.Controls.Add(this.textBoxResizeImageWidth);
             this.groupBox3.Controls.Add(this.checkBoxResizeImagesTo);
-            this.groupBox3.Location = new System.Drawing.Point(12, 131);
+            this.groupBox3.Location = new System.Drawing.Point(12, 186);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(481, 49);
             this.groupBox3.TabIndex = 3;
@@ -196,7 +207,7 @@
             this.groupBox4.Controls.Add(this.buttonOutputSelectFolder);
             this.groupBox4.Controls.Add(this.buttonOutputSelectFile);
             this.groupBox4.Controls.Add(this.textBoxOutput);
-            this.groupBox4.Location = new System.Drawing.Point(11, 186);
+            this.groupBox4.Location = new System.Drawing.Point(11, 241);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(482, 56);
             this.groupBox4.TabIndex = 3;
@@ -232,7 +243,7 @@
             // 
             // buttonConvert
             // 
-            this.buttonConvert.Location = new System.Drawing.Point(204, 248);
+            this.buttonConvert.Location = new System.Drawing.Point(204, 303);
             this.buttonConvert.Name = "buttonConvert";
             this.buttonConvert.Size = new System.Drawing.Size(95, 23);
             this.buttonConvert.TabIndex = 3;
@@ -240,11 +251,115 @@
             this.buttonConvert.UseVisualStyleBackColor = true;
             this.buttonConvert.Click += new System.EventHandler(this.buttonConvert_Click);
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.textBoxRight);
+            this.groupBox5.Controls.Add(this.label5);
+            this.groupBox5.Controls.Add(this.label6);
+            this.groupBox5.Controls.Add(this.textBoxBottom);
+            this.groupBox5.Controls.Add(this.textBoxLeft);
+            this.groupBox5.Controls.Add(this.label4);
+            this.groupBox5.Controls.Add(this.label3);
+            this.groupBox5.Controls.Add(this.textBoxTop);
+            this.groupBox5.Controls.Add(this.checkBoxCrop);
+            this.groupBox5.Location = new System.Drawing.Point(12, 131);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(481, 49);
+            this.groupBox5.TabIndex = 4;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Crop Images";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(147, 21);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(28, 13);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Left:";
+            // 
+            // textBoxTop
+            // 
+            this.textBoxTop.Enabled = false;
+            this.textBoxTop.Location = new System.Drawing.Point(259, 18);
+            this.textBoxTop.Name = "textBoxTop";
+            this.textBoxTop.Size = new System.Drawing.Size(36, 20);
+            this.textBoxTop.TabIndex = 2;
+            this.textBoxTop.Text = "0";
+            // 
+            // checkBoxCrop
+            // 
+            this.checkBoxCrop.AutoSize = true;
+            this.checkBoxCrop.Checked = true;
+            this.checkBoxCrop.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxCrop.Location = new System.Drawing.Point(7, 20);
+            this.checkBoxCrop.Name = "checkBoxCrop";
+            this.checkBoxCrop.Size = new System.Drawing.Size(117, 17);
+            this.checkBoxCrop.TabIndex = 0;
+            this.checkBoxCrop.Text = "Crop Image(s) by = ";
+            this.checkBoxCrop.UseVisualStyleBackColor = true;
+            this.checkBoxCrop.CheckedChanged += new System.EventHandler(this.checkBoxCrop_CheckedChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(227, 21);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(29, 13);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Top:";
+            // 
+            // textBoxLeft
+            // 
+            this.textBoxLeft.Enabled = false;
+            this.textBoxLeft.Location = new System.Drawing.Point(181, 19);
+            this.textBoxLeft.Name = "textBoxLeft";
+            this.textBoxLeft.Size = new System.Drawing.Size(36, 20);
+            this.textBoxLeft.TabIndex = 4;
+            this.textBoxLeft.Text = "0";
+            // 
+            // textBoxRight
+            // 
+            this.textBoxRight.Enabled = false;
+            this.textBoxRight.Location = new System.Drawing.Point(342, 17);
+            this.textBoxRight.Name = "textBoxRight";
+            this.textBoxRight.Size = new System.Drawing.Size(36, 20);
+            this.textBoxRight.TabIndex = 8;
+            this.textBoxRight.Text = "0";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(383, 21);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(43, 13);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Bottom:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(301, 21);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(35, 13);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "Right:";
+            // 
+            // textBoxBottom
+            // 
+            this.textBoxBottom.Enabled = false;
+            this.textBoxBottom.Location = new System.Drawing.Point(430, 17);
+            this.textBoxBottom.Name = "textBoxBottom";
+            this.textBoxBottom.Size = new System.Drawing.Size(36, 20);
+            this.textBoxBottom.TabIndex = 6;
+            this.textBoxBottom.Text = "0";
+            // 
             // ImageConverterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(505, 278);
+            this.ClientSize = new System.Drawing.Size(505, 336);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.buttonConvert);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -263,6 +378,8 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -288,5 +405,15 @@
         private System.Windows.Forms.Button buttonOutputSelectFile;
         private System.Windows.Forms.TextBox textBoxOutput;
         private System.Windows.Forms.Button buttonConvert;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.TextBox textBoxRight;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox textBoxBottom;
+        private System.Windows.Forms.TextBox textBoxLeft;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textBoxTop;
+        private System.Windows.Forms.CheckBox checkBoxCrop;
     }
 }

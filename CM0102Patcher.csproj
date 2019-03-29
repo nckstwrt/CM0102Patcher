@@ -97,6 +97,7 @@
       <DependentUpon>RefereePatcherForm.cs</DependentUpon>
     </Compile>
     <Compile Include="RegString.cs" />
+    <Compile Include="RestorePoint.cs" />
     <Compile Include="RGNConverter.cs" />
     <Compile Include="Scouter\CMCompressedFileStream.cs" />
     <Compile Include="Scouter\ColumnSelector.cs">

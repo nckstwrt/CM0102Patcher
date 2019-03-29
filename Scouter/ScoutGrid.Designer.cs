@@ -37,6 +37,7 @@
             this.buttonColumns = new System.Windows.Forms.Button();
             this.buttonFilter = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.buttonCopyToClipboard = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -84,7 +85,7 @@
             this.checkBoxShowIntrinstics.AutoSize = true;
             this.checkBoxShowIntrinstics.Checked = true;
             this.checkBoxShowIntrinstics.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxShowIntrinstics.Location = new System.Drawing.Point(541, 308);
+            this.checkBoxShowIntrinstics.Location = new System.Drawing.Point(541, 312);
             this.checkBoxShowIntrinstics.Name = "checkBoxShowIntrinstics";
             this.checkBoxShowIntrinstics.Size = new System.Drawing.Size(97, 17);
             this.checkBoxShowIntrinstics.TabIndex = 2;
@@ -123,11 +124,22 @@
             this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // buttonCopyToClipboard
+            // 
+            this.buttonCopyToClipboard.Location = new System.Drawing.Point(433, 308);
+            this.buttonCopyToClipboard.Name = "buttonCopyToClipboard";
+            this.buttonCopyToClipboard.Size = new System.Drawing.Size(102, 23);
+            this.buttonCopyToClipboard.TabIndex = 6;
+            this.buttonCopyToClipboard.Text = "Copy to Clipboard";
+            this.buttonCopyToClipboard.UseVisualStyleBackColor = true;
+            this.buttonCopyToClipboard.Click += new System.EventHandler(this.buttonCopyToClipboard_Click);
+            // 
             // ScoutGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(650, 337);
+            this.Controls.Add(this.buttonCopyToClipboard);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonFilter);
             this.Controls.Add(this.buttonColumns);
@@ -158,5 +170,6 @@
         private System.Windows.Forms.Button buttonColumns;
         private System.Windows.Forms.Button buttonFilter;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonCopyToClipboard;
     }
 }

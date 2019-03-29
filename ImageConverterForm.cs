@@ -16,6 +16,7 @@ namespace CM0102Patcher
         public ImageConverterForm()
         {
             InitializeComponent();
+            checkBoxCrop_CheckedChanged(null, null);
         }
 
         private void buttonInputSelectFile_Click(object sender, EventArgs e)
@@ -70,6 +71,12 @@ namespace CM0102Patcher
             textBoxResizeImageWidth.Enabled = textBoxResizeImageHeight.Enabled = checkBoxResizeImagesTo.Checked;
         }
 
+        private void checkBoxCrop_CheckedChanged(object sender, EventArgs e)
+        {
+            textBoxLeft.Enabled = textBoxTop.Enabled = textBoxRight.Enabled = textBoxBottom.Enabled = checkBoxCrop.Checked;
+        }
+
+
         private void buttonConvert_Click(object sender, EventArgs e)
         {
             try
@@ -109,6 +116,15 @@ namespace CM0102Patcher
                     newHeight = int.Parse(textBoxResizeImageHeight.Text);
                 }
 
+                int cropLeft = -1, cropTop = -1, cropRight = -1, cropBottom = -1;
+                if (checkBoxCrop.Checked)
+                {
+                    cropLeft = int.Parse(textBoxLeft.Text);
+                    cropTop = int.Parse(textBoxTop.Text);
+                    cropRight = int.Parse(textBoxRight.Text);
+                    cropBottom = int.Parse(textBoxBottom.Text);
+                }
+
                 new Thread(() =>
                 {
                     try
@@ -134,11 +150,11 @@ namespace CM0102Patcher
 
                             if (Path.GetExtension(picFile).ToLower() == ".rgn")
                             {
-                                RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight);
+                                RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
                             }
                             else
                             {
-                                RGNConverter.BMP2RGN(picFile, outputTo, newWidth, newHeight);
+                                RGNConverter.BMP2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
                             }
                         }
                     }

@@ -209,7 +209,7 @@ namespace CM0102Patcher
                                 RGNConverter.GetImageSize(picFile, out Width, out Height);
                                 if (Width == 800 && Height == 600)
                                 {
-                                    RGNConverter.RGN2RGN(picFile, picFile + ".tmp", 1280, 800);
+                                    RGNConverter.RGN2RGN(picFile, picFile + ".tmp", 1280, 800, 0, 35, 0, 100-35);
                                     File.SetAttributes(picFile, FileAttributes.Normal);
                                     File.Delete(picFile);
                                     File.Move(picFile + ".tmp", picFile);
@@ -290,156 +290,14 @@ namespace CM0102Patcher
             MessageBox.Show("CM0102Patcher by Nick\r\n\r\nAll credit should go to the geniuses that found and shared their code and great patching work:\r\nTapani\r\nJohnLocke\r\nSaturn\r\nxeno\r\nMadScientist\r\nAnd so many others!\r\n\r\nThanks to everyone at www.champman0102.co.uk for keeping the game alive :)", "CM0102Patcher", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
-        private void CreateDirectory(string dirName)
-        {
-            if (!Directory.Exists(dirName))
-                Directory.CreateDirectory(dirName);
-        }
-
-        private void CopyFile(string srcFile, string dstFile)
-        {
-            if (File.Exists(dstFile))
-                File.SetAttributes(dstFile, FileAttributes.Normal);
-            File.Copy(srcFile, dstFile, true);
-        }
-
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            try
-            {
-                var dir = Path.GetDirectoryName(labelFilename.Text);
-                var dataDir = Path.Combine(dir, "Data");
-                var picturesDir = Path.Combine(dir, "Pictures");
-                var restorePointDir = Path.Combine(dir, "RestorePoint");
-                var restorePointExeDir = Path.Combine(restorePointDir, "exe");
-                var restorePointDataDir = Path.Combine(restorePointDir, "Data");
-                var restorePointPicturesDir = Path.Combine(restorePointDir, "Pictures");
-                if (Directory.Exists(restorePointDir))
-                {
-                    if (MessageBox.Show("Restore point already exists. Do you wish to overwrite?", "Restore point", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
-                        return;
-                }
-                else
-                    CreateDirectory(restorePointDir);
-                CreateDirectory(restorePointExeDir);
-                CreateDirectory(restorePointDataDir);
-
-                var pf = new PictureConvertProgressForm("Restore Point");
-                new Thread(() =>
-                {
-                    try
-                    {
-                        int copying = 1;
-                        Thread.CurrentThread.IsBackground = true;
-
-                        // Copy CM0102.exe
-                        CopyFile(labelFilename.Text, Path.Combine(restorePointExeDir, "cm0102.exe"));
-
-                        // Copy Data
-                        var dataFiles = Directory.GetFiles(dataDir, "*.*");
-                            foreach (var dataFile in dataFiles)
-                            {
-                                pf.SetProgressText(string.Format("Copying {0}/{1} ({2})", copying++, dataFiles.Length, Path.GetFileName(dataFile)));
-                                pf.SetProgressPercent((int)(((double)(copying - 1) / ((double)dataFiles.Length)) * 100.0));
-                                CopyFile(dataFile, Path.Combine(restorePointDataDir, Path.GetFileName(dataFile)));
-                            }
-
-                        // Copy Pictures
-                        if (Directory.Exists(picturesDir))
-                        {
-                            CreateDirectory(restorePointPicturesDir);
-                            var pictureFiles = Directory.GetFiles(picturesDir, "*.*");
-                            copying = 1;
-                            foreach (var pictureFile in pictureFiles)
-                            {
-                                pf.SetProgressText(string.Format("Copying {0}/{1} ({2})", copying++, pictureFiles.Length, Path.GetFileName(pictureFile)));
-                                pf.SetProgressPercent((int)(((double)(copying - 1) / ((double)pictureFiles.Length)) * 100.0));
-                                CopyFile(pictureFile, Path.Combine(restorePointPicturesDir, Path.GetFileName(pictureFile)));
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        ExceptionMsgBox.Show(ex);
-                    }
-                    pf.CloseForm();
-                }).Start();
-                pf.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                ExceptionMsgBox.Show(ex);
-            }
+            RestorePoint.Save(labelFilename.Text);
         }
 
         private void buttonRestore_Click(object sender, EventArgs e)
         {
-            try
-            {
-
-                var dir = Path.GetDirectoryName(labelFilename.Text);
-                var dataDir = Path.Combine(dir, "Data");
-                var picturesDir = Path.Combine(dir, "Pictures");
-                var restorePointDir = Path.Combine(dir, "RestorePoint");
-                var restorePointExeDir = Path.Combine(restorePointDir, "exe");
-                var restorePointDataDir = Path.Combine(restorePointDir, "Data");
-                var restorePointPicturesDir = Path.Combine(restorePointDir, "Pictures");
-                if (Directory.Exists(restorePointDir))
-                {
-                    if (MessageBox.Show("Are sure you want to overwrite your current cm0102.exe, data and pictures from the restore point?", "Restore point", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
-                        return;
-                }
-                else
-                {
-                    MessageBox.Show("Restore point not found. Unable to restore.", "Restore point", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
-                }
-
-                var pf = new PictureConvertProgressForm("Restore Point");
-                new Thread(() =>
-                {
-                    try
-                    {
-                        int copying = 1;
-                        Thread.CurrentThread.IsBackground = true;
-
-                        // Copy CM0102.exe
-                        CopyFile(Path.Combine(restorePointExeDir, "cm0102.exe"), labelFilename.Text);
-
-                        // Copy Data
-                        var dataFiles = Directory.GetFiles(restorePointDataDir, "*.*");
-                        foreach (var dataFile in dataFiles)
-                        {
-                            pf.SetProgressText(string.Format("Copying {0}/{1} ({2})", copying++, dataFiles.Length, Path.GetFileName(dataFile)));
-                            pf.SetProgressPercent((int)(((double)(copying - 1) / ((double)dataFiles.Length)) * 100.0));
-                            CopyFile(dataFile, Path.Combine(dataDir, Path.GetFileName(dataFile)));
-                        }
-
-                        // Copy Pictures
-                        if (Directory.Exists(restorePointPicturesDir))
-                        {
-                            var pictureFiles = Directory.GetFiles(restorePointPicturesDir, "*.*");
-                            copying = 1;
-                            foreach (var pictureFile in pictureFiles)
-                            {
-                                pf.SetProgressText(string.Format("Copying {0}/{1} ({2})", copying++, pictureFiles.Length, Path.GetFileName(pictureFile)));
-                                pf.SetProgressPercent((int)(((double)(copying - 1) / ((double)pictureFiles.Length)) * 100.0));
-                                CopyFile(pictureFile, Path.Combine(picturesDir, Path.GetFileName(pictureFile)));
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        ExceptionMsgBox.Show(ex);
-                    }
-                    pf.CloseForm();
-                }).Start();
-                pf.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                ExceptionMsgBox.Show(ex);
-            }
+            RestorePoint.Restore(labelFilename.Text);
         }
     }
 }

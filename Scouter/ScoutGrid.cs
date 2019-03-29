@@ -186,8 +186,10 @@ namespace CM0102Patcher.Scouter
             newSize.Width -= 40;
             newSize.Height -= 110;
             dataGridView.Size = newSize;
+            buttonCopyToClipboard.Location = new Point(dataGridView.Location.X + (dataGridView.Width - (checkBoxShowIntrinstics.Width + buttonCopyToClipboard.Width + 8)),
+                                                         dataGridView.Location.Y + (dataGridView.Height + 8));
             checkBoxShowIntrinstics.Location = new Point(dataGridView.Location.X + (dataGridView.Width - checkBoxShowIntrinstics.Width),
-                                                         dataGridView.Location.Y + (dataGridView.Height + 10));
+                                                         dataGridView.Location.Y + (dataGridView.Height + 12));
             buttonColumns.Location = new Point(dataGridView.Location.X + 0,
                                                          dataGridView.Location.Y + (dataGridView.Height + 8));
             buttonFilter.Location = new Point(buttonColumns.Location.X + buttonColumns.Width + 5, buttonColumns.Location.Y);
@@ -225,6 +227,38 @@ namespace CM0102Patcher.Scouter
                 dataGridView.Update();
                 dataGridView.Refresh();
             }
+        }
+
+        private void buttonCopyToClipboard_Click(object sender, EventArgs e)
+        {
+            var sb = new StringBuilder();
+            var dt = ((DataTable)dataGridView.DataSource);
+            int colsCount = dt.Columns.Count;
+            int rowsCount = dt.Rows.Count;
+            for (int i = 0; i < colsCount; i++)
+            {
+                sb.Append(dt.Columns[i].ColumnName);
+                if (i != colsCount - 1)
+                    sb.Append("\t");
+            }
+            sb.Append("\r\n");
+
+            for (int i = 0; i < rowsCount; i++)
+            {
+                for (int j = 0; j < colsCount; j++)
+                {
+                    var s = dt.Rows[i][j].ToString();
+                    s = s.Replace("\0", ""); // Occassional oddities in data cause this
+                    sb.Append(s);
+                    if (j != colsCount - 1)
+                        sb.Append("\t");
+                }
+                sb.Append("\r\n");
+            }
+            Clipboard.SetText(sb.ToString());
+            dataGridView.CellFormatting -= DataGridView_CellFormatting;
+            MessageBox.Show("Copied table to Clipboard", "Clipboard Copy", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            dataGridView.CellFormatting += DataGridView_CellFormatting;
         }
     }
 }

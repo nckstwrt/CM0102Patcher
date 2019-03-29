@@ -13,7 +13,7 @@ namespace CM0102Patcher
 {
     public class RGNConverter
     {
-        private static Bitmap ResizeImage(Image image, int width, int height)
+        private static Bitmap ResizeImage(Image image, int width, int height, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0)
         {
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
@@ -31,7 +31,7 @@ namespace CM0102Patcher
                 using (var wrapMode = new ImageAttributes())
                 {
                     wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                    graphics.DrawImage(image, destRect, cropLeft, cropTop, image.Width - cropRight, image.Height - cropBottom, GraphicsUnit.Pixel, wrapMode);
                 }
             }
 
@@ -59,23 +59,23 @@ namespace CM0102Patcher
             }
         }
 
-        public static void RGN2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1)
+        public static void RGN2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0)
         {
-            using (var bmp = RGN2BMP(inFile, newWidth, newHeight))
+            using (var bmp = RGN2BMP(inFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom))
             {
                 BMP2RGN(bmp, outFile);
             }
         }
 
-        public static void RGN2BMP(string inFile, string outFile, int newWidth = -1, int newHeight = -1)
+        public static void RGN2BMP(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0)
         {
-            using (var bmp = RGN2BMP(inFile, newWidth, newHeight))
+            using (var bmp = RGN2BMP(inFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom))
             {
                 bmp.Save(outFile, ImageFormat.Bmp);
             }
         }
 
-        public static Bitmap RGN2BMP(string inFile, int newWidth = -1, int newHeight = -1)
+        public static Bitmap RGN2BMP(string inFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0)
         {
             using (var stream = File.OpenRead(inFile))
             using (var br = new BinaryReader(stream))
@@ -112,26 +112,26 @@ namespace CM0102Patcher
                 }
                 else
                 {
-                    var newBMP = ResizeImage(bmp, newWidth, newHeight);
+                    var newBMP = ResizeImage(bmp, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom);
                     bmp.Dispose();
                     return newBMP;
                 }
             }
         }
 
-        public static void BMP2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1)
+        public static void BMP2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0)
         {
             using (var bmp = new Bitmap(inFile))
             {
-                BMP2RGN(bmp, outFile, newWidth, newHeight);
+                BMP2RGN(bmp, outFile, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
             }
         }
 
-        public static void BMP2RGN(Bitmap bmp, string outFile, int newWidth = -1, int newHeight = -1)
+        public static void BMP2RGN(Bitmap bmp, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0)
         {
             // Resize BMP if need be
             if (newWidth != -1 && newHeight != -1)
-                bmp = ResizeImage(bmp, newWidth, newHeight);
+                bmp = ResizeImage(bmp, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
 
             using (var stream = File.Create(outFile))
             using (var rgnFile = new BinaryWriter(stream))
