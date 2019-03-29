@@ -1,4 +1,4 @@
-# CM0102Patcher v1.08
+# CM0102Patcher v1.09
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/YAPZaUv.png)
+![alt text](https://i.imgur.com/qcFNt6V.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,11 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.09:
+* Added option to remove 3 foreign player restriction
+* EEC Hack supports uncompressed save game files too
+* Added "Restore Points" to save Exe, Data and Pictures
 
 v1.08:
 * Fixed the World Cup history being on odd years (didn't affect future world cup dates/years)
