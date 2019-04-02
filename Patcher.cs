@@ -65,7 +65,7 @@ namespace CM0102Patcher
                     var line = sr.ReadLine();
                     if (line == null)
                         break;
-                    if (string.IsNullOrEmpty(line) || line.StartsWith("/"))
+                    if (string.IsNullOrEmpty(line) || line.StartsWith("/") || line.StartsWith("#"))
                         continue;
                     var parts = line.Split(' ');
                     if (parts.Length != 3)
