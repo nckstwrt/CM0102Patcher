@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ByteSearch.cs" />
+    <Compile Include="CM0102ClubMover.cs" />
     <Compile Include="ExceptionMsgBox.cs" />
     <Compile Include="ImageConverterForm.cs">
       <SubType>Form</SubType>
