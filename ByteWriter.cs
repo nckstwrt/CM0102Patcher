@@ -6,7 +6,7 @@ using System.IO;
 
 namespace CM0102Patcher
 {
-    public class ByteSearch
+    public class ByteWriter
     {
         public static byte[] LoadFile(string file)
         {
@@ -123,7 +123,7 @@ namespace CM0102Patcher
         public static int BinFileReplace(string file, string toReplace, string replaceWith, int startPosition = 0, int timesToReplace = 0)
         {
             int lastPosChanged = -1;
-            var bytes = ByteSearch.LoadFile(file);
+            var bytes = ByteWriter.LoadFile(file);
             Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
             var stringBytes = latin1.GetBytes(toReplace);
             var bytePositions = SearchBytesForAll(bytes, stringBytes);

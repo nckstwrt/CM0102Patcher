@@ -52,7 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ByteSearch.cs" />
+    <Compile Include="ByteWriter.cs" />
     <Compile Include="CM0102ClubMover.cs" />
     <Compile Include="ExceptionMsgBox.cs" />
     <Compile Include="ImageConverterForm.cs">
