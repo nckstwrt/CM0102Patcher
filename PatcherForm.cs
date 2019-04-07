@@ -70,183 +70,200 @@ namespace CM0102Patcher
 
         private void buttonApply_Click(object sender, EventArgs e)
         {
-            // Let's go! - check the file exists and is writeable
-            if (string.IsNullOrEmpty(labelFilename.Text))
-            {
-                MessageBox.Show("Please select a cm0102.exe file", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            if (!File.Exists(labelFilename.Text))
-            {
-                MessageBox.Show("Cannot find cm0102.exe file", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
             try
             {
-                using (var file = File.Open(labelFilename.Text, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                // Let's go! - check the file exists and is writeable
+                if (string.IsNullOrEmpty(labelFilename.Text))
                 {
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Unable to open and/or write to cm0102.exe file", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            var dir = Path.GetDirectoryName(labelFilename.Text);
-            var dataDir = Path.Combine(dir, "Data");
-
-            // Start the patcher
-            Patcher patcher = new Patcher();
-            if (!patcher.CheckForV3968(labelFilename.Text))
-            {
-                var YesNo = MessageBox.Show("This does not look to be a 3.9.68 exe. Are you sure you wish to continue?", "3.9.68 Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (YesNo == DialogResult.No)
+                    MessageBox.Show("Please select a cm0102.exe file", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
-            }
-
-            // Game speed hack
-            patcher.SpeedHack(labelFilename.Text, (short)(int)(comboBoxGameSpeed.SelectedItem as ComboboxItem).Value);
-
-            // Currency Inflation
-            patcher.CurrencyInflationChanger(labelFilename.Text, (double)numericCurrencyInflation.Value);
-
-            // Year Change
-            if (checkBoxChangeStartYear.Checked)
-            {
-                // Assume Staff.data is in Data
-                var staffFile = Path.Combine(dataDir, "staff.dat");
-                var indexFile = Path.Combine(dataDir, "index.dat");
-                var playerConfigFile = Path.Combine(dataDir, "player_setup.cfg");
-                var staffCompHistoryFile = Path.Combine(dataDir, "staff_comp_history.dat");
-                var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
-                var staffHistoryFile = Path.Combine(dataDir, "staff_history.dat");
-                var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
+                }
+                if (!File.Exists(labelFilename.Text))
+                {
+                    MessageBox.Show("Cannot find cm0102.exe file", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 try
                 {
-                    YearChanger yearChanger = new YearChanger();
-                    var currentYear = yearChanger.GetCurrentExeYear(labelFilename.Text);
-                    if (currentYear != (int)numericGameStartYear.Value)
+                    using (var file = File.Open(labelFilename.Text, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
                     {
-                        if (!File.Exists(staffFile) || !File.Exists(indexFile))
-                        {
-                            MessageBox.Show("staff.dat or index.dat not found in Data directory. Aborting year change.", "Files Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        var yesNo = MessageBox.Show("The Start Year Changer updates staff.dat and other files in the Data directory with the correct years as well as the cm0102.exe. Are you happy to proceed?", "CM0102Patcher - Year Changer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        if (yesNo == DialogResult.No)
-                            return;
-                        int yearIncrement = (((int)numericGameStartYear.Value) - currentYear);
-                        yearChanger.ApplyYearChangeToExe(labelFilename.Text, (int)numericGameStartYear.Value);
-                        yearChanger.UpdateStaff(indexFile, staffFile, yearIncrement);
-                        yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
-
-                        yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
-                        yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8);
-                        yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8);
-
-                        yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement + 1, 0x8);
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
-                    ExceptionMsgBox.Show(ex);
+                    MessageBox.Show("Unable to open and/or write to cm0102.exe file", "File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-            }
 
-            // Patches
-            if (checkBoxEnableColouredAtts.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["colouredattributes"]);
-            if (checkBoxIdleSensitivity.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["idlesensitivity"]);
-            if (checkBoxHideNonPublicBids.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["hideprivatebids"]);
-            if (checkBox7Subs.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["sevensubs"]);
-            if (checkBoxShowStarPlayers.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["showstarplayers"]);
-            if (checkBoxDisableUnprotectedContracts.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["disableunprotectedcontracts"]);
-            if (checkBoxCDRemoval.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablecdremove"]);
-            if (checkBoxDisableSplashScreen.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablesplashscreen"]);
-            if (checkBoxAllowCloseWindow.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["allowclosewindow"]);
-            if (checkBoxForceLoadAllPlayers.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["forceloadallplayers"]);
-            if (checkBoxRegenFixes.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["regenfixes"]);
-            if (checkBoxChangeResolution1280s800.Checked)
-            {
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["to1280x800"]);
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
+                var dir = Path.GetDirectoryName(labelFilename.Text);
+                var dataDir = Path.Combine(dir, "Data");
 
-                // Convert the core gfx
-                RGNConverter.RGN2RGN(Path.Combine(dataDir, "DEFAULT_PIC.RGN"), Path.Combine(dataDir, "bkg1280_800.rgn"), 1280, 800);
-                RGNConverter.RGN2RGN(Path.Combine(dataDir, "match.mbr"), Path.Combine(dataDir, "m800.mbr"), 126, 800);
-                RGNConverter.RGN2RGN(Path.Combine(dataDir, "game.mbr"), Path.Combine(dataDir, "g800.mbr"), 126, 800);
-
-                var yesNo = MessageBox.Show("Do you wish to convert your CM0102 Pictures directory to 1280x800 too?\r\n\r\nIf no, please turn off Background Changes in CM0102's Options else pictures will not appear correctly.\r\n\r\nIf yes, this takes a few moments.", "CM0102Patcher - Resolution Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (yesNo == DialogResult.Yes)
+                // Start the patcher
+                Patcher patcher = new Patcher();
+                if (!patcher.CheckForV3968(labelFilename.Text))
                 {
-                    var pf = new PictureConvertProgressForm();
+                    var YesNo = MessageBox.Show("This does not look to be a 3.9.68 exe. Are you sure you wish to continue?", "3.9.68 Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (YesNo == DialogResult.No)
+                        return;
+                }
 
-                    new Thread(() =>
+                // Game speed hack
+                patcher.SpeedHack(labelFilename.Text, (short)(int)(comboBoxGameSpeed.SelectedItem as ComboboxItem).Value);
+
+                // Currency Inflation
+                patcher.CurrencyInflationChanger(labelFilename.Text, (double)numericCurrencyInflation.Value);
+
+                // Year Change
+                if (checkBoxChangeStartYear.Checked)
+                {
+                    // Assume Staff.data is in Data
+                    var staffFile = Path.Combine(dataDir, "staff.dat");
+                    var indexFile = Path.Combine(dataDir, "index.dat");
+                    var playerConfigFile = Path.Combine(dataDir, "player_setup.cfg");
+                    var staffCompHistoryFile = Path.Combine(dataDir, "staff_comp_history.dat");
+                    var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
+                    var staffHistoryFile = Path.Combine(dataDir, "staff_history.dat");
+                    var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
+                    try
                     {
-                        var picturesDir = Path.Combine(dir, "Pictures");
-                        int converting = 1;
-                        Thread.CurrentThread.IsBackground = true;
-                        if (Directory.Exists(picturesDir))
+                        YearChanger yearChanger = new YearChanger();
+                        var currentYear = yearChanger.GetCurrentExeYear(labelFilename.Text);
+                        if (currentYear != (int)numericGameStartYear.Value)
                         {
-                            var picFiles = Directory.GetFiles(picturesDir, "*.rgn");
-                            foreach (var picFile in picFiles)
+                            if (!File.Exists(staffFile) || !File.Exists(indexFile))
                             {
-                                pf.SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, picFiles.Length, Path.GetFileName(picFile)));
-                                pf.SetProgressPercent((int)(((double)(converting - 1) / ((double)picFiles.Length)) * 100.0));
-                                int Width, Height;
-                                RGNConverter.GetImageSize(picFile, out Width, out Height);
-                                if (Width == 800 && Height == 600)
+                                MessageBox.Show("staff.dat or index.dat not found in Data directory. Aborting year change.", "Files Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+                            var yesNo = MessageBox.Show("The Start Year Changer updates staff.dat and other files in the Data directory with the correct years as well as the cm0102.exe. Are you happy to proceed?", "CM0102Patcher - Year Changer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            if (yesNo == DialogResult.No)
+                                return;
+                            int yearIncrement = (((int)numericGameStartYear.Value) - currentYear);
+                            yearChanger.ApplyYearChangeToExe(labelFilename.Text, (int)numericGameStartYear.Value);
+                            yearChanger.UpdateStaff(indexFile, staffFile, yearIncrement);
+                            yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
+
+                            yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
+                            yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8);
+                            yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8);
+
+                            yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement + 1, 0x8);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ExceptionMsgBox.Show(ex);
+                        return;
+                    }
+                }
+
+                // Patches
+                if (checkBoxEnableColouredAtts.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["colouredattributes"]);
+                if (checkBoxIdleSensitivity.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["idlesensitivity"]);
+                if (checkBoxHideNonPublicBids.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["hideprivatebids"]);
+                if (checkBox7Subs.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["sevensubs"]);
+                if (checkBoxShowStarPlayers.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["showstarplayers"]);
+                if (checkBoxDisableUnprotectedContracts.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["disableunprotectedcontracts"]);
+                if (checkBoxCDRemoval.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablecdremove"]);
+                if (checkBoxDisableSplashScreen.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablesplashscreen"]);
+                if (checkBoxAllowCloseWindow.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["allowclosewindow"]);
+                if (checkBoxForceLoadAllPlayers.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["forceloadallplayers"]);
+                if (checkBoxRegenFixes.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["regenfixes"]);
+                if (checkBoxChangeResolution1280s800.Checked)
+                {
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["to1280x800"]);
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
+
+                    // Convert the core gfx
+                    RGNConverter.RGN2RGN(Path.Combine(dataDir, "DEFAULT_PIC.RGN"), Path.Combine(dataDir, "bkg1280_800.rgn"), 1280, 800);
+                    RGNConverter.RGN2RGN(Path.Combine(dataDir, "match.mbr"), Path.Combine(dataDir, "m800.mbr"), 126, 800);
+                    RGNConverter.RGN2RGN(Path.Combine(dataDir, "game.mbr"), Path.Combine(dataDir, "g800.mbr"), 126, 800);
+
+                    var yesNo = MessageBox.Show("Do you wish to convert your CM0102 Pictures directory to 1280x800 too?\r\n\r\nIf no, please turn off Background Changes in CM0102's Options else pictures will not appear correctly.\r\n\r\nIf yes, this takes a few moments.", "CM0102Patcher - Resolution Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (yesNo == DialogResult.Yes)
+                    {
+                        var pf = new PictureConvertProgressForm();
+
+                        new Thread(() =>
+                        {
+                            var picturesDir = Path.Combine(dir, "Pictures");
+                            int converting = 1;
+                            Thread.CurrentThread.IsBackground = true;
+                            if (Directory.Exists(picturesDir))
+                            {
+                                var picFiles = Directory.GetFiles(picturesDir, "*.rgn");
+                                foreach (var picFile in picFiles)
                                 {
-                                    RGNConverter.RGN2RGN(picFile, picFile + ".tmp", 1280, 800, 0, 35, 0, 100-35);
-                                    File.SetAttributes(picFile, FileAttributes.Normal);
-                                    File.Delete(picFile);
-                                    File.Move(picFile + ".tmp", picFile);
+                                    pf.SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, picFiles.Length, Path.GetFileName(picFile)));
+                                    pf.SetProgressPercent((int)(((double)(converting - 1) / ((double)picFiles.Length)) * 100.0));
+                                    int Width, Height;
+                                    RGNConverter.GetImageSize(picFile, out Width, out Height);
+                                    if (Width == 800 && Height == 600)
+                                    {
+                                        RGNConverter.RGN2RGN(picFile, picFile + ".tmp", 1280, 800, 0, 35, 0, 100 - 35);
+                                        File.SetAttributes(picFile, FileAttributes.Normal);
+                                        File.Delete(picFile);
+                                        File.Move(picFile + ".tmp", picFile);
+                                    }
                                 }
                             }
-                        }
-                        pf.CloseForm();
-                    }).Start();
+                            pf.CloseForm();
+                        }).Start();
 
-                    pf.ShowDialog();
+                        pf.ShowDialog();
+                    }
                 }
-            }
-            if (checkBoxJobsAbroadBoost.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["jobsabroadboost"]);
-            if (checkBoxNewRegenCode.Checked)
-            {
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapaninewregencode"]);
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
-            }
-            if (checkBoxUpdateNames.Checked)
-            {
-                var namePatcher = new NamePatcher(labelFilename.Text, dataDir);
-                namePatcher.RunPatch();
-            }
-            if (checkBoxManageAnyTeam.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["manageanyteam"]);
-            if (checkBoxRemove3NonEULimit.Checked)
-                patcher.ApplyPatch(labelFilename.Text, patcher.patches["remove3playerlimit"]);
+                if (checkBoxJobsAbroadBoost.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["jobsabroadboost"]);
+                if (checkBoxNewRegenCode.Checked)
+                {
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapaninewregencode"]);
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
+                }
+                if (checkBoxUpdateNames.Checked)
+                {
+                    var namePatcher = new NamePatcher(labelFilename.Text, dataDir);
+                    namePatcher.RunPatch();
+                }
+                if (checkBoxManageAnyTeam.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["manageanyteam"]);
+                if (checkBoxRemove3NonEULimit.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["remove3playerlimit"]);
+                if (checkBoxAddNorthernLeague.Checked)
+                {
+                    NamePatcher np = new NamePatcher(labelFilename.Text, dataDir);
+                    np.PatchWelshWithNorthernLeague();
+                }
+                if (checkBoxAddSouthernLeague.Checked)
+                {
+                    NamePatcher np = new NamePatcher(labelFilename.Text, dataDir);
+                    np.PatchWelshWithSouthernLeague();
+                }
 
-            // NOCD Crack
-            if (checkBoxRemoveCDChecks.Checked)
-            {
-                NoCDPatch nocd = new NoCDPatch();
-                var patched = nocd.PatchEXEFile(labelFilename.Text);
-            }
+                // NOCD Crack
+                if (checkBoxRemoveCDChecks.Checked)
+                {
+                    NoCDPatch nocd = new NoCDPatch();
+                    var patched = nocd.PatchEXEFile(labelFilename.Text);
+                }
 
-            MessageBox.Show("Patched Successfully!", "CM0102 Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Patched Successfully!", "CM0102 Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                ExceptionMsgBox.Show(ex);
+            }
         }
 
         private void checkBoxChangeStartYear_CheckedChanged(object sender, EventArgs e)
@@ -298,6 +315,18 @@ namespace CM0102Patcher
         private void buttonRestore_Click(object sender, EventArgs e)
         {
             RestorePoint.Restore(labelFilename.Text);
+        }
+
+        private void checkBoxAddNorthernLeague_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxAddNorthernLeague.Checked)
+                checkBoxAddSouthernLeague.Checked = false;
+        }
+
+        private void checkBoxAddSouthernLeague_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxAddSouthernLeague.Checked)
+                checkBoxAddNorthernLeague.Checked = false;
         }
     }
 }

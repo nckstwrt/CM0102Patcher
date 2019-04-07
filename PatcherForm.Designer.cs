@@ -53,6 +53,7 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxRemove3NonEULimit = new System.Windows.Forms.CheckBox();
             this.checkBoxManageAnyTeam = new System.Windows.Forms.CheckBox();
             this.checkBoxNewRegenCode = new System.Windows.Forms.CheckBox();
             this.checkBoxJobsAbroadBoost = new System.Windows.Forms.CheckBox();
@@ -62,10 +63,11 @@
             this.checkBoxUpdateNames = new System.Windows.Forms.CheckBox();
             this.checkBoxRemoveCDChecks = new System.Windows.Forms.CheckBox();
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonAbout = new System.Windows.Forms.Button();
-            this.checkBoxRemove3NonEULimit = new System.Windows.Forms.CheckBox();
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonRestore = new System.Windows.Forms.Button();
+            this.buttonAbout = new System.Windows.Forms.Button();
+            this.checkBoxAddNorthernLeague = new System.Windows.Forms.CheckBox();
+            this.checkBoxAddSouthernLeague = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -160,7 +162,7 @@
             // 
             this.buttonApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonApply.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonApply.Location = new System.Drawing.Point(381, 394);
+            this.buttonApply.Location = new System.Drawing.Point(381, 419);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(75, 31);
             this.buttonApply.TabIndex = 7;
@@ -212,7 +214,7 @@
             // 
             this.buttonTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTools.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonTools.Location = new System.Drawing.Point(9, 394);
+            this.buttonTools.Location = new System.Drawing.Point(9, 419);
             this.buttonTools.Name = "buttonTools";
             this.buttonTools.Size = new System.Drawing.Size(75, 31);
             this.buttonTools.TabIndex = 11;
@@ -356,6 +358,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBoxAddNorthernLeague);
+            this.groupBox3.Controls.Add(this.checkBoxAddSouthernLeague);
             this.groupBox3.Controls.Add(this.checkBoxRemove3NonEULimit);
             this.groupBox3.Controls.Add(this.checkBoxManageAnyTeam);
             this.groupBox3.Controls.Add(this.checkBoxNewRegenCode);
@@ -367,15 +371,29 @@
             this.groupBox3.Controls.Add(this.checkBoxRemoveCDChecks);
             this.groupBox3.Location = new System.Drawing.Point(9, 131);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(447, 257);
+            this.groupBox3.Size = new System.Drawing.Size(447, 279);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
+            // 
+            // checkBoxRemove3NonEULimit
+            // 
+            this.checkBoxRemove3NonEULimit.AutoSize = true;
+            this.checkBoxRemove3NonEULimit.Checked = true;
+            this.checkBoxRemove3NonEULimit.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxRemove3NonEULimit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxRemove3NonEULimit.Location = new System.Drawing.Point(219, 146);
+            this.checkBoxRemove3NonEULimit.Name = "checkBoxRemove3NonEULimit";
+            this.checkBoxRemove3NonEULimit.Size = new System.Drawing.Size(200, 20);
+            this.checkBoxRemove3NonEULimit.TabIndex = 30;
+            this.checkBoxRemove3NonEULimit.Text = "Remove 3 foreign player limit";
+            this.toolTips.SetToolTip(this.checkBoxRemove3NonEULimit, "Removes the 3 non-EU player limit from England, Denmark and Sweden");
+            this.checkBoxRemove3NonEULimit.UseVisualStyleBackColor = true;
             // 
             // checkBoxManageAnyTeam
             // 
             this.checkBoxManageAnyTeam.AutoSize = true;
             this.checkBoxManageAnyTeam.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxManageAnyTeam.Location = new System.Drawing.Point(7, 224);
+            this.checkBoxManageAnyTeam.Location = new System.Drawing.Point(7, 250);
             this.checkBoxManageAnyTeam.Name = "checkBoxManageAnyTeam";
             this.checkBoxManageAnyTeam.Size = new System.Drawing.Size(135, 20);
             this.checkBoxManageAnyTeam.TabIndex = 29;
@@ -389,7 +407,7 @@
             this.checkBoxNewRegenCode.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxNewRegenCode.AutoSize = true;
             this.checkBoxNewRegenCode.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxNewRegenCode.Location = new System.Drawing.Point(219, 198);
+            this.checkBoxNewRegenCode.Location = new System.Drawing.Point(219, 224);
             this.checkBoxNewRegenCode.Name = "checkBoxNewRegenCode";
             this.checkBoxNewRegenCode.Size = new System.Drawing.Size(180, 20);
             this.checkBoxNewRegenCode.TabIndex = 27;
@@ -443,7 +461,7 @@
             // 
             this.checkBoxForceLoadAllPlayers.AutoSize = true;
             this.checkBoxForceLoadAllPlayers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxForceLoadAllPlayers.Location = new System.Drawing.Point(7, 198);
+            this.checkBoxForceLoadAllPlayers.Location = new System.Drawing.Point(7, 224);
             this.checkBoxForceLoadAllPlayers.Name = "checkBoxForceLoadAllPlayers";
             this.checkBoxForceLoadAllPlayers.Size = new System.Drawing.Size(157, 20);
             this.checkBoxForceLoadAllPlayers.TabIndex = 23;
@@ -470,7 +488,7 @@
             // 
             this.checkBoxRemoveCDChecks.AutoSize = true;
             this.checkBoxRemoveCDChecks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(219, 224);
+            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(219, 250);
             this.checkBoxRemoveCDChecks.Name = "checkBoxRemoveCDChecks";
             this.checkBoxRemoveCDChecks.Size = new System.Drawing.Size(149, 20);
             this.checkBoxRemoveCDChecks.TabIndex = 23;
@@ -478,37 +496,11 @@
             this.checkBoxRemoveCDChecks.UseVisualStyleBackColor = true;
             this.checkBoxRemoveCDChecks.Visible = false;
             // 
-            // buttonAbout
-            // 
-            this.buttonAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAbout.Location = new System.Drawing.Point(95, 394);
-            this.buttonAbout.Name = "buttonAbout";
-            this.buttonAbout.Size = new System.Drawing.Size(30, 31);
-            this.buttonAbout.TabIndex = 23;
-            this.buttonAbout.Text = "?";
-            this.buttonAbout.UseVisualStyleBackColor = true;
-            this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
-            // 
-            // checkBoxRemove3NonEULimit
-            // 
-            this.checkBoxRemove3NonEULimit.AutoSize = true;
-            this.checkBoxRemove3NonEULimit.Checked = true;
-            this.checkBoxRemove3NonEULimit.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxRemove3NonEULimit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxRemove3NonEULimit.Location = new System.Drawing.Point(219, 146);
-            this.checkBoxRemove3NonEULimit.Name = "checkBoxRemove3NonEULimit";
-            this.checkBoxRemove3NonEULimit.Size = new System.Drawing.Size(200, 20);
-            this.checkBoxRemove3NonEULimit.TabIndex = 30;
-            this.checkBoxRemove3NonEULimit.Text = "Remove 3 foreign player limit";
-            this.toolTips.SetToolTip(this.checkBoxRemove3NonEULimit, "Removes the 3 non-EU player limit from England, Denmark and Sweden");
-            this.checkBoxRemove3NonEULimit.UseVisualStyleBackColor = true;
-            // 
             // buttonSave
             // 
             this.buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSave.Location = new System.Drawing.Point(135, 394);
+            this.buttonSave.Location = new System.Drawing.Point(135, 419);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(66, 31);
             this.buttonSave.TabIndex = 26;
@@ -522,7 +514,7 @@
             // 
             this.buttonRestore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRestore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonRestore.Location = new System.Drawing.Point(211, 394);
+            this.buttonRestore.Location = new System.Drawing.Point(211, 419);
             this.buttonRestore.Name = "buttonRestore";
             this.buttonRestore.Size = new System.Drawing.Size(66, 31);
             this.buttonRestore.TabIndex = 27;
@@ -532,11 +524,51 @@
             this.buttonRestore.UseVisualStyleBackColor = true;
             this.buttonRestore.Click += new System.EventHandler(this.buttonRestore_Click);
             // 
+            // buttonAbout
+            // 
+            this.buttonAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonAbout.Location = new System.Drawing.Point(95, 419);
+            this.buttonAbout.Name = "buttonAbout";
+            this.buttonAbout.Size = new System.Drawing.Size(30, 31);
+            this.buttonAbout.TabIndex = 23;
+            this.buttonAbout.Text = "?";
+            this.buttonAbout.UseVisualStyleBackColor = true;
+            this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
+            // 
+            // checkBoxAddNorthernLeague
+            // 
+            this.checkBoxAddNorthernLeague.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxAddNorthernLeague.AutoSize = true;
+            this.checkBoxAddNorthernLeague.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxAddNorthernLeague.Location = new System.Drawing.Point(7, 198);
+            this.checkBoxAddNorthernLeague.Name = "checkBoxAddNorthernLeague";
+            this.checkBoxAddNorthernLeague.Size = new System.Drawing.Size(205, 20);
+            this.checkBoxAddNorthernLeague.TabIndex = 31;
+            this.checkBoxAddNorthernLeague.Text = "Add Northern Premier League";
+            this.toolTips.SetToolTip(this.checkBoxAddNorthernLeague, "Replaces the Welsh League with the Northern Premier League");
+            this.checkBoxAddNorthernLeague.UseVisualStyleBackColor = true;
+            this.checkBoxAddNorthernLeague.CheckedChanged += new System.EventHandler(this.checkBoxAddNorthernLeague_CheckedChanged);
+            // 
+            // checkBoxAddSouthernLeague
+            // 
+            this.checkBoxAddSouthernLeague.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxAddSouthernLeague.AutoSize = true;
+            this.checkBoxAddSouthernLeague.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxAddSouthernLeague.Location = new System.Drawing.Point(219, 198);
+            this.checkBoxAddSouthernLeague.Name = "checkBoxAddSouthernLeague";
+            this.checkBoxAddSouthernLeague.Size = new System.Drawing.Size(204, 20);
+            this.checkBoxAddSouthernLeague.TabIndex = 32;
+            this.checkBoxAddSouthernLeague.Text = "Add Southern Central Division";
+            this.toolTips.SetToolTip(this.checkBoxAddSouthernLeague, "Replaces the Welsh League with the Southern Central Division");
+            this.checkBoxAddSouthernLeague.UseVisualStyleBackColor = true;
+            this.checkBoxAddSouthernLeague.CheckedChanged += new System.EventHandler(this.checkBoxAddSouthernLeague_CheckedChanged);
+            // 
             // PatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(465, 432);
+            this.ClientSize = new System.Drawing.Size(465, 460);
             this.Controls.Add(this.buttonRestore);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonAbout);
@@ -567,7 +599,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v1.09";
+            this.Text = "Nick\'s CM0102Patcher v1.10";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
@@ -617,6 +649,8 @@
         private System.Windows.Forms.CheckBox checkBoxRemove3NonEULimit;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.Button buttonRestore;
+        private System.Windows.Forms.CheckBox checkBoxAddNorthernLeague;
+        private System.Windows.Forms.CheckBox checkBoxAddSouthernLeague;
     }
 }
 

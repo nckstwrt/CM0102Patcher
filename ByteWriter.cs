@@ -10,7 +10,7 @@ namespace CM0102Patcher
     {
         public static byte[] LoadFile(string file)
         {
-            using (var fs = File.OpenRead(file))
+            using (var fs = File.Open(file, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
                 using (var br = new BinaryReader(fs))
                 {

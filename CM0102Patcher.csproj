@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ByteWriter.cs" />
-    <Compile Include="CM0102ClubMover.cs" />
+    <Compile Include="ClubMover.cs" />
     <Compile Include="ExceptionMsgBox.cs" />
     <Compile Include="ImageConverterForm.cs">
       <SubType>Form</SubType>

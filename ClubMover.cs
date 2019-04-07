@@ -6,7 +6,7 @@ using System.IO;
 
 namespace CM0102Patcher
 {
-    public class CM0102ClubMover
+    public class ClubMover
     {
         class Comp
         {
@@ -34,6 +34,7 @@ namespace CM0102Patcher
 
         string clubCompDatFile;
         string clubDatFile;
+        Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
         List<Comp> compList = new List<Comp>();
         static List<Club> clubList = new List<Club>();
 
@@ -42,51 +43,38 @@ namespace CM0102Patcher
             this.clubCompDatFile = clubCompDatFile;
             this.clubDatFile = clubDatFile;
 
-            Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
-            using (var file = File.Open(clubCompDatFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            var bytes = ByteWriter.LoadFile(clubCompDatFile);
+            for (int i = 0; i < bytes.Length; i += 107)
             {
-                var fileLength = (int)file.Length;
-                var bytes = new byte[fileLength];
-                file.Read(bytes, 0, fileLength);
-
-                for (int i = 0; i < fileLength; i += 107)
-                {
-                    if (i + 107 > fileLength)
-                        break;
-                    Comp comp = new Comp();
-                    comp.Offset = i;
-                    comp.ClubCompID = BitConverter.ToUInt32(bytes, i);
-                    comp.ClubCompName = latin1.GetString(bytes, i + 4, 51).Replace("\0", "");
-                    comp.ClubCompGenderName = bytes[i + 4 + 51];
-                    comp.ClubCompNameShort = latin1.GetString(bytes, i + 4 + 51 + 1, 26).Replace("\0", "");
-                    comp.ClubCompGenderNameShort = bytes[i + 4 + 51 + 1 + 26];
-                    comp.ClubCompNameThreeLetter = latin1.GetString(bytes, i + 4 + 51 + 1 + 26 + 1, 3).Replace("\0", "");
-                    compList.Add(comp);
-                }
+                if (i + 107 > bytes.Length)
+                    break;
+                Comp comp = new Comp();
+                comp.Offset = i;
+                comp.ClubCompID = BitConverter.ToUInt32(bytes, i);
+                comp.ClubCompName = latin1.GetString(bytes, i + 4, 51).Replace("\0", "");
+                comp.ClubCompGenderName = bytes[i + 4 + 51];
+                comp.ClubCompNameShort = latin1.GetString(bytes, i + 4 + 51 + 1, 26).Replace("\0", "");
+                comp.ClubCompGenderNameShort = bytes[i + 4 + 51 + 1 + 26];
+                comp.ClubCompNameThreeLetter = latin1.GetString(bytes, i + 4 + 51 + 1 + 26 + 1, 3).Replace("\0", "");
+                compList.Add(comp);
             }
 
-            using (var file = File.Open(clubDatFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            bytes = ByteWriter.LoadFile(clubDatFile);
+            for (int i = 0; i < bytes.Length; i += 581)
             {
-                var fileLength = (int)file.Length;
-                var bytes = new byte[fileLength];
-                file.Read(bytes, 0, fileLength);
-
-                for (int i = 0; i < fileLength; i += 581)
-                {
-                    if (i + 578 > fileLength)
-                        break;
-                    Club club = new Club();
-                    club.Offset = i;
-                    club.ClubID = BitConverter.ToUInt32(bytes, i);
-                    club.ClubName = latin1.GetString(bytes, i + 4, 51).Replace("\0", "");
-                    club.ClubGenderName = bytes[i + 4 + 51];
-                    club.ClubNameShort = latin1.GetString(bytes, i + 4 + 51 + 1, 26).Replace("\0", "");
-                    club.ClubGenderNameShort = bytes[i + 4 + 51 + 1 + 26];
-                    club.ClubNation = BitConverter.ToUInt32(bytes, i + 4 + 51 + 1 + 26 + 1);
-                    club.ClubDivision = BitConverter.ToUInt32(bytes, i + 4 + 51 + 1 + 26 + 1 + 4);
-                    club.ClubLastDivision = BitConverter.ToUInt32(bytes, i + 4 + 51 + 1 + 26 + 1 + 4 + 4);
-                    clubList.Add(club);
-                }
+                if (i + 578 > bytes.Length)
+                    break;
+                Club club = new Club();
+                club.Offset = i;
+                club.ClubID = BitConverter.ToUInt32(bytes, i);
+                club.ClubName = latin1.GetString(bytes, i + 4, 51).Replace("\0", "");
+                club.ClubGenderName = bytes[i + 4 + 51];
+                club.ClubNameShort = latin1.GetString(bytes, i + 4 + 51 + 1, 26).Replace("\0", "");
+                club.ClubGenderNameShort = bytes[i + 4 + 51 + 1 + 26];
+                club.ClubNation = BitConverter.ToUInt32(bytes, i + 4 + 51 + 1 + 26 + 1);
+                club.ClubDivision = BitConverter.ToUInt32(bytes, i + 4 + 51 + 1 + 26 + 1 + 4);
+                club.ClubLastDivision = BitConverter.ToUInt32(bytes, i + 4 + 51 + 1 + 26 + 1 + 4 + 4);
+                clubList.Add(club);
             }
         }
 
@@ -99,7 +87,7 @@ namespace CM0102Patcher
             foreach (var southernClub in allSouthernClubs)
             {
                 southernClub.ClubDivision = aLowerDivision.ClubCompID;
-                SaveClubsDivision(clubDatFile, southernClub);
+                SaveClubsDivision(southernClub);
             }
 
             string[] southernTeams = new string[]
@@ -125,11 +113,14 @@ namespace CM0102Patcher
                 "Lowestoft Town",
                 "St. Neots Town",
                 "Halesowen Town",
-                "Bedworth United"
+                "Bedworth United",
+                "Metropolitan Police"
             };
 
+            var xx = clubList.Count(x => x.ClubDivision == southernLeague.ClubCompID);
+            // Add teams to the southern league
             foreach (var southernTeam in southernTeams)
-                MoveClubToDivision(clubDatFile, southernTeam, "English Southern League Premier Division");
+                MoveClubToDivision(southernTeam, "English Southern League Premier Division");
 
             return clubList.Count(x => x.ClubDivision == southernLeague.ClubCompID);
         }
@@ -149,7 +140,7 @@ namespace CM0102Patcher
             return compList.FirstOrDefault(x => x.ClubCompID == club.ClubDivision);
         }
 
-        bool MoveClubToDivision(string clubDatFile, string clubName, string divisionName)
+        bool MoveClubToDivision(string clubName, string divisionName)
         {
             bool ret = false;
             var division = compList.FirstOrDefault(x => x.ClubCompName == divisionName);
@@ -157,15 +148,15 @@ namespace CM0102Patcher
             if (division != null & club != null)
             {
                 club.ClubDivision = division.ClubCompID;
-                SaveClubsDivision(clubDatFile, club);
+                SaveClubsDivision(club);
                 ret = true;
             }
             return ret;
         }
 
-        void SaveClubsDivision(string clubDat, Club club)
+        void SaveClubsDivision(Club club)
         {
-            using (var file = File.Open(clubDat, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            using (var file = File.Open(clubDatFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
                 file.Seek(club.Offset + 4 + 51 + 1 + 26 + 1 + 4, SeekOrigin.Begin);
                 using (var bw = new BinaryWriter(file))

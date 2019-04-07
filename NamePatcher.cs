@@ -45,6 +45,62 @@ namespace CM0102Patcher
             PatchComp("English Third Division", "English Football League Two", "Third Division", "League Two", "FL2");
         }
 
+        public void PatchWelshWithNorthernLeague()
+        {
+            PatchComp("English Northern Premier League Premier Division", "English National League North", "Northern Premier", "National League North", "NLN");
+            patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatch"]);
+            ByteWriter.WriteToFile(exeFile, 0x6d56b8, "English National League North" + "\0");
+
+            PatchStaffAward("Welsh Team of the Week",           "English National League North Team of the Week");
+            PatchStaffAward("Welsh Player of the Year",         "English National League North Player of the Year");
+            PatchStaffAward("Welsh Young Player of the Year",   "English National League North Youth of the Year");
+            PatchStaffAward("Welsh Top Goalscorer",             "English National League North Top Goalscorer");
+            PatchStaffAward("Welsh Manager of the Year",        "English National League North Manager of the Year");
+            PatchStaffAward("Welsh Manager of the Month",       "English National League North Manager of the Month");
+            patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthawards"]);
+        }
+
+        public void PatchWelshWithSouthernLeague()
+        {
+            // Apply the standard north patch first
+            patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatch"]);
+
+            var cm = new ClubMover();
+            cm.LoadClubAndComp(Path.Combine(dataDir, "club_comp.dat"), Path.Combine(dataDir, "club.dat"));
+            var southernTeams = cm.SetupEnglishSouthernLeague();
+
+            // Patch the number of teams
+            ByteWriter.WriteToFile(exeFile, 0x525B3C, BitConverter.GetBytes(southernTeams*59));
+            ByteWriter.WriteToFile(exeFile, 0x525B46, new byte[] { ((byte)southernTeams) });
+
+            //ByteWriter.WriteToFile(exeFile, 0x6d56b8, "English Southern League Premier Division" + "\0");
+                        
+            PatchComp("English Southern League Premier Division", "English Southern Premier Central\0", "Southern Premier", "Southern Premier", "SPC");
+            ByteWriter.WriteToFile(exeFile, 0x6d56b8, "English Southern Premier Central" + "\0");
+            
+            PatchStaffAward("Welsh Team of the Week",           "English Southern Premier Team of the Week");
+            PatchStaffAward("Welsh Player of the Year",         "English Southern Premier Player of the Year");
+            PatchStaffAward("Welsh Young Player of the Year",   "English Southern Premier Youth of the Year");
+            PatchStaffAward("Welsh Top Goalscorer",             "English Southern Central Premier Top Goalscorer");
+            PatchStaffAward("Welsh Manager of the Year",        "English Southern Premier Manager of the Year");
+            PatchStaffAward("Welsh Manager of the Month",       "English Southern Premier Manager of the Month");
+            patcher.ApplyPatch(exeFile, patcher.patches["englishleaguesouthawards"]);
+
+            // Let's allow more loans seeing as we don't get many players
+            patcher.ApplyPatch(exeFile, 0x179e5B, "07");
+            patcher.ApplyPatch(exeFile, 0x179f17, "06");
+
+            /*
+            005751F8  |> \A1 FCADAD00   MOV EAX,DWORD PTR DS:[0ADADFC]
+            005751FD  |.  8BB8 A0050000 MOV EDI,DWORD PTR DS:[EAX+5A0]
+            00575203  |.  8BB0 74010000 MOV ESI,DWORD PTR DS:[EAX+174]
+
+            0x5A0 = 0x168 * 4 = Team 0x168 which is the Northern Premier League
+            0x167 is the southern, so we need 0x167 * 4 = 0x59c
+            */
+            patcher.ApplyPatch(exeFile, 0x1751ff, "9c");
+        }
+
         // https://champman0102.co.uk/showthread.php?t=8267&highlight=Netherlands
         // Going to stick things at 009861d0 (005861d0 = in binary)
         // 0060E100  |> 68 34159B00 PUSH OFFSET 009B1534                     ; /Arg2 = ASCII "Holland"
@@ -69,6 +125,11 @@ namespace CM0102Patcher
             ByteWriter.TextFileReplace(Path.Combine(dataDir, "euro.cfg"), "Holland", "Netherlands");
         }
 
+        public static void PatchCompAcronym(string fileName, int startPos, string acronym)
+        {
+            ByteWriter.WriteToFile(fileName, startPos + 79, acronym, 3);
+        }
+
         void PatchComp(string oldName, string newName, string oldShortName, string newShortName, string newAcronym = null)
         {
             int compChangePos = PatchComp(oldName, newName);
@@ -76,13 +137,14 @@ namespace CM0102Patcher
             {
                 PatchComp(oldShortName, newShortName, compChangePos, -1);
                 if (newAcronym != null)
-                    PatchCompAcronym(compChangePos, newAcronym);
+                    PatchCompAcronym(Path.Combine(dataDir, "club_comp.dat"), compChangePos, newAcronym);
             }
         }
 
-        void PatchCompAcronym(int startPos, string acronym)
+        void PatchStaffAward(string oldName, string newName)
         {
-            ByteWriter.WriteToFile(Path.Combine(dataDir, "club_comp.dat"), startPos + 79, acronym, 3);
+            var staff_comp = Path.Combine(dataDir, "staff_comp.dat");
+            ByteWriter.BinFileReplace(staff_comp, oldName, newName + "\0");
         }
 
         int PatchComp(string fromComp, string toComp, int clubCompStartPos = 0, int exeStartPos = 0x5d9590)
