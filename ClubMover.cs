@@ -113,8 +113,7 @@ namespace CM0102Patcher
                 "Lowestoft Town",
                 "St. Neots Town",
                 "Halesowen Town",
-                "Bedworth United",
-                "Metropolitan Police"
+                "Bedworth United"
             };
 
             var xx = clubList.Count(x => x.ClubDivision == southernLeague.ClubCompID);
