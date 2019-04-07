@@ -80,15 +80,7 @@ namespace CM0102Patcher
 
         public int SetupEnglishSouthernLeague()
         {
-            // Kick all clubs out of the southern league into a lower division
             var southernLeague = GetDivision("English Southern League Premier Division");
-            var aLowerDivision = GetDivision("A Lower Division");
-            var allSouthernClubs = clubList.FindAll(x => x.ClubDivision == southernLeague.ClubCompID);
-            foreach (var southernClub in allSouthernClubs)
-            {
-                southernClub.ClubDivision = aLowerDivision.ClubCompID;
-                SaveClubsDivision(southernClub);
-            }
 
             string[] southernTeams = new string[]
             {
@@ -116,10 +108,48 @@ namespace CM0102Patcher
                 "Bedworth United"
             };
 
-            var xx = clubList.Count(x => x.ClubDivision == southernLeague.ClubCompID);
-            // Add teams to the southern league
+            // Check all teams exist
+            bool allTeamsExist = true;
             foreach (var southernTeam in southernTeams)
-                MoveClubToDivision(southernTeam, "English Southern League Premier Division");
+            {
+                var southernClub = GetClub(southernTeam);
+                if (southernClub == null)
+                {
+                    allTeamsExist = false;
+                    break;
+                }
+            }
+
+            if (allTeamsExist)
+            {
+                // Kick all clubs out of the southern league into a lower division
+                var aLowerDivision = GetDivision("A Lower Division");
+                var allSouthernClubs = clubList.FindAll(x => x.ClubDivision == southernLeague.ClubCompID);
+                foreach (var southernClub in allSouthernClubs)
+                {
+                    southernClub.ClubDivision = aLowerDivision.ClubCompID;
+                    SaveClubsDivision(southernClub);
+                }
+
+                // Add teams to the southern league
+                foreach (var southernTeam in southernTeams)
+                {
+                    // Don't remove a team if it belongs to a higher division
+                    var southernClub = GetClub(southernTeam);
+                    if (southernClub == null)
+                        continue;
+                    var clubsDivision = GetClubsDivision(southernClub);
+                    if (clubsDivision == null)
+                        continue;
+                    if (clubsDivision.ClubCompName.ToLower().Contains("conference") ||
+                        clubsDivision.ClubCompName.ToLower().Contains("first") ||
+                        clubsDivision.ClubCompName.ToLower().Contains("second") ||
+                        clubsDivision.ClubCompName.ToLower().Contains("one"))
+                        continue;
+
+                    MoveClubToDivision(southernTeam, "English Southern League Premier Division");
+                }
+            }
 
             return clubList.Count(x => x.ClubDivision == southernLeague.ClubCompID);
         }

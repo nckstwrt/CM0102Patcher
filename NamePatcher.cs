@@ -64,11 +64,11 @@ namespace CM0102Patcher
         {
             // Apply the standard north patch first
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatch"]);
-
+            
             var cm = new ClubMover();
             cm.LoadClubAndComp(Path.Combine(dataDir, "club_comp.dat"), Path.Combine(dataDir, "club.dat"));
             var southernTeams = cm.SetupEnglishSouthernLeague();
-
+            
             // Patch the number of teams
             ByteWriter.WriteToFile(exeFile, 0x525B3C, BitConverter.GetBytes(southernTeams*59));
             ByteWriter.WriteToFile(exeFile, 0x525B46, new byte[] { ((byte)southernTeams) });
