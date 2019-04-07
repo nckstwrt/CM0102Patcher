@@ -64,6 +64,33 @@ namespace CM0102Patcher
         {
             // Apply the standard north patch first
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatch"]);
+
+            var cm = new ClubMover();
+            cm.LoadClubAndComp(Path.Combine(dataDir, "club_comp.dat"), Path.Combine(dataDir, "club.dat"));
+            var southernTeams = cm.CountSouthernTeams();
+
+            // Patch the number of teams
+            ByteWriter.WriteToFile(exeFile, 0x525B3C, BitConverter.GetBytes(southernTeams * 59));
+            ByteWriter.WriteToFile(exeFile, 0x525B46, new byte[] { ((byte)southernTeams) });
+
+            PatchComp("English Southern League Premier Division", "English National League South", "Southern Premier", "National League South", "NLS");
+            ByteWriter.WriteToFile(exeFile, 0x6d56b8, "English National League South" + "\0");
+
+            PatchStaffAward("Welsh Team of the Week", "English National League South Team of the Week");
+            PatchStaffAward("Welsh Player of the Year", "English National League South Player of the Year");
+            PatchStaffAward("Welsh Young Player of the Year", "English National League South Youth of the Year");
+            PatchStaffAward("Welsh Top Goalscorer", "English National League South Top Goalscorer");
+            PatchStaffAward("Welsh Manager of the Year", "English National League South Manager of the Year");
+            PatchStaffAward("Welsh Manager of the Month", "English National League South Manager of the Month");
+            patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthawards"]);
+
+            patcher.ApplyPatch(exeFile, 0x1751ff, "9c");
+        }
+
+        public void PatchWelshWithSouthernPremierCentral()
+        {
+            // Apply the standard north patch first
+            patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatch"]);
             
             var cm = new ClubMover();
             cm.LoadClubAndComp(Path.Combine(dataDir, "club_comp.dat"), Path.Combine(dataDir, "club.dat"));

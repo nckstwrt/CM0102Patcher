@@ -38,6 +38,11 @@ namespace CM0102Patcher
                 });
                 comboBoxGameSpeed.SelectedIndex = 3;
 
+                // Set selectable leagues
+                comboBoxReplacementLeagues.Items.Add("English National League North");
+                comboBoxReplacementLeagues.Items.Add("English National League South");
+                comboBoxReplacementLeagues.Items.Add("English Southern Premier Central Division");
+
                 // Set Default Start Year to this year if we're past July (else use last year) 
                 var currentYear = DateTime.Now.Year;
                 if (DateTime.Now.Month < 7)
@@ -240,17 +245,23 @@ namespace CM0102Patcher
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["manageanyteam"]);
                 if (checkBoxRemove3NonEULimit.Checked)
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["remove3playerlimit"]);
-                if (checkBoxAddNorthernLeague.Checked)
+                if (checkBoxReplaceWelshPremier.Checked)
                 {
                     NamePatcher np = new NamePatcher(labelFilename.Text, dataDir);
-                    np.PatchWelshWithNorthernLeague();
+                    switch (comboBoxReplacementLeagues.SelectedIndex)
+                    {
+                        case 0:
+                            np.PatchWelshWithNorthernLeague();
+                            break;
+                        case 1:
+                            np.PatchWelshWithSouthernLeague();
+                            break;
+                        case 2:
+                            np.PatchWelshWithSouthernPremierCentral();
+                            break;
+                    }
                 }
-                if (checkBoxAddSouthernLeague.Checked)
-                {
-                    NamePatcher np = new NamePatcher(labelFilename.Text, dataDir);
-                    np.PatchWelshWithSouthernLeague();
-                }
-
+               
                 // NOCD Crack
                 if (checkBoxRemoveCDChecks.Checked)
                 {
@@ -319,14 +330,9 @@ namespace CM0102Patcher
 
         private void checkBoxAddNorthernLeague_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxAddNorthernLeague.Checked)
-                checkBoxAddSouthernLeague.Checked = false;
-        }
-
-        private void checkBoxAddSouthernLeague_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxAddSouthernLeague.Checked)
-                checkBoxAddNorthernLeague.Checked = false;
+            comboBoxReplacementLeagues.Enabled = checkBoxReplaceWelshPremier.Checked;
+            if (checkBoxReplaceWelshPremier.Checked && comboBoxReplacementLeagues.SelectedIndex == -1)
+                comboBoxReplacementLeagues.SelectedIndex = 0;
         }
     }
 }

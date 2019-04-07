@@ -53,6 +53,7 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxReplaceWelshPremier = new System.Windows.Forms.CheckBox();
             this.checkBoxRemove3NonEULimit = new System.Windows.Forms.CheckBox();
             this.checkBoxManageAnyTeam = new System.Windows.Forms.CheckBox();
             this.checkBoxNewRegenCode = new System.Windows.Forms.CheckBox();
@@ -66,8 +67,7 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonRestore = new System.Windows.Forms.Button();
             this.buttonAbout = new System.Windows.Forms.Button();
-            this.checkBoxAddNorthernLeague = new System.Windows.Forms.CheckBox();
-            this.checkBoxAddSouthernLeague = new System.Windows.Forms.CheckBox();
+            this.comboBoxReplacementLeagues = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -358,8 +358,8 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.checkBoxAddNorthernLeague);
-            this.groupBox3.Controls.Add(this.checkBoxAddSouthernLeague);
+            this.groupBox3.Controls.Add(this.comboBoxReplacementLeagues);
+            this.groupBox3.Controls.Add(this.checkBoxReplaceWelshPremier);
             this.groupBox3.Controls.Add(this.checkBoxRemove3NonEULimit);
             this.groupBox3.Controls.Add(this.checkBoxManageAnyTeam);
             this.groupBox3.Controls.Add(this.checkBoxNewRegenCode);
@@ -374,6 +374,20 @@
             this.groupBox3.Size = new System.Drawing.Size(447, 279);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
+            // 
+            // checkBoxReplaceWelshPremier
+            // 
+            this.checkBoxReplaceWelshPremier.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxReplaceWelshPremier.AutoSize = true;
+            this.checkBoxReplaceWelshPremier.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxReplaceWelshPremier.Location = new System.Drawing.Point(7, 198);
+            this.checkBoxReplaceWelshPremier.Name = "checkBoxReplaceWelshPremier";
+            this.checkBoxReplaceWelshPremier.Size = new System.Drawing.Size(197, 20);
+            this.checkBoxReplaceWelshPremier.TabIndex = 31;
+            this.checkBoxReplaceWelshPremier.Text = "Replace Welsh premier with:";
+            this.toolTips.SetToolTip(this.checkBoxReplaceWelshPremier, "Replaces the Welsh League with the Northern Premier League");
+            this.checkBoxReplaceWelshPremier.UseVisualStyleBackColor = true;
+            this.checkBoxReplaceWelshPremier.CheckedChanged += new System.EventHandler(this.checkBoxAddNorthernLeague_CheckedChanged);
             // 
             // checkBoxRemove3NonEULimit
             // 
@@ -536,33 +550,14 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
-            // checkBoxAddNorthernLeague
+            // comboBoxReplacementLeagues
             // 
-            this.checkBoxAddNorthernLeague.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
-            this.checkBoxAddNorthernLeague.AutoSize = true;
-            this.checkBoxAddNorthernLeague.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxAddNorthernLeague.Location = new System.Drawing.Point(7, 198);
-            this.checkBoxAddNorthernLeague.Name = "checkBoxAddNorthernLeague";
-            this.checkBoxAddNorthernLeague.Size = new System.Drawing.Size(205, 20);
-            this.checkBoxAddNorthernLeague.TabIndex = 31;
-            this.checkBoxAddNorthernLeague.Text = "Add Northern Premier League";
-            this.toolTips.SetToolTip(this.checkBoxAddNorthernLeague, "Replaces the Welsh League with the Northern Premier League");
-            this.checkBoxAddNorthernLeague.UseVisualStyleBackColor = true;
-            this.checkBoxAddNorthernLeague.CheckedChanged += new System.EventHandler(this.checkBoxAddNorthernLeague_CheckedChanged);
-            // 
-            // checkBoxAddSouthernLeague
-            // 
-            this.checkBoxAddSouthernLeague.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
-            this.checkBoxAddSouthernLeague.AutoSize = true;
-            this.checkBoxAddSouthernLeague.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxAddSouthernLeague.Location = new System.Drawing.Point(219, 198);
-            this.checkBoxAddSouthernLeague.Name = "checkBoxAddSouthernLeague";
-            this.checkBoxAddSouthernLeague.Size = new System.Drawing.Size(204, 20);
-            this.checkBoxAddSouthernLeague.TabIndex = 32;
-            this.checkBoxAddSouthernLeague.Text = "Add Southern Central Division";
-            this.toolTips.SetToolTip(this.checkBoxAddSouthernLeague, "Replaces the Welsh League with the Southern Central Division");
-            this.checkBoxAddSouthernLeague.UseVisualStyleBackColor = true;
-            this.checkBoxAddSouthernLeague.CheckedChanged += new System.EventHandler(this.checkBoxAddSouthernLeague_CheckedChanged);
+            this.comboBoxReplacementLeagues.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxReplacementLeagues.FormattingEnabled = true;
+            this.comboBoxReplacementLeagues.Location = new System.Drawing.Point(219, 197);
+            this.comboBoxReplacementLeagues.Name = "comboBoxReplacementLeagues";
+            this.comboBoxReplacementLeagues.Size = new System.Drawing.Size(222, 21);
+            this.comboBoxReplacementLeagues.TabIndex = 32;
             // 
             // PatcherForm
             // 
@@ -599,7 +594,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v1.10";
+            this.Text = "Nick\'s CM0102Patcher v1.11";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
@@ -649,8 +644,8 @@
         private System.Windows.Forms.CheckBox checkBoxRemove3NonEULimit;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.Button buttonRestore;
-        private System.Windows.Forms.CheckBox checkBoxAddNorthernLeague;
-        private System.Windows.Forms.CheckBox checkBoxAddSouthernLeague;
+        private System.Windows.Forms.CheckBox checkBoxReplaceWelshPremier;
+        private System.Windows.Forms.ComboBox comboBoxReplacementLeagues;
     }
 }
 

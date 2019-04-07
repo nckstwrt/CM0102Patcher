@@ -151,6 +151,12 @@ namespace CM0102Patcher
                 }
             }
 
+            return CountSouthernTeams();
+        }
+
+        public int CountSouthernTeams()
+        {
+            var southernLeague = GetDivision("English Southern League Premier Division");
             return clubList.Count(x => x.ClubDivision == southernLeague.ClubCompID);
         }
 
