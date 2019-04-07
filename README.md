@@ -1,4 +1,4 @@
-# CM0102Patcher v1.09
+# CM0102Patcher v1.10
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/qcFNt6V.png)
+![alt text](https://i.imgur.com/IL1wCgw.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,12 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.10:
+* Added the National League North (replaces Welsh Premier)
+* Added the Southern Premier Division (replaces Welsh Premier). If using 2018/19 update creates league with current teams.
+* Added auto cropping to keep aspect ratio when going 800x600 -> 1280x800
+* Added cropping to RGN conversion tools
 
 v1.09:
 * Added option to remove 3 foreign player restriction
