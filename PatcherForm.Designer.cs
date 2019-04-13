@@ -567,11 +567,11 @@
             this.checkBoxRestrictTactics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxRestrictTactics.Location = new System.Drawing.Point(219, 250);
             this.checkBoxRestrictTactics.Name = "checkBoxRestrictTactics";
-            this.checkBoxRestrictTactics.Size = new System.Drawing.Size(154, 20);
+            this.checkBoxRestrictTactics.Size = new System.Drawing.Size(218, 20);
             this.checkBoxRestrictTactics.TabIndex = 33;
-            this.checkBoxRestrictTactics.Text = "Restrict player tactics";
-            this.toolTips.SetToolTip(this.checkBoxRestrictTactics, "This stops you from loading tactics and from adjusting WibWob. Keeps you honest! " +
-        ":)");
+            this.checkBoxRestrictTactics.Text = "Restrict player tactics + scouters";
+            this.toolTips.SetToolTip(this.checkBoxRestrictTactics, "This stops you from loading tactics and from adjusting WibWob. It also stops your" +
+        " save games from loading into CMScout and other scouters. Keeps you honest! :)");
             this.checkBoxRestrictTactics.UseVisualStyleBackColor = true;
             // 
             // PatcherForm

@@ -262,7 +262,10 @@ namespace CM0102Patcher
                     }
                 }
                 if (checkBoxRestrictTactics.Checked)
+                {
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["restricttactics"]);
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["changegeneraldat"]);
+                }
 
                 // NOCD Crack
                 if (checkBoxRemoveCDChecks.Checked)

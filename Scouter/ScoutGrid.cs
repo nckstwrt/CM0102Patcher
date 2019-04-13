@@ -161,22 +161,29 @@ namespace CM0102Patcher.Scouter
 
         private void LoadSaveFile(string saveFileName)
         {
-            using (saveReader = new SaveReader(saveFileName))
+            try
             {
-                saveReader.LoadPlayers();
-                dataGridView.SuspendLayout();
-                dataGridView.DataSource = saveReader.CreateDataTable(checkBoxShowIntrinstics.Checked);
-                dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                dataGridView.AllowUserToResizeColumns = true;
-                dataGridView.Columns["Value"].DefaultCellStyle.FormatProvider = ci;
-                dataGridView.Columns["Value"].DefaultCellStyle.Format = "C0";
-                dataGridView.Columns[1].Width -= 20;
-                for (int i = 5; i < dataGridView.Columns.Count; i++)
-                    if (i != 7)
-                        dataGridView.Columns[i].Width -= 20;
-                dataGridView.ResumeLayout();
-                dataGridView.Update();
-                dataGridView.Refresh();
+                using (saveReader = new SaveReader(saveFileName))
+                {
+                    saveReader.LoadPlayers();
+                    dataGridView.SuspendLayout();
+                    dataGridView.DataSource = saveReader.CreateDataTable(checkBoxShowIntrinstics.Checked);
+                    dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                    dataGridView.AllowUserToResizeColumns = true;
+                    dataGridView.Columns["Value"].DefaultCellStyle.FormatProvider = ci;
+                    dataGridView.Columns["Value"].DefaultCellStyle.Format = "C0";
+                    dataGridView.Columns[1].Width -= 20;
+                    for (int i = 5; i < dataGridView.Columns.Count; i++)
+                        if (i != 7)
+                            dataGridView.Columns[i].Width -= 20;
+                    dataGridView.ResumeLayout();
+                    dataGridView.Update();
+                    dataGridView.Refresh();
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionMsgBox.Show(ex);
             }
         }
 
