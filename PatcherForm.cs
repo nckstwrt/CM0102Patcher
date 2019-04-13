@@ -261,7 +261,9 @@ namespace CM0102Patcher
                             break;
                     }
                 }
-               
+                if (checkBoxRestrictTactics.Checked)
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["restricttactics"]);
+
                 // NOCD Crack
                 if (checkBoxRemoveCDChecks.Checked)
                 {

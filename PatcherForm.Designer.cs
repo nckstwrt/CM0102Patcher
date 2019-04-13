@@ -53,6 +53,7 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.comboBoxReplacementLeagues = new System.Windows.Forms.ComboBox();
             this.checkBoxReplaceWelshPremier = new System.Windows.Forms.CheckBox();
             this.checkBoxRemove3NonEULimit = new System.Windows.Forms.CheckBox();
             this.checkBoxManageAnyTeam = new System.Windows.Forms.CheckBox();
@@ -67,7 +68,7 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonRestore = new System.Windows.Forms.Button();
             this.buttonAbout = new System.Windows.Forms.Button();
-            this.comboBoxReplacementLeagues = new System.Windows.Forms.ComboBox();
+            this.checkBoxRestrictTactics = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -358,6 +359,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBoxRestrictTactics);
             this.groupBox3.Controls.Add(this.comboBoxReplacementLeagues);
             this.groupBox3.Controls.Add(this.checkBoxReplaceWelshPremier);
             this.groupBox3.Controls.Add(this.checkBoxRemove3NonEULimit);
@@ -368,12 +370,20 @@
             this.groupBox3.Controls.Add(this.checkBoxRegenFixes);
             this.groupBox3.Controls.Add(this.checkBoxForceLoadAllPlayers);
             this.groupBox3.Controls.Add(this.checkBoxUpdateNames);
-            this.groupBox3.Controls.Add(this.checkBoxRemoveCDChecks);
             this.groupBox3.Location = new System.Drawing.Point(9, 131);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(447, 279);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
+            // 
+            // comboBoxReplacementLeagues
+            // 
+            this.comboBoxReplacementLeagues.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxReplacementLeagues.FormattingEnabled = true;
+            this.comboBoxReplacementLeagues.Location = new System.Drawing.Point(219, 197);
+            this.comboBoxReplacementLeagues.Name = "comboBoxReplacementLeagues";
+            this.comboBoxReplacementLeagues.Size = new System.Drawing.Size(222, 21);
+            this.comboBoxReplacementLeagues.TabIndex = 32;
             // 
             // checkBoxReplaceWelshPremier
             // 
@@ -502,11 +512,11 @@
             // 
             this.checkBoxRemoveCDChecks.AutoSize = true;
             this.checkBoxRemoveCDChecks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(219, 250);
+            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(294, 425);
             this.checkBoxRemoveCDChecks.Name = "checkBoxRemoveCDChecks";
-            this.checkBoxRemoveCDChecks.Size = new System.Drawing.Size(149, 20);
+            this.checkBoxRemoveCDChecks.Size = new System.Drawing.Size(69, 20);
             this.checkBoxRemoveCDChecks.TabIndex = 23;
-            this.checkBoxRemoveCDChecks.Text = "Remove CD Checks";
+            this.checkBoxRemoveCDChecks.Text = "NO CD";
             this.checkBoxRemoveCDChecks.UseVisualStyleBackColor = true;
             this.checkBoxRemoveCDChecks.Visible = false;
             // 
@@ -550,14 +560,19 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
-            // comboBoxReplacementLeagues
+            // checkBoxRestrictTactics
             // 
-            this.comboBoxReplacementLeagues.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxReplacementLeagues.FormattingEnabled = true;
-            this.comboBoxReplacementLeagues.Location = new System.Drawing.Point(219, 197);
-            this.comboBoxReplacementLeagues.Name = "comboBoxReplacementLeagues";
-            this.comboBoxReplacementLeagues.Size = new System.Drawing.Size(222, 21);
-            this.comboBoxReplacementLeagues.TabIndex = 32;
+            this.checkBoxRestrictTactics.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxRestrictTactics.AutoSize = true;
+            this.checkBoxRestrictTactics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxRestrictTactics.Location = new System.Drawing.Point(219, 250);
+            this.checkBoxRestrictTactics.Name = "checkBoxRestrictTactics";
+            this.checkBoxRestrictTactics.Size = new System.Drawing.Size(154, 20);
+            this.checkBoxRestrictTactics.TabIndex = 33;
+            this.checkBoxRestrictTactics.Text = "Restrict player tactics";
+            this.toolTips.SetToolTip(this.checkBoxRestrictTactics, "This stops you from loading tactics and from adjusting WibWob. Keeps you honest! " +
+        ":)");
+            this.checkBoxRestrictTactics.UseVisualStyleBackColor = true;
             // 
             // PatcherForm
             // 
@@ -574,6 +589,7 @@
             this.Controls.Add(this.checkBoxDisableSplashScreen);
             this.Controls.Add(this.numericCurrencyInflation);
             this.Controls.Add(this.label3);
+            this.Controls.Add(this.checkBoxRemoveCDChecks);
             this.Controls.Add(this.checkBox7Subs);
             this.Controls.Add(this.checkBoxCDRemoval);
             this.Controls.Add(this.buttonTools);
@@ -594,7 +610,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v1.11";
+            this.Text = "Nick\'s CM0102Patcher v1.12";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
@@ -646,6 +662,7 @@
         private System.Windows.Forms.Button buttonRestore;
         private System.Windows.Forms.CheckBox checkBoxReplaceWelshPremier;
         private System.Windows.Forms.ComboBox comboBoxReplacementLeagues;
+        private System.Windows.Forms.CheckBox checkBoxRestrictTactics;
     }
 }
 
