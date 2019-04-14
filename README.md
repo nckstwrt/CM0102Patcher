@@ -1,4 +1,4 @@
-# CM0102Patcher v1.11
+# CM0102Patcher v1.12
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/mDm0nKn.png)
+![alt text](https://i.imgur.com/kdBZZ4m.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,10 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.12:
+* Option to stop loading of tactics and changing of wib-wob
+* Change also stop scouters (like CMScout) working on your save games
 
 v1.11:
 * Added the National League South as a new option to replace the Welsh Premier
