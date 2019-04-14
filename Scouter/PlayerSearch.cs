@@ -91,11 +91,11 @@ namespace CM0102Patcher.Scouter
             }
             if (numericUpDownValueMin.Value != 0)
             {
-                RowFilter += string.Format("AND [{0}] >= {1} ", "Value", numericUpDownPAMin.Value);
+                RowFilter += string.Format("AND [{0}] >= {1} ", "Value", numericUpDownValueMin.Value);
             }
             if (numericUpDownValueMax.Value != 0)
             {
-                RowFilter += string.Format("AND [{0}] <= {1} ", "Value", numericUpDownPAMax.Value);
+                RowFilter += string.Format("AND [{0}] <= {1} ", "Value", numericUpDownValueMax.Value);
             }
             if (numericUpDownFilter1Min.Value != 0 && (comboBoxFilter1.SelectedItem as string) != "")
             {

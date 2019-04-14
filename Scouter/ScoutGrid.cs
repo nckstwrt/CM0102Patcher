@@ -57,74 +57,81 @@ namespace CM0102Patcher.Scouter
 
         private void DataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (e.RowIndex < 0)
-                return;
-            var cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
-            cell.Style.BackColor = Color.Black;
-            cell.Style.ForeColor = Color.White;
-
-            if (cell.ValueType == typeof(sbyte))
+            try
             {
-                if (cell.Value != null)
-                {
-                    var val = ((sbyte)cell.Value);
+                if (e.RowIndex < 0)
+                    return;
+                var cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                cell.Style.BackColor = Color.Black;
+                cell.Style.ForeColor = Color.White;
 
-                    if (checkBoxShowIntrinstics.Checked)
+                if (cell.ValueType == typeof(sbyte))
+                {
+                    if (cell.Value != null)
                     {
-                        var colName = dataGridView.Columns[e.ColumnIndex].Name;
-                        switch (colName)
+                        var val = ((sbyte)cell.Value);
+
+                        if (checkBoxShowIntrinstics.Checked)
                         {
-                            case "Anticipation":
-                            case "Crossing":
-                            case "Decisions":
-                            case "Dribbling":
-                            case "Finishing":
-                            case "Heading":
-                            case "Long Shots":
-                            case "Off The Ball":
-                            case "Marking":
-                            case "Passing":
-                            case "Penalties":
-                            case "Positioning":
-                            case "Throw Ins":
-                            case "Creativity":
-                            case "Tackling":
-                                val = (sbyte)(((((int)val) + 127.0) / 230.0) * 20.0);
+                            var colName = dataGridView.Columns[e.ColumnIndex].Name;
+                            switch (colName)
+                            {
+                                case "Anticipation":
+                                case "Crossing":
+                                case "Decisions":
+                                case "Dribbling":
+                                case "Finishing":
+                                case "Heading":
+                                case "Long Shots":
+                                case "Off The Ball":
+                                case "Marking":
+                                case "Passing":
+                                case "Penalties":
+                                case "Positioning":
+                                case "Throw Ins":
+                                case "Creativity":
+                                case "Tackling":
+                                    val = (sbyte)(((((int)val) + 127.0) / 230.0) * 20.0);
+                                    break;
+                            }
+                        }
+                        switch (val)
+                        {
+                            case 1:
+                            case 2:
+                            case 3:
+                            case 4:
+                            case 5:
+                                cell.Style.ForeColor = Color.Gray;
+                                break;
+                            case 6:
+                            case 7:
+                            case 8:
+                            case 9:
+                            case 10:
+                            case 11:
+                                cell.Style.ForeColor = ColorMaker(Color.LightYellow, Color.FromArgb(251, 241, 84), 12, val);
+                                break;
+                            case 12:
+                            case 13:
+                            case 14:
+                            case 15:
+                            case 16:
+                                cell.Style.ForeColor = ColorMaker(Color.FromArgb(251, 241, 84), Color.Orange, 17, val);
+                                break;
+                            case 17:
+                            case 18:
+                            case 19:
+                            case 20:
+                                cell.Style.ForeColor = ColorMaker(Color.Orange, Color.Red, 21, val);
                                 break;
                         }
                     }
-                    switch (val)
-                    {
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                        case 5:
-                            cell.Style.ForeColor = Color.Gray;
-                            break;
-                        case 6:
-                        case 7:
-                        case 8:
-                        case 9:
-                        case 10:
-                        case 11:
-                            cell.Style.ForeColor = ColorMaker(Color.LightYellow, Color.FromArgb(251, 241, 84), 12, val);
-                            break;
-                        case 12:
-                        case 13:
-                        case 14:
-                        case 15:
-                        case 16:
-                            cell.Style.ForeColor = ColorMaker(Color.FromArgb(251, 241, 84), Color.Orange, 17, val);
-                            break;
-                        case 17:
-                        case 18:
-                        case 19:
-                        case 20:
-                            cell.Style.ForeColor = ColorMaker(Color.Orange, Color.Red, 21, val);
-                            break;
-                    }
                 }
+            }
+            catch
+            {
+
             }
         }
 
