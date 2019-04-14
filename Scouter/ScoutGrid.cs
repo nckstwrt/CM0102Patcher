@@ -165,6 +165,8 @@ namespace CM0102Patcher.Scouter
             {
                 using (saveReader = new SaveReader(saveFileName))
                 {
+                    dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+                    dataGridView.AllowUserToResizeColumns = true;
                     saveReader.LoadPlayers();
                     dataGridView.SuspendLayout();
                     dataGridView.DataSource = saveReader.CreateDataTable(checkBoxShowIntrinstics.Checked);
@@ -177,8 +179,7 @@ namespace CM0102Patcher.Scouter
                         if (i != 7)
                             dataGridView.Columns[i].Width -= 20;
                     dataGridView.ResumeLayout();
-                    dataGridView.Update();
-                    dataGridView.Refresh();
+                    RefreshGrid();
                 }
             }
             catch (Exception ex)

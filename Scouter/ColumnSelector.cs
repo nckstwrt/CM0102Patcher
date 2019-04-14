@@ -35,10 +35,11 @@ namespace CM0102Patcher.Scouter
                 // https://champman0102.co.uk/showthread.php?t=6625
                 comboBoxPresets.Items.Add(new ColumnPreset("All", false, colNames.ToArray()));
                 comboBoxPresets.Items.Add(new ColumnPreset("None", false));
-                comboBoxPresets.Items.Add(new ColumnPreset("Goalkeepers", true, "Goalkeepers", "Handling", "Acceleration", "Agility", "Jumping", "Pace", "Passing", "Positioning", "Reflexes", "Strength"));
-                comboBoxPresets.Items.Add(new ColumnPreset("Defenders", true, "Acceleration", "Marking", "Passing", "Tackling", "Jumping", "Pace", "Passing", "Positioning", "Stamina", "Strength"));
-                comboBoxPresets.Items.Add(new ColumnPreset("Midfielders", true, "Determination", "Marking", "Passing", "Crossing", "Dribbling", "Heading", "Pace", "Strength", "Stamina" ));
-                comboBoxPresets.Items.Add(new ColumnPreset("Attackers", true, "Determination", "Acceleration", "Creativity", "Off The Ball", "Finishing", "Jumping", "Pace", "Flair", "Creativity"));
+                comboBoxPresets.Items.Add(new ColumnPreset("Goalkeepers", true, "Goalkeepers", "Handling", "Agility", "Jumping", "Passing", "Positioning", "Reflexes", "Anticipation", "Decisions", "One On Ones"));
+                comboBoxPresets.Items.Add(new ColumnPreset("Defenders", true, "Position", "Determination", "Anticipation", "Marking", "Passing", "Tackling", "Jumping", "Pace", "Passing", "Positioning", "Stamina", "Strength"));
+                comboBoxPresets.Items.Add(new ColumnPreset("Wingers", true, "Position", "Determination", "Acceleration", "Agility", "Flair", "Crossing", "Corners", "Finishing", "Dribbling", "Free Kicks", "Technique", "Passing", "Creativity", "Off The Ball"));
+                comboBoxPresets.Items.Add(new ColumnPreset("Midfielders", true, "Position", "Determination", "Marking", "Passing", "Crossing", "Dribbling", "Heading", "Pace", "Strength", "Stamina" ));
+                comboBoxPresets.Items.Add(new ColumnPreset("Attackers", true, "Position", "Determination", "Acceleration", "Aggression", "Bravery", "Off The Ball", "Finishing", "Jumping", "Pace", "Flair", "Stamina", "Strength"));
                 comboBoxPresets.SelectedIndex = 0;
             }
         }

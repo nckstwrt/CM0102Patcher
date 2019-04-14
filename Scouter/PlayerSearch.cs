@@ -69,6 +69,10 @@ namespace CM0102Patcher.Scouter
             {
                 RowFilter += string.Format("AND [{0}] <= {1} ", "Age", numericUpDownMaxAge.Value);
             }
+            if (!string.IsNullOrEmpty(textBoxClub.Text))
+            {
+                RowFilter += string.Format("AND [{0}] LIKE '%{1}%' ", "Club", textBoxClub.Text);
+            }
             if (numericUpDownAbilityMin.Value != 0)
             {
                 RowFilter += string.Format("AND [{0}] >= {1} ", "CA", numericUpDownAbilityMin.Value);
@@ -236,6 +240,33 @@ namespace CM0102Patcher.Scouter
                 RowFilter += string.Format(") ");
             }
             Hide();
+        }
+
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            ResetControls(this);
+        }
+
+        private void ResetControls(Control controlContainer)
+        {
+            foreach (var control in controlContainer.Controls)
+            {
+                if (control is TextBox || control is NumericUpDown)
+                {
+                    (control as Control).Text = "";
+                }
+                if (control is ComboBox)
+                {
+                    (control as ComboBox).SelectedIndex = 0;
+                }
+                if (control is CheckBox)
+                {
+                    (control as CheckBox).Checked = false;
+                }
+
+                if (control is GroupBox || control is TabPage || control is TabControl)
+                    ResetControls(control as Control);
+            }
         }
     }
 }
