@@ -91,6 +91,10 @@ namespace CM0102Patcher.Scouter
                                 case "Throw Ins":
                                 case "Creativity":
                                 case "Tackling":
+
+                                case "Handling":
+                                case "Reflexes":
+                                case "One On Ones":
                                     val = (sbyte)(((((int)val) + 127.0) / 230.0) * 20.0);
                                     break;
                             }

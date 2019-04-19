@@ -251,9 +251,13 @@ namespace CM0102Patcher.Scouter
         {
             foreach (var control in controlContainer.Controls)
             {
-                if (control is TextBox || control is NumericUpDown)
+                if (control is TextBox)
                 {
                     (control as Control).Text = "";
+                }
+                if (control is NumericUpDown)
+                {
+                    (control as NumericUpDown).Value = 0;
                 }
                 if (control is ComboBox)
                 {

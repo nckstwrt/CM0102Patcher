@@ -239,10 +239,12 @@ namespace CM0102Scout
             dataTable.Columns.Add("Versatility", typeof(sbyte));
             dataTable.Columns.Add("Work Rate", typeof(sbyte));
             dataTable.Columns.Add("Player Morale", typeof(byte));
+            dataTable.Columns.Add("Scouter Rating", typeof(int));
 
             // Creativity = Vision
             // Movement = Off The Ball
 
+            Weighter weighter = new Weighter();
             foreach (var player in players)
             {
                 try
@@ -256,6 +258,39 @@ namespace CM0102Scout
                     var nationality = "Unknown";
                     if (nations.ContainsKey(staff.nationID))
                         nationality = nations[staff.nationID].nationality;
+
+                    weighter.Reset(instrinsicsOn);
+                    if (player.Goalkeeper >= 15)
+                    {
+                        weighter.Add(instrinsicsOn ? player.Handling : player.Convert(player.Handling, true, true), 90, 20);
+                        weighter.Add(instrinsicsOn ? player.Reflexes : player.Convert(player.Reflexes, true, true), 90, 10);
+                        weighter.Add(instrinsicsOn ? player.OneOnOnes : player.Convert(player.OneOnOnes, true, true), 90, 10);
+                        weighter.Add(instrinsicsOn ? player.Positioning : player.Convert(player.Positioning), 90, 7);
+                        weighter.Add(instrinsicsOn ? player.Anticipation : player.Convert(player.Anticipation), 90, 7);
+                    }
+                    else
+                    if (player.Defender >= 15)
+                    {
+                        weighter.Add(instrinsicsOn ? player.Positioning : player.Convert(player.Positioning, true), 120, 12);
+                        weighter.Add(instrinsicsOn ? player.Tackling : player.Convert(player.Tackling, true), 120, 8);
+                        weighter.Add(instrinsicsOn ? player.Marking : player.Convert(player.Marking, true), 120, 8);
+                        weighter.Add(staff.determination, 20, 4);
+                        weighter.Add(player.Strength, 20, 4);
+                    }
+                    else
+                    if (player.Attacker>=15)
+                    {
+                        weighter.Add(instrinsicsOn ? player.Finishing : player.Convert(player.Finishing, true), 120, 12);
+                        weighter.Add(instrinsicsOn ? player.Movement : player.Convert(player.Movement, true), 120, 12);
+                        weighter.Add(player.PlayerPace, 20, 7);
+                        weighter.Add(player.Jumping, 20, 7);
+                        weighter.Add(player.Acceleration, 20, 7);
+                        weighter.Add(player.Flair, 20, 7);
+                        weighter.Add(player.Technique, 20, 5);
+                        weighter.Add(staff.determination, 20, 5);
+                        weighter.Add(player.Balance, 20, 4);
+                        weighter.Add(player.Bravery, 20, 4);
+                    }
 
                     dataTable.Rows.Add(name, age, club, nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, staff.value,
                         player.Acceleration,
@@ -301,7 +336,8 @@ namespace CM0102Scout
                         instrinsicsOn ? player.ThrowIns : player.Convert(player.ThrowIns, true),
                         player.Versatility,
                         player.WorkRate,
-                        player.PlayerMorale
+                        player.PlayerMorale,
+                        weighter.RatingPercentage
                         );
                 }
                 catch
@@ -345,6 +381,38 @@ namespace CM0102Scout
             var block = FlstBlock.FirstOrDefault(x => TBlock.GetName(x) == blockName);
             blockCount = TBlock.GetSize(block) / blockSize;
             return TBlock.GetPosition(block);
+        }
+    }
+
+    public class Weighter
+    {
+        bool intrinsicsOn = true;
+        double total = 0;
+        double total_weight = 0;
+
+        public void Reset(bool intrinsicsOn)
+        {
+            this.intrinsicsOn = intrinsicsOn;
+            total = 0;
+            total_weight = 0;
+        }
+
+        public void Add(double amount, double outof, double weight)
+        {
+            if (!intrinsicsOn)
+                outof = 20;
+            total += (amount / outof) * weight;
+            total_weight += weight;
+        }
+
+        public int RatingPercentage
+        {
+            get
+            {
+                if (total_weight == 0)
+                    return 0;
+                return (int)(total / total_weight * 100.0);
+            }
         }
     }
 }
