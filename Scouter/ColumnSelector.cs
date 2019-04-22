@@ -37,8 +37,9 @@ namespace CM0102Patcher.Scouter
                 comboBoxPresets.Items.Add(new ColumnPreset("None", false));
                 comboBoxPresets.Items.Add(new ColumnPreset("Goalkeepers", true, "Position", "Handling", "Agility", "Jumping", "Passing", "Positioning", "Reflexes", "Anticipation", "Decisions", "One On Ones", "Scouter Rating"));
                 comboBoxPresets.Items.Add(new ColumnPreset("Defenders", true, "Position", "Determination", "Anticipation", "Marking", "Passing", "Tackling", "Jumping", "Pace", "Passing", "Positioning", "Stamina", "Strength", "Scouter Rating"));
-                comboBoxPresets.Items.Add(new ColumnPreset("Wingers", true, "Position", "Determination", "Acceleration", "Agility", "Flair", "Crossing", "Corners", "Finishing", "Dribbling", "Free Kicks", "Technique", "Passing", "Creativity", "Off The Ball"));
-                comboBoxPresets.Items.Add(new ColumnPreset("Midfielders", true, "Position", "Determination", "Marking", "Passing", "Crossing", "Dribbling", "Heading", "Pace", "Strength", "Stamina" ));
+                comboBoxPresets.Items.Add(new ColumnPreset("Wingers", true, "Position", "Determination", "Acceleration", "Agility", "Bravery", "Balance", "Flair", "Crossing", "Corners", "Finishing", "Dribbling", "Technique", "Pace", "Passing", "Creativity", "Off The Ball", "Scouter Rating"));
+                comboBoxPresets.Items.Add(new ColumnPreset("Midfielders (DM)", true, "Position", "Determination", "Agility", "Balance", "Heading", "Influence", "Creativity", "Pace", "Strength", "Stamina", "Positioning", "Technique", "Marking", "Jumping", "Work Rate", "Flair" ));
+                comboBoxPresets.Items.Add(new ColumnPreset("Midfielders (AM)", true, "Position", "Determination", "Acceleration", "Creativity", "Passing", "Crossing", "Dribbling", "Heading", "Pace", "Strength", "Stamina"));
                 comboBoxPresets.Items.Add(new ColumnPreset("Attackers", true, "Position", "Determination", "Acceleration", "Aggression", "Balance", "Bravery", "Off The Ball", "Finishing", "Jumping", "Pace", "Flair", "Stamina", "Strength", "Technique", "Scouter Rating"));
                 comboBoxPresets.SelectedIndex = 0;
             }

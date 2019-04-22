@@ -117,6 +117,10 @@ namespace CM0102Scout
                 staffList[staff.playerId] = staff;
             }
 
+            // Load Player History
+            //var playerHistorBlocks = ReadBlocks("player stats history.tmp", 0x2f);
+            //var staffHistoryBlocks = ReadBlocks("staff history.tmp", 0x39);
+
             // Load Nations
             var nationBlocks = ReadBlocks("nation.dat", NationSize);
             foreach (var nationBlock in nationBlocks)
@@ -148,11 +152,11 @@ namespace CM0102Scout
 
             // Load Players
             var playerBlocks = ReadBlocks("player.dat", PlayerSize);
+            var fields = typeof(Player).GetFields();
             foreach (var playerBlock in playerBlocks)
             {
                 int pos = 0;
                 var player = new Player();
-                var fields = typeof(Player).GetFields();
                 foreach (var field in fields)
                 {
                     if (field.FieldType == typeof(int))
@@ -259,6 +263,9 @@ namespace CM0102Scout
                     if (nations.ContainsKey(staff.nationID))
                         nationality = nations[staff.nationID].nationality;
 
+                    //if (name == "Maxim Tsigalko")
+                      //  Console.WriteLine();
+
                     weighter.Reset(instrinsicsOn);
                     if (player.Goalkeeper >= 15)
                     {
@@ -278,6 +285,24 @@ namespace CM0102Scout
                         weighter.Add(player.Strength, 20, 4);
                     }
                     else
+                    // Winger
+                    if (player.AttackingMidfielder>=15 && (player.RightSide>=15 || player.LeftSide >= 15))
+                    {
+                        weighter.Add(player.Acceleration, 20, 10);
+                        weighter.Add(player.PlayerPace, 20, 10);
+                        weighter.Add(staff.determination, 20, 10);
+                        weighter.Add(player.Aggression, 20, 8);
+                        weighter.Add(player.Balance, 20, 8);
+                        weighter.Add(player.Bravery, 20, 8);
+                        weighter.Add(player.Flair, 20, 7);
+                        weighter.Add(player.Technique, 20, 7);
+                        weighter.Add(instrinsicsOn ? player.Dribbling : player.Convert(player.Dribbling, true), 120, 7);
+                        weighter.Add(instrinsicsOn ? player.Movement : player.Convert(player.Movement, true), 120, 6);
+                        weighter.Add(player.Agility, 20, 7);
+                        weighter.Add(player.Teamwork, 20, 7);
+                        weighter.Add(player.WorkRate, 20, 7);
+                        weighter.Add(player.Strength, 20, 5);
+                    }
                     if (player.Attacker>=15)
                     {
                         weighter.Add(instrinsicsOn ? player.Finishing : player.Convert(player.Finishing, true), 120, 12);
