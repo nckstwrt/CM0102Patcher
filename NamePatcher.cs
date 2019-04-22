@@ -80,9 +80,9 @@ namespace CM0102Patcher
             PatchStaffAward("Welsh Player of the Year", "English National League South Player of the Year");
             PatchStaffAward("Welsh Young Player of the Year", "English National League South Youth of the Year");
             PatchStaffAward("Welsh Top Goalscorer", "English National League South Top Goalscorer");
-            PatchStaffAward("Welsh Manager of the Year", "English National League South Manager of the Year");
-            PatchStaffAward("Welsh Manager of the Month", "English National League South Manager of the Month");
-            patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthawards"]);
+            PatchStaffAward("Welsh Manager of the Year", "National League South Manager of the Year");
+            PatchStaffAward("Welsh Manager of the Month", "National League South Manager of the Month");
+            patcher.ApplyPatch(exeFile, patcher.patches["englishleaguesouthawards"]);
 
             patcher.ApplyPatch(exeFile, 0x1751ff, "9c");
         }
@@ -102,7 +102,7 @@ namespace CM0102Patcher
 
             //ByteWriter.WriteToFile(exeFile, 0x6d56b8, "English Southern League Premier Division" + "\0");
                         
-            PatchComp("English Southern League Premier Division", "English Southern Premier Central\0", "Southern Premier", "Southern Premier", "SPC");
+            PatchComp("English Southern League Premier Division", "English Southern Premier Central", "Southern Premier", "Southern Premier", "SPC");
             ByteWriter.WriteToFile(exeFile, 0x6d56b8, "English Southern Premier Central" + "\0");
             
             PatchStaffAward("Welsh Team of the Week",           "English Southern Premier Team of the Week");

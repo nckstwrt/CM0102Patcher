@@ -112,6 +112,9 @@ namespace CM0102Patcher
                         return;
                 }
 
+                // Initialise the name patcher
+                var namePatcher = new NamePatcher(labelFilename.Text, dataDir);
+                
                 // Game speed hack
                 patcher.SpeedHack(labelFilename.Text, (short)(int)(comboBoxGameSpeed.SelectedItem as ComboboxItem).Value);
 
@@ -238,7 +241,6 @@ namespace CM0102Patcher
                 }
                 if (checkBoxUpdateNames.Checked)
                 {
-                    var namePatcher = new NamePatcher(labelFilename.Text, dataDir);
                     namePatcher.RunPatch();
                 }
                 if (checkBoxManageAnyTeam.Checked)
@@ -247,17 +249,16 @@ namespace CM0102Patcher
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["remove3playerlimit"]);
                 if (checkBoxReplaceWelshPremier.Checked)
                 {
-                    NamePatcher np = new NamePatcher(labelFilename.Text, dataDir);
                     switch (comboBoxReplacementLeagues.SelectedIndex)
                     {
                         case 0:
-                            np.PatchWelshWithNorthernLeague();
+                            namePatcher.PatchWelshWithNorthernLeague();
                             break;
                         case 1:
-                            np.PatchWelshWithSouthernLeague();
+                            namePatcher.PatchWelshWithSouthernLeague();
                             break;
                         case 2:
-                            np.PatchWelshWithSouthernPremierCentral();
+                            namePatcher.PatchWelshWithSouthernPremierCentral();
                             break;
                     }
                 }

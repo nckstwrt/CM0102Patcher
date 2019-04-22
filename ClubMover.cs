@@ -36,7 +36,7 @@ namespace CM0102Patcher
         string clubDatFile;
         Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
         List<Comp> compList = new List<Comp>();
-        static List<Club> clubList = new List<Club>();
+        List<Club> clubList = new List<Club>();
 
         public void LoadClubAndComp(string clubCompDatFile, string clubDatFile)
         {
