@@ -1,4 +1,4 @@
-# CM0102Patcher v1.12
+# CM0102Patcher v1.13
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/kdBZZ4m.png)
+![alt text](https://i.imgur.com/ZumdWRS.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -16,7 +16,7 @@ It also has a tools section with things like a patch applier that can apply .pat
 
 An unfinished scouter, based on CM Scout, but allows you to view and sort by the "intrinsic" skills value (can load compressed and uncompressed saves)
 
-![alt text](https://i.imgur.com/LOMaY2W.png)
+![alt text](https://i.imgur.com/w5E8SGO.png)
 
 Also there is a little officials.dat patcher for patching up referees as per recent discussions on getting too many red cards from recent updates:
 
@@ -27,6 +27,11 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.13:
+* Lots of improvements to the Scouter
+* Fixed jobs abroad boost
+* Fixed issues when setting the Welsh Premier to be the Nation League South
 
 v1.12:
 * Option to stop loading of tactics and changing of wib-wob
