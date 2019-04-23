@@ -53,6 +53,7 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxRestrictTactics = new System.Windows.Forms.CheckBox();
             this.comboBoxReplacementLeagues = new System.Windows.Forms.ComboBox();
             this.checkBoxReplaceWelshPremier = new System.Windows.Forms.CheckBox();
             this.checkBoxRemove3NonEULimit = new System.Windows.Forms.CheckBox();
@@ -68,7 +69,6 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonRestore = new System.Windows.Forms.Button();
             this.buttonAbout = new System.Windows.Forms.Button();
-            this.checkBoxRestrictTactics = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -376,6 +376,20 @@
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
             // 
+            // checkBoxRestrictTactics
+            // 
+            this.checkBoxRestrictTactics.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxRestrictTactics.AutoSize = true;
+            this.checkBoxRestrictTactics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxRestrictTactics.Location = new System.Drawing.Point(219, 250);
+            this.checkBoxRestrictTactics.Name = "checkBoxRestrictTactics";
+            this.checkBoxRestrictTactics.Size = new System.Drawing.Size(218, 20);
+            this.checkBoxRestrictTactics.TabIndex = 33;
+            this.checkBoxRestrictTactics.Text = "Restrict player tactics + scouters";
+            this.toolTips.SetToolTip(this.checkBoxRestrictTactics, "This stops you from loading tactics and from adjusting WibWob. It also stops your" +
+        " save games from loading into CMScout and other scouters. Keeps you honest! :)");
+            this.checkBoxRestrictTactics.UseVisualStyleBackColor = true;
+            // 
             // comboBoxReplacementLeagues
             // 
             this.comboBoxReplacementLeagues.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -560,20 +574,6 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
-            // checkBoxRestrictTactics
-            // 
-            this.checkBoxRestrictTactics.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
-            this.checkBoxRestrictTactics.AutoSize = true;
-            this.checkBoxRestrictTactics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxRestrictTactics.Location = new System.Drawing.Point(219, 250);
-            this.checkBoxRestrictTactics.Name = "checkBoxRestrictTactics";
-            this.checkBoxRestrictTactics.Size = new System.Drawing.Size(218, 20);
-            this.checkBoxRestrictTactics.TabIndex = 33;
-            this.checkBoxRestrictTactics.Text = "Restrict player tactics + scouters";
-            this.toolTips.SetToolTip(this.checkBoxRestrictTactics, "This stops you from loading tactics and from adjusting WibWob. It also stops your" +
-        " save games from loading into CMScout and other scouters. Keeps you honest! :)");
-            this.checkBoxRestrictTactics.UseVisualStyleBackColor = true;
-            // 
             // PatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -610,7 +610,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v1.12";
+            this.Text = "Nick\'s CM0102Patcher v1.13";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
