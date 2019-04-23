@@ -32,6 +32,8 @@ v1.13:
 * Lots of improvements to the Scouter
 * Fixed jobs abroad boost
 * Fixed issues when setting the Welsh Premier to be the Nation League South
+* Manage background league teams fixed
+* Can also hide Load Preset and recently used tactics when restricting tactics
 
 v1.12:
 * Option to stop loading of tactics and changing of wib-wob
