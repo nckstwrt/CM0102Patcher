@@ -35,6 +35,7 @@
             this.buttonRefereePatcher = new System.Windows.Forms.Button();
             this.buttonSaveScouter = new System.Windows.Forms.Button();
             this.buttonRGNImageConverter = new System.Windows.Forms.Button();
+            this.buttonApplySaturnPatch = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonApplyPatchfile
@@ -103,11 +104,23 @@
             this.buttonRGNImageConverter.UseVisualStyleBackColor = true;
             this.buttonRGNImageConverter.Click += new System.EventHandler(this.buttonRGNImageConverter_Click);
             // 
+            // buttonApplySaturnPatch
+            // 
+            this.buttonApplySaturnPatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonApplySaturnPatch.Location = new System.Drawing.Point(12, 182);
+            this.buttonApplySaturnPatch.Name = "buttonApplySaturnPatch";
+            this.buttonApplySaturnPatch.Size = new System.Drawing.Size(165, 24);
+            this.buttonApplySaturnPatch.TabIndex = 6;
+            this.buttonApplySaturnPatch.Text = "Apply a Saturn Patch...";
+            this.buttonApplySaturnPatch.UseVisualStyleBackColor = true;
+            this.buttonApplySaturnPatch.Click += new System.EventHandler(this.buttonApplySaturnPatch_Click);
+            // 
             // Tools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(189, 185);
+            this.ClientSize = new System.Drawing.Size(189, 214);
+            this.Controls.Add(this.buttonApplySaturnPatch);
             this.Controls.Add(this.buttonRGNImageConverter);
             this.Controls.Add(this.buttonSaveScouter);
             this.Controls.Add(this.buttonRefereePatcher);
@@ -133,5 +146,6 @@
         private System.Windows.Forms.Button buttonRefereePatcher;
         private System.Windows.Forms.Button buttonSaveScouter;
         private System.Windows.Forms.Button buttonRGNImageConverter;
+        private System.Windows.Forms.Button buttonApplySaturnPatch;
     }
 }

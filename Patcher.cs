@@ -62,8 +62,16 @@ namespace CM0102Patcher
 
         public IEnumerable<HexPatch> LoadPatchFile(string patchFile)
         {
+            using (var fs = File.Open(patchFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                return LoadPatchFile(fs);
+            }
+        }
+
+        public IEnumerable<HexPatch> LoadPatchFile(Stream patchStream)
+        {
             var patchList = new List<HexPatch>();
-            using (var sr = new StreamReader(patchFile))
+            using (var sr = new StreamReader(patchStream))
             {
                 while (true)
                 {
