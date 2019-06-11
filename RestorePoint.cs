@@ -52,7 +52,7 @@ namespace CM0102Patcher
                 }
             }
         }
-        
+
         public static void Save(string exeFile)
         {
             try
@@ -71,49 +71,54 @@ namespace CM0102Patcher
                 }
                 else
                     CreateDirectory(restorePointDir);
+
                 CreateDirectory(restorePointExeDir);
                 CreateDirectory(restorePointDataDir);
 
                 var pf = new PictureConvertProgressForm("Restore Point");
-                new Thread(() =>
+                pf.OnLoadAction = () =>
                 {
-                    try
+                    new Thread(() =>
                     {
-                        int copying = 1;
-                        Thread.CurrentThread.IsBackground = true;
-
-                        // Copy CM0102.exe
-                        CompressFile(exeFile, Path.Combine(restorePointExeDir, "cm0102.exe"+".gz"));
-
-                        // Copy Data
-                        var dataFiles = Directory.GetFiles(dataDir, "*.*");
-                        foreach (var dataFile in dataFiles)
+                        try
                         {
-                            pf.SetProgressText(string.Format("Copying {0}/{1} ({2})", copying++, dataFiles.Length, Path.GetFileName(dataFile)));
-                            pf.SetProgressPercent((int)(((double)(copying - 1) / ((double)dataFiles.Length)) * 100.0));
-                            CompressFile(dataFile, Path.Combine(restorePointDataDir, Path.GetFileName(dataFile) + ".gz"));
-                        }
+                            int copying = 1;
+                            Thread.CurrentThread.IsBackground = true;
 
-                        // Copy Pictures
-                        if (Directory.Exists(picturesDir))
-                        {
-                            CreateDirectory(restorePointPicturesDir);
-                            var pictureFiles = Directory.GetFiles(picturesDir, "*.*");
-                            copying = 1;
-                            foreach (var pictureFile in pictureFiles)
+                            // Copy CM0102.exe
+                            CompressFile(exeFile, Path.Combine(restorePointExeDir, "cm0102.exe" + ".gz"));
+
+                            // Copy Data
+                            var dataFiles = Directory.GetFiles(dataDir, "*.*");
+                            foreach (var dataFile in dataFiles)
                             {
-                                pf.SetProgressText(string.Format("Copying {0}/{1} ({2})", copying++, pictureFiles.Length, Path.GetFileName(pictureFile)));
-                                pf.SetProgressPercent((int)(((double)(copying - 1) / ((double)pictureFiles.Length)) * 100.0));
-                                CompressFile(pictureFile, Path.Combine(restorePointPicturesDir, Path.GetFileName(pictureFile) + ".gz"));
+                                pf.SetProgressText(string.Format("Copying {0}/{1} ({2})", copying++, dataFiles.Length, Path.GetFileName(dataFile)));
+                                pf.SetProgressPercent((int)(((double)(copying - 1) / ((double)dataFiles.Length)) * 100.0));
+                                CompressFile(dataFile, Path.Combine(restorePointDataDir, Path.GetFileName(dataFile) + ".gz"));
+                            }
+
+                            // Copy Pictures
+                            if (Directory.Exists(picturesDir))
+                            {
+                                CreateDirectory(restorePointPicturesDir);
+                                var pictureFiles = Directory.GetFiles(picturesDir, "*.*");
+                                copying = 1;
+                                foreach (var pictureFile in pictureFiles)
+                                {
+                                    pf.SetProgressText(string.Format("Copying {0}/{1} ({2})", copying++, pictureFiles.Length, Path.GetFileName(pictureFile)));
+                                    pf.SetProgressPercent((int)(((double)(copying - 1) / ((double)pictureFiles.Length)) * 100.0));
+                                    CompressFile(pictureFile, Path.Combine(restorePointPicturesDir, Path.GetFileName(pictureFile) + ".gz"));
+                                }
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        ExceptionMsgBox.Show(ex);
-                    }
-                    pf.CloseForm();
-                }).Start();
+                        catch (Exception ex)
+                        {
+                            ExceptionMsgBox.Show(ex);
+                        }
+                        pf.CloseForm();
+                    }).Start();
+                };
+
                 pf.ShowDialog();
             }
             catch (Exception ex)
@@ -146,44 +151,47 @@ namespace CM0102Patcher
                 }
 
                 var pf = new PictureConvertProgressForm("Restore Point");
-                new Thread(() =>
+                pf.OnLoadAction = () =>
                 {
-                    try
+                    new Thread(() =>
                     {
-                        int copying = 1;
-                        Thread.CurrentThread.IsBackground = true;
-
-                        // Copy CM0102.exe
-                        CompressFile(Path.Combine(restorePointExeDir, "cm0102.exe.gz"), exeFile, true);
-
-                        // Copy Data
-                        var dataFiles = Directory.GetFiles(restorePointDataDir, "*.*");
-                        foreach (var dataFile in dataFiles)
+                        try
                         {
-                            pf.SetProgressText(string.Format("Copying {0}/{1} ({2})", copying++, dataFiles.Length, Path.GetFileName(dataFile)));
-                            pf.SetProgressPercent((int)(((double)(copying - 1) / ((double)dataFiles.Length)) * 100.0));
-                            CompressFile(dataFile, Path.Combine(dataDir, Path.GetFileName(dataFile).Replace(".gz", "")), true);
-                        }
+                            int copying = 1;
+                            Thread.CurrentThread.IsBackground = true;
 
-                        // Copy Pictures
-                        if (Directory.Exists(restorePointPicturesDir))
-                        {
-                            var pictureFiles = Directory.GetFiles(restorePointPicturesDir, "*.*");
-                            copying = 1;
-                            foreach (var pictureFile in pictureFiles)
+                            // Copy CM0102.exe
+                            CompressFile(Path.Combine(restorePointExeDir, "cm0102.exe.gz"), exeFile, true);
+
+                            // Copy Data
+                            var dataFiles = Directory.GetFiles(restorePointDataDir, "*.*");
+                            foreach (var dataFile in dataFiles)
                             {
-                                pf.SetProgressText(string.Format("Copying {0}/{1} ({2})", copying++, pictureFiles.Length, Path.GetFileName(pictureFile)));
-                                pf.SetProgressPercent((int)(((double)(copying - 1) / ((double)pictureFiles.Length)) * 100.0));
-                                CompressFile(pictureFile, Path.Combine(picturesDir, Path.GetFileName(pictureFile).Replace(".gz", "")), true);
+                                pf.SetProgressText(string.Format("Copying {0}/{1} ({2})", copying++, dataFiles.Length, Path.GetFileName(dataFile)));
+                                pf.SetProgressPercent((int)(((double)(copying - 1) / ((double)dataFiles.Length)) * 100.0));
+                                CompressFile(dataFile, Path.Combine(dataDir, Path.GetFileName(dataFile).Replace(".gz", "")), true);
+                            }
+
+                            // Copy Pictures
+                            if (Directory.Exists(restorePointPicturesDir))
+                            {
+                                var pictureFiles = Directory.GetFiles(restorePointPicturesDir, "*.*");
+                                copying = 1;
+                                foreach (var pictureFile in pictureFiles)
+                                {
+                                    pf.SetProgressText(string.Format("Copying {0}/{1} ({2})", copying++, pictureFiles.Length, Path.GetFileName(pictureFile)));
+                                    pf.SetProgressPercent((int)(((double)(copying - 1) / ((double)pictureFiles.Length)) * 100.0));
+                                    CompressFile(pictureFile, Path.Combine(picturesDir, Path.GetFileName(pictureFile).Replace(".gz", "")), true);
+                                }
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        ExceptionMsgBox.Show(ex);
-                    }
-                    pf.CloseForm();
-                }).Start();
+                        catch (Exception ex)
+                        {
+                            ExceptionMsgBox.Show(ex);
+                        }
+                        pf.CloseForm();
+                    }).Start();
+                };
                 pf.ShowDialog();
             }
             catch (Exception ex)

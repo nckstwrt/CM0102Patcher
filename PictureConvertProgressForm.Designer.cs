@@ -62,6 +62,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Picture Conversion";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PictureConvertProgressForm_FormClosing);
+            this.Load += new System.EventHandler(this.PictureConvertProgressForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

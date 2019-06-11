@@ -203,31 +203,34 @@ namespace CM0102Patcher
                     {
                         var pf = new PictureConvertProgressForm();
 
-                        new Thread(() =>
+                        pf.OnLoadAction = () =>
                         {
-                            var picturesDir = Path.Combine(dir, "Pictures");
-                            int converting = 1;
-                            Thread.CurrentThread.IsBackground = true;
-                            if (Directory.Exists(picturesDir))
+                            new Thread(() =>
                             {
-                                var picFiles = Directory.GetFiles(picturesDir, "*.rgn");
-                                foreach (var picFile in picFiles)
+                                var picturesDir = Path.Combine(dir, "Pictures");
+                                int converting = 1;
+                                Thread.CurrentThread.IsBackground = true;
+                                if (Directory.Exists(picturesDir))
                                 {
-                                    pf.SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, picFiles.Length, Path.GetFileName(picFile)));
-                                    pf.SetProgressPercent((int)(((double)(converting - 1) / ((double)picFiles.Length)) * 100.0));
-                                    int Width, Height;
-                                    RGNConverter.GetImageSize(picFile, out Width, out Height);
-                                    if (Width == 800 && Height == 600)
+                                    var picFiles = Directory.GetFiles(picturesDir, "*.rgn");
+                                    foreach (var picFile in picFiles)
                                     {
-                                        RGNConverter.RGN2RGN(picFile, picFile + ".tmp", 1280, 800, 0, 35, 0, 100 - 35);
-                                        File.SetAttributes(picFile, FileAttributes.Normal);
-                                        File.Delete(picFile);
-                                        File.Move(picFile + ".tmp", picFile);
+                                        pf.SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, picFiles.Length, Path.GetFileName(picFile)));
+                                        pf.SetProgressPercent((int)(((double)(converting - 1) / ((double)picFiles.Length)) * 100.0));
+                                        int Width, Height;
+                                        RGNConverter.GetImageSize(picFile, out Width, out Height);
+                                        if (Width == 800 && Height == 600)
+                                        {
+                                            RGNConverter.RGN2RGN(picFile, picFile + ".tmp", 1280, 800, 0, 35, 0, 100 - 35);
+                                            File.SetAttributes(picFile, FileAttributes.Normal);
+                                            File.Delete(picFile);
+                                            File.Move(picFile + ".tmp", picFile);
+                                        }
                                     }
                                 }
-                            }
-                            pf.CloseForm();
-                        }).Start();
+                                pf.CloseForm();
+                            }).Start();
+                        };
 
                         pf.ShowDialog();
                     }

@@ -48,5 +48,13 @@ namespace CM0102Patcher
         {
             e.Cancel = stopClose;
         }
+
+        private void PictureConvertProgressForm_Load(object sender, EventArgs e)
+        {
+            if (OnLoadAction != null)
+                OnLoadAction();
+        }
+
+        public Action OnLoadAction;
     }
 }

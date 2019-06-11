@@ -125,45 +125,48 @@ namespace CM0102Patcher
                     cropBottom = int.Parse(textBoxBottom.Text);
                 }
 
-                new Thread(() =>
+                pf.OnLoadAction = () =>
                 {
-                    try
+                    new Thread(() =>
                     {
-                        int converting = 1;
-                        Thread.CurrentThread.IsBackground = true;
-                        foreach (var picFile in inputFiles)
+                        try
                         {
-                            pf.SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, inputFiles.Count(), Path.GetFileName(picFile)));
-                            pf.SetProgressPercent((int)(((double)(converting - 1) / ((double)inputFiles.Count())) * 100.0));
-
-                            if (checkSizeWidth != -1 || checkSizeHeight != -1)
+                            int converting = 1;
+                            Thread.CurrentThread.IsBackground = true;
+                            foreach (var picFile in inputFiles)
                             {
-                                int Width, Height;
-                                RGNConverter.GetImageSize(picFile, out Width, out Height);
-                                if (Width != checkSizeWidth || Height != checkSizeHeight)
-                                    continue;
-                            }
+                                pf.SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, inputFiles.Count(), Path.GetFileName(picFile)));
+                                pf.SetProgressPercent((int)(((double)(converting - 1) / ((double)inputFiles.Count())) * 100.0));
 
-                            var outputTo = outputPath;
-                            if (isDirectory)
-                                outputTo = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(picFile) + ".rgn");
+                                if (checkSizeWidth != -1 || checkSizeHeight != -1)
+                                {
+                                    int Width, Height;
+                                    RGNConverter.GetImageSize(picFile, out Width, out Height);
+                                    if (Width != checkSizeWidth || Height != checkSizeHeight)
+                                        continue;
+                                }
 
-                            if (Path.GetExtension(picFile).ToLower() == ".rgn")
-                            {
-                                RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
-                            }
-                            else
-                            {
-                                RGNConverter.BMP2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
+                                var outputTo = outputPath;
+                                if (isDirectory)
+                                    outputTo = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(picFile) + ".rgn");
+
+                                if (Path.GetExtension(picFile).ToLower() == ".rgn")
+                                {
+                                    RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
+                                }
+                                else
+                                {
+                                    RGNConverter.BMP2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
+                                }
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        ExceptionMsgBox.Show(ex);
-                    }
-                    pf.CloseForm();
-                }).Start();
+                        catch (Exception ex)
+                        {
+                            ExceptionMsgBox.Show(ex);
+                        }
+                        pf.CloseForm();
+                    }).Start();
+                };
 
                 pf.ShowDialog();
             }
