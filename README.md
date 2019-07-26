@@ -1,4 +1,4 @@
-# CM0102Patcher v1.13
+# CM0102Patcher v1.14
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/ZumdWRS.png)
+![alt text](https://i.imgur.com/faSpt9s.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,9 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.14:
+* Adds all the Saturn patches as options to add (Experts Only! Don't use unless you know what you're doing!)
 
 v1.13:
 * Lots of improvements to the Scouter
