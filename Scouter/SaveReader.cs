@@ -254,6 +254,29 @@ namespace CM0102Scout
                 try
                 {
                     var staff = staffList[player.ID];
+
+                    /// SOME NOTES FOR MYSELF WHILE WRITING NEW REGEN CODE
+                    // The increase happens at 5d5078. The increase is dependent, in a semi-random way, on a magic number stored at [esp+5c]
+                    // https://champman0102.co.uk/showthread.php?t=5310&page=2
+                    // CPU Disasm
+                    // 005D5078 |.  8846 2F | MOV BYTE PTR DS:[ESI + 2F],AL
+                    // Func Starts:
+                    // 005CE2D0 /$  55            PUSH EBP
+                    // I've found the main retirement/regen code (7AACE0 onwards) 
+                    // 7abac0
+                    // 538ec0
+                    // 3acfa0 <-- offset in file to unhook regens (7acfa0)
+                    // Func Starts at:
+                    // 007ABAC0 /$  83EC 08       SUB ESP,8; cm0102.007ABAC0(guessed Arg1)
+                    // Jumps to 
+                    // 00602700   $  60            PUSHAD; cm0102.00602700(guessed void)
+
+                    // 22nd Nov
+                    // https://champman0102.co.uk/showthread.php?t=5310&p=220885#post220885 <-- Saturns Table
+                    // https://hugo9cf.wordpress.com/resources/the-9cf-page/
+
+                    //if (player.ID == 0x0523)
+                        //Console.WriteLine();
                     var name = firstNames[staff.firstName] + " " + secondNames[staff.secondName];
                     var age = AgeCalc(staff.dob);
                     var club = "None";
@@ -263,8 +286,8 @@ namespace CM0102Scout
                     if (nations.ContainsKey(staff.nationID))
                         nationality = nations[staff.nationID].nationality;
 
-                    //if (name == "Maxim Tsigalko")
-                      //  Console.WriteLine();
+                    //if (name == "Gianfranco Serioli")
+                        //Console.WriteLine();
 
                     weighter.Reset(instrinsicsOn);
                     if (player.Goalkeeper >= 15)

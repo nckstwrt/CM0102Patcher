@@ -133,7 +133,7 @@
             this.comboBoxGameSpeed.FormattingEnabled = true;
             this.comboBoxGameSpeed.Location = new System.Drawing.Point(345, 61);
             this.comboBoxGameSpeed.Name = "comboBoxGameSpeed";
-            this.comboBoxGameSpeed.Size = new System.Drawing.Size(93, 24);
+            this.comboBoxGameSpeed.Size = new System.Drawing.Size(96, 24);
             this.comboBoxGameSpeed.TabIndex = 4;
             // 
             // numericGameStartYear
@@ -248,7 +248,7 @@
             131072});
             this.numericCurrencyInflation.Location = new System.Drawing.Point(345, 95);
             this.numericCurrencyInflation.Name = "numericCurrencyInflation";
-            this.numericCurrencyInflation.Size = new System.Drawing.Size(93, 22);
+            this.numericCurrencyInflation.Size = new System.Drawing.Size(96, 22);
             this.numericCurrencyInflation.TabIndex = 15;
             this.numericCurrencyInflation.Value = new decimal(new int[] {
             25,
@@ -610,7 +610,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v1.15";
+            this.Text = "Nick\'s CM0102Patcher v1.16";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();

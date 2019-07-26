@@ -27,6 +27,7 @@ namespace CM0102Patcher
                 }
                 comboBoxGameSpeed.Items.AddRange(new ComboboxItem[]
                 {
+                    new ComboboxItem("don't modify", 0),
                     new ComboboxItem("x0.5", 20000),
                     new ComboboxItem("default", 10000),
                     new ComboboxItem("x2", 5000),
@@ -36,7 +37,7 @@ namespace CM0102Patcher
                     new ComboboxItem("x200", 50),
                     new ComboboxItem("Max", 1)
                 });
-                comboBoxGameSpeed.SelectedIndex = 3;
+                comboBoxGameSpeed.SelectedIndex = 4;
 
                 // Set selectable leagues
                 comboBoxReplacementLeagues.Items.Add("English National League North");
@@ -114,12 +115,15 @@ namespace CM0102Patcher
 
                 // Initialise the name patcher
                 var namePatcher = new NamePatcher(labelFilename.Text, dataDir);
-                
+
                 // Game speed hack
-                patcher.SpeedHack(labelFilename.Text, (short)(int)(comboBoxGameSpeed.SelectedItem as ComboboxItem).Value);
+                var speed = (short)(int)(comboBoxGameSpeed.SelectedItem as ComboboxItem).Value;
+                if (speed != 0)
+                    patcher.SpeedHack(labelFilename.Text, speed);
 
                 // Currency Inflation
-                patcher.CurrencyInflationChanger(labelFilename.Text, (double)numericCurrencyInflation.Value);
+                if (numericCurrencyInflation.Value != 0)
+                    patcher.CurrencyInflationChanger(labelFilename.Text, (double)numericCurrencyInflation.Value);
 
                 // Year Change
                 if (checkBoxChangeStartYear.Checked)
@@ -297,13 +301,73 @@ namespace CM0102Patcher
             tools.ShowDialog();
         }
 
+        private void ResetControls(Control controlContainer)
+        {
+            foreach (var control in controlContainer.Controls)
+            {
+                if (control is CheckBox)
+                {
+                    (control as CheckBox).Checked = false;
+                }
+
+                if (control is GroupBox || control is TabPage || control is TabControl)
+                    ResetControls(control as Control);
+            }
+        }
+
         private void PatcherForm_KeyPress(object sender, KeyPressEventArgs e)
         {
             if ((Control.ModifierKeys & Keys.Control) == Keys.Control &&
-                (Control.ModifierKeys & Keys.Shift) == Keys.Shift &&
-                e.KeyChar == (char)19) // S
+                (Control.ModifierKeys & Keys.Shift) == Keys.Shift)
             {
-                checkBoxRemoveCDChecks.Checked = checkBoxRemoveCDChecks.Visible = true;
+                if (e.KeyChar == (char)19) // S
+                {
+                    checkBoxRemoveCDChecks.Checked = checkBoxRemoveCDChecks.Visible = true;
+                    e.Handled = true;
+                }
+                if (e.KeyChar == (char)14) // N
+                {
+                    ResetControls(this);
+                    numericCurrencyInflation.Value = 0;
+                    comboBoxGameSpeed.SelectedIndex = 0;
+                    e.Handled = true;
+                }
+                if (e.KeyChar == (char)1 && checkBoxRemoveCDChecks.Visible) // A
+                {
+                    string doubleWarning = labelFilename.Text.Contains("cm0001.exe") ? "" : "\r\n\r\nTHIS DOES NOT LOOK LIKE A CM0001.EXE!!!!!!!!!!\r\nDOUBLE CHECK BEFORE HITTING YES!!\r\n";
+                    if (MessageBox.Show(string.Format("This will change exe:\r\n{0}\r\nTo Year: {1}\r\n\r\nARE YOU SURE YOU WANT TO DO THIS?!{2}", labelFilename.Text, (int)numericGameStartYear.Value, doubleWarning), "CM 00/01 Year Changer", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                    {
+                        var yearChanger = new YearChanger();
+                        var currentYear = yearChanger.GetCurrentExeYear(labelFilename.Text, 0x0001009F);
+                        yearChanger.ApplyYearChangeTo0001Exe(labelFilename.Text, (int)numericGameStartYear.Value);
+
+                        // Update Data Too
+                        var dir = Path.GetDirectoryName(labelFilename.Text);
+                        var dataDir = Path.Combine(dir, "Data");
+                        var staffFile = Path.Combine(dataDir, "staff.dat");
+                        var indexFile = Path.Combine(dataDir, "index.dat");
+                        var playerConfigFile = Path.Combine(dataDir, "player_setup.cfg");
+
+                        int yearIncrement = (((int)numericGameStartYear.Value) - currentYear);
+                        yearChanger.UpdateStaff(indexFile, staffFile, yearIncrement);
+                        yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
+
+                        // Update History
+                        var staffCompHistoryFile = Path.Combine(dataDir, "staff_comp_history.dat");
+                        var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
+                        var staffHistoryFile = Path.Combine(dataDir, "staff_history.dat");
+                        var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
+
+                        yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
+                        yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8);
+                        yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8);
+                        yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement + 1, 0x8);
+
+
+                        MessageBox.Show("CM0001 Year Changer Patch Applied!", "CM 00/01 Year Changer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    e.Handled = true;
+                }
             }
         }
 

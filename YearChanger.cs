@@ -23,11 +23,11 @@ namespace CM0102Patcher
             return new byte[] { (byte)(year & 0xff), (byte)(year >> 8) };
         }
 
-        public int GetCurrentExeYear(string fileName)
+        public int GetCurrentExeYear(string fileName, int offset = -1)
         {
             using (var file = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                file.Seek(startYear[0], SeekOrigin.Begin);
+                file.Seek(offset == -1 ? startYear[0] : offset, SeekOrigin.Begin);
                 using (var br = new BinaryReader(file))
                 {
                     return br.ReadInt16();
@@ -95,6 +95,87 @@ namespace CM0102Patcher
                     // Special 2 (the calc for season selection can cause England 18/09 without this)
                     bw.Seek(0x41e9ca, SeekOrigin.Begin);
                     bw.Write((byte)0x64);
+                }
+            }
+        }
+
+        public void ApplyYearChangeTo0001Exe(string fileName, int year)
+        {
+            using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                using (var br = new BinaryReader(file))
+                {
+                    using (var bw = new BinaryWriter(file))
+                    {
+                        List<int> startYear_0001 = new List<int> { 0x0001009F, 0x00010DB5, 0x0001F580, 0x001A4D82, 0x001B39B3, 0x0031B3E1, 0x00364760, 0x00377ADE, 0x0037D5B7, 0x003ABAED, 0x003BFEA8, 0x003BFEEC, 0x003C036E, 0x003C0888, 0x003C0B84, 0x003C0EF2, 0x003C1197, 0x003C143E, 0x003C154C, 0x003C178D, 0x003C19EE, 0x003C1C31, 0x003C1FC7, 0x003C24CC, 0x003C2809, 0x003C2B45, 0x003C312C, 0x003C3428, 0x003C381C, 0x003C3BF7, 0x003C3F37, 0x003C4277, 0x003C465B, 0x003C4C4C, 0x003C4FF3, 0x003C53DA, 0x003C56F9, 0x003C5A98, 0x003C5E5F, 0x003C6172, 0x003C65AF, 0x003C6A31, 0x003C6DAF, 0x003C70F7, 0x003C73E1, 0x003C7729, 0x003CE535, 0x003E4BF0, 0x003E9350 };
+                        List<int> startYearMinus1_0001 = new List<int> { 0x001A6AA0, 0x001A739F, 0x001A759E, /* new*/0x101865, 0x377ade, 0x377aff };
+                        List<int> startYearMinus2_0001 = new List<int> { 0x0037EC26, 0x0037F166, 0x0037FFA1, 0x003800B9, 0x00381550, 0x00381D10, 0x00381FA5, 0x00383881, 0x003839CE, 0x00383A9E, 0x00383ADD, 0x00384224, 0x00384FDB, 0x00385F8F };
+                        List<int> startYearMinus3_0001 = new List<int> { 0x3779f9, 0x3eeb48 };
+                        List<int> startYearPlus3_0001 = new List<int> { 0x169b54 };
+
+                        foreach (var offset in startYear_0001)
+                        {
+                            bw.Seek(offset, SeekOrigin.Begin);
+                            bw.Write(YearToBytes(year));
+                        }
+                        foreach (var offset in startYearMinus1_0001)
+                        {
+                            bw.Seek(offset, SeekOrigin.Begin);
+                            bw.Write(YearToBytes(year - 1));    // -0 or -1 ?
+                        }
+                        foreach (var offset in startYearMinus2_0001)
+                        {
+                            bw.Seek(offset, SeekOrigin.Begin);
+                            bw.Write(YearToBytes(year - 1));    // -2 or -1 ?
+                        }
+                        foreach (var offset in startYearMinus3_0001)
+                        {
+                            bw.Seek(offset, SeekOrigin.Begin);
+                            bw.Write(YearToBytes(year - 3));   
+                        }
+                        foreach (var offset in startYearPlus3_0001)
+                        {
+                            bw.Seek(offset, SeekOrigin.Begin);
+                            bw.Write(YearToBytes(year + 3));    
+                        }
+
+                        // Special 2 (the calc for season selection can cause England 18/09 without this)
+                        bw.Seek(0x3AECE1, SeekOrigin.Begin);
+                        bw.Write((byte)0x64);
+
+                        // Turkey Fix (doesn't work :( )
+                        file.Seek(0x21bea1, SeekOrigin.Begin);
+                        var bytes = br.ReadBytes(0x21daf5 - 0x21bea1);
+                        var turkeyOffsets = ByteWriter.SearchBytesForAll(bytes, new byte[] { 0x68, 0xD0, 0x07, 0x00, 0x00 });
+                        foreach (var offset in turkeyOffsets)
+                        {
+                            bw.Seek(0x21bea1 + offset + 1, SeekOrigin.Begin);
+                            bw.Write(YearToBytes(year));
+                        }
+
+                        // Special 3 Parts
+                        bw.Seek(0x377AFF, SeekOrigin.Begin);
+                        bw.Write(YearToBytes(year));
+                        bw.Seek(0x1113b7, SeekOrigin.Begin);
+                        bw.Write(YearToBytes(year - 2));
+
+
+
+                        // This is error removing is poor - but at least makes for a mainly smooth game
+                        /*
+                        // Turn off the World Cup 1081 error
+                        bw.Seek(0x4b1061, SeekOrigin.Begin);
+                        bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+                        // Turn off the German Regional 332 error
+                        bw.Seek(0x1a7561, SeekOrigin.Begin);
+                        bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+                        // Turn off Database 19941 error
+                        bw.Seek(0x119199, SeekOrigin.Begin);
+                        bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+                        */
+                    }
                 }
             }
         }
