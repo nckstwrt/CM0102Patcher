@@ -108,10 +108,15 @@ namespace CM0102Patcher
                     using (var bw = new BinaryWriter(file))
                     {
                         List<int> startYear_0001 = new List<int> { 0x0001009F, 0x00010DB5, 0x0001F580, 0x001A4D82, 0x001B39B3, 0x0031B3E1, 0x00364760, 0x00377ADE, 0x0037D5B7, 0x003ABAED, 0x003BFEA8, 0x003BFEEC, 0x003C036E, 0x003C0888, 0x003C0B84, 0x003C0EF2, 0x003C1197, 0x003C143E, 0x003C154C, 0x003C178D, 0x003C19EE, 0x003C1C31, 0x003C1FC7, 0x003C24CC, 0x003C2809, 0x003C2B45, 0x003C312C, 0x003C3428, 0x003C381C, 0x003C3BF7, 0x003C3F37, 0x003C4277, 0x003C465B, 0x003C4C4C, 0x003C4FF3, 0x003C53DA, 0x003C56F9, 0x003C5A98, 0x003C5E5F, 0x003C6172, 0x003C65AF, 0x003C6A31, 0x003C6DAF, 0x003C70F7, 0x003C73E1, 0x003C7729, 0x003CE535, 0x003E4BF0, 0x003E9350 };
-                        List<int> startYearMinus1_0001 = new List<int> { 0x001A6AA0, 0x001A739F, 0x001A759E, /* new*/0x101865, 0x377ade, 0x377aff };
-                        List<int> startYearMinus2_0001 = new List<int> { 0x0037EC26, 0x0037F166, 0x0037FFA1, 0x003800B9, 0x00381550, 0x00381D10, 0x00381FA5, 0x00383881, 0x003839CE, 0x00383A9E, 0x00383ADD, 0x00384224, 0x00384FDB, 0x00385F8F };
+                        List<int> startYearMinus1_0001 = new List<int> { /* All German Regional 0x001A6AA0, 0x001A739F, 0x001A759E, *//* new*/0x101865, 0x377ade, 0x377aff, 0xd0e83 };
+                        // All for scotland ?? List<int> startYearMinus2_Scotland_0001 = new List<int> { 0x0037EC26, 0x0037F166, 0x0037FFA1, 0x003800B9, 0x00381550, 0x00381D10, 0x00381FA5, 0x00383881, 0x003839CE, 0x00383A9E, 0x00383ADD, 0x00384224, 0x00384FDB, 0x00385F8F };
+                        List<int> startYearMinus2_0001 = new List<int> { 0x109e69, 0x109ed8 };
                         List<int> startYearMinus3_0001 = new List<int> { 0x3779f9, 0x3eeb48 };
+                        List<int> startYearMinus19_0001 = new List<int> { 0x0fab71, 0x0fab9e };
+                        List<int> startYearPlus1_0001 = new List<int> { 0x0d0f86 };
+                        List<int> startYearPlus2_0001 = new List<int> { 0x1018a4 };
                         List<int> startYearPlus3_0001 = new List<int> { 0x169b54 };
+                        List<int> startYearPlus9_0001 = new List<int> { 0x109e6f, 0x109ede, 0x30042b /*?*/ };
 
                         foreach (var offset in startYear_0001)
                         {
@@ -126,17 +131,37 @@ namespace CM0102Patcher
                         foreach (var offset in startYearMinus2_0001)
                         {
                             bw.Seek(offset, SeekOrigin.Begin);
-                            bw.Write(YearToBytes(year - 1));    // -2 or -1 ?
+                            bw.Write(YearToBytes(year - 2));
                         }
                         foreach (var offset in startYearMinus3_0001)
                         {
                             bw.Seek(offset, SeekOrigin.Begin);
                             bw.Write(YearToBytes(year - 3));   
                         }
+                        foreach (var offset in startYearMinus19_0001)
+                        {
+                            bw.Seek(offset, SeekOrigin.Begin);
+                            bw.Write(YearToBytes(year - 19));
+                        }
+                        foreach (var offset in startYearPlus1_0001)
+                        {
+                            bw.Seek(offset, SeekOrigin.Begin);
+                            bw.Write(YearToBytes(year + 1));
+                        }
+                        foreach (var offset in startYearPlus2_0001)
+                        {
+                            bw.Seek(offset, SeekOrigin.Begin);
+                            bw.Write(YearToBytes(year + 2));
+                        }
                         foreach (var offset in startYearPlus3_0001)
                         {
                             bw.Seek(offset, SeekOrigin.Begin);
                             bw.Write(YearToBytes(year + 3));    
+                        }
+                        foreach (var offset in startYearPlus9_0001)
+                        {
+                            bw.Seek(offset, SeekOrigin.Begin);
+                            bw.Write(YearToBytes(year + 9));
                         }
 
                         // Special 2 (the calc for season selection can cause England 18/09 without this)
@@ -144,6 +169,7 @@ namespace CM0102Patcher
                         bw.Write((byte)0x64);
 
                         // Turkey Fix (doesn't work :( )
+                        /*
                         file.Seek(0x21bea1, SeekOrigin.Begin);
                         var bytes = br.ReadBytes(0x21daf5 - 0x21bea1);
                         var turkeyOffsets = ByteWriter.SearchBytesForAll(bytes, new byte[] { 0x68, 0xD0, 0x07, 0x00, 0x00 });
@@ -152,29 +178,138 @@ namespace CM0102Patcher
                             bw.Seek(0x21bea1 + offset + 1, SeekOrigin.Begin);
                             bw.Write(YearToBytes(year));
                         }
+                        */
+
+                        // Turn off Turkey Division 2 (T2) - as it will crash if selected
+                        bw.Seek(0x3c7024, SeekOrigin.Begin);
+                        bw.Write((byte)0xEB);
+
+                        // Turn off T2's Awards
+                        bw.Seek(0x486e32, SeekOrigin.Begin);
+                        bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
+                        
 
                         // Special 3 Parts
-                        bw.Seek(0x377AFF, SeekOrigin.Begin);
-                        bw.Write(YearToBytes(year));
                         bw.Seek(0x1113b7, SeekOrigin.Begin);
                         bw.Write(YearToBytes(year - 2));
 
+                        // Special 4 - Euro + World Cup Fixes for 1993
+                        if (year == 1993)
+                        {
+                            // Euro
+                            bw.Seek(0x1c3a3a, SeekOrigin.Begin);
+                            bw.Write(YearToBytes(year-1));  // Make it 1992 instead of 2000
+                            bw.Seek(0x1c3ae2, SeekOrigin.Begin);
+                            bw.Write(new byte[] { 0x8B, 0x0D, 0x84, 0x64, 0x94, 0x00 }); // Make England the hosts
+                            // Everything is shunted along, so after the Euro 96 in England we'll get Switzerland or Wales/Scotland or Sweden in 2000.
+                            // Making that dual hosted means finding the host (e.g. Switzerland), Replacing it with Belgium and then 
+                            // Making the next 4 bytes be the dual host, using 0x53 - which is the ID for Holland
+                            
+                            bw.Seek(0x1c3c03, SeekOrigin.Begin);    // Switzerland
+                            bw.Write(new byte[] { 0xA1, 0xE4, 0x63, 0x94, 0x00, 0x89, 0x82, 0xC0, 0x01, 0x00, 0x00, 0xC7, 0x81, 0xC4, 0x01, 0x00, 0x00, 0x53, 0x00, 0x00, 0x00 });
+                            // ^ Suspicious of this - probably not necessary
+                            /*
+                            bw.Seek(0x1c3b48, SeekOrigin.Begin); // Sweden
+                            bw.Write(new byte[] { 0xA1, 0xE4, 0x63, 0x94, 0x00, 0x89, 0x82, 0x6A, 0x01, 0x00, 0x00, 0xC7, 0x81, 0x6E, 0x01, 0x00, 0x00, 0x53, 0x00, 0x00, 0x00 });
+                            */
 
+                            // New Approach for Switzerland + Sweden:
+                            // Doesn't work either - or maybe it does if you make BL = FD rather than FE
+                            bw.Seek(0x1c3b34, SeekOrigin.Begin); 
+                            bw.Write(new byte[] { 0xE4, 0x63 });
+                            bw.Seek(0x1c3b3e, SeekOrigin.Begin);
+                            bw.Write(new byte[] { 0xC7, 0x82, 0x66, 0x01, 0x00, 0x00, 0x53, 0x00, 0x00, 0x00 });
+                            bw.Seek(0x1c3b49, SeekOrigin.Begin); 
+                            bw.Write(new byte[] { 0xE4, 0x63 });
+                            bw.Seek(0x1c3b53, SeekOrigin.Begin);
+                            bw.Write(new byte[] { 0xC7, 0x82, 0x6e, 0x01, 0x00, 0x00, 0x53, 0x00, 0x00, 0x00 });
+                            // Change BL to FD, (use EDX rather than EAX)
+                            bw.Seek(0x1c3b5d, SeekOrigin.Begin);
+                            bw.Write(new byte[] { 0xC6, 0x82, 0x72, 0x01, 0x00, 0x00, 0xFD, 0x90 });
+                            bw.Seek(0x1c3b6c, SeekOrigin.Begin);
+                            bw.Write(new byte[] { 0x8a });
 
-                        // This is error removing is poor - but at least makes for a mainly smooth game
-                        /*
+                            bw.Seek(0x1c3b19, SeekOrigin.Begin); // Wales/Scotland (easier as already dual nation hosted)
+                            bw.Write(new byte[] { 0xE4, 0x63 });
+                            bw.Seek(0x1c3b27, SeekOrigin.Begin); 
+                            bw.Write(new byte[] { 0xD8, 0x64 });
+
+                            // Make 2004 Portugal
+                            bw.Seek(0x1c3b67, SeekOrigin.Begin);
+                            bw.Write(new byte[] { 0xD4, 0x65 });
+                            bw.Seek(0x1c3b7d, SeekOrigin.Begin);
+                            bw.Write(new byte[] { 0xD4, 0x65 });
+                            bw.Seek(0x1c3b93, SeekOrigin.Begin);
+                            bw.Write(new byte[] { 0xD4, 0x65 });
+                            
+                            // World Cup
+                            bw.Seek(0x1c37ec, SeekOrigin.Begin);
+                            bw.Write(YearToBytes(year + 1));  // Make it 1994 instead of 1998
+                            bw.Seek(0x1c37d1, SeekOrigin.Begin);
+                            bw.Write(YearToBytes(year));  // Make it 1993 instead of 1997
+                            bw.Seek(0x1c3819, SeekOrigin.Begin);
+                            bw.Write(new byte[] { 0x8B, 0x0D, 0x98, 0x66, 0x94, 0x00 }); // Make USA the hosts (replacing France)
+                            bw.Seek(0x4b0d93, SeekOrigin.Begin);
+                            bw.Write(new byte[] { 0xA1, 0xF4, 0x63, 0x94, 0x00 }); // Make Bolivia replace USA in qualifiers so we don't get 2 USAs
+                            // This, like the Euros shunts everything along, so the 1998 World Cup would get hosted by S.Korea and Japan. Replace with just France.
+                            bw.Seek(0x1c3851, SeekOrigin.Begin);
+                            bw.Write(new byte[] { 0x8B, 0x15, 0xA0, 0x64, 0x94, 0x00, 0x89, 0x51, 0x28, 0x8B, 0x06, 0xB9, 0xFF, 0xFF, 0xFF, 0xFF, 0x90 });
+                            // Make Germany = S.Korea + Japan
+                            bw.Seek(0x1c388d, SeekOrigin.Begin);
+                            bw.Write(new byte[] { 0x24, 0x66 });
+                            bw.Seek(0x1c3894, SeekOrigin.Begin);
+                            bw.Write(new byte[] { 0xC7, 0x40, 0x4E, 0x61, 0x00, 0x00, 0x00 });
+
+                        }
+
+                        // Special 5 - There seems to be a check to stop any more than 20000 players being loaded maybe? Fk that
+                        bw.Seek(0x0fc2e7, SeekOrigin.Begin);
+                        bw.Write((uint)80000);
+
+                        // This error removing is poor - but at least makes for a mainly smooth game
+                        
                         // Turn off the World Cup 1081 error
                         bw.Seek(0x4b1061, SeekOrigin.Begin);
                         bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
-
-                        // Turn off the German Regional 332 error
+                        
+                        // Turn off the World Cup 1358 error
+                        bw.Seek(0x4b169c, SeekOrigin.Begin);
+                        bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+                        
+                        // Turn off the German Regional 332 error (this occurs because before 2000, Germany had 18 rather than 19 teams)
                         bw.Seek(0x1a7561, SeekOrigin.Begin);
                         bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
-
+                        
                         // Turn off Database 19941 error
                         bw.Seek(0x119199, SeekOrigin.Begin);
                         bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
-                        */
+
+                        // Turn off transfer_manager..cpp 10616
+                        // This is a bad one - you need to do more than turn it off
+                        // This occurs when the staff member being transferred does not have a Player pointer at +61
+                        // So you need to eject! :)
+                        //bw.Seek(0x450cbb, SeekOrigin.Begin);
+                        //bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+                        bw.Seek(0x450c6a, SeekOrigin.Begin);
+                        bw.Write(new byte[] { 0xEB, 0xA4, 0x90, 0x90, });
+
+                        // Turn off contract_manager..cpp 5095
+                        bw.Seek(0x0c4f57, SeekOrigin.Begin);
+                        bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+                        // Turn off Cup.cpp 1187
+                        bw.Seek(0x0ef1b6, SeekOrigin.Begin);
+                        bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+                        // EXTRAS
+
+                        // Turn off using Registry
+                        bw.Seek(0x561e10, SeekOrigin.Begin);
+                        bw.Write((byte)0x41);
+
+                        // Always report good memory (stops need for XP compatibility)
+                        bw.Seek(0x3392c0, SeekOrigin.Begin);
+                        bw.Write(new byte[] { 0xB8, 0xFE, 0xFF, 0xFF, 0x7F, 0xC3, 0x90, 0x90 });
                     }
                 }
             }

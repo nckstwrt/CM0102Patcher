@@ -340,33 +340,43 @@ namespace CM0102Patcher
                         var yearChanger = new YearChanger();
                         var currentYear = yearChanger.GetCurrentExeYear(labelFilename.Text, 0x0001009F);
                         yearChanger.ApplyYearChangeTo0001Exe(labelFilename.Text, (int)numericGameStartYear.Value);
-
-                        // Update Data Too
+                                                
                         var dir = Path.GetDirectoryName(labelFilename.Text);
                         var dataDir = Path.Combine(dir, "Data");
                         var staffFile = Path.Combine(dataDir, "staff.dat");
                         var indexFile = Path.Combine(dataDir, "index.dat");
                         var playerConfigFile = Path.Combine(dataDir, "player_setup.cfg");
-
-                        int yearIncrement = (((int)numericGameStartYear.Value) - currentYear);
-                        yearChanger.UpdateStaff(indexFile, staffFile, yearIncrement);
-                        yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
-
-                        // Update History
                         var staffCompHistoryFile = Path.Combine(dataDir, "staff_comp_history.dat");
                         var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
                         var staffHistoryFile = Path.Combine(dataDir, "staff_history.dat");
                         var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
 
+                        
+                        // Update Data Too
+                        int yearIncrement = (((int)numericGameStartYear.Value) - currentYear);
+                        yearChanger.UpdateStaff(indexFile, staffFile, yearIncrement);
+                        yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
+
+                        // Update History
                         yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
                         yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8);
                         yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8);
                         yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement + 1, 0x8);
-
+                        
 
                         MessageBox.Show("CM0001 Year Changer Patch Applied!", "CM 00/01 Year Changer", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     e.Handled = true;
+                }
+                if (e.KeyChar == (char)2 && checkBoxRemoveCDChecks.Visible) // B
+                {
+                    var yearChanger = new YearChanger();
+                    var dir = Path.GetDirectoryName(labelFilename.Text);
+                    var dataDir = Path.Combine(dir, "Data");
+                    var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
+                    var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
+                    //yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, 6, 0x8);
+                    yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, -1, 0x8);
                 }
             }
         }
