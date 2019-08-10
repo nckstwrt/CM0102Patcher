@@ -10,6 +10,7 @@ using CM0102Scout;
 using System.Reflection;
 using System.Globalization;
 using Microsoft.Win32;
+using System.IO;
 
 namespace CM0102Patcher.Scouter
 {
@@ -152,26 +153,36 @@ namespace CM0102Patcher.Scouter
             dataGridView.Columns["Drug"].Visible = false;
         }
 
+        string lastGoodPath = null;
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var ofd = new OpenFileDialog();
             ofd.Filter = "CM0102 Save Files|*.sav|All files (*.*)|*.*";
             ofd.Title = "Select a CM0102 Save file";
-            try
+            if (string.IsNullOrEmpty(lastGoodPath))
             {
-                var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
-                if (!string.IsNullOrEmpty(path))
-                    ofd.InitialDirectory = path;
+                try
+                {
+                    var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
+                    if (!string.IsNullOrEmpty(path))
+                        ofd.InitialDirectory = path;
+                }
+                catch { }
             }
-            catch { }
+            else
+                ofd.InitialDirectory = lastGoodPath;
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                LoadSaveFile(ofd.FileName);
+                if (LoadSaveFile(ofd.FileName))
+                {
+                    lastGoodPath = Path.GetDirectoryName(ofd.FileName);
+                }
             }
         }
 
-        private void LoadSaveFile(string saveFileName)
+        private bool LoadSaveFile(string saveFileName)
         {
+            var ret = false;
             try
             {
                 using (saveReader = new SaveReader(saveFileName))
@@ -191,12 +202,14 @@ namespace CM0102Patcher.Scouter
                             dataGridView.Columns[i].Width -= 20;
                     dataGridView.ResumeLayout();
                     RefreshGrid();
+                    ret = true;
                 }
             }
             catch (Exception ex)
             {
                 ExceptionMsgBox.Show(ex);
             }
+            return ret;
         }
 
         private void ScoutGrid_Resize(object sender, EventArgs e)

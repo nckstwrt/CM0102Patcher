@@ -168,6 +168,10 @@ namespace CM0102Patcher
                         bw.Seek(0x3AECE1, SeekOrigin.Begin);
                         bw.Write((byte)0x64);
 
+                        // Default Birth Year for Players with no DoB
+                        //bw.Seek(0x10A910, SeekOrigin.Begin);
+                        //bw.Write(YearToBytes(year - 20));
+
                         // Turkey Fix (doesn't work :( )
                         /*
                         file.Seek(0x21bea1, SeekOrigin.Begin);
@@ -299,6 +303,10 @@ namespace CM0102Patcher
 
                         // Turn off Cup.cpp 1187
                         bw.Seek(0x0ef1b6, SeekOrigin.Begin);
+                        bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+                        // Turn off hall_of_fame.cpp 678
+                        bw.Seek(0x1ba2c4, SeekOrigin.Begin);
                         bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
 
                         // EXTRAS

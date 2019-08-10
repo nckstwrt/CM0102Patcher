@@ -173,7 +173,10 @@ namespace CM0102Patcher
                 if (checkBoxEnableColouredAtts.Checked)
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["colouredattributes"]);
                 if (checkBoxIdleSensitivity.Checked)
+                {
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["idlesensitivity"]);
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["idlesensitivitytransferscreen"]);
+                }
                 if (checkBoxHideNonPublicBids.Checked)
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["hideprivatebids"]);
                 if (checkBox7Subs.Checked)
@@ -274,6 +277,11 @@ namespace CM0102Patcher
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["restricttactics"]);
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["changegeneraldat"]);
                 }
+                if (checkBoxMakeExecutablePortable.Checked)
+                {
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["changeregistrylocation"]);
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["memorycheckfix"]);
+                }
 
                 // NOCD Crack
                 if (checkBoxRemoveCDChecks.Checked)
@@ -320,12 +328,12 @@ namespace CM0102Patcher
             if ((Control.ModifierKeys & Keys.Control) == Keys.Control &&
                 (Control.ModifierKeys & Keys.Shift) == Keys.Shift)
             {
-                if (e.KeyChar == (char)19) // S
+                if (e.KeyChar == (char)19) // (S)ecret Mode
                 {
                     checkBoxRemoveCDChecks.Checked = checkBoxRemoveCDChecks.Visible = true;
                     e.Handled = true;
                 }
-                if (e.KeyChar == (char)14) // N
+                if (e.KeyChar == (char)14) // N - Blank out all fields
                 {
                     ResetControls(this);
                     numericCurrencyInflation.Value = 0;
@@ -351,7 +359,7 @@ namespace CM0102Patcher
                         var staffHistoryFile = Path.Combine(dataDir, "staff_history.dat");
                         var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
 
-                        
+                        /*
                         // Update Data Too
                         int yearIncrement = (((int)numericGameStartYear.Value) - currentYear);
                         yearChanger.UpdateStaff(indexFile, staffFile, yearIncrement);
@@ -362,7 +370,7 @@ namespace CM0102Patcher
                         yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8);
                         yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8);
                         yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement + 1, 0x8);
-                        
+                        */
 
                         MessageBox.Show("CM0001 Year Changer Patch Applied!", "CM 00/01 Year Changer", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -375,8 +383,13 @@ namespace CM0102Patcher
                     var dataDir = Path.Combine(dir, "Data");
                     var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
                     var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
-                    //yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, 6, 0x8);
-                    yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, -1, 0x8);
+                    //yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, +2, 0x8);
+                    yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, 3, 0x8);
+                }
+                if (e.KeyChar == (char)3 && checkBoxRemoveCDChecks.Visible) // C
+                {
+                    var nocd = new NoCDPatch();
+                    nocd.PatchEXEFile0001FixV2(labelFilename.Text);
                 }
             }
         }

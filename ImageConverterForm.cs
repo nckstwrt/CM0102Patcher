@@ -43,7 +43,7 @@ namespace CM0102Patcher
         private void buttonOutputSelectFile_Click(object sender, EventArgs e)
         {
             var ofd = new SaveFileDialog();
-            ofd.Filter = "RGN Files (*.rgn)|*.rgn|All files (*.*)|*.*";
+            ofd.Filter = "RGN Files (*.rgn)|*.rgn|Image Files (*.jpg/*.bmp/*.png)|*.jpg;*.bmp;*.png|All files (*.*)|*.*";
             ofd.Title = "Select an output image file...";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -152,7 +152,10 @@ namespace CM0102Patcher
 
                                 if (Path.GetExtension(picFile).ToLower() == ".rgn")
                                 {
-                                    RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
+                                    if (!isDirectory && Path.GetExtension(outputTo).ToLower() != ".rgn")
+                                        RGNConverter.RGN2BMP(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
+                                    else
+                                        RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
                                 }
                                 else
                                 {

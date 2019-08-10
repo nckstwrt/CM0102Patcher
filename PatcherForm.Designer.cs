@@ -69,6 +69,7 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonRestore = new System.Windows.Forms.Button();
             this.buttonAbout = new System.Windows.Forms.Button();
+            this.checkBoxMakeExecutablePortable = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -163,7 +164,7 @@
             // 
             this.buttonApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonApply.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonApply.Location = new System.Drawing.Point(381, 419);
+            this.buttonApply.Location = new System.Drawing.Point(381, 445);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(75, 31);
             this.buttonApply.TabIndex = 7;
@@ -215,7 +216,7 @@
             // 
             this.buttonTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTools.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonTools.Location = new System.Drawing.Point(9, 419);
+            this.buttonTools.Location = new System.Drawing.Point(9, 445);
             this.buttonTools.Name = "buttonTools";
             this.buttonTools.Size = new System.Drawing.Size(75, 31);
             this.buttonTools.TabIndex = 11;
@@ -359,6 +360,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBoxMakeExecutablePortable);
             this.groupBox3.Controls.Add(this.checkBoxRestrictTactics);
             this.groupBox3.Controls.Add(this.comboBoxReplacementLeagues);
             this.groupBox3.Controls.Add(this.checkBoxReplaceWelshPremier);
@@ -372,7 +374,7 @@
             this.groupBox3.Controls.Add(this.checkBoxUpdateNames);
             this.groupBox3.Location = new System.Drawing.Point(9, 131);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(447, 279);
+            this.groupBox3.Size = new System.Drawing.Size(447, 304);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
             // 
@@ -526,7 +528,7 @@
             // 
             this.checkBoxRemoveCDChecks.AutoSize = true;
             this.checkBoxRemoveCDChecks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(294, 425);
+            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(294, 451);
             this.checkBoxRemoveCDChecks.Name = "checkBoxRemoveCDChecks";
             this.checkBoxRemoveCDChecks.Size = new System.Drawing.Size(69, 20);
             this.checkBoxRemoveCDChecks.TabIndex = 23;
@@ -538,7 +540,7 @@
             // 
             this.buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSave.Location = new System.Drawing.Point(135, 419);
+            this.buttonSave.Location = new System.Drawing.Point(135, 445);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(66, 31);
             this.buttonSave.TabIndex = 26;
@@ -552,7 +554,7 @@
             // 
             this.buttonRestore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRestore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonRestore.Location = new System.Drawing.Point(211, 419);
+            this.buttonRestore.Location = new System.Drawing.Point(211, 445);
             this.buttonRestore.Name = "buttonRestore";
             this.buttonRestore.Size = new System.Drawing.Size(66, 31);
             this.buttonRestore.TabIndex = 27;
@@ -566,7 +568,7 @@
             // 
             this.buttonAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAbout.Location = new System.Drawing.Point(95, 419);
+            this.buttonAbout.Location = new System.Drawing.Point(95, 445);
             this.buttonAbout.Name = "buttonAbout";
             this.buttonAbout.Size = new System.Drawing.Size(30, 31);
             this.buttonAbout.TabIndex = 23;
@@ -574,11 +576,24 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
+            // checkBoxMakeExecutablePortable
+            // 
+            this.checkBoxMakeExecutablePortable.AutoSize = true;
+            this.checkBoxMakeExecutablePortable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxMakeExecutablePortable.Location = new System.Drawing.Point(7, 276);
+            this.checkBoxMakeExecutablePortable.Name = "checkBoxMakeExecutablePortable";
+            this.checkBoxMakeExecutablePortable.Size = new System.Drawing.Size(183, 20);
+            this.checkBoxMakeExecutablePortable.TabIndex = 34;
+            this.checkBoxMakeExecutablePortable.Text = "Make executable portable";
+            this.toolTips.SetToolTip(this.checkBoxMakeExecutablePortable, "This attempts to remove the need for XP compatibility and running as Administrato" +
+        "r. So you can run the exe from anywhere.");
+            this.checkBoxMakeExecutablePortable.UseVisualStyleBackColor = true;
+            // 
             // PatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(465, 460);
+            this.ClientSize = new System.Drawing.Size(465, 484);
             this.Controls.Add(this.buttonRestore);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonAbout);
@@ -663,6 +678,7 @@
         private System.Windows.Forms.CheckBox checkBoxReplaceWelshPremier;
         private System.Windows.Forms.ComboBox comboBoxReplacementLeagues;
         private System.Windows.Forms.CheckBox checkBoxRestrictTactics;
+        private System.Windows.Forms.CheckBox checkBoxMakeExecutablePortable;
     }
 }
 

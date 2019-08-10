@@ -69,7 +69,7 @@ namespace CM0102Patcher
                 if (is0001)
                 {
                     string[] files = new string[] { @"d:\KPWN.AFP", @"d:\SPBB.AFP", @"d:\PWQE.AFP", @"d:\EVWF.AFP" };
-                    byte[] bytePatten = new byte[] { 0x68, 0x00, 0x00, 0x00, 0x00, 0xE8 };
+                    byte[] bytePattern = new byte[] { 0x68, 0x00, 0x00, 0x00, 0x00, 0xE8 };
 
                     Action<FileStream, BinaryReader, BinaryWriter, int> patchFunc = (file, br, bw, offset) =>
                     {
@@ -94,27 +94,88 @@ namespace CM0102Patcher
 
                     Action<FileStream, BinaryReader, BinaryWriter, int> patternSearchFunc = (file, br, bw, offset) =>
                     {
-                        BitConverter.GetBytes(offset + 0x400000).ToArray().CopyTo(bytePatten, 1);
+                        BitConverter.GetBytes(offset + 0x400000).ToArray().CopyTo(bytePattern, 1);
                     };
 
                     foreach (var file in files)
                     {
                         FindPattern(exeFile, Encoding.ASCII.GetBytes(file), patternSearchFunc);
-                        FindPattern(exeFile, bytePatten, patchFunc);
+                        FindPattern(exeFile, bytePattern, patchFunc);
                     }
 
                     // SPBB.AFP - Special Case - With the drive letter overwriting
                     FindPattern(exeFile, Encoding.ASCII.GetBytes(@"d:\SPBB.AFP"), patternSearchFunc);
-                    bytePatten[5] = 0x88;
-                    FindPattern(exeFile, bytePatten, (file, br, bw, offset) =>
+                    bytePattern[5] = 0x88;
+                    FindPattern(exeFile, bytePattern, (file, br, bw, offset) =>
                     {
                         file.Seek(offset - 0x2b, SeekOrigin.Begin);
                         bw.Write(new byte[] { 0x31, 0xc0, 0x40, 0xc3 }); // xor eax, eax inc eax retn
                     });
+
+                    // Makes the .AFP files all equal cm0001.exe. This way a file will always be loaded.
+                    // Stops corruption on Wine based systems (Like Exagear Strategies on Android).
+                    //PatchEXEFile0001Fix(exeFile); 
+
+                    // Improved Fix: Makes SPBB.AFP (the first of the files listed in the exe == data\\index.dat and then makes
+                    // all references point to that, rather than the other 4.
+                    PatchEXEFile0001FixV2(exeFile);
                 }
             }
 
             return patched;
+        }
+
+        public void PatchEXEFile0001Fix(string exeFile)
+        {
+            string[] files = new string[] { @"d:\KPWN.AFP", @"d:\SPBB.AFP", @"d:\PWQE.AFP", @"d:\EVWF.AFP" };
+            foreach (var file in files)
+            {
+                FindPattern(exeFile, Encoding.ASCII.GetBytes(file), (f, br, bw, offset) =>
+                {
+                    bw.Seek(offset, SeekOrigin.Begin);
+                    bw.Write(Encoding.ASCII.GetBytes("cm0001.exe"));
+                    bw.Write((byte)0);
+                });
+            }
+        }
+
+        public void PatchEXEFile0001FixV2(string exeFile)
+        {
+            string[] files = new string[] { @"d:\KPWN.AFP", @"d:\PWQE.AFP", @"d:\EVWF.AFP" };
+            byte[] SPBBBytePattern = new byte[] { 0x68, 0x00, 0x00, 0x00, 0x00 };
+            int SPBBOffset = 0;
+
+            FindPattern(exeFile, Encoding.ASCII.GetBytes(@"d:\SPBB.AFP"), (f, br, bw, offset) =>
+            {
+                SPBBOffset = offset;
+                BitConverter.GetBytes(offset + 0x400000).ToArray().CopyTo(SPBBBytePattern, 1);
+            });
+
+            foreach (var file in files)
+            {
+                byte[] otherBytePattern = new byte[] { 0x68, 0x00, 0x00, 0x00, 0x00, 0xE8 };
+                FindPattern(exeFile, Encoding.ASCII.GetBytes(file), (f, br, bw, offset) =>
+                {
+                    BitConverter.GetBytes(offset + 0x400000).ToArray().CopyTo(otherBytePattern, 1);
+                });
+
+                // Found the byte pattern, now fix it to the SPBB byte pattern
+                FindPattern(exeFile, otherBytePattern, (f, br, bw, offset) =>
+                {
+                    bw.Seek(offset, SeekOrigin.Begin);
+                    bw.Write(SPBBBytePattern);
+                });
+            }
+
+            using (var file = File.Open(exeFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                using (var bw = new BinaryWriter(file))
+                {
+                    bw.Seek(SPBBOffset, SeekOrigin.Begin);
+                    bw.Write(Encoding.ASCII.GetBytes("data\\index.dat"));
+                    bw.Write((byte)0);
+                }
+            }
         }
     }
 }
