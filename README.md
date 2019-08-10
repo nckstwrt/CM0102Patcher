@@ -28,6 +28,19 @@ The RGN Image Converter:
 
 ## Updates
 
+v1.16:
+* Idle Sensitivity now also works on transfer screen
+* Ctrl+Shift+N to clear options
+* More 7 Subs fixes
+* Image Converter can now go RGN->PNG/BMP/JPG
+* Experimental changes to make exe portable
+* 3.9.60 patches added to Saturn patches
+* NoCD for Cm00/01
+* Year Changer coded for CM00/01
+
+v1.15:
+* Fixes a crash when using the RGN Converter multiple times (Thanks MrFoo for letting me know!)
+
 v1.14:
 * Adds all the Saturn patches as options to add (Experts Only! Don't use unless you know what you're doing!)
 
