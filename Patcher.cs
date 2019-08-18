@@ -146,7 +146,7 @@ namespace CM0102Patcher
                 }
             }
 
-            var patch = new HexPatch(0x566A00, "FF74E40468146A96005589E583E4F8E9E28DADFFDD05C1969100DC0DB89CAD00DD1DB89CAD0083C404C3");
+            var patch = new HexPatch(0x566A00, "FF74240468146A96005589E583E4F8E9E28DADFFDD05C1969100DC0DB89CAD00DD1DB89CAD0083C404C3");
             var jmpPatch = new HexPatch(0x3F7F0, "E90B72520090");
             ApplyPatch(fileName, new HexPatch[] { patch, jmpPatch });
         }
