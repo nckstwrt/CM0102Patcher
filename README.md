@@ -1,4 +1,4 @@
-# CM0102Patcher v1.14
+# CM0102Patcher v1.16
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/faSpt9s.png)
+![alt text](https://i.imgur.com/VX5LwUi.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,19 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.16:
+* Idle Sensitivity now also works on transfer screen
+* Ctrl+Shift+N to clear options
+* More 7 Subs fixes
+* Image Converter can now go RGN->PNG/BMP/JPG
+* Experimental changes to make exe portable
+* 3.9.60 patches added to Saturn patches
+* NoCD for Cm00/01
+* Year Changer coded for CM00/01
+
+v1.15:
+* Fixes a crash when using the RGN Converter multiple times (Thanks MrFoo for letting me know!)
 
 v1.14:
 * Adds all the Saturn patches as options to add (Experts Only! Don't use unless you know what you're doing!)
