@@ -186,5 +186,124 @@ namespace CM0102Patcher
             }
             return ret;
         }
+
+        public void SetResolution(string fileName, int width, int height)
+        {
+            List<int> widthOffsets = new List<int> {
+                0x001D79F3,
+                0x001D864B,
+                0x001D868B,
+                0x001E78BC,
+                0x001E78E6,
+                0x001E7B74,
+                0x001E7BDC,
+                0x001E7C39,
+                0x001E7CAB,
+                0x001E7D6B,
+                0x001E7DDA,
+                0x001E7E3C,
+                0x001E7EB3,
+                0x001E830A,
+                0x0028D8D5,
+                0x004AEED9,
+                0x004AEF01
+            };
+
+            List<int> heightOffsets = new List<int> {
+                0x0000384D,
+                0x00003924,
+                0x000039B7,
+                0x001D79EE,
+                0x001D8646,
+                0x001D8686,
+                0x001E78EE,
+                0x001E82F5,
+                0x001E8305,
+                0x0028D8E0,
+                0x004AEED4,
+                0x004AEEFC
+            };
+
+            List<int> widthMinus1Offsets = new List<int> {
+                0x00002B7E,
+                0x00002B85,
+                0x00003B02,
+                0x00003B65,
+                0x00060421,
+                0x00070FB3,
+                0x00072ADC,
+                0x0015F2D0,
+                0x0015F2ED,
+                0x0015F393,
+                0x0015F571,
+                0x0015F593,
+                0x0015F5F1,
+                0x001612A2,
+                0x001612A9,
+                0x00190F2B,
+                0x001EE1F6,
+                0x001F14D0,
+                0x00408E7C,
+                0x0041BD17,
+                0x004B9A7C,
+                0x004BAA60
+            };
+
+            List<int> heightMinus1Offsets = new List<int> {
+                0x00002B8E,
+                0x00003BDE,
+                0x00003C41,
+                0x0006041C,
+                0x00070FAE,
+                0x00072AD7,
+                0x0015F2CB,
+                0x0015F2E8,
+                0x0015F38E,
+                0x0015F56C,
+                0x0015F58E,
+                0x0015F5EC,
+                0x001612CB,
+                0x001612D2,
+                0x00190F23,
+                0x001EE20B,
+                0x001F14C8,
+                0x00319346,
+                0x0035DC11,
+                0x00408E77,
+                0x0041BD12,
+                0x004B9A74,
+                0x004BAA58
+            };
+
+            using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                using (var bw = new BinaryWriter(file))
+                {
+                    foreach (var offset in widthOffsets)
+                    {
+                        bw.Seek(offset, SeekOrigin.Begin);
+                        bw.Write((short)width);
+                    }
+
+                    foreach (var offset in heightOffsets)
+                    {
+                        bw.Seek(offset, SeekOrigin.Begin);
+                        bw.Write((short)height);
+                    }
+
+                    foreach (var offset in widthMinus1Offsets)
+                    {
+                        bw.Seek(offset, SeekOrigin.Begin);
+                        bw.Write((short)(width - 1));
+                    }
+
+                    foreach (var offset in heightMinus1Offsets)
+                    {
+                        bw.Seek(offset, SeekOrigin.Begin);
+                        bw.Write((short)(height - 1));
+                    }
+                }
+            }
+        }
     }
 }

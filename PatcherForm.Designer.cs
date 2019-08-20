@@ -53,6 +53,7 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxMakeExecutablePortable = new System.Windows.Forms.CheckBox();
             this.checkBoxRestrictTactics = new System.Windows.Forms.CheckBox();
             this.comboBoxReplacementLeagues = new System.Windows.Forms.ComboBox();
             this.checkBoxReplaceWelshPremier = new System.Windows.Forms.CheckBox();
@@ -69,7 +70,6 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonRestore = new System.Windows.Forms.Button();
             this.buttonAbout = new System.Windows.Forms.Button();
-            this.checkBoxMakeExecutablePortable = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -378,6 +378,19 @@
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
             // 
+            // checkBoxMakeExecutablePortable
+            // 
+            this.checkBoxMakeExecutablePortable.AutoSize = true;
+            this.checkBoxMakeExecutablePortable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxMakeExecutablePortable.Location = new System.Drawing.Point(7, 276);
+            this.checkBoxMakeExecutablePortable.Name = "checkBoxMakeExecutablePortable";
+            this.checkBoxMakeExecutablePortable.Size = new System.Drawing.Size(183, 20);
+            this.checkBoxMakeExecutablePortable.TabIndex = 34;
+            this.checkBoxMakeExecutablePortable.Text = "Make executable portable";
+            this.toolTips.SetToolTip(this.checkBoxMakeExecutablePortable, "This attempts to remove the need for XP compatibility and running as Administrato" +
+        "r. So you can run the exe from anywhere.");
+            this.checkBoxMakeExecutablePortable.UseVisualStyleBackColor = true;
+            // 
             // checkBoxRestrictTactics
             // 
             this.checkBoxRestrictTactics.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
@@ -576,19 +589,6 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
-            // checkBoxMakeExecutablePortable
-            // 
-            this.checkBoxMakeExecutablePortable.AutoSize = true;
-            this.checkBoxMakeExecutablePortable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxMakeExecutablePortable.Location = new System.Drawing.Point(7, 276);
-            this.checkBoxMakeExecutablePortable.Name = "checkBoxMakeExecutablePortable";
-            this.checkBoxMakeExecutablePortable.Size = new System.Drawing.Size(183, 20);
-            this.checkBoxMakeExecutablePortable.TabIndex = 34;
-            this.checkBoxMakeExecutablePortable.Text = "Make executable portable";
-            this.toolTips.SetToolTip(this.checkBoxMakeExecutablePortable, "This attempts to remove the need for XP compatibility and running as Administrato" +
-        "r. So you can run the exe from anywhere.");
-            this.checkBoxMakeExecutablePortable.UseVisualStyleBackColor = true;
-            // 
             // PatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -625,7 +625,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v1.16";
+            this.Text = "Nick\'s CM0102Patcher v1.17";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
