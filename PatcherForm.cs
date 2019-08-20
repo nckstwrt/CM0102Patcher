@@ -200,25 +200,31 @@ namespace CM0102Patcher
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["to1280x800"]);
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
 
+                    int newWidth = 1280; // 1680;
+                    int newHeight = 800; // 1050;
+                    patcher.SetResolution(labelFilename.Text, newWidth, newHeight);
+
                     // Convert the core gfx
-                    RGNConverter.RGN2RGN(Path.Combine(dataDir, "DEFAULT_PIC.RGN"), Path.Combine(dataDir, "bkg1280_800.rgn"), 1280, 800);
-                    RGNConverter.RGN2RGN(Path.Combine(dataDir, "match.mbr"), Path.Combine(dataDir, "m800.mbr"), 126, 800);
-                    RGNConverter.RGN2RGN(Path.Combine(dataDir, "game.mbr"), Path.Combine(dataDir, "g800.mbr"), 126, 800);
+                    RGNConverter.RGN2RGN(Path.Combine(dataDir, "DEFAULT_PIC.RGN"), Path.Combine(dataDir, "bkg1280_800.rgn"), newWidth, newHeight);
+                    RGNConverter.RGN2RGN(Path.Combine(dataDir, "match.mbr"), Path.Combine(dataDir, "m800.mbr"), 126, newHeight);
+                    RGNConverter.RGN2RGN(Path.Combine(dataDir, "game.mbr"), Path.Combine(dataDir, "g800.mbr"), 126, newHeight);
 
-                    var yesNo = MessageBox.Show("Do you wish to convert your CM0102 Pictures directory to 1280x800 too?\r\n\r\nIf no, please turn off Background Changes in CM0102's Options else pictures will not appear correctly.\r\n\r\nIf yes, this takes a few moments.", "CM0102Patcher - Resolution Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (yesNo == DialogResult.Yes)
+                    var picturesDir = Path.Combine(dir, "Pictures");
+
+                    if (Directory.Exists(picturesDir))
                     {
-                        var pf = new PictureConvertProgressForm();
-
-                        pf.OnLoadAction = () =>
+                        var yesNo = MessageBox.Show("Do you wish to convert your CM0102 Pictures directory to 1280x800 too?\r\n\r\nIf no, please turn off Background Changes in CM0102's Options else pictures will not appear correctly.\r\n\r\nIf yes, this takes a few moments.", "CM0102Patcher - Resolution Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (yesNo == DialogResult.Yes)
                         {
-                            new Thread(() =>
+                            var pf = new PictureConvertProgressForm();
+
+                            pf.OnLoadAction = () =>
                             {
-                                var picturesDir = Path.Combine(dir, "Pictures");
-                                int converting = 1;
-                                Thread.CurrentThread.IsBackground = true;
-                                if (Directory.Exists(picturesDir))
+                                new Thread(() =>
                                 {
+                                    int converting = 1;
+                                    Thread.CurrentThread.IsBackground = true;
+
                                     var picFiles = Directory.GetFiles(picturesDir, "*.rgn");
                                     foreach (var picFile in picFiles)
                                     {
@@ -234,12 +240,13 @@ namespace CM0102Patcher
                                             File.Move(picFile + ".tmp", picFile);
                                         }
                                     }
-                                }
-                                pf.CloseForm();
-                            }).Start();
-                        };
 
-                        pf.ShowDialog();
+                                    pf.CloseForm();
+                                }).Start();
+                            };
+
+                            pf.ShowDialog();
+                        }
                     }
                 }
                 if (checkBoxJobsAbroadBoost.Checked)

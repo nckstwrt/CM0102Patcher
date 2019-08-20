@@ -302,6 +302,99 @@ namespace CM0102Patcher
                         bw.Seek(offset, SeekOrigin.Begin);
                         bw.Write((short)(height - 1));
                     }
+
+                    // Unknowns
+
+                    // Unknown(15->14) 21 -> 20
+                    List<int> unknownsPart1 = new List<int> {
+                        0x001A33F5,
+                        0x001A38AB,
+                        0x001A3E06,
+                        0x001A4376,
+                        0x001A46D4,
+                        0x001A46F8,
+                        0x001A4735,
+                        0x001A482C,
+                        0x001A4850,
+                        0x001A4889,
+                        0x001A4AD2,
+                        0x001A4B3F,
+                        0x001A4BC2,
+                        0x001A4D82,
+                        0x001A4DEF,
+                        0x001A4E72
+                    };
+
+                    // Unknown(D2->C8) 210 -> 200
+                    List<int> unknownsPart2 = new List<int> {
+                        0x001A46A4,
+                        0x001A472A,
+                        0x001A47FF,
+                        0x001A487E,
+                        0x001A4A66,
+                        0x001A4BB4,
+                        0x001A4D16,
+                        0x001A4E64
+                    };
+
+                    int size = 30;
+
+                    foreach (var offset in unknownsPart1)
+                    {
+                        bw.Seek(offset, SeekOrigin.Begin);
+                        bw.Write((byte)size);
+                    }
+
+                    foreach (var offset in unknownsPart2)
+                    {
+                        bw.Seek(offset, SeekOrigin.Begin);
+                        bw.Write((short)(size*10));
+                    }
+
+                    // 00201E62: 9F BE
+                    // 00601E60 |.  69C0 9F010000           IMUL EAX, EAX,19F(415)
+                    bw.Seek(0x00201E62, SeekOrigin.Begin);
+                    bw.Write((short)0x19f);
+
+                    // 00201E7E: 55 47
+                    // 00601E7C |.  69C0 55010000           IMUL EAX, EAX,155(341)
+                    bw.Seek(0x00201E7E, SeekOrigin.Begin);
+                    bw.Write((short)0x155);
+
+                    // 00201E8D: BF C7
+                    // 00601E89 |.B8 FFFFFFBF MOV EAX,BFFFFFFF(BF = 191)
+                    bw.Seek(0x00201E8D, SeekOrigin.Begin);
+                    bw.Write((byte)0xbf);
+
+                    // 00201F2B: 15 14
+                    // 00601F2A |.  6A 15                   PUSH 15
+                    bw.Seek(0x00201F2B, SeekOrigin.Begin);
+                    bw.Write((byte)0x15);
+
+                    // 00201F4F: 35 3E
+                    // 00601F4D |.  83C0 35 | ADD EAX,35(53)
+                    bw.Seek(0x00201F4F, SeekOrigin.Begin);
+                    bw.Write((byte)0x35);
+
+                    // 0038900F: AB FD
+                    // 0078900E |.  68 AB040000 PUSH 4AB; | Arg3 = 4AB
+                    bw.Seek(0x0038900F, SeekOrigin.Begin);
+                    bw.Write((short)0x4ab);
+
+                    // 00470CCE: 8B 99
+                    // 00870CCD |.  68 8B030000 PUSH 38B; || Arg3 = 38B
+                    bw.Seek(0x00470CCE, SeekOrigin.Begin);
+                    bw.Write((short)0x38b);
+
+                    // 00470F57: 8B 99
+                    // 00870F56 |.  68 8B030000 PUSH 38B; | Arg3 = 38B
+                    bw.Seek(0x00470F57, SeekOrigin.Begin);
+                    bw.Write((short)0x38b);
+
+                    // 004750E2: 81 8F
+                    // 008750E1 |.  68 81030000             PUSH 381; | Arg3 = 381
+                    bw.Seek(0x004750E2, SeekOrigin.Begin);
+                    bw.Write((short)0x381);
                 }
             }
         }
