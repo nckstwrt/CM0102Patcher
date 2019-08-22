@@ -12,12 +12,12 @@ using System.IO.Compression;
 
 namespace CM0102Patcher
 {
-    public partial class SaturnPatches : Form
+    public partial class MiscPatches : Form
     {
         string exeFile;
         List<ZipStorer.ZipFileEntry> patchFiles;
 
-        public SaturnPatches(string exeFile)
+        public MiscPatches(string exeFile)
         {
             this.exeFile = exeFile;
             InitializeComponent();
@@ -25,7 +25,6 @@ namespace CM0102Patcher
             using (var zs = OpenZip())
             {
                 patchFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".patch"));
-                
             }
 
             foreach (var patch in patchFiles)
@@ -36,7 +35,7 @@ namespace CM0102Patcher
         {
             if (checkedListBoxPatches.CheckedItems.Count == 0)
             {
-                MessageBox.Show("No patches selected. Closing.", "Saturn Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No patches selected. Closing.", "Misc Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Close();
                 return;
             }
@@ -68,7 +67,7 @@ namespace CM0102Patcher
         private ZipStorer OpenZip()
         {
             var assembly = Assembly.GetExecutingAssembly();
-            string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("SaturnPatches.zip"));
+            string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("MiscPatches.zip"));
             return ZipStorer.Open(assembly.GetManifestResourceStream(resourceName), FileAccess.Read);
         }
     }
