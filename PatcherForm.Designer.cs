@@ -61,7 +61,7 @@
             this.checkBoxManageAnyTeam = new System.Windows.Forms.CheckBox();
             this.checkBoxNewRegenCode = new System.Windows.Forms.CheckBox();
             this.checkBoxJobsAbroadBoost = new System.Windows.Forms.CheckBox();
-            this.checkBoxChangeResolution1280s800 = new System.Windows.Forms.CheckBox();
+            this.checkBoxChangeResolution = new System.Windows.Forms.CheckBox();
             this.checkBoxRegenFixes = new System.Windows.Forms.CheckBox();
             this.checkBoxForceLoadAllPlayers = new System.Windows.Forms.CheckBox();
             this.checkBoxUpdateNames = new System.Windows.Forms.CheckBox();
@@ -70,6 +70,7 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonRestore = new System.Windows.Forms.Button();
             this.buttonAbout = new System.Windows.Forms.Button();
+            this.comboBoxResolution = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -360,6 +361,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.comboBoxResolution);
             this.groupBox3.Controls.Add(this.checkBoxMakeExecutablePortable);
             this.groupBox3.Controls.Add(this.checkBoxRestrictTactics);
             this.groupBox3.Controls.Add(this.comboBoxReplacementLeagues);
@@ -368,7 +370,7 @@
             this.groupBox3.Controls.Add(this.checkBoxManageAnyTeam);
             this.groupBox3.Controls.Add(this.checkBoxNewRegenCode);
             this.groupBox3.Controls.Add(this.checkBoxJobsAbroadBoost);
-            this.groupBox3.Controls.Add(this.checkBoxChangeResolution1280s800);
+            this.groupBox3.Controls.Add(this.checkBoxChangeResolution);
             this.groupBox3.Controls.Add(this.checkBoxRegenFixes);
             this.groupBox3.Controls.Add(this.checkBoxForceLoadAllPlayers);
             this.groupBox3.Controls.Add(this.checkBoxUpdateNames);
@@ -408,10 +410,11 @@
             // comboBoxReplacementLeagues
             // 
             this.comboBoxReplacementLeagues.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxReplacementLeagues.Enabled = false;
             this.comboBoxReplacementLeagues.FormattingEnabled = true;
             this.comboBoxReplacementLeagues.Location = new System.Drawing.Point(219, 197);
             this.comboBoxReplacementLeagues.Name = "comboBoxReplacementLeagues";
-            this.comboBoxReplacementLeagues.Size = new System.Drawing.Size(222, 21);
+            this.comboBoxReplacementLeagues.Size = new System.Drawing.Size(220, 21);
             this.comboBoxReplacementLeagues.TabIndex = 32;
             // 
             // checkBoxReplaceWelshPremier
@@ -483,17 +486,18 @@
             this.toolTips.SetToolTip(this.checkBoxJobsAbroadBoost, "Changes to allow managers to obtain jobs abroad easier");
             this.checkBoxJobsAbroadBoost.UseVisualStyleBackColor = true;
             // 
-            // checkBoxChangeResolution1280s800
+            // checkBoxChangeResolution
             // 
-            this.checkBoxChangeResolution1280s800.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
-            this.checkBoxChangeResolution1280s800.AutoSize = true;
-            this.checkBoxChangeResolution1280s800.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxChangeResolution1280s800.Location = new System.Drawing.Point(7, 172);
-            this.checkBoxChangeResolution1280s800.Name = "checkBoxChangeResolution1280s800";
-            this.checkBoxChangeResolution1280s800.Size = new System.Drawing.Size(207, 20);
-            this.checkBoxChangeResolution1280s800.TabIndex = 24;
-            this.checkBoxChangeResolution1280s800.Text = "Change resolution to 1280x800";
-            this.checkBoxChangeResolution1280s800.UseVisualStyleBackColor = true;
+            this.checkBoxChangeResolution.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxChangeResolution.AutoSize = true;
+            this.checkBoxChangeResolution.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxChangeResolution.Location = new System.Drawing.Point(7, 172);
+            this.checkBoxChangeResolution.Name = "checkBoxChangeResolution";
+            this.checkBoxChangeResolution.Size = new System.Drawing.Size(196, 20);
+            this.checkBoxChangeResolution.TabIndex = 24;
+            this.checkBoxChangeResolution.Text = "Change screen resolution to:";
+            this.checkBoxChangeResolution.UseVisualStyleBackColor = true;
+            this.checkBoxChangeResolution.CheckedChanged += new System.EventHandler(this.checkBoxChangeResolution_CheckedChanged);
             // 
             // checkBoxRegenFixes
             // 
@@ -527,7 +531,7 @@
             this.checkBoxUpdateNames.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxUpdateNames.AutoSize = true;
             this.checkBoxUpdateNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxUpdateNames.Location = new System.Drawing.Point(219, 172);
+            this.checkBoxUpdateNames.Location = new System.Drawing.Point(219, 276);
             this.checkBoxUpdateNames.Name = "checkBoxUpdateNames";
             this.checkBoxUpdateNames.Size = new System.Drawing.Size(227, 20);
             this.checkBoxUpdateNames.TabIndex = 28;
@@ -588,6 +592,16 @@
             this.buttonAbout.Text = "?";
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
+            // 
+            // comboBoxResolution
+            // 
+            this.comboBoxResolution.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxResolution.Enabled = false;
+            this.comboBoxResolution.FormattingEnabled = true;
+            this.comboBoxResolution.Location = new System.Drawing.Point(219, 170);
+            this.comboBoxResolution.Name = "comboBoxResolution";
+            this.comboBoxResolution.Size = new System.Drawing.Size(220, 21);
+            this.comboBoxResolution.TabIndex = 35;
             // 
             // PatcherForm
             // 
@@ -667,7 +681,7 @@
         private System.Windows.Forms.CheckBox checkBoxRegenFixes;
         private System.Windows.Forms.ToolTip toolTips;
         private System.Windows.Forms.Button buttonAbout;
-        private System.Windows.Forms.CheckBox checkBoxChangeResolution1280s800;
+        private System.Windows.Forms.CheckBox checkBoxChangeResolution;
         private System.Windows.Forms.CheckBox checkBoxJobsAbroadBoost;
         private System.Windows.Forms.CheckBox checkBoxNewRegenCode;
         private System.Windows.Forms.CheckBox checkBoxUpdateNames;
@@ -679,6 +693,7 @@
         private System.Windows.Forms.ComboBox comboBoxReplacementLeagues;
         private System.Windows.Forms.CheckBox checkBoxRestrictTactics;
         private System.Windows.Forms.CheckBox checkBoxMakeExecutablePortable;
+        private System.Windows.Forms.ComboBox comboBoxResolution;
     }
 }
 

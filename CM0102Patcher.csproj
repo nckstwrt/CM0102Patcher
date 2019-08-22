@@ -98,6 +98,7 @@
       <DependentUpon>RefereePatcherForm.cs</DependentUpon>
     </Compile>
     <Compile Include="RegString.cs" />
+    <Compile Include="ResolutionChanger.cs" />
     <Compile Include="RestorePoint.cs" />
     <Compile Include="RGNConverter.cs" />
     <Compile Include="SaturnPatches.cs">

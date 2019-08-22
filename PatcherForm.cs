@@ -44,6 +44,22 @@ namespace CM0102Patcher
                 comboBoxReplacementLeagues.Items.Add("English National League South");
                 comboBoxReplacementLeagues.Items.Add("English Southern Premier Central Division");
 
+                // Screen Resolution
+                comboBoxResolution.Items.AddRange(new ComboboxItem[]
+                {
+                    new ComboboxItem("720 x 480", new Point(720, 480)),
+                    new ComboboxItem("800 x 600 (default)", new Point(800, 600)),
+                    new ComboboxItem("1024 x 600", new Point(1024, 600)),
+                    new ComboboxItem("1024 x 768", new Point(1024, 768)),
+                    new ComboboxItem("1280 x 720", new Point(1280, 720)),
+                    new ComboboxItem("1280 x 800 (recommended)", new Point(1280, 800)),
+                    new ComboboxItem("1280 x 960", new Point(1280, 960)),
+                    new ComboboxItem("1280 x 1024", new Point(1280, 1024)),
+                    new ComboboxItem("1366 x 768", new Point(1366, 768)),
+                    new ComboboxItem("1400 x 900", new Point(1400, 900)),
+                    new ComboboxItem("1680 x 1050", new Point(1680, 1050)),
+                });
+
                 // Set Default Start Year to this year if we're past July (else use last year) 
                 var currentYear = DateTime.Now.Year;
                 if (DateTime.Now.Month < 7)
@@ -195,19 +211,20 @@ namespace CM0102Patcher
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["forceloadallplayers"]);
                 if (checkBoxRegenFixes.Checked)
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["regenfixes"]);
-                if (checkBoxChangeResolution1280s800.Checked)
+                if (checkBoxChangeResolution.Checked)
                 {
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["to1280x800"]);
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
 
-                    int newWidth = 1280; // 1680;
-                    int newHeight = 800; // 1050;
-                    patcher.SetResolution(labelFilename.Text, newWidth, newHeight);
+                    int newWidth = ((Point)((comboBoxResolution.SelectedItem as ComboboxItem).Value)).X;
+                    int newHeight = ((Point)((comboBoxResolution.SelectedItem as ComboboxItem).Value)).Y;
+                    ResolutionChanger.SetResolution(labelFilename.Text, newWidth, newHeight);
 
                     // Convert the core gfx
+                    int menuWidth = newWidth > 800 ? 126 : 90;
                     RGNConverter.RGN2RGN(Path.Combine(dataDir, "DEFAULT_PIC.RGN"), Path.Combine(dataDir, "bkg1280_800.rgn"), newWidth, newHeight);
-                    RGNConverter.RGN2RGN(Path.Combine(dataDir, "match.mbr"), Path.Combine(dataDir, "m800.mbr"), 126, newHeight);
-                    RGNConverter.RGN2RGN(Path.Combine(dataDir, "game.mbr"), Path.Combine(dataDir, "g800.mbr"), 126, newHeight);
+                    RGNConverter.RGN2RGN(Path.Combine(dataDir, "match.mbr"), Path.Combine(dataDir, "m800.mbr"), menuWidth, newHeight); // 800 => 90 - 1280 => 126
+                    RGNConverter.RGN2RGN(Path.Combine(dataDir, "game.mbr"), Path.Combine(dataDir, "g800.mbr"), menuWidth, newHeight);
 
                     var picturesDir = Path.Combine(dir, "Pictures");
 
@@ -234,7 +251,7 @@ namespace CM0102Patcher
                                         RGNConverter.GetImageSize(picFile, out Width, out Height);
                                         if (Width == 800 && Height == 600)
                                         {
-                                            RGNConverter.RGN2RGN(picFile, picFile + ".tmp", 1280, 800, 0, 35, 0, 100 - 35);
+                                            RGNConverter.RGN2RGN(picFile, picFile + ".tmp", menuWidth, newHeight, 0, 35, 0, 100 - 35);
                                             File.SetAttributes(picFile, FileAttributes.Normal);
                                             File.Delete(picFile);
                                             File.Move(picFile + ".tmp", picFile);
@@ -436,6 +453,13 @@ namespace CM0102Patcher
             comboBoxReplacementLeagues.Enabled = checkBoxReplaceWelshPremier.Checked;
             if (checkBoxReplaceWelshPremier.Checked && comboBoxReplacementLeagues.SelectedIndex == -1)
                 comboBoxReplacementLeagues.SelectedIndex = 0;
+        }
+
+        private void checkBoxChangeResolution_CheckedChanged(object sender, EventArgs e)
+        {
+            comboBoxResolution.Enabled = checkBoxChangeResolution.Checked;
+            if (checkBoxChangeResolution.Checked && comboBoxResolution.SelectedIndex == -1)
+                comboBoxResolution.SelectedIndex = 5;
         }
     }
 }
