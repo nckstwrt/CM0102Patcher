@@ -309,6 +309,25 @@ namespace CM0102Patcher
                         centering2 = 987;
                     }
                     else
+                    if (width == 1920 && height == 1080)
+                    {
+                        unknown1 = 27;
+                        widthMod = 650;
+                        heightMod = 460;
+                        unknownNegative = 160;
+                        unknown2 = 77;
+                        unknown3 = 1100;
+                        centering1 = 1088;
+                        centering2 = 1057;
+
+                        bw.Seek(0x49C626, SeekOrigin.Begin);
+                        bw.Write((byte)0x3);
+                        bw.Seek(0x49C69E, SeekOrigin.Begin);
+                        bw.Write((byte)0x3);
+                        bw.Seek(0x49C73C, SeekOrigin.Begin);
+                        bw.Write((byte)0x3);
+                    }
+                    else
                     {
                         unknown1 = (int)(((double)height) * 0.0255);
                         widthMod = (int)(((double)width) * 0.326);

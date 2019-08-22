@@ -58,6 +58,7 @@ namespace CM0102Patcher
                     new ComboboxItem("1366 x 768", new Point(1366, 768)),
                     new ComboboxItem("1400 x 900", new Point(1400, 900)),
                     new ComboboxItem("1680 x 1050", new Point(1680, 1050)),
+                    new ComboboxItem("1920 x 1080", new Point(1920, 1080)),
                 });
 
                 // Set Default Start Year to this year if we're past July (else use last year) 
