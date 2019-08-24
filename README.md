@@ -28,7 +28,7 @@ The RGN Image Converter:
 
 ## Updates
 
-v1.18
+v1.18:
 * Support multiple resolutions (Beta: Not fully tested)
 * Auto-fix Euros Crash when setting year to 2019
 * Updated "Saturn Patches" to "Misc Patches" and added a few bits
