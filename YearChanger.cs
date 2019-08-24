@@ -95,6 +95,13 @@ namespace CM0102Patcher
                     // Special 2 (the calc for season selection can cause England 18/09 without this)
                     bw.Seek(0x41e9ca, SeekOrigin.Begin);
                     bw.Write((byte)0x64);
+
+                    // Special 3 - Need to fix Euro for 2019
+                    if ((year % 4) == 3)
+                    {
+                        bw.Seek(0x1f9c0a, SeekOrigin.Begin);
+                        bw.Write((byte)0xdc);
+                    }
                 }
             }
         }
