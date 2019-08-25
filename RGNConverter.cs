@@ -7,7 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
-
+using System.Windows.Forms;
 
 namespace CM0102Patcher
 {
@@ -38,25 +38,37 @@ namespace CM0102Patcher
             return destImage;
         }
 
-        public static void GetImageSize(string inFile, out int Width, out int Height)
+        public static bool GetImageSize(string inFile, out int Width, out int Height)
         {
-            if (Path.GetExtension(inFile).ToLower() == ".rgn")
+            bool ret = false;
+            try
             {
-                using (var stream = File.OpenRead(inFile))
-                using (var br = new BinaryReader(stream))
+                if (Path.GetExtension(inFile).ToLower() == ".rgn")
                 {
-                    Width = br.ReadInt32();
-                    Height = br.ReadInt32();
+                    using (var stream = File.OpenRead(inFile))
+                    using (var br = new BinaryReader(stream))
+                    {
+                        Width = br.ReadInt32();
+                        Height = br.ReadInt32();
+                    }
                 }
+                else
+                {
+                    using (var bmp = Bitmap.FromFile(inFile))
+                    {
+                        Width = bmp.Width;
+                        Height = bmp.Height;
+                    }
+                }
+                ret = true;
             }
-            else
+            catch (Exception ex)
             {
-                using (var bmp = Bitmap.FromFile(inFile))
-                {
-                    Width = bmp.Width;
-                    Height = bmp.Height;
-                }
+                MessageBox.Show("Failed to GetImageSize of: " + inFile, "GetImageSize", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExceptionMsgBox.Show(ex);
+                Width = Height = 0;
             }
+            return ret;
         }
 
         public static void RGN2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0)

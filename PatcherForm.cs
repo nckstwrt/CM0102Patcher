@@ -168,6 +168,9 @@ namespace CM0102Patcher
                             if (yesNo == DialogResult.No)
                                 return;
                             int yearIncrement = (((int)numericGameStartYear.Value) - currentYear);
+
+                            // yearIncrement--; When using 2018 data, to make it 2019 dates
+
                             yearChanger.ApplyYearChangeToExe(labelFilename.Text, (int)numericGameStartYear.Value);
                             yearChanger.UpdateStaff(indexFile, staffFile, yearIncrement);
                             yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
@@ -240,23 +243,35 @@ namespace CM0102Patcher
                             {
                                 new Thread(() =>
                                 {
-                                    int converting = 1;
-                                    Thread.CurrentThread.IsBackground = true;
-
-                                    var picFiles = Directory.GetFiles(picturesDir, "*.rgn");
-                                    foreach (var picFile in picFiles)
+                                    var lastPic = "";
+                                    try
                                     {
-                                        pf.SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, picFiles.Length, Path.GetFileName(picFile)));
-                                        pf.SetProgressPercent((int)(((double)(converting - 1) / ((double)picFiles.Length)) * 100.0));
-                                        int Width, Height;
-                                        RGNConverter.GetImageSize(picFile, out Width, out Height);
-                                        if (Width == 800 && Height == 600)
+                                        int converting = 1;
+                                        Thread.CurrentThread.IsBackground = true;
+
+                                        var picFiles = Directory.GetFiles(picturesDir, "*.rgn");
+                                        foreach (var picFile in picFiles)
                                         {
-                                            RGNConverter.RGN2RGN(picFile, picFile + ".tmp", menuWidth, newHeight, 0, 35, 0, 100 - 35);
-                                            File.SetAttributes(picFile, FileAttributes.Normal);
-                                            File.Delete(picFile);
-                                            File.Move(picFile + ".tmp", picFile);
+                                            lastPic = picFile;
+                                            pf.SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, picFiles.Length, Path.GetFileName(picFile)));
+                                            pf.SetProgressPercent((int)(((double)(converting - 1) / ((double)picFiles.Length)) * 100.0));
+                                            int Width, Height;
+                                            if (RGNConverter.GetImageSize(picFile, out Width, out Height))
+                                            {
+                                                if (Width == 800 && Height == 600)
+                                                {
+                                                    RGNConverter.RGN2RGN(picFile, picFile + ".tmp", menuWidth, newHeight, 0, 35, 0, 100 - 35);
+                                                    File.SetAttributes(picFile, FileAttributes.Normal);
+                                                    File.Delete(picFile);
+                                                    File.Move(picFile + ".tmp", picFile);
+                                                }
+                                            }
                                         }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        MessageBox.Show(string.Format("Failed when converting images!\r\nLast Pic: {0}", lastPic), "Image Convert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                        ExceptionMsgBox.Show(ex);
                                     }
 
                                     pf.CloseForm();

@@ -141,8 +141,12 @@ namespace CM0102Patcher
                                 if (checkSizeWidth != -1 || checkSizeHeight != -1)
                                 {
                                     int Width, Height;
-                                    RGNConverter.GetImageSize(picFile, out Width, out Height);
-                                    if (Width != checkSizeWidth || Height != checkSizeHeight)
+                                    if (RGNConverter.GetImageSize(picFile, out Width, out Height))
+                                    {
+                                        if (Width != checkSizeWidth || Height != checkSizeHeight)
+                                            continue;
+                                    }
+                                    else
                                         continue;
                                 }
 
