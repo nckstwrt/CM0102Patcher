@@ -1,4 +1,4 @@
-# CM0102Patcher v1.18
+# CM0102Patcher v1.20
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/Anpkl7t.png)
+![alt text](https://i.imgur.com/8AXk5tz.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,14 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.20:
+* Fixed issue with Leap Year dates (meaning some DoBs were off by one). Thanks again MrFoo!
+* Added playable China league (swaps out S.Korea)
+
+v1.19:
+* Better Image Error Handling for Mr.Foo.
+* Better Patching (Handles /* */ to a degree)
 
 v1.18:
 * Support multiple resolutions (Beta: Not fully tested)
