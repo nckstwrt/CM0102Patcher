@@ -1,4 +1,4 @@
-# CM0102Patcher v1.16
+# CM0102Patcher v1.18
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/VX5LwUi.png)
+![alt text](https://i.imgur.com/Anpkl7t.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -28,6 +28,14 @@ The RGN Image Converter:
 
 ## Updates
 
+v1.18:
+* Support multiple resolutions (Beta: Not fully tested)
+* Auto-fix Euros Crash when setting year to 2019
+* Updated "Saturn Patches" to "Misc Patches" and added a few bits
+
+v1.17
+* Very minor fix to inflation currency patch (PUSH DWORD PTR SS:[ESP+4] issue)
+
 v1.16:
 * Idle Sensitivity now also works on transfer screen
 * Ctrl+Shift+N to clear options
@@ -35,7 +43,7 @@ v1.16:
 * Image Converter can now go RGN->PNG/BMP/JPG
 * Experimental changes to make exe portable
 * 3.9.60 patches added to Saturn patches
-* NoCD for Cm00/01
+* NoCD for CM00/01
 * Year Changer coded for CM00/01
 
 v1.15:
