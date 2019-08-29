@@ -365,24 +365,51 @@ namespace CM0102Patcher
             return ret;
         }
 
-        bool IsLeapYear(int year)
+        DateTime FromCMDate(short day, short year, int leapYear)
         {
-            return ((year % 4) == 0) && ((year % 100) != 0 || (year % 400) == 0);
+            //31 + 28 == Feb 28th
+            return new DateTime(year, 1, 1).AddDays(day - 1);
+        }
+
+        void ToCMDate(DateTime dt, out short day, out short year, out int leapYear)
+        {
+            day = (short)(dt.DayOfYear);
+            year = (short)dt.Year;
+            leapYear = DateTime.IsLeapYear(year) ? 1 : 0;
         }
 
         void ChangeDate(byte[] staffBytes, long pos, int yearIncrement, string yearType)
         {
-            int year = ((staffBytes[pos + 0]) | (staffBytes[pos + 1] << 8));
+            short year = (short)((staffBytes[pos + 0]) | (staffBytes[pos + 1] << 8));
 
             if (year > 1900 && year < 2100)
             {
                 int new_year = year + yearIncrement;
                 YearToBytes(new_year).CopyTo(staffBytes, pos);
+
                 if (yearType != "Year")
                 {
-                    int isLeapYear = IsLeapYear(new_year) ? 1 : 0;
+                    // Giggs = 29 November 1973 (1956)
+                    short oldDay = BitConverter.ToInt16(staffBytes, (int)pos - 2);
+                    int oldIsLeapYear = BitConverter.ToInt32(staffBytes, (int)pos + 2);
+                    var oldDate = FromCMDate(oldDay, year, oldIsLeapYear);
+
+                   /* if (year == 1956 && oldDate.Month == 10 && oldDate.Day == 29)
+                    {
+                        Console.WriteLine();
+                    }*/
+
+                    var newDate = oldDate.AddYears(yearIncrement);
+                    
+                    int isLeapYear = DateTime.IsLeapYear(new_year) ? 1 : 0;
                     byte[] intBytes = BitConverter.GetBytes(isLeapYear);
                     intBytes.CopyTo(staffBytes, pos + 2);
+
+                    short shtDay, shtYear;
+                    int shtLeapYear;
+                    ToCMDate(newDate, out shtDay, out shtYear, out shtLeapYear);
+                    var shtDayBytes = BitConverter.GetBytes(shtDay);
+                    shtDayBytes.CopyTo(staffBytes, pos - 2); 
                 }
             }
         }

@@ -71,6 +71,7 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonRestore = new System.Windows.Forms.Button();
             this.buttonAbout = new System.Windows.Forms.Button();
+            this.checkBoxSwapSKoreaForChina = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -165,7 +166,7 @@
             // 
             this.buttonApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonApply.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonApply.Location = new System.Drawing.Point(381, 445);
+            this.buttonApply.Location = new System.Drawing.Point(381, 464);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(75, 31);
             this.buttonApply.TabIndex = 7;
@@ -217,7 +218,7 @@
             // 
             this.buttonTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTools.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonTools.Location = new System.Drawing.Point(9, 445);
+            this.buttonTools.Location = new System.Drawing.Point(9, 464);
             this.buttonTools.Name = "buttonTools";
             this.buttonTools.Size = new System.Drawing.Size(75, 31);
             this.buttonTools.TabIndex = 11;
@@ -361,6 +362,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBoxSwapSKoreaForChina);
             this.groupBox3.Controls.Add(this.comboBoxResolution);
             this.groupBox3.Controls.Add(this.checkBoxMakeExecutablePortable);
             this.groupBox3.Controls.Add(this.checkBoxRestrictTactics);
@@ -376,7 +378,7 @@
             this.groupBox3.Controls.Add(this.checkBoxUpdateNames);
             this.groupBox3.Location = new System.Drawing.Point(9, 131);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(447, 304);
+            this.groupBox3.Size = new System.Drawing.Size(447, 325);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
             // 
@@ -555,7 +557,7 @@
             // 
             this.checkBoxRemoveCDChecks.AutoSize = true;
             this.checkBoxRemoveCDChecks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(294, 451);
+            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(294, 470);
             this.checkBoxRemoveCDChecks.Name = "checkBoxRemoveCDChecks";
             this.checkBoxRemoveCDChecks.Size = new System.Drawing.Size(69, 20);
             this.checkBoxRemoveCDChecks.TabIndex = 23;
@@ -567,7 +569,7 @@
             // 
             this.buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSave.Location = new System.Drawing.Point(135, 445);
+            this.buttonSave.Location = new System.Drawing.Point(135, 464);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(66, 31);
             this.buttonSave.TabIndex = 26;
@@ -581,7 +583,7 @@
             // 
             this.buttonRestore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRestore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonRestore.Location = new System.Drawing.Point(211, 445);
+            this.buttonRestore.Location = new System.Drawing.Point(211, 464);
             this.buttonRestore.Name = "buttonRestore";
             this.buttonRestore.Size = new System.Drawing.Size(66, 31);
             this.buttonRestore.TabIndex = 27;
@@ -595,7 +597,7 @@
             // 
             this.buttonAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAbout.Location = new System.Drawing.Point(95, 445);
+            this.buttonAbout.Location = new System.Drawing.Point(95, 464);
             this.buttonAbout.Name = "buttonAbout";
             this.buttonAbout.Size = new System.Drawing.Size(30, 31);
             this.buttonAbout.TabIndex = 23;
@@ -603,11 +605,24 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
+            // checkBoxSwapSKoreaForChina
+            // 
+            this.checkBoxSwapSKoreaForChina.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxSwapSKoreaForChina.AutoSize = true;
+            this.checkBoxSwapSKoreaForChina.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxSwapSKoreaForChina.Location = new System.Drawing.Point(7, 300);
+            this.checkBoxSwapSKoreaForChina.Name = "checkBoxSwapSKoreaForChina";
+            this.checkBoxSwapSKoreaForChina.Size = new System.Drawing.Size(167, 20);
+            this.checkBoxSwapSKoreaForChina.TabIndex = 36;
+            this.checkBoxSwapSKoreaForChina.Text = "Swap S.Korea for China";
+            this.toolTips.SetToolTip(this.checkBoxSwapSKoreaForChina, "Makes China a selectable and playable league rather than South Korea");
+            this.checkBoxSwapSKoreaForChina.UseVisualStyleBackColor = true;
+            // 
             // PatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(465, 484);
+            this.ClientSize = new System.Drawing.Size(465, 504);
             this.Controls.Add(this.buttonRestore);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonAbout);
@@ -639,7 +654,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v1.19";
+            this.Text = "Nick\'s CM0102Patcher v1.20";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
@@ -694,6 +709,7 @@
         private System.Windows.Forms.CheckBox checkBoxRestrictTactics;
         private System.Windows.Forms.CheckBox checkBoxMakeExecutablePortable;
         private System.Windows.Forms.ComboBox comboBoxResolution;
+        private System.Windows.Forms.CheckBox checkBoxSwapSKoreaForChina;
     }
 }
 

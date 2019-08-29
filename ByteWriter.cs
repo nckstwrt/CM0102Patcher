@@ -19,19 +19,28 @@ namespace CM0102Patcher
             }
         }
 
-        public static int SearchBytes(byte[] toSearch, string searchText, int startIndex = 0)
+        public static int SearchBytes(byte[] toSearch, string searchText, int startIndex = 0, bool ignoreCase = false)
         {
             Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
             var stringBytes = latin1.GetBytes(searchText);
-            return SearchBytes(toSearch, stringBytes, startIndex);
+            return SearchBytes(toSearch, stringBytes, startIndex, ignoreCase);
         }
 
-        public static int SearchBytes(byte[] toSearch, byte[] searchBytes, int startIndex = 0)
+        public static int SearchBytes(byte[] toSearch, byte[] searchBytes, int startIndex = 0, bool ignoreCase = false)
         {
             int ptr = 0;
             for (int i = startIndex; i < toSearch.Length; i++)
             {
-                if (toSearch[i] == searchBytes[ptr])
+                bool equal = toSearch[i] == searchBytes[ptr];
+                if (ignoreCase)
+                {
+                    if (toSearch[i] >= 32 && toSearch[i] < 127 &&
+                        searchBytes[ptr] >= 32 && searchBytes[ptr] < 127)
+                    {
+                        equal = (char.ToUpper((char)toSearch[i]).Equals(char.ToUpper((char)searchBytes[ptr])));
+                    }
+                }
+                if (equal)
                 {
                     ptr++;
                     if (ptr == searchBytes.Length)
@@ -49,13 +58,13 @@ namespace CM0102Patcher
             return -1;
         }
 
-        public static List<int> SearchBytesForAll(byte[] toSearch, byte[] searchBytes)
+        public static List<int> SearchBytesForAll(byte[] toSearch, byte[] searchBytes, bool ignoreCase = false)
         {
             List<int> offsets = new List<int>();
             int idx = 0;
             while (true)
             {
-                var found = SearchBytes(toSearch, searchBytes, idx);
+                var found = SearchBytes(toSearch, searchBytes, idx, ignoreCase);
                 if (found != -1)
                 {
                     offsets.Add(found);
@@ -120,13 +129,13 @@ namespace CM0102Patcher
             }
         }
 
-        public static int BinFileReplace(string file, string toReplace, string replaceWith, int startPosition = 0, int timesToReplace = 0)
+        public static int BinFileReplace(string file, string toReplace, string replaceWith, int startPosition = 0, int timesToReplace = 0, bool ignoreCase = false)
         {
             int lastPosChanged = -1;
             var bytes = ByteWriter.LoadFile(file);
             Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
             var stringBytes = latin1.GetBytes(toReplace);
-            var bytePositions = SearchBytesForAll(bytes, stringBytes);
+            var bytePositions = SearchBytesForAll(bytes, stringBytes, ignoreCase);
             int numberChanged = 0;
             foreach (var pos in bytePositions)
             {

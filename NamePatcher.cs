@@ -157,7 +157,7 @@ namespace CM0102Patcher
             ByteWriter.WriteToFile(fileName, startPos + 79, acronym, 3);
         }
 
-        void PatchComp(string oldName, string newName, string oldShortName, string newShortName, string newAcronym = null)
+        public void PatchComp(string oldName, string newName, string oldShortName, string newShortName, string newAcronym = null)
         {
             int compChangePos = PatchComp(oldName, newName);
             if (compChangePos != -1)
@@ -168,10 +168,12 @@ namespace CM0102Patcher
             }
         }
 
-        void PatchStaffAward(string oldName, string newName)
+        public void PatchStaffAward(string oldName, string newName, bool patchExe = false, bool ignoreCase = false)
         {
             var staff_comp = Path.Combine(dataDir, "staff_comp.dat");
-            ByteWriter.BinFileReplace(staff_comp, oldName, newName + "\0");
+            ByteWriter.BinFileReplace(staff_comp, oldName, newName + "\0", 0, 0, ignoreCase);
+            if (patchExe)
+                ByteWriter.BinFileReplace(exeFile, oldName, newName + "\0", 0, 0, ignoreCase);
         }
 
         int PatchComp(string fromComp, string toComp, int clubCompStartPos = 0, int exeStartPos = 0x5d9590)

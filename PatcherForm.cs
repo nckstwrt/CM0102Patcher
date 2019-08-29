@@ -91,6 +91,7 @@ namespace CM0102Patcher
             }
         }
 
+        private int yearExeSyncDecrement = 0;
         private void buttonApply_Click(object sender, EventArgs e)
         {
             try
@@ -169,8 +170,9 @@ namespace CM0102Patcher
                                 return;
                             int yearIncrement = (((int)numericGameStartYear.Value) - currentYear);
 
-                            // yearIncrement--; When using 2018 data, to make it 2019 dates
-
+                            // e.g. When using 2018 data, to make it 2019 birth dates, etc
+                            yearIncrement -= yearExeSyncDecrement;
+                            
                             yearChanger.ApplyYearChangeToExe(labelFilename.Text, (int)numericGameStartYear.Value);
                             yearChanger.UpdateStaff(indexFile, staffFile, yearIncrement);
                             yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
@@ -321,6 +323,19 @@ namespace CM0102Patcher
                 {
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["changeregistrylocation"]);
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["memorycheckfix"]);
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["removemutexcheck"]);
+                }
+                if (checkBoxSwapSKoreaForChina.Checked)
+                {
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["chinapatch"]);
+                    namePatcher.PatchStaffAward("South Korean Best 11 Of The Year", "Chinese Super League Best XI", true, true);
+                    namePatcher.PatchStaffAward("South Korean Most Assisted Player Of The Year", "Chinese Super League Top Assistor", true, true);
+                    namePatcher.PatchStaffAward("South Korean Top Goal Scorer Of The Year", "Chinese Super League Top Scorer", true, true);
+                    namePatcher.PatchStaffAward("South Korean Young Player Of The Year", "Super League Young Player Of the Year", true, true);
+                    namePatcher.PatchStaffAward("South Korean Manager Of The Year", "Super League Manager Of the Year", true, true);
+                    namePatcher.PatchStaffAward("South Korean Player Of The Month", "Super League Player Of the Month", true, true);
+                    namePatcher.PatchStaffAward("South Korean Player Of The Year", "Super League Player Of The Year", true, true);
+                    namePatcher.PatchComp("Chinese First Division A", "Chinese Super League", "First Division A", "Super League", "CSL");
                 }
 
                 // NOCD Crack
@@ -388,7 +403,7 @@ namespace CM0102Patcher
                         var yearChanger = new YearChanger();
                         var currentYear = yearChanger.GetCurrentExeYear(labelFilename.Text, 0x0001009F);
                         yearChanger.ApplyYearChangeTo0001Exe(labelFilename.Text, (int)numericGameStartYear.Value);
-                                                
+
                         var dir = Path.GetDirectoryName(labelFilename.Text);
                         var dataDir = Path.Combine(dir, "Data");
                         var staffFile = Path.Combine(dataDir, "staff.dat");
@@ -430,6 +445,21 @@ namespace CM0102Patcher
                 {
                     var nocd = new NoCDPatch();
                     nocd.PatchEXEFile0001FixV2(labelFilename.Text);
+                }
+                if (e.KeyChar == (char)4 && checkBoxRemoveCDChecks.Visible) // D
+                {
+                    var yearChanger = new YearChanger();
+                    var dir = Path.GetDirectoryName(labelFilename.Text);
+                    var dataDir = Path.Combine(dir, "Data");
+                    var staffFile = Path.Combine(dataDir, "staff.dat");
+                    var indexFile = Path.Combine(dataDir, "index.dat");
+                    yearChanger.UpdateStaff(indexFile, staffFile, 17);
+                    MessageBox.Show("staff.dat updated");
+                }
+                if (e.KeyChar == (char)31 && checkBoxRemoveCDChecks.Visible) // -
+                {
+                    yearExeSyncDecrement = 1;
+                    MessageBox.Show("Year Exe vs Data Sync Decrement Set to 1");
                 }
             }
         }
