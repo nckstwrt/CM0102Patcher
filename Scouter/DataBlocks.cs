@@ -268,7 +268,8 @@ namespace CM0102Scout
     {
         public static string GetName(byte[] block)
         {
-            return Encoding.ASCII.GetString(block, 8, 260).TrimEnd('\0');
+            int idx = Array.IndexOf(block, (byte)0, 8);
+            return Encoding.ASCII.GetString(block, 8, idx - 8);
         }
 
         public static int GetPosition(byte[] block)

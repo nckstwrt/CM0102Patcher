@@ -219,22 +219,23 @@ namespace CM0102Patcher.Scouter
             //Center side: checkBox5
             //Right side: checkBox6
             string sideAndOr = "AND ("; //if more than one side checked it appends 'OR' instead of 'AND (', and we use parenthesis because AND preceeds OR
+            // Nick: Changing this to an AND (think CMScout works like this)
             if (checkBoxLeftSided.Checked)
             {
                 RowFilter += string.Format(sideAndOr + " [{0}] LIKE '%{1}%' ", positionTitle, "L");
-                sideAndOr = "OR";
+                sideAndOr = "AND";
             }
             if (checkBoxCentralSided.Checked)
             {
                 RowFilter += string.Format(sideAndOr + " [{0}] LIKE '%{1}%' ", positionTitle, "C");
-                sideAndOr = "OR";
+                sideAndOr = "AND";
             }
             if (checkBoxRightSided.Checked)
             {
                 RowFilter += string.Format(sideAndOr + " [{0}] LIKE '%{1}%' ", positionTitle, "R");
-                sideAndOr = "OR";
+                sideAndOr = "AND";
             }
-            if (sideAndOr.Equals("OR"))
+            if (sideAndOr.Equals("AND"))
             {
                 //this means at least one side checkbox was checked, so we close parenthesis:
                 RowFilter += string.Format(") ");
