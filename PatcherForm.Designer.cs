@@ -53,6 +53,7 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxSwapSKoreaForChina = new System.Windows.Forms.CheckBox();
             this.comboBoxResolution = new System.Windows.Forms.ComboBox();
             this.checkBoxMakeExecutablePortable = new System.Windows.Forms.CheckBox();
             this.checkBoxRestrictTactics = new System.Windows.Forms.CheckBox();
@@ -71,7 +72,6 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonRestore = new System.Windows.Forms.Button();
             this.buttonAbout = new System.Windows.Forms.Button();
-            this.checkBoxSwapSKoreaForChina = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -382,6 +382,19 @@
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
             // 
+            // checkBoxSwapSKoreaForChina
+            // 
+            this.checkBoxSwapSKoreaForChina.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxSwapSKoreaForChina.AutoSize = true;
+            this.checkBoxSwapSKoreaForChina.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxSwapSKoreaForChina.Location = new System.Drawing.Point(7, 300);
+            this.checkBoxSwapSKoreaForChina.Name = "checkBoxSwapSKoreaForChina";
+            this.checkBoxSwapSKoreaForChina.Size = new System.Drawing.Size(167, 20);
+            this.checkBoxSwapSKoreaForChina.TabIndex = 36;
+            this.checkBoxSwapSKoreaForChina.Text = "Swap S.Korea for China";
+            this.toolTips.SetToolTip(this.checkBoxSwapSKoreaForChina, "Makes China a selectable and playable league rather than South Korea");
+            this.checkBoxSwapSKoreaForChina.UseVisualStyleBackColor = true;
+            // 
             // comboBoxResolution
             // 
             this.comboBoxResolution.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -605,19 +618,6 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
-            // checkBoxSwapSKoreaForChina
-            // 
-            this.checkBoxSwapSKoreaForChina.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
-            this.checkBoxSwapSKoreaForChina.AutoSize = true;
-            this.checkBoxSwapSKoreaForChina.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxSwapSKoreaForChina.Location = new System.Drawing.Point(7, 300);
-            this.checkBoxSwapSKoreaForChina.Name = "checkBoxSwapSKoreaForChina";
-            this.checkBoxSwapSKoreaForChina.Size = new System.Drawing.Size(167, 20);
-            this.checkBoxSwapSKoreaForChina.TabIndex = 36;
-            this.checkBoxSwapSKoreaForChina.Text = "Swap S.Korea for China";
-            this.toolTips.SetToolTip(this.checkBoxSwapSKoreaForChina, "Makes China a selectable and playable league rather than South Korea");
-            this.checkBoxSwapSKoreaForChina.UseVisualStyleBackColor = true;
-            // 
             // PatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -654,7 +654,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v1.20";
+            this.Text = "Nick\'s CM0102Patcher v1.21";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();

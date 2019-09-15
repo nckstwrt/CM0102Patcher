@@ -41,7 +41,7 @@ namespace CM0102Patcher.Scouter
                 comboBoxPresets.Items.Add(new ColumnPreset("Midfielders (DM)", true, "Position", "Determination", "Agility", "Balance", "Heading", "Influence", "Creativity", "Pace", "Strength", "Stamina", "Positioning", "Technique", "Marking", "Jumping", "Work Rate", "Flair" ));
                 comboBoxPresets.Items.Add(new ColumnPreset("Midfielders (AM)", true, "Position", "Determination", "Acceleration", "Creativity", "Passing", "Crossing", "Dribbling", "Heading", "Pace", "Strength", "Stamina"));
                 comboBoxPresets.Items.Add(new ColumnPreset("Attackers", true, "Position", "Determination", "Acceleration", "Aggression", "Balance", "Bravery", "Off The Ball", "Finishing", "Jumping", "Pace", "Flair", "Stamina", "Strength", "Technique", "Scouter Rating"));
-                comboBoxPresets.SelectedIndex = 0;
+                //comboBoxPresets.SelectedIndex = 0;
             }
         }
 
@@ -144,8 +144,8 @@ namespace CM0102Patcher.Scouter
                         comboBoxPresets.Items.Clear();
                         foreach (var preset in presets)
                             comboBoxPresets.Items.Add(preset);
-                        if (comboBoxPresets.Items.Count > 0)
-                            comboBoxPresets.SelectedIndex = 0;
+                        //if (comboBoxPresets.Items.Count > 0)
+                        //    comboBoxPresets.SelectedIndex = 0;
                     }
                 }
             }
