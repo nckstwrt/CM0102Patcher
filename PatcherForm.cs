@@ -236,7 +236,7 @@ namespace CM0102Patcher
 
                     if (Directory.Exists(picturesDir))
                     {
-                        var yesNo = MessageBox.Show("Do you wish to convert your CM0102 Pictures directory to 1280x800 too?\r\n\r\nIf no, please turn off Background Changes in CM0102's Options else pictures will not appear correctly.\r\n\r\nIf yes, this takes a few moments.", "CM0102Patcher - Resolution Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        var yesNo = MessageBox.Show(string.Format("Do you wish to convert your CM0102 Pictures directory to {0}x{1} too?\r\n\r\nIf no, please turn off Background Changes in CM0102's Options else pictures will not appear correctly.\r\n\r\nIf yes, this takes a few moments.", newWidth, newHeight), "CM0102Patcher - Resolution Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                         if (yesNo == DialogResult.Yes)
                         {
                             var pf = new PictureConvertProgressForm();
