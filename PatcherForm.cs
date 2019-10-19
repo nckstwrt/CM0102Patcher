@@ -456,6 +456,12 @@ namespace CM0102Patcher
                     yearChanger.UpdateStaff(indexFile, staffFile, 17);
                     MessageBox.Show("staff.dat updated");
                 }
+                if (e.KeyChar == (char)5 && checkBoxRemoveCDChecks.Visible) // E
+                {
+                    var patcher = new Patcher();
+                    patcher.CurrencyInflationChanger0001(labelFilename.Text, (double)numericCurrencyInflation.Value);
+                    MessageBox.Show("CM0001 EXE Updated with new Inflation Multiplier!");
+                }
                 if (e.KeyChar == (char)31 && checkBoxRemoveCDChecks.Visible) // -
                 {
                     yearExeSyncDecrement = 1;

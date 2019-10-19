@@ -162,6 +162,26 @@ namespace CM0102Patcher
             ApplyPatch(fileName, new HexPatch[] { patch, jmpPatch });
         }
 
+        public void CurrencyInflationChanger0001(string fileName, double multiplier)
+        {
+            using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                using (var br = new BinaryReader(file))
+                {
+                    // Write Multiplier
+                    using (var bw = new BinaryWriter(file))
+                    {
+                        file.Seek(0x4e6a2a, SeekOrigin.Begin);
+                        bw.Write(multiplier);
+                    }
+                }
+            }
+
+            var patch = new HexPatch(0x4e6a00, "FF74240468146A8E005589E583E4F8E932B2B4FFDD052A6A8E00DC0D7055A300DD1D7055A30083C404C3");
+            var jmpPatch = new HexPatch(0x031c40, "E9BB4D4B0090");
+            ApplyPatch(fileName, new HexPatch[] { patch, jmpPatch });
+        }
+
         public void SpeedHack(string fileName, short speed)
         {
             using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
