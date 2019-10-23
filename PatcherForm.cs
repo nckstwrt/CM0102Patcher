@@ -261,12 +261,12 @@ namespace CM0102Patcher
                                             if (RGNConverter.GetImageSize(picFile, out Width, out Height))
                                             {
                                                 if (Width == 800 && Height == 600)
-                                                {
-                                                    RGNConverter.RGN2RGN(picFile, picFile + ".tmp", menuWidth, newHeight, 0, 35, 0, 100 - 35);
-                                                    File.SetAttributes(picFile, FileAttributes.Normal);
-                                                    File.Delete(picFile);
-                                                    File.Move(picFile + ".tmp", picFile);
-                                                }
+                                                    RGNConverter.RGN2RGN(picFile, picFile + ".tmp", newWidth, newHeight, 0, 35, 0, 100 - 35);
+                                                else
+                                                    RGNConverter.RGN2RGN(picFile, picFile + ".tmp", newWidth, newHeight);
+                                                File.SetAttributes(picFile, FileAttributes.Normal);
+                                                File.Delete(picFile);
+                                                File.Move(picFile + ".tmp", picFile);
                                             }
                                         }
                                     }
