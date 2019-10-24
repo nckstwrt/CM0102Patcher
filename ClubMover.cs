@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Windows.Forms;
 
 namespace CM0102Patcher
 {
@@ -87,7 +88,7 @@ namespace CM0102Patcher
                 "Kettering Town",
                 "Stourbridge",
                 "King's Lynn Town",
-                "Stratford Town",
+                "Stratford Town FC",
                 "Alvechurch FC",
                 "AFC Rushden & Diamonds",
                 "Biggleswade Town",
@@ -116,6 +117,7 @@ namespace CM0102Patcher
                 if (southernClub == null)
                 {
                     allTeamsExist = false;
+                    MessageBox.Show(string.Format("Team {0} does not exist! So can create Southern Premier Central League!", southernTeam), "League Creation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
                 }
             }
