@@ -66,11 +66,48 @@ namespace CM0102Patcher
                 if (DateTime.Now.Month < 7)
                     currentYear--;
                 numericGameStartYear.Value = currentYear;
+
+                TapaniDetection();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void TapaniDetection()
+        {
+            try
+            {
+                var windowText = " - (TAPANI EXE DETECTED)";
+                var exeFile = labelFilename.Text;
+                // Use the pattern finder in the NoCD patcher
+                bool isTapani = false;
+                NoCDPatch.FindPattern(exeFile, Encoding.ASCII.GetBytes("Tapani v"), (file, br, bw, offset) => { isTapani = true; });
+                this.Text = this.Text.Replace(windowText, "");
+                if (isTapani)
+                {
+                    ResetControls(this);
+                    this.Text += windowText;
+                }
+                checkBoxChangeStartYear.Enabled = !isTapani;
+                checkBoxIdleSensitivity.Enabled = !isTapani;
+                checkBoxCDRemoval.Enabled = !isTapani;
+                checkBoxDisableSplashScreen.Enabled = !isTapani;
+                checkBox7Subs.Enabled = !isTapani;
+                checkBoxAllowCloseWindow.Enabled = !isTapani;
+                checkBoxShowStarPlayers.Enabled = !isTapani;
+                checkBoxRegenFixes.Enabled = !isTapani;
+                checkBoxJobsAbroadBoost.Enabled = !isTapani;
+                checkBoxRemove3NonEULimit.Enabled = !isTapani;
+                checkBoxReplaceWelshPremier.Enabled = !isTapani;
+                checkBoxNewRegenCode.Enabled = !isTapani;
+                checkBoxManageAnyTeam.Enabled = !isTapani;
+                checkBoxUpdateNames.Enabled = !isTapani;
+                checkBoxSwapSKoreaForChina.Enabled = !isTapani;
+                checkBoxChangeStartYear_CheckedChanged(null, null);
+            }
+            catch { }
         }
 
         private void buttonBrowse_Click(object sender, EventArgs e)
@@ -88,6 +125,7 @@ namespace CM0102Patcher
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 labelFilename.Text = ofd.FileName;
+                TapaniDetection();
             }
         }
 
@@ -376,6 +414,8 @@ namespace CM0102Patcher
                 if (control is GroupBox || control is TabPage || control is TabControl)
                     ResetControls(control as Control);
             }
+            numericCurrencyInflation.Value = 0;
+            comboBoxGameSpeed.SelectedIndex = 0;
         }
 
         private void PatcherForm_KeyPress(object sender, KeyPressEventArgs e)
@@ -391,8 +431,6 @@ namespace CM0102Patcher
                 if (e.KeyChar == (char)14) // N - Blank out all fields
                 {
                     ResetControls(this);
-                    numericCurrencyInflation.Value = 0;
-                    comboBoxGameSpeed.SelectedIndex = 0;
                     e.Handled = true;
                 }
                 if (e.KeyChar == (char)1 && checkBoxRemoveCDChecks.Visible) // A

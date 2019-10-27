@@ -10,7 +10,7 @@ namespace CM0102Patcher
     {
         public byte[] pattern = new byte[] { 0x75, 0x00, 0x6a, 0x65, 0x6a, 0x78, 0x6a, 0x65, 0x6a, 0x2e, 0x6a, 0x00, 0x6a, 0x30 };
 
-        int FindPattern(string fileName, byte[] pattern, Action<FileStream, BinaryReader, BinaryWriter, int> func)
+        public static int FindPattern(string fileName, byte[] pattern, Action<FileStream, BinaryReader, BinaryWriter, int> func)
         {
             int patched = 0;
             using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
