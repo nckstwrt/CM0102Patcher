@@ -106,7 +106,7 @@ namespace CM0102Patcher
         public static int WriteToFile(string file, int pos, string str, int padTo = 0)
         {
             File.SetAttributes(file, FileAttributes.Normal);
-            using (var fs = File.Open(file, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
+            using (var fs = File.Open(file, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
                 using (var bw = new BinaryWriter(fs))
                 {
@@ -118,7 +118,7 @@ namespace CM0102Patcher
         public static int WriteToFile(string file, int pos, byte[] bytes)
         {
             File.SetAttributes(file, FileAttributes.Normal);
-            using (var fs = File.Open(file, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
+            using (var fs = File.Open(file, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
                 using (var bw = new BinaryWriter(fs))
                 {

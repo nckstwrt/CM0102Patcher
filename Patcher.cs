@@ -67,7 +67,7 @@ namespace CM0102Patcher
 
         public IEnumerable<HexPatch> LoadPatchFile(string patchFile)
         {
-            using (var fs = File.Open(patchFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var fs = File.Open(patchFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
                 return LoadPatchFile(fs);
             }
