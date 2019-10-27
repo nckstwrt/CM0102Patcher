@@ -84,6 +84,8 @@ namespace CM0102Patcher
                 // Use the pattern finder in the NoCD patcher
                 bool isTapani = false;
                 NoCDPatch.FindPattern(exeFile, Encoding.ASCII.GetBytes("Tapani v"), (file, br, bw, offset) => { isTapani = true; });
+                if (!isTapani)
+                    NoCDPatch.FindPattern(exeFile, Encoding.ASCII.GetBytes("TapaniPatch"), (file, br, bw, offset) => { isTapani = true; });
                 this.Text = this.Text.Replace(windowText, "");
                 if (isTapani)
                 {
