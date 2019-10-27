@@ -196,6 +196,8 @@ namespace CM0102Patcher
                         var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
                         var staffHistoryFile = Path.Combine(dataDir, "staff_history.dat");
                         var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
+
+                        // Old Version
                         try
                         {
                             YearChanger yearChanger = new YearChanger();
@@ -210,6 +212,7 @@ namespace CM0102Patcher
                                 var yesNo = MessageBox.Show("The Start Year Changer updates staff.dat and other files in the Data directory with the correct years as well as the cm0102.exe. Are you happy to proceed?", "CM0102Patcher - Year Changer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                                 if (yesNo == DialogResult.No)
                                     return;
+
                                 int yearIncrement = (((int)numericGameStartYear.Value) - currentYear);
 
                                 // e.g. When using 2018 data, to make it 2019 birth dates, etc
@@ -231,6 +234,17 @@ namespace CM0102Patcher
                             ExceptionMsgBox.Show(ex);
                             return;
                         }
+                        /*
+                        // New EXE Version
+                        YearChanger yearChanger = new YearChanger();
+                        var currentYear = yearChanger.GetCurrentExeYear(labelFilename.Text);
+                        if (currentYear != (int)numericGameStartYear.Value)
+                        {
+                            int yearIncrement = (((int)numericGameStartYear.Value) - currentYear);
+                            yearChanger.ApplyYearChangeToExe(labelFilename.Text, (int)numericGameStartYear.Value);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatch"]);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatchjumps"]);
+                        }*/
                     }
 
                     // Patches
