@@ -1,4 +1,4 @@
-# CM0102Patcher v1.21
+# CM0102Patcher v1.22
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,11 +8,11 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/NnUCPcb.png)
+![alt text](https://i.imgur.com/YLiQxBB.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
-![alt text](https://i.imgur.com/AW5dASG.png)
+![alt text](https://i.imgur.com/QtmWs5O.png)
 
 An unfinished scouter, based on CM Scout, but allows you to view and sort by the "intrinsic" skills value (can load compressed and uncompressed saves)
 
@@ -27,6 +27,11 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.22:
+* Option in Tools to remove Stadium Expansion limits
+* Misc patches have Saturn v8 options and points deduction patch (Experts Only!)
+* Tapani exe detection to make usage more foolproof for Saturn exes
 
 v1.21:
 * Resolution patching fixes
