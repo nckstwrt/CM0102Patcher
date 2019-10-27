@@ -65,7 +65,7 @@ namespace CM0102Patcher
             {
                 // Check if 0001 (could be the origial with more checks
                 bool is0001 = false;
-                FindPattern(exeFile, Encoding.ASCII.GetBytes("KPWN.AFP"), (file, br, bw, offset) => { is0001 = true; });
+                FindPattern(exeFile, Encoding.ASCII.GetBytes("CM00/01 CD"), (file, br, bw, offset) => { is0001 = true; });
                 if (is0001)
                 {
                     string[] files = new string[] { @"d:\KPWN.AFP", @"d:\SPBB.AFP", @"d:\PWQE.AFP", @"d:\EVWF.AFP" };
