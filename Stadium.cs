@@ -40,7 +40,7 @@ namespace CM0102Patcher
                             bw.Write((int)0);
                             if (file.Position + LENGTH > fileLength)
                                 break;
-                            file.Seek(LENGTH, SeekOrigin.Current);
+                            file.Seek(LENGTH-4, SeekOrigin.Current);
                         }
                     }
                 }
