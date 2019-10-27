@@ -118,7 +118,7 @@ namespace CM0102Patcher
                         ofd.InitialDirectory = Path.Combine(path, "Data");
                 }
                 catch { }
-                        
+
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
                     var yesNo = MessageBox.Show("This will make all countries EEC members removing the need for work permits. Continue?", "EEC Patcher", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -162,6 +162,33 @@ namespace CM0102Patcher
         {
             MessageBox.Show("This will provide a list of ALL current miscellaneous patches.\r\nDO NOT APPLY ANY OF THESE UNLESS YOU KNOW WHAT YOU ARE DOING!!\r\nYou will most likely break your exe by applying these!!\r\nBest to do a Save so you can restore afterwards!!\r\n\r\nDO NOT ASK FOR SUPPORT ON APPLYING THESE. YOU ARE ON YOUR OWN ON THIS!! :)", "WARNING!!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             new MiscPatches(exeFile).ShowDialog();
+        }
+
+        private void buttonRemoveStadiumLimits_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var ofd = new OpenFileDialog();
+                ofd.Filter = "CM0102 stadium.dat file|stadium.dat|All files (*.*)|*.*";
+                ofd.Title = "Select a CM0102 stadium.dat file";
+                try
+                {
+                    var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
+                    if (!string.IsNullOrEmpty(path))
+                        ofd.InitialDirectory = Path.Combine(path, "Data");
+                }
+                catch { }
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    Stadium.RemoveExpansionLimits(ofd.FileName);
+                    MessageBox.Show("Stadium Expansion Limits Removed!", "Stadium Expansion Limits", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionMsgBox.Show(ex);
+            }
         }
     }
 }

@@ -36,6 +36,7 @@
             this.buttonSaveScouter = new System.Windows.Forms.Button();
             this.buttonRGNImageConverter = new System.Windows.Forms.Button();
             this.buttonApplyMiscPatch = new System.Windows.Forms.Button();
+            this.buttonRemoveStadiumLimits = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonApplyPatchfile
@@ -43,7 +44,7 @@
             this.buttonApplyPatchfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonApplyPatchfile.Location = new System.Drawing.Point(12, 37);
             this.buttonApplyPatchfile.Name = "buttonApplyPatchfile";
-            this.buttonApplyPatchfile.Size = new System.Drawing.Size(165, 24);
+            this.buttonApplyPatchfile.Size = new System.Drawing.Size(166, 24);
             this.buttonApplyPatchfile.TabIndex = 0;
             this.buttonApplyPatchfile.Text = "Apply Patchfile...";
             this.buttonApplyPatchfile.UseVisualStyleBackColor = true;
@@ -54,7 +55,7 @@
             this.buttonEECPatcher.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonEECPatcher.Location = new System.Drawing.Point(12, 66);
             this.buttonEECPatcher.Name = "buttonEECPatcher";
-            this.buttonEECPatcher.Size = new System.Drawing.Size(165, 24);
+            this.buttonEECPatcher.Size = new System.Drawing.Size(166, 24);
             this.buttonEECPatcher.TabIndex = 1;
             this.buttonEECPatcher.Text = "EEC Patcher...";
             this.buttonEECPatcher.UseVisualStyleBackColor = true;
@@ -63,9 +64,9 @@
             // buttonOffsetCalculator
             // 
             this.buttonOffsetCalculator.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonOffsetCalculator.Location = new System.Drawing.Point(12, 124);
+            this.buttonOffsetCalculator.Location = new System.Drawing.Point(12, 153);
             this.buttonOffsetCalculator.Name = "buttonOffsetCalculator";
-            this.buttonOffsetCalculator.Size = new System.Drawing.Size(165, 24);
+            this.buttonOffsetCalculator.Size = new System.Drawing.Size(166, 24);
             this.buttonOffsetCalculator.TabIndex = 2;
             this.buttonOffsetCalculator.Text = "Offset Calculator...";
             this.buttonOffsetCalculator.UseVisualStyleBackColor = true;
@@ -76,9 +77,9 @@
             this.buttonRefereePatcher.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonRefereePatcher.Location = new System.Drawing.Point(12, 95);
             this.buttonRefereePatcher.Name = "buttonRefereePatcher";
-            this.buttonRefereePatcher.Size = new System.Drawing.Size(165, 24);
+            this.buttonRefereePatcher.Size = new System.Drawing.Size(166, 24);
             this.buttonRefereePatcher.TabIndex = 3;
-            this.buttonRefereePatcher.Text = "Referee Patcher..";
+            this.buttonRefereePatcher.Text = "Referee Patcher...";
             this.buttonRefereePatcher.UseVisualStyleBackColor = true;
             this.buttonRefereePatcher.Click += new System.EventHandler(this.buttonRefereePatcher_Click);
             // 
@@ -87,7 +88,7 @@
             this.buttonSaveScouter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonSaveScouter.Location = new System.Drawing.Point(12, 8);
             this.buttonSaveScouter.Name = "buttonSaveScouter";
-            this.buttonSaveScouter.Size = new System.Drawing.Size(165, 24);
+            this.buttonSaveScouter.Size = new System.Drawing.Size(166, 24);
             this.buttonSaveScouter.TabIndex = 4;
             this.buttonSaveScouter.Text = "Save Scouter...";
             this.buttonSaveScouter.UseVisualStyleBackColor = true;
@@ -96,9 +97,9 @@
             // buttonRGNImageConverter
             // 
             this.buttonRGNImageConverter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonRGNImageConverter.Location = new System.Drawing.Point(12, 153);
+            this.buttonRGNImageConverter.Location = new System.Drawing.Point(12, 182);
             this.buttonRGNImageConverter.Name = "buttonRGNImageConverter";
-            this.buttonRGNImageConverter.Size = new System.Drawing.Size(165, 24);
+            this.buttonRGNImageConverter.Size = new System.Drawing.Size(166, 24);
             this.buttonRGNImageConverter.TabIndex = 5;
             this.buttonRGNImageConverter.Text = "RGN Image Converter...";
             this.buttonRGNImageConverter.UseVisualStyleBackColor = true;
@@ -107,19 +108,31 @@
             // buttonApplyMiscPatch
             // 
             this.buttonApplyMiscPatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonApplyMiscPatch.Location = new System.Drawing.Point(12, 182);
+            this.buttonApplyMiscPatch.Location = new System.Drawing.Point(12, 211);
             this.buttonApplyMiscPatch.Name = "buttonApplyMiscPatch";
-            this.buttonApplyMiscPatch.Size = new System.Drawing.Size(165, 24);
+            this.buttonApplyMiscPatch.Size = new System.Drawing.Size(166, 24);
             this.buttonApplyMiscPatch.TabIndex = 6;
             this.buttonApplyMiscPatch.Text = "Apply a Misc. Patch...";
             this.buttonApplyMiscPatch.UseVisualStyleBackColor = true;
             this.buttonApplyMiscPatch.Click += new System.EventHandler(this.buttonApplyMiscPatch_Click);
             // 
+            // buttonRemoveStadiumLimits
+            // 
+            this.buttonRemoveStadiumLimits.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonRemoveStadiumLimits.Location = new System.Drawing.Point(12, 124);
+            this.buttonRemoveStadiumLimits.Name = "buttonRemoveStadiumLimits";
+            this.buttonRemoveStadiumLimits.Size = new System.Drawing.Size(166, 24);
+            this.buttonRemoveStadiumLimits.TabIndex = 7;
+            this.buttonRemoveStadiumLimits.Text = "Remove Stadium Limits...";
+            this.buttonRemoveStadiumLimits.UseVisualStyleBackColor = true;
+            this.buttonRemoveStadiumLimits.Click += new System.EventHandler(this.buttonRemoveStadiumLimits_Click);
+            // 
             // Tools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(189, 214);
+            this.ClientSize = new System.Drawing.Size(189, 243);
+            this.Controls.Add(this.buttonRemoveStadiumLimits);
             this.Controls.Add(this.buttonApplyMiscPatch);
             this.Controls.Add(this.buttonRGNImageConverter);
             this.Controls.Add(this.buttonSaveScouter);
@@ -147,5 +160,6 @@
         private System.Windows.Forms.Button buttonSaveScouter;
         private System.Windows.Forms.Button buttonRGNImageConverter;
         private System.Windows.Forms.Button buttonApplyMiscPatch;
+        private System.Windows.Forms.Button buttonRemoveStadiumLimits;
     }
 }
