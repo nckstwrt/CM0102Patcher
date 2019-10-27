@@ -1,4 +1,4 @@
-# CM0102Patcher v1.20
+# CM0102Patcher v1.21
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/8AXk5tz.png)
+![alt text](https://i.imgur.com/NnUCPcb.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,10 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.21:
+* Resolution patching fixes
+* "Page Down" patch in misc patches
 
 v1.20:
 * Fixed issue with Leap Year dates (meaning some DoBs were off by one). Thanks again MrFoo!
