@@ -108,6 +108,13 @@ namespace CM0102Patcher
                 checkBoxUpdateNames.Enabled = !isTapani;
                 checkBoxSwapSKoreaForChina.Enabled = !isTapani;
                 checkBoxChangeStartYear_CheckedChanged(null, null);
+
+                // Do some defaults - as it seems to confuse people without
+                checkBoxEnableColouredAtts.Checked = true;
+                checkBoxDisableUnprotectedContracts.Checked = true;
+                checkBoxHideNonPublicBids.Checked = true;
+                numericCurrencyInflation.Value = 2.5m;
+                comboBoxGameSpeed.SelectedIndex = 4;
             }
             catch { }
         }
