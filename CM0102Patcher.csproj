@@ -55,6 +55,12 @@
     <Compile Include="ByteWriter.cs" />
     <Compile Include="ClubMover.cs" />
     <Compile Include="ExceptionMsgBox.cs" />
+    <Compile Include="FixtureScheduler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FixtureScheduler.Designer.cs">
+      <DependentUpon>FixtureScheduler.cs</DependentUpon>
+    </Compile>
     <Compile Include="ImageConverterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,6 +143,9 @@
     </Compile>
     <Compile Include="YearChanger.cs" />
     <Compile Include="ZipStorer.cs" />
+    <EmbeddedResource Include="FixtureScheduler.resx">
+      <DependentUpon>FixtureScheduler.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ImageConverterForm.resx">
       <DependentUpon>ImageConverterForm.cs</DependentUpon>
     </EmbeddedResource>

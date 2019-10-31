@@ -37,6 +37,7 @@
             this.buttonRGNImageConverter = new System.Windows.Forms.Button();
             this.buttonApplyMiscPatch = new System.Windows.Forms.Button();
             this.buttonRemoveStadiumLimits = new System.Windows.Forms.Button();
+            this.buttonFixtureScheduler = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonApplyPatchfile
@@ -108,7 +109,7 @@
             // buttonApplyMiscPatch
             // 
             this.buttonApplyMiscPatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonApplyMiscPatch.Location = new System.Drawing.Point(12, 211);
+            this.buttonApplyMiscPatch.Location = new System.Drawing.Point(12, 242);
             this.buttonApplyMiscPatch.Name = "buttonApplyMiscPatch";
             this.buttonApplyMiscPatch.Size = new System.Drawing.Size(166, 24);
             this.buttonApplyMiscPatch.TabIndex = 6;
@@ -127,11 +128,23 @@
             this.buttonRemoveStadiumLimits.UseVisualStyleBackColor = true;
             this.buttonRemoveStadiumLimits.Click += new System.EventHandler(this.buttonRemoveStadiumLimits_Click);
             // 
+            // buttonFixtureScheduler
+            // 
+            this.buttonFixtureScheduler.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonFixtureScheduler.Location = new System.Drawing.Point(12, 212);
+            this.buttonFixtureScheduler.Name = "buttonFixtureScheduler";
+            this.buttonFixtureScheduler.Size = new System.Drawing.Size(166, 24);
+            this.buttonFixtureScheduler.TabIndex = 8;
+            this.buttonFixtureScheduler.Text = "Fixture Scheduler...";
+            this.buttonFixtureScheduler.UseVisualStyleBackColor = true;
+            this.buttonFixtureScheduler.Click += new System.EventHandler(this.buttonFixtureScheduler_Click);
+            // 
             // Tools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(189, 243);
+            this.ClientSize = new System.Drawing.Size(189, 273);
+            this.Controls.Add(this.buttonFixtureScheduler);
             this.Controls.Add(this.buttonRemoveStadiumLimits);
             this.Controls.Add(this.buttonApplyMiscPatch);
             this.Controls.Add(this.buttonRGNImageConverter);
@@ -161,5 +174,6 @@
         private System.Windows.Forms.Button buttonRGNImageConverter;
         private System.Windows.Forms.Button buttonApplyMiscPatch;
         private System.Windows.Forms.Button buttonRemoveStadiumLimits;
+        private System.Windows.Forms.Button buttonFixtureScheduler;
     }
 }

@@ -190,5 +190,23 @@ namespace CM0102Patcher
                 ExceptionMsgBox.Show(ex);
             }
         }
+
+        private void buttonFixtureScheduler_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (var fileLock = File.Open(exeFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                {
+                    var yearChanger = new YearChanger();
+                    int currentYear = yearChanger.GetCurrentExeYear(exeFile);
+                    var fixtureScheduler = new FixtureScheduler(exeFile, currentYear);
+                    fixtureScheduler.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionMsgBox.Show(ex);
+            }
+        }
     }
 }
