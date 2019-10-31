@@ -80,31 +80,34 @@ namespace CM0102Patcher
         */
         public void SetFromFile()
         {
-            using (var file = File.Open(exeFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            if (comboBox.SelectedIndex != -1)
             {
-                file.Seek(offset+1, SeekOrigin.Begin);
-                var timeOfDay = file.ReadByte();
-                file.ReadByte();
-                var dayOfWeek = file.ReadByte();
-                // Arg 5 is ignored
-                file.ReadByte();
-                file.ReadByte();
-                file.ReadByte();
-                var monthOfYear = file.ReadByte();
-                file.ReadByte();
-                var dateOfMonth = file.ReadByte();
+                using (var file = File.Open(exeFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                {
+                    file.Seek(offset + 1, SeekOrigin.Begin);
+                    var timeOfDay = file.ReadByte();
+                    file.ReadByte();
+                    var dayOfWeek = file.ReadByte();
+                    // Arg 5 is ignored
+                    file.ReadByte();
+                    file.ReadByte();
+                    file.ReadByte();
+                    var monthOfYear = file.ReadByte();
+                    file.ReadByte();
+                    var dateOfMonth = file.ReadByte();
 
-                // Assume before middle of the year means it's the next year
-                int year = currentYear;
-                if (monthOfYear <= 6)
-                    year++;
-                try
-                {
-                    datePicker.Value = new DateTime(year, monthOfYear + 1, dateOfMonth - 1);
-                    comboBox.SelectedIndex = timeOfDay;
-                }
-                catch 
-                {
+                    // Assume before middle of the year means it's the next year
+                    int year = currentYear;
+                    if (monthOfYear <= 6)
+                        year++;
+                    try
+                    {
+                        datePicker.Value = new DateTime(year, monthOfYear + 1, dateOfMonth - 1);
+                        comboBox.SelectedIndex = timeOfDay;
+                    }
+                    catch
+                    {
+                    }
                 }
             }
         }
