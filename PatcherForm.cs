@@ -527,17 +527,19 @@ namespace CM0102Patcher
                 if (e.KeyChar == (char)6 && checkBoxRemoveCDChecks.Visible) // F
                 {
                     var patcher = new Patcher();
-                    var pp = new ProcessPatch();
-                    if (pp.LoadProcess(labelFilename.Text))
+                    using (var pp = new ProcessPatch())
                     {
-                        var ms = pp.ReadIn();
-                        patcher.ApplyPatch(ms, patcher.patches["changeregistrylocation"]);
-                        patcher.ApplyPatch(ms, patcher.patches["memorycheckfix"]);
-                        patcher.ApplyPatch(ms, patcher.patches["removemutexcheck"]);
-                        patcher.ApplyPatch(ms, patcher.patches["colouredattributes"]);
-                        NoCDPatch.PatchMemoryStream(ms);
-                        pp.Write();
-                        pp.Start();
+                        if (pp.LoadProcess(labelFilename.Text))
+                        {
+                            var ms = pp.ReadIn();
+                            patcher.ApplyPatch(ms, patcher.patches["changeregistrylocation"]);
+                            patcher.ApplyPatch(ms, patcher.patches["memorycheckfix"]);
+                            patcher.ApplyPatch(ms, patcher.patches["removemutexcheck"]);
+                            patcher.ApplyPatch(ms, patcher.patches["colouredattributes"]);
+                            NoCDPatch.PatchMemoryStream(ms);
+                            pp.Write();
+                            pp.Start();
+                        }
                     }
                 }
                 if (e.KeyChar == (char)31 && checkBoxRemoveCDChecks.Visible) // -

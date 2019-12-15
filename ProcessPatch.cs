@@ -7,13 +7,13 @@ using System.Text;
 
 namespace CM0102Patcher
 {
-    public class ProcessPatch
+    public class ProcessPatch : IDisposable
     {
 		Win32.STARTUPINFO si;
 		Win32.PROCESS_INFORMATION pi;
 		int size = 8*1024*1024;//0x00966FFF - 0x400000;
 		byte[] buffer;
-		MemoryStream ms;
+		MemoryStream ms = null;
 
 		public bool LoadProcess(string exeFile)
 		{
@@ -25,7 +25,7 @@ namespace CM0102Patcher
 			return Win32.CreateProcess(exeFile, null, IntPtr.Zero, IntPtr.Zero, false, Win32.ProcessCreationFlags.CREATE_SUSPENDED, IntPtr.Zero, null, ref si, out pi);
 		}
 
-		public MemoryStream ReadIn()//Patch(Patcher.HexPatch patch)
+		public MemoryStream ReadIn()
 		{
 			uint old;
 			buffer = new byte[size];
@@ -46,6 +46,15 @@ namespace CM0102Patcher
 		public void Start()
 		{
 			Win32.ResumeThread(pi.hThread);
+		}
+
+		public void Dispose()
+		{
+			if (ms != null)
+			{
+				ms.Dispose();
+				ms = null;
+			}
 		}
     }
 
