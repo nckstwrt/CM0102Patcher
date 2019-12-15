@@ -100,7 +100,7 @@ namespace CM0102Patcher
                     if ((year % 4) == 3)
                     {
                         bw.Seek(0x1f9c0a, SeekOrigin.Begin);
-                        bw.Write((byte)0xdc);
+                        bw.Write((short)year - 7);
                     }
                 }
             }
