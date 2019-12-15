@@ -88,6 +88,7 @@
     <Compile Include="PresetNameForm.Designer.cs">
       <DependentUpon>PresetNameForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProcessPatch.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="PictureConvertProgressForm.cs">
       <SubType>Form</SubType>

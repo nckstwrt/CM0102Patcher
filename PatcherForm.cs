@@ -404,8 +404,7 @@ namespace CM0102Patcher
                     // NOCD Crack
                     if (checkBoxRemoveCDChecks.Checked)
                     {
-                        NoCDPatch nocd = new NoCDPatch();
-                        var patched = nocd.PatchEXEFile(labelFilename.Text);
+                        var patched = NoCDPatch.PatchEXEFile(labelFilename.Text);
                     }
 
                     MessageBox.Show("Patched Successfully!", "CM0102 Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -507,8 +506,7 @@ namespace CM0102Patcher
                 }
                 if (e.KeyChar == (char)3 && checkBoxRemoveCDChecks.Visible) // C
                 {
-                    var nocd = new NoCDPatch();
-                    nocd.PatchEXEFile0001FixV2(labelFilename.Text);
+                    NoCDPatch.PatchEXEFile0001FixV2(labelFilename.Text);
                 }
                 if (e.KeyChar == (char)4 && checkBoxRemoveCDChecks.Visible) // D
                 {
@@ -525,6 +523,22 @@ namespace CM0102Patcher
                     var patcher = new Patcher();
                     patcher.CurrencyInflationChanger0001(labelFilename.Text, (double)numericCurrencyInflation.Value);
                     MessageBox.Show("CM0001 EXE Updated with new Inflation Multiplier!");
+                }
+                if (e.KeyChar == (char)6 && checkBoxRemoveCDChecks.Visible) // F
+                {
+                    var patcher = new Patcher();
+                    var pp = new ProcessPatch();
+                    if (pp.LoadProcess(labelFilename.Text))
+                    {
+                        var ms = pp.ReadIn();
+                        patcher.ApplyPatch(ms, patcher.patches["changeregistrylocation"]);
+                        patcher.ApplyPatch(ms, patcher.patches["memorycheckfix"]);
+                        patcher.ApplyPatch(ms, patcher.patches["removemutexcheck"]);
+                        patcher.ApplyPatch(ms, patcher.patches["colouredattributes"]);
+                        NoCDPatch.PatchMemoryStream(ms);
+                        pp.Write();
+                        pp.Start();
+                    }
                 }
                 if (e.KeyChar == (char)31 && checkBoxRemoveCDChecks.Visible) // -
                 {

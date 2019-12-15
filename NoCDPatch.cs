@@ -8,49 +8,66 @@ namespace CM0102Patcher
 {
     public class NoCDPatch
     {
-        public byte[] pattern = new byte[] { 0x75, 0x00, 0x6a, 0x65, 0x6a, 0x78, 0x6a, 0x65, 0x6a, 0x2e, 0x6a, 0x00, 0x6a, 0x30 };
+        public static byte[] pattern = new byte[] { 0x75, 0x00, 0x6a, 0x65, 0x6a, 0x78, 0x6a, 0x65, 0x6a, 0x2e, 0x6a, 0x00, 0x6a, 0x30 };
 
-        public static int FindPattern(string fileName, byte[] pattern, Action<FileStream, BinaryReader, BinaryWriter, int> func)
+        public static int FindPattern(string fileName, byte[] pattern, Action<Stream, BinaryReader, BinaryWriter, int> func)
         {
-            int patched = 0;
             using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
-                using (var bw = new BinaryWriter(file))
-                {
-                    using (var br = new BinaryReader(file))
-                    {
-                        int match = 0;
-                        int fileLength = (int)file.Length;
-                        var fileContent = br.ReadBytes(fileLength);
-                        for (int i = 0; i < fileLength; i++)
-                        {
-                            if (pattern[match] == 0)
-                            {
-                                match++;
-                                continue;
-                            }
+                return FindPattern(file, pattern, func);
+            }
+        }
 
-                            if (fileContent[i] == pattern[match])
-                            {
-                                match += 1;
-                                if (match == pattern.Length)
-                                {
-                                    int savedPos = (i - pattern.Length) + 1;
-                                    func(file, br, bw, savedPos);
-                                    patched++;
-                                    match = 0;
-                                }
-                            }
-                            else
-                                match = 0;
+        public static int FindPattern(Stream stream, byte[] pattern, Action<Stream, BinaryReader, BinaryWriter, int> func)
+        {
+            int patched = 0;
+            using (var bw = new BinaryWriter(stream))
+            {
+                using (var br = new BinaryReader(stream))
+                {
+                    int match = 0;
+                    int fileLength = (int)stream.Length;
+                    var fileContent = br.ReadBytes(fileLength);
+                    for (int i = 0; i < fileLength; i++)
+                    {
+                        if (pattern[match] == 0)
+                        {
+                            match++;
+                            continue;
                         }
+
+                        if (fileContent[i] == pattern[match])
+                        {
+                            match += 1;
+                            if (match == pattern.Length)
+                            {
+                                int savedPos = (i - pattern.Length) + 1;
+                                func(stream, br, bw, savedPos);
+                                patched++;
+                                match = 0;
+                            }
+                        }
+                        else
+                            match = 0;
                     }
                 }
             }
             return patched;
         }
 
-        public int PatchEXEFile(string exeFile)
+        public static void PatchMemoryStream(MemoryStream stream)
+        {
+            stream.Seek(0, SeekOrigin.Begin);
+            FindPattern(stream, pattern, (file, br, bw, offset) =>
+            {
+                file.Seek(offset, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x90, 0x90 });
+                file.Seek(17, SeekOrigin.Current);
+                bw.Write(new byte[] { 0x00, 0x6a, 0x2a });
+            });
+        }
+
+        public static int PatchEXEFile(string exeFile)
         {
             int patched = FindPattern(exeFile, pattern, (file, br, bw, offset) =>
             {
@@ -71,7 +88,7 @@ namespace CM0102Patcher
                     string[] files = new string[] { @"d:\KPWN.AFP", @"d:\SPBB.AFP", @"d:\PWQE.AFP", @"d:\EVWF.AFP" };
                     byte[] bytePattern = new byte[] { 0x68, 0x00, 0x00, 0x00, 0x00, 0xE8 };
 
-                    Action<FileStream, BinaryReader, BinaryWriter, int> patchFunc = (file, br, bw, offset) =>
+                    Action<Stream, BinaryReader, BinaryWriter, int> patchFunc = (file, br, bw, offset) =>
                     {
                         file.Seek(offset + 5, SeekOrigin.Begin);
                         for (int i = 0; i < 0x50; i++)
@@ -92,7 +109,7 @@ namespace CM0102Patcher
                         }
                     };
 
-                    Action<FileStream, BinaryReader, BinaryWriter, int> patternSearchFunc = (file, br, bw, offset) =>
+                    Action<Stream, BinaryReader, BinaryWriter, int> patternSearchFunc = (file, br, bw, offset) =>
                     {
                         BitConverter.GetBytes(offset + 0x400000).ToArray().CopyTo(bytePattern, 1);
                     };
@@ -125,7 +142,7 @@ namespace CM0102Patcher
             return patched;
         }
 
-        public void PatchEXEFile0001Fix(string exeFile)
+        public static void PatchEXEFile0001Fix(string exeFile)
         {
             string[] files = new string[] { @"d:\KPWN.AFP", @"d:\SPBB.AFP", @"d:\PWQE.AFP", @"d:\EVWF.AFP" };
             foreach (var file in files)
@@ -139,7 +156,7 @@ namespace CM0102Patcher
             }
         }
 
-        public void PatchEXEFile0001FixV2(string exeFile)
+        public static void PatchEXEFile0001FixV2(string exeFile)
         {
             string[] files = new string[] { @"d:\KPWN.AFP", @"d:\PWQE.AFP", @"d:\EVWF.AFP" };
             byte[] SPBBBytePattern = new byte[] { 0x68, 0x00, 0x00, 0x00, 0x00 };

@@ -124,6 +124,16 @@ namespace CM0102Patcher
             }
         }
 
+        public void ApplyPatch(MemoryStream stream, IEnumerable<HexPatch> patch)
+        {
+            foreach (var hexpatch in patch)
+            {
+                var bytes = HexStringToBytes(hexpatch.hex);
+                stream.Seek(hexpatch.offset, SeekOrigin.Begin);
+                stream.Write(bytes, 0, bytes.Length);
+            }
+        }
+
         public void ApplyPatch(string fileName, int pos, string hexBytes)
         {
             using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
