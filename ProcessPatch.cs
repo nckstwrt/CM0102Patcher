@@ -27,6 +27,18 @@ namespace CM0102Patcher
 
 		public MemoryStream ReadIn()
 		{
+			// Read size to be read
+			uint addr = 0x400000;
+			for (;addr <= 0x7fffffff;)
+			{
+				Win32.MEMORY_BASIC_INFORMATION mbi;
+				int result = Win32.VirtualQueryEx(pi.hProcess, (IntPtr)addr, out mbi, (uint)Marshal.SizeOf(typeof(Win32.MEMORY_BASIC_INFORMATION)));
+				if (((uint)mbi.AllocationBase) == 0 || mbi.Type == 0)
+					break;
+				addr += (uint)mbi.RegionSize;
+			}
+			size = (int)(addr - 0x400000);
+
 			uint old;
 			buffer = new byte[size];
 			uint bytesRead;
@@ -148,6 +160,18 @@ namespace CM0102Patcher
 			DIRECT_IMPERSONATION = (0x0200)
 		}
 
+		[StructLayout(LayoutKind.Sequential)]
+		public struct MEMORY_BASIC_INFORMATION
+		{
+			public IntPtr BaseAddress;
+			public IntPtr AllocationBase;
+			public uint AllocationProtect;
+			public IntPtr RegionSize;
+			public uint State;
+			public uint Protect;
+			public uint Type;
+		}
+
 		[DllImport("kernel32.dll", SetLastError = true)]
 		public static extern IntPtr OpenThread(ThreadAccess dwDesiredAccess, bool bInheritHandle,
 			int dwThreadId);
@@ -185,15 +209,20 @@ namespace CM0102Patcher
 		 int processId
 		);
 
-
 		[DllImport("kernel32.dll")]
 		public static extern bool CreateProcess(string lpApplicationName, string lpCommandLine, IntPtr lpProcessAttributes, IntPtr lpThreadAttributes, bool bInheritHandles, ProcessCreationFlags dwCreationFlags, IntPtr lpEnvironment, string lpCurrentDirectory, ref STARTUPINFO lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
+
 		[DllImport("kernel32.dll")]
 		public static extern uint ResumeThread(IntPtr hThread);
+
 		[DllImport("kernel32.dll")]
 		public static extern uint SuspendThread(IntPtr hThread);
+
 		[DllImport("kernel32.dll")]
 		public static extern bool VirtualProtectEx(IntPtr hProcess, IntPtr lpAddress,
 		int dwSize, uint flNewProtect, out uint lpflOldProtect);
+
+		[DllImport("kernel32.dll")]
+		public static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
 	}
 }
