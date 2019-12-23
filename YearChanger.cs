@@ -39,70 +39,74 @@ namespace CM0102Patcher
         {
             using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
-                using (var bw = new BinaryWriter(file))
-                {
-                    foreach (var offset in startYear)
-                    {
-                        bw.Seek(offset, SeekOrigin.Begin);
-                        bw.Write(YearToBytes(year));
-                    }
-                    foreach (var offset in startYearMinus19)
-                    {
-                        bw.Seek(offset, SeekOrigin.Begin);
-                        bw.Write(YearToBytes(year - 19));
-                    }
-                    foreach (var offset in startYearMinus3)
-                    {
-                        bw.Seek(offset, SeekOrigin.Begin);
-                        bw.Write(YearToBytes(year - 3));
-                    }
-                    foreach (var offset in startYearMinus2)
-                    {
-                        bw.Seek(offset, SeekOrigin.Begin);
-                        bw.Write(YearToBytes(year - 2));
-                    }
-                    foreach (var offset in startYearMinus1)
-                    {
-                        bw.Seek(offset, SeekOrigin.Begin);
-                        bw.Write(YearToBytes(year - 1));
-                    }
-                    foreach (var offset in startYearPlus1)
-                    {
-                        bw.Seek(offset, SeekOrigin.Begin);
-                        bw.Write(YearToBytes(year + 1));
-                    }
-                    foreach (var offset in startYearPlus2)
-                    {
-                        bw.Seek(offset, SeekOrigin.Begin);
-                        bw.Write(YearToBytes(year + 2));
-                    }
-                    foreach (var offset in startYearPlus3)
-                    {
-                        bw.Seek(offset, SeekOrigin.Begin);
-                        bw.Write(YearToBytes(year + 3));
-                    }
-                    foreach (var offset in startYearPlus9)
-                    {
-                        bw.Seek(offset, SeekOrigin.Begin);
-                        bw.Write(YearToBytes(year + 9));
-                    }
+                ApplyYearChangeToExe(file, year);
+            }
+        }
 
-                    // Special
-                    bw.Seek(0x18B387, SeekOrigin.Begin);
-                    int mod4year = ((year + 1) - ((year - 1) % 4));
-                    bw.Write(YearToBytes(mod4year));
+        public void ApplyYearChangeToExe(Stream stream, int year)
+        {
+            // In 4.0 and lower, BinaryWriter closes the outer stream. So don't dispose it and let the streams close themselves
+            var bw = new BinaryWriter(stream);
+            foreach (var offset in startYear)
+            {
+                bw.Seek(offset, SeekOrigin.Begin);
+                bw.Write(YearToBytes(year));
+            }
+            foreach (var offset in startYearMinus19)
+            {
+                bw.Seek(offset, SeekOrigin.Begin);
+                bw.Write(YearToBytes(year - 19));
+            }
+            foreach (var offset in startYearMinus3)
+            {
+                bw.Seek(offset, SeekOrigin.Begin);
+                bw.Write(YearToBytes(year - 3));
+            }
+            foreach (var offset in startYearMinus2)
+            {
+                bw.Seek(offset, SeekOrigin.Begin);
+                bw.Write(YearToBytes(year - 2));
+            }
+            foreach (var offset in startYearMinus1)
+            {
+                bw.Seek(offset, SeekOrigin.Begin);
+                bw.Write(YearToBytes(year - 1));
+            }
+            foreach (var offset in startYearPlus1)
+            {
+                bw.Seek(offset, SeekOrigin.Begin);
+                bw.Write(YearToBytes(year + 1));
+            }
+            foreach (var offset in startYearPlus2)
+            {
+                bw.Seek(offset, SeekOrigin.Begin);
+                bw.Write(YearToBytes(year + 2));
+            }
+            foreach (var offset in startYearPlus3)
+            {
+                bw.Seek(offset, SeekOrigin.Begin);
+                bw.Write(YearToBytes(year + 3));
+            }
+            foreach (var offset in startYearPlus9)
+            {
+                bw.Seek(offset, SeekOrigin.Begin);
+                bw.Write(YearToBytes(year + 9));
+            }
 
-                    // Special 2 (the calc for season selection can cause England 18/09 without this)
-                    bw.Seek(0x41e9ca, SeekOrigin.Begin);
-                    bw.Write((byte)0x64);
+            // Special
+            bw.Seek(0x18B387, SeekOrigin.Begin);
+            int mod4year = ((year + 1) - ((year - 1) % 4));
+            bw.Write(YearToBytes(mod4year));
 
-                    // Special 3 - Need to fix Euro for 2019
-                    if ((year % 4) == 3)
-                    {
-                        bw.Seek(0x1f9c0a, SeekOrigin.Begin);
-                        bw.Write((short)year - 7);
-                    }
-                }
+            // Special 2 (the calc for season selection can cause England 18/09 without this)
+            bw.Seek(0x41e9ca, SeekOrigin.Begin);
+            bw.Write((byte)0x64);
+
+            // Special 3 - Need to fix Euro for 2019
+            if ((year % 4) == 3)
+            {
+                bw.Seek(0x1f9c0a, SeekOrigin.Begin);
+                bw.Write((short)year - 7);
             }
         }
 

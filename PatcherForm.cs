@@ -526,9 +526,11 @@ namespace CM0102Patcher
                 }
                 if (e.KeyChar == (char)6 && checkBoxRemoveCDChecks.Visible) // F
                 {
+                    var yearChanger = new YearChanger();
                     var patcher = new Patcher();
                     using (var pp = new ProcessPatch())
                     {
+                        var currentYear = yearChanger.GetCurrentExeYear(labelFilename.Text);
                         if (pp.LoadProcess(labelFilename.Text))
                         {
                             var ms = pp.ReadIn();
@@ -536,6 +538,15 @@ namespace CM0102Patcher
                             patcher.ApplyPatch(ms, patcher.patches["memorycheckfix"]);
                             patcher.ApplyPatch(ms, patcher.patches["removemutexcheck"]);
                             patcher.ApplyPatch(ms, patcher.patches["colouredattributes"]);
+                            patcher.ApplyPatch(ms, patcher.patches["allowclosewindow"]);
+
+                            yearChanger.ApplyYearChangeToExe(ms, (int)numericGameStartYear.Value);
+                            patcher.ApplyPatch(ms, patcher.patches["datecalcpatch"]);
+                            patcher.ApplyPatch(ms, patcher.patches["datecalcpatchjumps"]);
+                            patcher.ApplyPatch(ms, patcher.patches["comphistory_datecalcpatch"]);
+                            ms.Seek(0x566F0D, SeekOrigin.Begin);
+                            ms.Write(new byte[] { (byte)((int)numericGameStartYear.Value - currentYear) }, 0, 1); 
+
                             NoCDPatch.PatchMemoryStream(ms);
                             pp.Write();
                             pp.Start();
