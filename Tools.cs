@@ -160,7 +160,7 @@ namespace CM0102Patcher
 
         private void buttonApplyMiscPatch_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("This will provide a list of ALL current miscellaneous patches.\r\nDO NOT APPLY ANY OF THESE UNLESS YOU KNOW WHAT YOU ARE DOING!!\r\nYou will most likely break your exe by applying these!!\r\nBest to do a Save so you can restore afterwards!!\r\n\r\nDO NOT ASK FOR SUPPORT ON APPLYING THESE. YOU ARE ON YOUR OWN ON THIS!! :)", "WARNING!!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show("This will provide a list of ALL current miscellaneous patches.\r\nDO NOT APPLY ANY OF THESE UNLESS YOU KNOW WHAT YOU ARE DOING!!\r\nYou will most likely break your exe by applying these!!\r\nBest to do a Save so you can Restore afterwards!!\r\n\r\nDO NOT ASK FOR SUPPORT ON APPLYING THESE. YOU ARE ON YOUR OWN ON THIS!! :)", "WARNING!!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             new MiscPatches(exeFile).ShowDialog();
         }
 
