@@ -230,10 +230,10 @@ namespace CM0102Patcher
                                 yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
 
                                 yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
-                                yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8);
                                 yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8);
 
                                 yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement + 1, 0x8);
+                                yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8);
                             }
                         }
                         catch (Exception ex)
@@ -251,6 +251,7 @@ namespace CM0102Patcher
                             yearChanger.ApplyYearChangeToExe(labelFilename.Text, (int)numericGameStartYear.Value);
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatch"]);
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatchjumps"]);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["comphistory_datecalcpatch"]);
                         }*/
                     }
 
@@ -544,8 +545,6 @@ namespace CM0102Patcher
                             patcher.ApplyPatch(ms, patcher.patches["datecalcpatch"]);
                             patcher.ApplyPatch(ms, patcher.patches["datecalcpatchjumps"]);
                             patcher.ApplyPatch(ms, patcher.patches["comphistory_datecalcpatch"]);
-                            ms.Seek(0x566F0D, SeekOrigin.Begin);
-                            ms.Write(new byte[] { (byte)((int)numericGameStartYear.Value - currentYear) }, 0, 1); 
 
                             NoCDPatch.PatchMemoryStream(ms);
                             pp.Write();

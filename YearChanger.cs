@@ -108,6 +108,19 @@ namespace CM0102Patcher
                 bw.Seek(0x1f9c0a, SeekOrigin.Begin);
                 bw.Write((short)year - 7);
             }
+
+            // Special 4 - World Cup - Oceania League Fix - So 2012, etc will work
+            if ((year % 4) == 0)
+            {
+                bw.Seek(0x5182dc, SeekOrigin.Begin);
+                bw.Write((short)year);
+                bw.Seek(0x518473, SeekOrigin.Begin);
+                bw.Write((byte)0xeb);
+                bw.Seek(0x52036e, SeekOrigin.Begin);
+                bw.Write((short)year);
+                bw.Seek(0x5204b8, SeekOrigin.Begin);
+                bw.Write((byte)0xeb);
+            }
         }
 
         public void ApplyYearChangeTo0001Exe(string fileName, int year)
