@@ -86,6 +86,8 @@ namespace CM0102Patcher
                 NoCDPatch.FindPattern(exeFile, Encoding.ASCII.GetBytes("Tapani v"), (file, br, bw, offset) => { isTapani = true; });
                 if (!isTapani)
                     NoCDPatch.FindPattern(exeFile, Encoding.ASCII.GetBytes("TapaniPatch"), (file, br, bw, offset) => { isTapani = true; });
+                if (!isTapani)
+                    NoCDPatch.FindPattern(exeFile, Encoding.ASCII.GetBytes("Tapani 2"), (file, br, bw, offset) => { isTapani = true; });
                 this.Text = this.Text.Replace(windowText, "");
                 if (isTapani)
                 {
