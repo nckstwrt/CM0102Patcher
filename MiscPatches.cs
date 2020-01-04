@@ -16,6 +16,7 @@ namespace CM0102Patcher
     {
         string exeFile;
         List<ZipStorer.ZipFileEntry> patchFiles;
+        List<ZipStorer.ZipFileEntry> txtFiles;
 
         public MiscPatches(string exeFile)
         {
@@ -25,6 +26,7 @@ namespace CM0102Patcher
             using (var zs = OpenZip())
             {
                 patchFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".patch"));
+                txtFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".txt"));
             }
 
             foreach (var patch in patchFiles)
@@ -40,7 +42,7 @@ namespace CM0102Patcher
                 return;
             }
 
-            var yesNo = MessageBox.Show("Are you sure you want to apply these to your exe?\r\nYou will most likely break your cm0102.exe - are you really sure?\r\nLike, really sure?", "Thar Be Dragons", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var yesNo = MessageBox.Show("Are you sure you want to apply these to your exe?\r\nYou could break your cm0102.exe - are you really sure?", "Misc Patches", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (yesNo == DialogResult.Yes)
             {
                 foreach (var checkedItem in checkedListBoxPatches.CheckedItems)
@@ -60,7 +62,7 @@ namespace CM0102Patcher
                     }
                 }
 
-                MessageBox.Show("Patches Applied!\r\n\r\nYou mad fool :)", "Patches Applied", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Patches Applied!", "Patches Applied", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -69,6 +71,34 @@ namespace CM0102Patcher
             var assembly = Assembly.GetExecutingAssembly();
             string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("MiscPatches.zip"));
             return ZipStorer.Open(assembly.GetManifestResourceStream(resourceName), FileAccess.Read);
+        }
+
+        private void checkedListBoxPatches_SelectedValueChanged(object sender, EventArgs e)
+        {
+            var patch = (ZipStorer.ZipFileEntry)checkedListBoxPatches.SelectedItem;
+            var txtFileName = patch.FilenameInZip.Replace(".patch", ".txt");
+            if (txtFiles.Exists(x => x.FilenameInZip == txtFileName))
+            {
+                var txtFile = txtFiles.First(x => x.FilenameInZip == txtFileName);
+                using (var zs = OpenZip())
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        zs.ExtractFile(txtFile, ms);
+                        ms.Seek(0, SeekOrigin.Begin);
+                        using (var tr = new StreamReader(ms))
+                        {
+                            var text = tr.ReadToEnd();
+                            // Help support Unix files that don't have MS \r
+                            text = text.Replace("\r\n", "\n");
+                            text = text.Replace("\n", "\r\n");
+                            textBoxDescription.Text = text;
+                        }
+                    }
+                }
+            }
+            else
+                textBoxDescription.Text = "No Description.";
         }
     }
 }
