@@ -63,8 +63,6 @@ namespace CM0102Patcher.Scouter
                 if (e.RowIndex < 0)
                     return;
                 var cell = dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                cell.Style.BackColor = Color.Black;
-                cell.Style.ForeColor = Color.White;
 
                 if (cell.ValueType == typeof(sbyte))
                 {
