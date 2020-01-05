@@ -1,4 +1,4 @@
-# CM0102Patcher v1.22
+# CM0102Patcher v1.23
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/YLiQxBB.png)
+![alt text](https://i.imgur.com/EbzsVVR.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,18 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.23:
+* Misc Patches improved and expanded (includes MadScientist's Creativity fix and other recently found patches)
+* Fixed issue with stadium expansion patch
+* Better checking for Tapani/Saturn .EXEs
+* Lock the exe when patching (stops write errors)
+* Welsh -> English suspensions on Northern Patch (from Saturn v3 patches)
+* Added Attribute Masking Off By Default Patch
+* More generic Euro Fix for 2019
+* Test Support for Patching Process Memory rather than the exe itself
+* Includes Inline Full Date Including History Patching. Not currently enabled.
+* Fix for 2012 year change. Should fix setting to 2020.
 
 v1.22:
 * Option in Tools to remove Stadium Expansion limits
