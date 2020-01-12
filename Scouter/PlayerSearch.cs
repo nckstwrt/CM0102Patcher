@@ -97,6 +97,14 @@ namespace CM0102Patcher.Scouter
             {
                 RowFilter += string.Format("AND [{0}] <= {1} ", "Value", numericUpDownValueMax.Value);
             }
+            if (numericUpDownScoutMin.Value != 0)
+            {
+                RowFilter += string.Format("AND [{0}] >= {1} ", "Scouter Rating", numericUpDownScoutMin.Value);
+            }
+            if (numericUpDownScoutMax.Value != 0)
+            {
+                RowFilter += string.Format("AND [{0}] <= {1} ", "Scouter Rating", numericUpDownScoutMax.Value);
+            }
             if (numericUpDownFilter1Min.Value != 0 && (comboBoxFilter1.SelectedItem as string) != "")
             {
                 RowFilter += string.Format("AND [{0}] >= {1} ", comboBoxFilter1.SelectedItem as string, numericUpDownFilter1Min.Value);
