@@ -1,4 +1,4 @@
-# CM0102Patcher v1.23
+# CM0102Patcher v1.24
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/EbzsVVR.png)
+![alt text](https://i.imgur.com/sMcM2ED.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,12 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.24:
+* Updated Misc Patches and added a few more descriptions
+* Fixed RGN Converter when outputting to directories from Tools
+* Increase font of Scouter grid
+* Save Scouter can now filter by Scouter Rating
 
 v1.23:
 * Misc Patches improved and expanded (includes MadScientist's Creativity fix and other recently found patches)
