@@ -99,7 +99,7 @@ namespace CM0102Patcher
                 // Output
                 bool isDirectory = false;
                 string outputPath = textBoxOutput.Text;
-                if (File.Exists(textBoxOutput.Text) && (File.GetAttributes(textBoxOutput.Text) & FileAttributes.Directory) == FileAttributes.Directory)
+                if (Directory.Exists(textBoxOutput.Text))
                     isDirectory = true;
 
                 int checkSizeWidth = -1, checkSizeHeight = -1;

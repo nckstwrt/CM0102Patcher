@@ -83,6 +83,12 @@ namespace CM0102Patcher
         {
             using (var bmp = RGN2BMP(inFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom))
             {
+
+                if (!File.Exists(outFile) && Directory.Exists(outFile))
+                {
+                    outFile = Path.Combine(outFile, Path.GetFileNameWithoutExtension(inFile) + ".bmp");
+                }
+
                 bmp.Save(outFile, ImageFormat.Bmp);
             }
         }
