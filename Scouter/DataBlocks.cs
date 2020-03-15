@@ -206,8 +206,8 @@ namespace CM0102Scout
             double dblResult = (dblTemp * dblTemp / 30.0) + (dblTemp / 3.0) + 0.5;
             if (dblResult < 1)
                 dblResult = 1;
-            if (dblResult > 20)
-                dblResult = 20;
+            //if (dblResult > 20)
+                //dblResult = 20;
             return (sbyte)dblResult;
         }
 
@@ -217,8 +217,8 @@ namespace CM0102Scout
             double dblResult = (dblTemp * dblTemp / 30.0) + (dblTemp / 3.0) + 0.5;
             if (dblResult < 1)
                 dblResult = 1;
-            if (dblResult > 20)
-                dblResult = 20;
+            //if (dblResult > 20)
+              //  dblResult = 20;
             return (sbyte)dblResult;
         }
 

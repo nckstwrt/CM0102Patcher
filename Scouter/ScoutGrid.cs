@@ -128,6 +128,10 @@ namespace CM0102Patcher.Scouter
                             case 20:
                                 cell.Style.ForeColor = ColorMaker(Color.Orange, Color.Red, 21, val);
                                 break;
+                            default:
+                                if (val > 20 && !checkBoxShowIntrinstics.Checked)
+                                    cell.Style.ForeColor = Color.Purple;
+                                break;
                         }
                     }
                 }
