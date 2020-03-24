@@ -13,7 +13,7 @@ namespace CM0102Patcher
 {
     public class RGNConverter
     {
-        private static Bitmap ResizeImage(Image image, int width, int height, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0)
+        public static Bitmap ResizeImage(Image image, int width, int height, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0)
         {
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
@@ -31,7 +31,7 @@ namespace CM0102Patcher
                 using (var wrapMode = new ImageAttributes())
                 {
                     wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, cropLeft, cropTop, image.Width - cropRight, image.Height - cropBottom, GraphicsUnit.Pixel, wrapMode);
+                    graphics.DrawImage(image, destRect, cropLeft, cropTop, (image.Width - cropLeft) - cropRight, (image.Height - cropTop) - cropBottom, GraphicsUnit.Pixel, wrapMode);
                 }
             }
 
