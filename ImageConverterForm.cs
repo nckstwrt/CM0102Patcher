@@ -182,5 +182,15 @@ namespace CM0102Patcher
                 ExceptionMsgBox.Show(ex);
             }
         }
+
+        private void textBoxInput_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

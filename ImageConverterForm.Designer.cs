@@ -49,15 +49,15 @@
             this.textBoxOutput = new System.Windows.Forms.TextBox();
             this.buttonConvert = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBoxTop = new System.Windows.Forms.TextBox();
-            this.checkBoxCrop = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBoxLeft = new System.Windows.Forms.TextBox();
             this.textBoxRight = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.textBoxBottom = new System.Windows.Forms.TextBox();
+            this.textBoxLeft = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBoxTop = new System.Windows.Forms.TextBox();
+            this.checkBoxCrop = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -76,6 +76,7 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Input Images (RGN/PNG/JPG/BMP)";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // buttonInputSelectFolder
             // 
@@ -103,6 +104,7 @@
             this.textBoxInput.Name = "textBoxInput";
             this.textBoxInput.Size = new System.Drawing.Size(261, 20);
             this.textBoxInput.TabIndex = 0;
+            this.textBoxInput.TextChanged += new System.EventHandler(this.textBoxInput_TextChanged);
             // 
             // groupBox2
             // 
@@ -269,55 +271,6 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Crop Images";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(147, 21);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(28, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Left:";
-            // 
-            // textBoxTop
-            // 
-            this.textBoxTop.Enabled = false;
-            this.textBoxTop.Location = new System.Drawing.Point(259, 18);
-            this.textBoxTop.Name = "textBoxTop";
-            this.textBoxTop.Size = new System.Drawing.Size(36, 20);
-            this.textBoxTop.TabIndex = 2;
-            this.textBoxTop.Text = "0";
-            // 
-            // checkBoxCrop
-            // 
-            this.checkBoxCrop.AutoSize = true;
-            this.checkBoxCrop.Checked = true;
-            this.checkBoxCrop.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxCrop.Location = new System.Drawing.Point(7, 20);
-            this.checkBoxCrop.Name = "checkBoxCrop";
-            this.checkBoxCrop.Size = new System.Drawing.Size(117, 17);
-            this.checkBoxCrop.TabIndex = 0;
-            this.checkBoxCrop.Text = "Crop Image(s) by = ";
-            this.checkBoxCrop.UseVisualStyleBackColor = true;
-            this.checkBoxCrop.CheckedChanged += new System.EventHandler(this.checkBoxCrop_CheckedChanged);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(227, 21);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(29, 13);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "Top:";
-            // 
-            // textBoxLeft
-            // 
-            this.textBoxLeft.Enabled = false;
-            this.textBoxLeft.Location = new System.Drawing.Point(181, 19);
-            this.textBoxLeft.Name = "textBoxLeft";
-            this.textBoxLeft.Size = new System.Drawing.Size(36, 20);
-            this.textBoxLeft.TabIndex = 4;
-            this.textBoxLeft.Text = "0";
-            // 
             // textBoxRight
             // 
             this.textBoxRight.Enabled = false;
@@ -353,6 +306,55 @@
             this.textBoxBottom.Size = new System.Drawing.Size(36, 20);
             this.textBoxBottom.TabIndex = 6;
             this.textBoxBottom.Text = "0";
+            // 
+            // textBoxLeft
+            // 
+            this.textBoxLeft.Enabled = false;
+            this.textBoxLeft.Location = new System.Drawing.Point(181, 19);
+            this.textBoxLeft.Name = "textBoxLeft";
+            this.textBoxLeft.Size = new System.Drawing.Size(36, 20);
+            this.textBoxLeft.TabIndex = 4;
+            this.textBoxLeft.Text = "0";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(227, 21);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(29, 13);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Top:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(147, 21);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(28, 13);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Left:";
+            // 
+            // textBoxTop
+            // 
+            this.textBoxTop.Enabled = false;
+            this.textBoxTop.Location = new System.Drawing.Point(259, 18);
+            this.textBoxTop.Name = "textBoxTop";
+            this.textBoxTop.Size = new System.Drawing.Size(36, 20);
+            this.textBoxTop.TabIndex = 2;
+            this.textBoxTop.Text = "0";
+            // 
+            // checkBoxCrop
+            // 
+            this.checkBoxCrop.AutoSize = true;
+            this.checkBoxCrop.Checked = true;
+            this.checkBoxCrop.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxCrop.Location = new System.Drawing.Point(7, 20);
+            this.checkBoxCrop.Name = "checkBoxCrop";
+            this.checkBoxCrop.Size = new System.Drawing.Size(117, 17);
+            this.checkBoxCrop.TabIndex = 0;
+            this.checkBoxCrop.Text = "Crop Image(s) by = ";
+            this.checkBoxCrop.UseVisualStyleBackColor = true;
+            this.checkBoxCrop.CheckedChanged += new System.EventHandler(this.checkBoxCrop_CheckedChanged);
             // 
             // ImageConverterForm
             // 

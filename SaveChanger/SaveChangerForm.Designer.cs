@@ -29,21 +29,167 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SaveChangerForm));
+            this.buttonInputSelectFile = new System.Windows.Forms.Button();
+            this.textBoxInput = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonOutputSelectFile = new System.Windows.Forms.Button();
+            this.textBoxOutput = new System.Windows.Forms.TextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.buttonApply = new System.Windows.Forms.Button();
+            this.groupBox = new System.Windows.Forms.GroupBox();
+            this.checkBoxLowerStats = new System.Windows.Forms.CheckBox();
+            this.checkBoxAddSuperStars = new System.Windows.Forms.CheckBox();
+            this.checkBoxSaveCompressed = new System.Windows.Forms.CheckBox();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // buttonInputSelectFile
+            // 
+            this.buttonInputSelectFile.Location = new System.Drawing.Point(300, 20);
+            this.buttonInputSelectFile.Name = "buttonInputSelectFile";
+            this.buttonInputSelectFile.Size = new System.Drawing.Size(95, 22);
+            this.buttonInputSelectFile.TabIndex = 1;
+            this.buttonInputSelectFile.Text = "Select File...";
+            this.buttonInputSelectFile.UseVisualStyleBackColor = true;
+            this.buttonInputSelectFile.Click += new System.EventHandler(this.buttonInputSelectFile_Click);
+            // 
+            // textBoxInput
+            // 
+            this.textBoxInput.Location = new System.Drawing.Point(7, 21);
+            this.textBoxInput.Name = "textBoxInput";
+            this.textBoxInput.Size = new System.Drawing.Size(287, 20);
+            this.textBoxInput.TabIndex = 0;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.buttonInputSelectFile);
+            this.groupBox1.Controls.Add(this.textBoxInput);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(406, 56);
+            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Input Save File";
+            // 
+            // buttonOutputSelectFile
+            // 
+            this.buttonOutputSelectFile.Location = new System.Drawing.Point(300, 20);
+            this.buttonOutputSelectFile.Name = "buttonOutputSelectFile";
+            this.buttonOutputSelectFile.Size = new System.Drawing.Size(95, 22);
+            this.buttonOutputSelectFile.TabIndex = 1;
+            this.buttonOutputSelectFile.Text = "Select File...";
+            this.buttonOutputSelectFile.UseVisualStyleBackColor = true;
+            this.buttonOutputSelectFile.Click += new System.EventHandler(this.buttonOutputSelectFile_Click);
+            // 
+            // textBoxOutput
+            // 
+            this.textBoxOutput.Location = new System.Drawing.Point(7, 21);
+            this.textBoxOutput.Name = "textBoxOutput";
+            this.textBoxOutput.Size = new System.Drawing.Size(287, 20);
+            this.textBoxOutput.TabIndex = 0;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.checkBoxSaveCompressed);
+            this.groupBox2.Controls.Add(this.buttonOutputSelectFile);
+            this.groupBox2.Controls.Add(this.textBoxOutput);
+            this.groupBox2.Location = new System.Drawing.Point(12, 150);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(406, 70);
+            this.groupBox2.TabIndex = 2;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Output Save File";
+            // 
+            // buttonApply
+            // 
+            this.buttonApply.Location = new System.Drawing.Point(180, 230);
+            this.buttonApply.Name = "buttonApply";
+            this.buttonApply.Size = new System.Drawing.Size(75, 26);
+            this.buttonApply.TabIndex = 3;
+            this.buttonApply.Text = "Apply";
+            this.buttonApply.UseVisualStyleBackColor = true;
+            this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
+            // 
+            // groupBox
+            // 
+            this.groupBox.Controls.Add(this.checkBoxAddSuperStars);
+            this.groupBox.Controls.Add(this.checkBoxLowerStats);
+            this.groupBox.Location = new System.Drawing.Point(12, 75);
+            this.groupBox.Name = "groupBox";
+            this.groupBox.Size = new System.Drawing.Size(406, 69);
+            this.groupBox.TabIndex = 4;
+            this.groupBox.TabStop = false;
+            this.groupBox.Text = "Options";
+            // 
+            // checkBoxLowerStats
+            // 
+            this.checkBoxLowerStats.AutoSize = true;
+            this.checkBoxLowerStats.Location = new System.Drawing.Point(7, 30);
+            this.checkBoxLowerStats.Name = "checkBoxLowerStats";
+            this.checkBoxLowerStats.Size = new System.Drawing.Size(176, 17);
+            this.checkBoxLowerStats.TabIndex = 0;
+            this.checkBoxLowerStats.Text = "Adjust Key Regen Stats By 15%";
+            this.checkBoxLowerStats.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAddSuperStars
+            // 
+            this.checkBoxAddSuperStars.AutoSize = true;
+            this.checkBoxAddSuperStars.Location = new System.Drawing.Point(218, 30);
+            this.checkBoxAddSuperStars.Name = "checkBoxAddSuperStars";
+            this.checkBoxAddSuperStars.Size = new System.Drawing.Size(179, 17);
+            this.checkBoxAddSuperStars.TabIndex = 1;
+            this.checkBoxAddSuperStars.Text = "Add Some CM0102 Super Stars!";
+            this.checkBoxAddSuperStars.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxSaveCompressed
+            // 
+            this.checkBoxSaveCompressed.AutoSize = true;
+            this.checkBoxSaveCompressed.Checked = true;
+            this.checkBoxSaveCompressed.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxSaveCompressed.Location = new System.Drawing.Point(7, 47);
+            this.checkBoxSaveCompressed.Name = "checkBoxSaveCompressed";
+            this.checkBoxSaveCompressed.Size = new System.Drawing.Size(112, 17);
+            this.checkBoxSaveCompressed.TabIndex = 2;
+            this.checkBoxSaveCompressed.Text = "Save Compressed";
+            this.checkBoxSaveCompressed.UseVisualStyleBackColor = true;
             // 
             // SaveChangerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(541, 245);
+            this.ClientSize = new System.Drawing.Size(430, 264);
+            this.Controls.Add(this.groupBox);
+            this.Controls.Add(this.buttonApply);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SaveChangerForm";
             this.Text = "Save Changer Tool";
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox.ResumeLayout(false);
+            this.groupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.Button buttonInputSelectFile;
+        private System.Windows.Forms.TextBox textBoxInput;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button buttonOutputSelectFile;
+        private System.Windows.Forms.TextBox textBoxOutput;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button buttonApply;
+        private System.Windows.Forms.GroupBox groupBox;
+        private System.Windows.Forms.CheckBox checkBoxAddSuperStars;
+        private System.Windows.Forms.CheckBox checkBoxLowerStats;
+        private System.Windows.Forms.CheckBox checkBoxSaveCompressed;
     }
 }
