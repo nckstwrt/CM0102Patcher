@@ -121,6 +121,21 @@ namespace CM0102Patcher
                 bw.Seek(0x5204b8, SeekOrigin.Begin);
                 bw.Write((byte)0xeb);
             }
+
+            // Special 5 - For going back in time (fixes Euros)
+            if (year < 2000)
+            {
+                // Crap way of finding the euro year before our year
+                for (int i = 1960; i < 2000; i+=4)
+                {
+                    if (i > year)
+                    {
+                        bw.Seek(0x1F9C0a, SeekOrigin.Begin);
+                        bw.Write((short)(i-4));
+                        break;
+                    }
+                }
+            }
         }
 
         public void ApplyYearChangeTo0001Exe(string fileName, int year)
