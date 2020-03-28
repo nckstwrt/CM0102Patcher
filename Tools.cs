@@ -191,7 +191,13 @@ namespace CM0102Patcher
             }
         }
 
-        private void buttonFixtureScheduler_Click(object sender, EventArgs e)
+        private void buttonSaveChanger_Click(object sender, EventArgs e)
+        {
+            var scf = new SaveChangerForm();
+            scf.ShowDialog();
+        }
+
+        private void buttonFixtureScheduler_Click2(object sender, EventArgs e)
         {
             try
             {

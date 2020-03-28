@@ -37,7 +37,7 @@
             this.buttonRGNImageConverter = new System.Windows.Forms.Button();
             this.buttonApplyMiscPatch = new System.Windows.Forms.Button();
             this.buttonRemoveStadiumLimits = new System.Windows.Forms.Button();
-            this.buttonFixtureScheduler = new System.Windows.Forms.Button();
+            this.buttonSaveChangerTool = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonApplyPatchfile
@@ -128,24 +128,23 @@
             this.buttonRemoveStadiumLimits.UseVisualStyleBackColor = true;
             this.buttonRemoveStadiumLimits.Click += new System.EventHandler(this.buttonRemoveStadiumLimits_Click);
             // 
-            // buttonFixtureScheduler
+            // buttonSaveChangerTool
             // 
-            this.buttonFixtureScheduler.Enabled = false;
-            this.buttonFixtureScheduler.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonFixtureScheduler.Location = new System.Drawing.Point(12, 212);
-            this.buttonFixtureScheduler.Name = "buttonFixtureScheduler";
-            this.buttonFixtureScheduler.Size = new System.Drawing.Size(166, 24);
-            this.buttonFixtureScheduler.TabIndex = 8;
-            this.buttonFixtureScheduler.Text = "Fixture Scheduler...";
-            this.buttonFixtureScheduler.UseVisualStyleBackColor = true;
-            this.buttonFixtureScheduler.Click += new System.EventHandler(this.buttonFixtureScheduler_Click);
+            this.buttonSaveChangerTool.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSaveChangerTool.Location = new System.Drawing.Point(12, 212);
+            this.buttonSaveChangerTool.Name = "buttonSaveChangerTool";
+            this.buttonSaveChangerTool.Size = new System.Drawing.Size(166, 24);
+            this.buttonSaveChangerTool.TabIndex = 8;
+            this.buttonSaveChangerTool.Text = "Save Changer Tool...";
+            this.buttonSaveChangerTool.UseVisualStyleBackColor = true;
+            this.buttonSaveChangerTool.Click += new System.EventHandler(this.buttonSaveChanger_Click);
             // 
             // Tools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(189, 273);
-            this.Controls.Add(this.buttonFixtureScheduler);
+            this.Controls.Add(this.buttonSaveChangerTool);
             this.Controls.Add(this.buttonRemoveStadiumLimits);
             this.Controls.Add(this.buttonApplyMiscPatch);
             this.Controls.Add(this.buttonRGNImageConverter);
@@ -175,6 +174,6 @@
         private System.Windows.Forms.Button buttonRGNImageConverter;
         private System.Windows.Forms.Button buttonApplyMiscPatch;
         private System.Windows.Forms.Button buttonRemoveStadiumLimits;
-        private System.Windows.Forms.Button buttonFixtureScheduler;
+        private System.Windows.Forms.Button buttonSaveChangerTool;
     }
 }

@@ -114,6 +114,12 @@
     <Compile Include="MiscPatches.Designer.cs">
       <DependentUpon>MiscPatches.cs</DependentUpon>
     </Compile>
+    <Compile Include="SaveChanger\SaveChangerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SaveChanger\SaveChangerForm.Designer.cs">
+      <DependentUpon>SaveChangerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SaveChanger\SaveReader2.cs" />
     <Compile Include="SaveChanger\Structures.cs" />
     <Compile Include="SaveChanger\SuperStarMaker.cs" />
@@ -180,6 +186,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MiscPatches.resx">
       <DependentUpon>MiscPatches.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SaveChanger\SaveChangerForm.resx">
+      <DependentUpon>SaveChangerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scouter\ColumnSelector.resx">
       <DependentUpon>ColumnSelector.cs</DependentUpon>
