@@ -63,6 +63,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.numericUpDownAbilityMin = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBoxClub = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.numericUpDownMaxAge = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
@@ -104,8 +106,8 @@
             this.comboBoxFilter1 = new System.Windows.Forms.ComboBox();
             this.buttonReset = new System.Windows.Forms.Button();
             this.buttonApply = new System.Windows.Forms.Button();
-            this.textBoxClub = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
+            this.checkBoxNotIndispensible = new System.Windows.Forms.CheckBox();
+            this.checkBoxNotNewContract = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -167,13 +169,15 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.checkBoxNotNewContract);
+            this.groupBox4.Controls.Add(this.checkBoxNotIndispensible);
             this.groupBox4.Controls.Add(this.label10);
             this.groupBox4.Controls.Add(this.label11);
             this.groupBox4.Controls.Add(this.numericUpDownValueMax);
             this.groupBox4.Controls.Add(this.numericUpDownValueMin);
             this.groupBox4.Location = new System.Drawing.Point(198, 118);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(191, 61);
+            this.groupBox4.Size = new System.Drawing.Size(191, 212);
             this.groupBox4.TabIndex = 8;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Contract";
@@ -524,6 +528,22 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General";
+            // 
+            // textBoxClub
+            // 
+            this.textBoxClub.Location = new System.Drawing.Point(63, 75);
+            this.textBoxClub.Name = "textBoxClub";
+            this.textBoxClub.Size = new System.Drawing.Size(114, 20);
+            this.textBoxClub.TabIndex = 7;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(7, 77);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(31, 13);
+            this.label20.TabIndex = 6;
+            this.label20.Text = "Club:";
             // 
             // label3
             // 
@@ -971,21 +991,25 @@
             this.buttonApply.UseVisualStyleBackColor = true;
             this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
             // 
-            // textBoxClub
+            // checkBoxNotIndispensible
             // 
-            this.textBoxClub.Location = new System.Drawing.Point(63, 75);
-            this.textBoxClub.Name = "textBoxClub";
-            this.textBoxClub.Size = new System.Drawing.Size(114, 20);
-            this.textBoxClub.TabIndex = 7;
+            this.checkBoxNotIndispensible.AutoSize = true;
+            this.checkBoxNotIndispensible.Location = new System.Drawing.Point(9, 63);
+            this.checkBoxNotIndispensible.Name = "checkBoxNotIndispensible";
+            this.checkBoxNotIndispensible.Size = new System.Drawing.Size(107, 17);
+            this.checkBoxNotIndispensible.TabIndex = 12;
+            this.checkBoxNotIndispensible.Text = "Not Indispensible";
+            this.checkBoxNotIndispensible.UseVisualStyleBackColor = true;
             // 
-            // label20
+            // checkBoxNotNewContract
             // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(7, 77);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(31, 13);
-            this.label20.TabIndex = 6;
-            this.label20.Text = "Club:";
+            this.checkBoxNotNewContract.AutoSize = true;
+            this.checkBoxNotNewContract.Location = new System.Drawing.Point(9, 86);
+            this.checkBoxNotNewContract.Name = "checkBoxNotNewContract";
+            this.checkBoxNotNewContract.Size = new System.Drawing.Size(111, 17);
+            this.checkBoxNotNewContract.TabIndex = 18;
+            this.checkBoxNotNewContract.Text = "Not New Contract";
+            this.checkBoxNotNewContract.UseVisualStyleBackColor = true;
             // 
             // PlayerSearch
             // 
@@ -1121,5 +1145,7 @@
         private System.Windows.Forms.ComboBox comboBoxFilter5;
         private System.Windows.Forms.TextBox textBoxClub;
         private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.CheckBox checkBoxNotNewContract;
+        private System.Windows.Forms.CheckBox checkBoxNotIndispensible;
     }
 }

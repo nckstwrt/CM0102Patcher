@@ -387,13 +387,13 @@ namespace CM0102Patcher
             return ret;
         }
 
-        DateTime FromCMDate(short day, short year, int leapYear)
+        public static DateTime FromCMDate(short day, short year, int leapYear)
         {
             //31 + 28 == Feb 28th
             return new DateTime(year, 1, 1).AddDays(day - 1);
         }
 
-        void ToCMDate(DateTime dt, out short day, out short year, out int leapYear)
+        public static void ToCMDate(DateTime dt, out short day, out short year, out int leapYear)
         {
             day = (short)(dt.DayOfYear);
             year = (short)dt.Year;

@@ -169,6 +169,14 @@ namespace CM0102Patcher.Scouter
             {
                 RowFilter += string.Format("AND [{0}] <= {1} ", comboBoxFilter8.SelectedItem as string, numericUpDownFilter8Max.Value);
             }
+            if (checkBoxNotIndispensible.Checked)
+            {
+                RowFilter += string.Format("AND [Squad Status] NOT LIKE 'Indispensable' ");
+            }
+            if (checkBoxNotNewContract.Checked)
+            {
+                RowFilter += string.Format("AND [Contract Age] >= 6 ");
+            }
 
             // MadScientist's Code
             //Position logic:            

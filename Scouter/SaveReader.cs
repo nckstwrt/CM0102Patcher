@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Data;
+using System.Runtime.InteropServices;
+using CM0102Patcher;
 
 namespace CM0102Scout
 {
@@ -12,6 +14,7 @@ namespace CM0102Scout
         public const int NationSize = 290;
         const int BlockSize = 268;
         const int PlayerSize = 70;
+        const int ContractSize = 80;
         const int StaffSize = 110;
         const int NameSize = 60;
         const int ClubSize = 581;
@@ -25,6 +28,7 @@ namespace CM0102Scout
         List<Player> players = new List<Player>();
         Dictionary<int, Nation> nations = new Dictionary<int, Nation>();
         Dictionary<int, Club> clubs = new Dictionary<int, Club>();
+        Dictionary<int, Contract> contracts = new Dictionary<int, Contract>();
         DateTime gameDate;
 
         public bool IsCompressed;
@@ -186,6 +190,36 @@ namespace CM0102Scout
 
                 players.Add(player);
             }
+
+            // Load Contracts
+            var contractBlocks = ReadBlocks("contract.dat", ContractSize, true);
+            foreach (var contractBlock in contractBlocks)
+            {
+                var ptrObj = Marshal.AllocHGlobal(ContractSize);
+                Marshal.Copy(contractBlock, 0, ptrObj, ContractSize);
+                Contract contract = (Contract)Marshal.PtrToStructure(ptrObj, typeof(Contract));
+                contracts[contract.ID] = contract;
+                Marshal.FreeHGlobal(ptrObj);
+            }
+
+            var sanchContract = contracts[33597];
+
+            FindPlayer("Jadon", "Sancho");
+        }
+
+        public Staff FindPlayer(string firstName, string secondName)
+        {
+            Staff ret = null;
+            var firstNameId = firstNames.IndexOf(firstName);
+            var secondNameId = secondNames.IndexOf(secondName);
+            foreach (var staff in staffList.Values)
+            {
+                if (staff.firstName == firstNameId && staff.secondName == secondNameId)
+                {
+                    ret = staff;
+                }
+            }
+            return ret;
         }
 
         public DataTable CreateDataTable(bool instrinsicsOn = true)
@@ -243,6 +277,8 @@ namespace CM0102Scout
             dataTable.Columns.Add("Versatility", typeof(sbyte));
             dataTable.Columns.Add("Work Rate", typeof(sbyte));
             dataTable.Columns.Add("Player Morale", typeof(byte));
+            dataTable.Columns.Add("Squad Status", typeof(string));
+            dataTable.Columns.Add("Contract Age", typeof(int));
             dataTable.Columns.Add("Scouter Rating", typeof(int));
 
             // Creativity = Vision
@@ -340,6 +376,35 @@ namespace CM0102Scout
                         weighter.Add(player.Bravery, 20, 4);
                     }
 
+                    
+                    string squadStatus = "Unknown";
+                    int contractAgesMonths = 0;
+                    if (contracts.ContainsKey(staff.staffId))
+                    {
+                        var contract = contracts[staff.staffId];
+                        if ((contract.SquadStatus & 240) == 0)
+                            squadStatus = "Uncertain";
+                        else if ((contract.SquadStatus & 224) == 0)
+                            squadStatus = "Indispensable";
+                        else if ((contract.SquadStatus & 208) == 0)
+                            squadStatus = "Important";
+                        else if ((contract.SquadStatus & 192) == 0)
+                            squadStatus = "Rotation";
+                        else if ((contract.SquadStatus & 176) == 0)
+                            squadStatus = "Backup";
+                        else if ((contract.SquadStatus & 160) == 0)
+                            squadStatus = "Hot Prospect";
+                        else if ((contract.SquadStatus & 144) == 0)
+                            squadStatus = "Decent Yng";
+                        else if ((contract.SquadStatus & 128) == 0)
+                            squadStatus = "Not Needed";
+                        else if ((contract.SquadStatus & 112) == 0)
+                            squadStatus = "On Trial";
+
+                        DateTime startDate = YearChanger.FromCMDate(contract.DateStarted.Day, contract.DateStarted.Year, contract.DateStarted.LeapYear);
+                        contractAgesMonths = (int)Math.Round((gameDate - startDate).TotalDays / 30);
+                    }
+
                     dataTable.Rows.Add(name, age, club, nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, staff.value,
                         player.Acceleration,
                         player.Aggression,
@@ -385,6 +450,8 @@ namespace CM0102Scout
                         player.Versatility,
                         player.WorkRate,
                         player.PlayerMorale,
+                        squadStatus,
+                        contractAgesMonths,
                         weighter.RatingPercentage
                         );
                 }
@@ -408,19 +475,33 @@ namespace CM0102Scout
             cfs.Dispose();
         }
 
-        List<byte[]> ReadBlocks(string blockName, int blockSize)
+        List<byte[]> ReadBlocks(string blockName, int blockSize, bool contractSpecific = false)
         {
+            var blocks = new List<byte[]>();
             var block = FlstBlock.FirstOrDefault(x => TBlock.GetName(x) == blockName);
             cfs.Seek(TBlock.GetPosition(block), SeekOrigin.Begin);
+
             var blockCount = TBlock.GetSize(block) / blockSize;
 
-            var blocks = new List<byte[]>();
+            if (contractSpecific)
+            {
+                var intPreCount = cfs.ReadInt32();
+                blockCount = cfs.ReadInt32();
+
+                var byPre = new byte[21];
+                for (int j = 0; j < intPreCount; j++)
+                    cfs.Read(byPre, 21);
+                if (intPreCount > 0)
+                    blockCount = BitConverter.ToInt32(byPre, 17);
+            }
+
             for (int j = 0; j < blockCount; j++)
             {
                 var blockBytes = new byte[blockSize];
                 cfs.Read(blockBytes, blockSize);
                 blocks.Add(blockBytes);
             }
+
             return blocks;
         }
 

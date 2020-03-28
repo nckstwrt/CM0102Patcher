@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace CM0102Scout
@@ -38,6 +39,43 @@ namespace CM0102Scout
         public short yearOfBirth;
         public int nationID;
         public int clubID;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TCMDate
+    {
+        public short Day;
+        public short Year;
+        public int LeapYear;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct Contract
+    {
+        public int ID;
+        public int Club;
+        public int Unknown;
+        public int Wage;
+        public int GoalBonus;
+        public int AssistBonus;
+        public int CleanSheetBonus;
+        public byte NonPromotionRC;
+        public byte MinimumFeeRC;
+        public byte NonPlayingRC;
+        public byte RelegationRC;
+        public byte ManagerJobRC;
+        public int ReleaseFee;
+        public TCMDate DateStarted;
+        public TCMDate ContractExpires;
+        public byte ContractType;
+        public UInt64 Unknown18_1;
+        public UInt64 Unknown18_2;
+        public short Unknown18_3;
+        public byte Unknown18_4;
+        public byte LeavingOnBosman;
+        public int TransferArrangedFor;
+        public byte TransferStatus;
+        public byte SquadStatus;
     }
 
     public class Player

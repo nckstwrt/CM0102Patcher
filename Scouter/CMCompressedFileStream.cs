@@ -45,6 +45,13 @@ namespace CM0102Scout
             return FfilStream.BaseStream.Seek(offset, origin);
         }
 
+        public int ReadInt32()
+        {
+            var buffer = new byte[4];
+            Read(buffer, 4);
+            return BitConverter.ToInt32(buffer, 0);
+        }
+
         public int Read(byte[] Buffer, int Count)
         {
             int intNewBufPos;
