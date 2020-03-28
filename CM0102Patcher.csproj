@@ -114,6 +114,9 @@
     <Compile Include="MiscPatches.Designer.cs">
       <DependentUpon>MiscPatches.cs</DependentUpon>
     </Compile>
+    <Compile Include="SaveChanger\SaveReader2.cs" />
+    <Compile Include="SaveChanger\Structures.cs" />
+    <Compile Include="SaveChanger\SuperStarMaker.cs" />
     <Compile Include="Scouter\CMCompressedFileStream.cs" />
     <Compile Include="Scouter\ColumnSelector.cs">
       <SubType>Form</SubType>
