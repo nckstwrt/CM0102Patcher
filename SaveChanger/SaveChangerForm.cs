@@ -56,7 +56,8 @@ namespace CM0102Patcher
                     var players = sr2.BlockToObjects<TPlayer>("player.dat");
                     var firstNames = sr2.NamesFromBlock("first_names.dat");
                     var secondNames = sr2.NamesFromBlock("second_names.dat");
-                    
+                    var gameDate = sr2.GetCurrentGameDate();
+
                     if (checkBoxLowerStats.Checked)
                     {
                         for (int i = 0; i < staff.Count(); i++)
@@ -85,6 +86,23 @@ namespace CM0102Patcher
 
                             staff[i] = staffData;
                             players[staffData.Player] = player;
+                        }
+                    }
+
+                    if (checkBoxAddSuperStars.Checked)
+                    {
+                        string secret = "";
+                        SuperStarMaker ssm = new SuperStarMaker();
+                        foreach (var star in ssm.stars)
+                        {
+                            var staffId = ssm.MakeSuperStar(staff, players, star.staffBytes, star.playerBytes, gameDate, star.age);
+                            string newName = firstNames[staff[staffId].FirstName] + " " + secondNames[staff[staffId].SecondName];
+                            secret += string.Format("{0} = {1} ({2})\r\n", star.name, newName, star.age);
+                        }
+                        if (PatcherForm.SecretMode)
+                        {
+                            ssm.MakeTHERichardMolloy(staff, players, gameDate, 15, firstNames, secondNames);
+                            Clipboard.SetText(secret);
                         }
                     }
 

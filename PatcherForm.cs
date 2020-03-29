@@ -446,6 +446,7 @@ namespace CM0102Patcher
             comboBoxGameSpeed.SelectedIndex = 0;
         }
 
+        public static bool SecretMode = false;
         private void PatcherForm_KeyPress(object sender, KeyPressEventArgs e)
         {
             if ((Control.ModifierKeys & Keys.Control) == Keys.Control &&
@@ -454,6 +455,7 @@ namespace CM0102Patcher
                 if (e.KeyChar == (char)19) // (S)ecret Mode
                 {
                     checkBoxRemoveCDChecks.Checked = checkBoxRemoveCDChecks.Visible = true;
+                    SecretMode = true;
                     e.Handled = true;
                 }
                 if (e.KeyChar == (char)14) // N - Blank out all fields
@@ -461,7 +463,7 @@ namespace CM0102Patcher
                     ResetControls(this);
                     e.Handled = true;
                 }
-                if (e.KeyChar == (char)1 && checkBoxRemoveCDChecks.Visible) // A
+                if (e.KeyChar == (char)1 && SecretMode) // A
                 {
                     string doubleWarning = labelFilename.Text.Contains("cm0001.exe") ? "" : "\r\n\r\nTHIS DOES NOT LOOK LIKE A CM0001.EXE!!!!!!!!!!\r\nDOUBLE CHECK BEFORE HITTING YES!!\r\n";
                     if (MessageBox.Show(string.Format("This will change exe:\r\n{0}\r\nTo Year: {1}\r\n\r\nARE YOU SURE YOU WANT TO DO THIS?!{2}", labelFilename.Text, (int)numericGameStartYear.Value, doubleWarning), "CM 00/01 Year Changer", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
@@ -497,7 +499,7 @@ namespace CM0102Patcher
                     }
                     e.Handled = true;
                 }
-                if (e.KeyChar == (char)2 && checkBoxRemoveCDChecks.Visible) // B
+                if (e.KeyChar == (char)2 && SecretMode) // B
                 {
                     var yearChanger = new YearChanger();
                     var dir = Path.GetDirectoryName(labelFilename.Text);
@@ -507,11 +509,11 @@ namespace CM0102Patcher
                     //yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, +2, 0x8);
                     yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, 3, 0x8);
                 }
-                if (e.KeyChar == (char)3 && checkBoxRemoveCDChecks.Visible) // C
+                if (e.KeyChar == (char)3 && SecretMode) // C
                 {
                     NoCDPatch.PatchEXEFile0001FixV2(labelFilename.Text);
                 }
-                if (e.KeyChar == (char)4 && checkBoxRemoveCDChecks.Visible) // D
+                if (e.KeyChar == (char)4 && SecretMode) // D
                 {
                     var yearChanger = new YearChanger();
                     var dir = Path.GetDirectoryName(labelFilename.Text);
@@ -521,13 +523,13 @@ namespace CM0102Patcher
                     yearChanger.UpdateStaff(indexFile, staffFile, 17);
                     MessageBox.Show("staff.dat updated");
                 }
-                if (e.KeyChar == (char)5 && checkBoxRemoveCDChecks.Visible) // E
+                if (e.KeyChar == (char)5 && SecretMode) // E
                 {
                     var patcher = new Patcher();
                     patcher.CurrencyInflationChanger0001(labelFilename.Text, (double)numericCurrencyInflation.Value);
                     MessageBox.Show("CM0001 EXE Updated with new Inflation Multiplier!");
                 }
-                if (e.KeyChar == (char)6 && checkBoxRemoveCDChecks.Visible) // F
+                if (e.KeyChar == (char)6 && SecretMode) // F
                 {
                     var yearChanger = new YearChanger();
                     var patcher = new Patcher();
@@ -554,7 +556,7 @@ namespace CM0102Patcher
                         }
                     }
                 }
-                if (e.KeyChar == (char)31 && checkBoxRemoveCDChecks.Visible) // -
+                if (e.KeyChar == (char)31 && SecretMode) // -
                 {
                     yearExeSyncDecrement = 1;
                     MessageBox.Show("Year Exe vs Data Sync Decrement Set to 1");
