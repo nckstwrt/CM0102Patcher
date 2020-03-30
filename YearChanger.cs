@@ -126,11 +126,11 @@ namespace CM0102Patcher
             if (year < 2000)
             {
                 // Euro
-                bw.Seek(0x1F9C0a, SeekOrigin.Begin);
                 for (int i = 1960; i < 2000; i+=4)
                 {
                     if (i >= year)
                     {
+                        bw.Seek(0x1F9C0a, SeekOrigin.Begin);
                         bw.Write((short)(i - 4));
                         break;
                     }
@@ -145,6 +145,7 @@ namespace CM0102Patcher
                         bw.Write((short)(i - 5));
                         bw.Seek(0x1F99BC, SeekOrigin.Begin);
                         bw.Write((short)(i - 4));
+                        break;
                     }
                 }
             }
