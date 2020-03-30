@@ -285,13 +285,21 @@ namespace CM0102Patcher
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["regenfixes"]);
                     if (checkBoxChangeResolution.Checked)
                     {
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["to1280x800"]);
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
-
                         int newWidth = ((Point)((comboBoxResolution.SelectedItem as ComboboxItem).Value)).X;
                         int newHeight = ((Point)((comboBoxResolution.SelectedItem as ComboboxItem).Value)).Y;
-                        ResolutionChanger.SetResolution(labelFilename.Text, newWidth, newHeight);
 
+                        if (newWidth == 800 && newHeight == 600)
+                        {
+                            // If 800x600 - revert
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["to1280x800"]);
+                        }
+                        else
+                        {
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["to1280x800"]);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
+                            ResolutionChanger.SetResolution(labelFilename.Text, newWidth, newHeight);
+                        }
+                        
                         // Convert the core gfx
                         int menuWidth = newWidth > 800 ? 126 : 90;
                         RGNConverter.RGN2RGN(Path.Combine(dataDir, "DEFAULT_PIC.RGN"), Path.Combine(dataDir, "bkg1280_800.rgn"), newWidth, newHeight);
