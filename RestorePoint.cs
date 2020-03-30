@@ -53,6 +53,13 @@ namespace CM0102Patcher
             }
         }
 
+        public static bool CheckForRestorePoint(string exeFile)
+        {
+            var dir = Path.GetDirectoryName(exeFile);
+            var restorePointDir = Path.Combine(dir, "RestorePoint");
+            return Directory.Exists(restorePointDir);
+        }
+
         public static void Save(string exeFile)
         {
             try

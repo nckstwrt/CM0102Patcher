@@ -168,6 +168,16 @@ namespace CM0102Patcher
                     return;
                 }
 
+                // Check for Restore Point
+                if (!RestorePoint.CheckForRestorePoint(labelFilename.Text))
+                {
+                    var result = MessageBox.Show("You have not yet made a Restore Point.\r\n\r\nRestore Points allow you to revert any changes you have made by clicking Restore in the patcher.\r\n\r\nWould you like to make one now before you apply changes?", "Make a Restore Point?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
+                        RestorePoint.Save(labelFilename.Text);
+                    if (result == DialogResult.Cancel)
+                        return;
+                }
+
                 using (var fileLock = File.Open(labelFilename.Text, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
                 {
                     var dir = Path.GetDirectoryName(labelFilename.Text);
