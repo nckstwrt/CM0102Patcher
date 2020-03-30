@@ -1,4 +1,4 @@
-# CM0102Patcher v1.25
+# CM0102Patcher v1.26
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/HDRysrF.png)
+![alt text](https://i.imgur.com/rFFmBnA.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,10 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.26:
+* Prompts users to create a Restore Point before they apply changes. This way they should be able to revert by clicking Restore in case of issues.
+* Correctly handles reverting back to 800x600 now
 
 v1.25:
 * New tool Save Game Changer - this can reduce stats in Saved Games that have run long and add in some of the special players from the original CM0102
