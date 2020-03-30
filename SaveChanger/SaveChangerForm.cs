@@ -54,10 +54,11 @@ namespace CM0102Patcher
                     sr2.Load(textBoxInput.Text);
                     var staff = sr2.BlockToObjects<TStaff>("staff.dat");
                     var players = sr2.BlockToObjects<TPlayer>("player.dat");
+                    var contracts = sr2.BlockToObjects<TContract>("contract.dat", true);
                     var firstNames = sr2.NamesFromBlock("first_names.dat");
                     var secondNames = sr2.NamesFromBlock("second_names.dat");
                     var gameDate = sr2.GetCurrentGameDate();
-
+                    
                     if (checkBoxLowerStats.Checked)
                     {
                         for (int i = 0; i < staff.Count(); i++)
@@ -106,8 +107,49 @@ namespace CM0102Patcher
                         }
                     }
 
+                    if (checkBoxContractStartDates.Checked)
+                    {
+                        for (int i = 0; i < contracts.Count(); i++)
+                        {
+                            var contract = contracts[i];
+                            if (contract.DateStarted.Year > 1900 && contract.DateStarted.Year < 3000 && contract.ContractExpires.Year > gameDate.Year)
+                            {
+                                contract.DateStarted = TCMDate.FromDateTime(TCMDate.ToDateTime(contract.DateStarted).AddYears(-1));
+                                contracts[i] = contract; 
+                            }
+                        }
+                        for (int i = 0; i < staff.Count(); i++)
+                        {
+                            var staffData = staff[i];
+                            if (staffData.DateJoinedClub.Year > 1900 && staffData.DateJoinedClub.Year < 3000 && staffData.DateExpiresClub.Year > gameDate.Year)
+                            {
+                                staffData.DateJoinedClub = TCMDate.FromDateTime(TCMDate.ToDateTime(staffData.DateJoinedClub).AddYears(-1));
+                                staff[i] = staffData;
+                            }
+                        }
+                    }
+
+                    if (checkBoxCapReputation.Checked)
+                    {
+                        for (int i = 0; i < staff.Count(); i++)
+                        {
+                            if (staff[i].Player < 0)
+                                continue;
+                            var staffData = staff[i];
+                            var player = players[staffData.Player];
+                            if (player.CurrentReputation > 5000)
+                            {
+                                player.CurrentReputation = 5000;
+                            }
+                            players[staffData.Player] = player;
+                        }
+                    }
+
                     sr2.ObjectsToBlock("player.dat", players);
                     sr2.ObjectsToBlock("staff.dat", staff);
+                    // Only write contracts if changed
+                    if (checkBoxContractStartDates.Checked)
+                        sr2.ObjectsToBlock("contract.dat", contracts, true);
                     sr2.Write(textBoxOutput.Text, checkBoxSaveCompressed.Checked);
 
                     MessageBox.Show(string.Format("Modification complete!\r\n\r\nSaved to {0} successfully!", Path.GetFileName(textBoxOutput.Text)), "Modification Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);

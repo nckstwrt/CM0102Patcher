@@ -201,10 +201,6 @@ namespace CM0102Scout
                 contracts[contract.ID] = contract;
                 Marshal.FreeHGlobal(ptrObj);
             }
-
-            var sanchContract = contracts[33597];
-
-            FindPlayer("Jadon", "Sancho");
         }
 
         public Staff FindPlayer(string firstName, string secondName)
