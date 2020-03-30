@@ -148,6 +148,9 @@ namespace CM0102Patcher
                         break;
                     }
                 }
+                // Turn off World Cup 1438 error
+                bw.Seek(0x52F2AC, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
             }
         }
 
