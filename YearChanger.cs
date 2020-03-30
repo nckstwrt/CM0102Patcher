@@ -125,8 +125,28 @@ namespace CM0102Patcher
             // Special 5 - For going back in time (fixes Euros - might be a better generic fix for euros for the future too (unlike Special 3))
             if (year < 2000)
             {
+                // Euro
                 bw.Seek(0x1F9C0a, SeekOrigin.Begin);
-                bw.Write((short)(year - (year % 4)));
+                for (int i = 1960; i < 2000; i+=4)
+                {
+                    if (i >= year)
+                    {
+                        bw.Write((short)(i - 4));
+                        break;
+                    }
+                }
+
+                // World Cup
+                for (int i = 1930; i < 2000; i += 4)
+                {
+                    if (i >= year)
+                    {
+                        bw.Seek(0x1F99A1, SeekOrigin.Begin);
+                        bw.Write((short)(i - 5));
+                        bw.Seek(0x1F99BC, SeekOrigin.Begin);
+                        bw.Write((short)(i - 4));
+                    }
+                }
             }
         }
 
