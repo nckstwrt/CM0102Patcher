@@ -1,4 +1,4 @@
-# CM0102Patcher v1.26
+# CM0102Patcher v1.27
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/rFFmBnA.png)
+![alt text](https://i.imgur.com/OsOiivx.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,11 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v1.27:
+* Updated Save Game Changer to support setting all contract start dates back a year (stops all teams refusing to sell because they bought recently)
+* Updated Save Game Changer to support setting the Current Reputation to a maxium of 5000 (stops all players being completely indispensable to the big clubs)
+* Fixed minor bugs in the Scouter
 
 v1.26:
 * Prompts users to create a Restore Point before they apply changes. This way they should be able to revert by clicking Restore in case of issues.
