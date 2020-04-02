@@ -141,9 +141,9 @@ namespace CM0102Patcher
                 {
                     if (i >= year)
                     {
-                        bw.Seek(0x1F99A1, SeekOrigin.Begin);
+                        bw.Seek(0x1F99A1, SeekOrigin.Begin);        // Normally 7CD (1997)
                         bw.Write((short)(i - 5));
-                        bw.Seek(0x1F99BC, SeekOrigin.Begin);
+                        bw.Seek(0x1F99BC, SeekOrigin.Begin);        // Normally 7CE (1998)
                         bw.Write((short)(i - 4));
                         break;
                     }
@@ -151,6 +151,36 @@ namespace CM0102Patcher
                 // Turn off World Cup 1438 error
                 bw.Seek(0x52F2AC, SeekOrigin.Begin);
                 bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+                // Special 3 from 00/01 code
+                bw.Seek(0x13DAE2, SeekOrigin.Begin);
+                bw.Write(YearToBytes(year - 2));
+
+                // Patcher for Tapani Euro Fix
+                var patcher = new Patcher();
+                patcher.ApplyPatch(stream, patcher.patches["tapanispacemaker"]);
+                patcher.ApplyPatch(stream, patcher.patches["tapanieurofix"]);
+
+                // Fix the Euro year jumps
+                bw.Seek(0x18315B, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x90, 0x90, 0xEB, 0x18 });
+
+                // If year is 1995 - at least try and get the euros kind of ok
+                if (year == 1995)
+                {
+                    // Swap Portugal for England
+                    bw.Seek(0x1F9CB4, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xe4, 0xf2 });
+                    // Change some saved scores so we don't get a duplicate England
+                    bw.Seek(0x18284B, SeekOrigin.Begin);
+                    bw.Write((byte)0xa);
+                    bw.Seek(0x18284e, SeekOrigin.Begin);
+                    bw.Write((byte)0x0);
+                    bw.Seek(0x182892, SeekOrigin.Begin);
+                    bw.Write((byte)0x0);
+                    bw.Seek(0x182895, SeekOrigin.Begin);
+                    bw.Write((byte)0xa);
+                }
             }
         }
 
