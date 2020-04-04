@@ -38,10 +38,11 @@
             this.checkBoxSaveCompressed = new System.Windows.Forms.CheckBox();
             this.buttonApply = new System.Windows.Forms.Button();
             this.groupBox = new System.Windows.Forms.GroupBox();
+            this.checkBoxCapReputation = new System.Windows.Forms.CheckBox();
+            this.checkBoxContractStartDates = new System.Windows.Forms.CheckBox();
             this.checkBoxAddSuperStars = new System.Windows.Forms.CheckBox();
             this.checkBoxLowerStats = new System.Windows.Forms.CheckBox();
-            this.checkBoxContractStartDates = new System.Windows.Forms.CheckBox();
-            this.checkBoxCapReputation = new System.Windows.Forms.CheckBox();
+            this.checkBoxReduceCrazyWages = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox.SuspendLayout();
@@ -97,7 +98,7 @@
             this.groupBox2.Controls.Add(this.checkBoxSaveCompressed);
             this.groupBox2.Controls.Add(this.buttonOutputSelectFile);
             this.groupBox2.Controls.Add(this.textBoxOutput);
-            this.groupBox2.Location = new System.Drawing.Point(12, 169);
+            this.groupBox2.Location = new System.Drawing.Point(12, 182);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(406, 70);
             this.groupBox2.TabIndex = 2;
@@ -118,7 +119,7 @@
             // 
             // buttonApply
             // 
-            this.buttonApply.Location = new System.Drawing.Point(180, 249);
+            this.buttonApply.Location = new System.Drawing.Point(180, 262);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(75, 26);
             this.buttonApply.TabIndex = 3;
@@ -128,16 +129,37 @@
             // 
             // groupBox
             // 
+            this.groupBox.Controls.Add(this.checkBoxReduceCrazyWages);
             this.groupBox.Controls.Add(this.checkBoxCapReputation);
             this.groupBox.Controls.Add(this.checkBoxContractStartDates);
             this.groupBox.Controls.Add(this.checkBoxAddSuperStars);
             this.groupBox.Controls.Add(this.checkBoxLowerStats);
             this.groupBox.Location = new System.Drawing.Point(12, 75);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(406, 86);
+            this.groupBox.Size = new System.Drawing.Size(406, 101);
             this.groupBox.TabIndex = 4;
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Options";
+            // 
+            // checkBoxCapReputation
+            // 
+            this.checkBoxCapReputation.AutoSize = true;
+            this.checkBoxCapReputation.Location = new System.Drawing.Point(218, 53);
+            this.checkBoxCapReputation.Name = "checkBoxCapReputation";
+            this.checkBoxCapReputation.Size = new System.Drawing.Size(176, 17);
+            this.checkBoxCapReputation.TabIndex = 3;
+            this.checkBoxCapReputation.Text = "Cap Current Reputation to 5000";
+            this.checkBoxCapReputation.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxContractStartDates
+            // 
+            this.checkBoxContractStartDates.AutoSize = true;
+            this.checkBoxContractStartDates.Location = new System.Drawing.Point(7, 53);
+            this.checkBoxContractStartDates.Name = "checkBoxContractStartDates";
+            this.checkBoxContractStartDates.Size = new System.Drawing.Size(203, 17);
+            this.checkBoxContractStartDates.TabIndex = 2;
+            this.checkBoxContractStartDates.Text = "Set Contract Start Dates Back 1 Year";
+            this.checkBoxContractStartDates.UseVisualStyleBackColor = true;
             // 
             // checkBoxAddSuperStars
             // 
@@ -159,31 +181,21 @@
             this.checkBoxLowerStats.Text = "Adjust Key Regen Stats By 15%";
             this.checkBoxLowerStats.UseVisualStyleBackColor = true;
             // 
-            // checkBoxContractStartDates
+            // checkBoxReduceCrazyWages
             // 
-            this.checkBoxContractStartDates.AutoSize = true;
-            this.checkBoxContractStartDates.Location = new System.Drawing.Point(7, 53);
-            this.checkBoxContractStartDates.Name = "checkBoxContractStartDates";
-            this.checkBoxContractStartDates.Size = new System.Drawing.Size(203, 17);
-            this.checkBoxContractStartDates.TabIndex = 2;
-            this.checkBoxContractStartDates.Text = "Set Contract Start Dates Back 1 Year";
-            this.checkBoxContractStartDates.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxCapReputation
-            // 
-            this.checkBoxCapReputation.AutoSize = true;
-            this.checkBoxCapReputation.Location = new System.Drawing.Point(218, 53);
-            this.checkBoxCapReputation.Name = "checkBoxCapReputation";
-            this.checkBoxCapReputation.Size = new System.Drawing.Size(176, 17);
-            this.checkBoxCapReputation.TabIndex = 3;
-            this.checkBoxCapReputation.Text = "Cap Current Reputation to 5000";
-            this.checkBoxCapReputation.UseVisualStyleBackColor = true;
+            this.checkBoxReduceCrazyWages.AutoSize = true;
+            this.checkBoxReduceCrazyWages.Location = new System.Drawing.Point(7, 76);
+            this.checkBoxReduceCrazyWages.Name = "checkBoxReduceCrazyWages";
+            this.checkBoxReduceCrazyWages.Size = new System.Drawing.Size(130, 17);
+            this.checkBoxReduceCrazyWages.TabIndex = 4;
+            this.checkBoxReduceCrazyWages.Text = "Reduce Crazy Wages";
+            this.checkBoxReduceCrazyWages.UseVisualStyleBackColor = true;
             // 
             // SaveChangerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(430, 287);
+            this.ClientSize = new System.Drawing.Size(430, 295);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.buttonApply);
             this.Controls.Add(this.groupBox2);
@@ -217,5 +229,6 @@
         private System.Windows.Forms.CheckBox checkBoxSaveCompressed;
         private System.Windows.Forms.CheckBox checkBoxContractStartDates;
         private System.Windows.Forms.CheckBox checkBoxCapReputation;
+        private System.Windows.Forms.CheckBox checkBoxReduceCrazyWages;
     }
 }

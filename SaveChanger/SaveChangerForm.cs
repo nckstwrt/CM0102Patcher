@@ -145,10 +145,23 @@ namespace CM0102Patcher
                         }
                     }
 
+                    if (checkBoxReduceCrazyWages.Checked)
+                    {
+                        for (int i = 0; i < contracts.Count(); i++)
+                        {
+                            var contract = contracts[i];
+                            if (contract.Wage >= 250000)
+                            {
+                                contract.Wage /= 10;
+                            }
+                            contracts[i] = contract;
+                        }
+                    }
+
                     sr2.ObjectsToBlock("player.dat", players);
                     sr2.ObjectsToBlock("staff.dat", staff);
                     // Only write contracts if changed
-                    if (checkBoxContractStartDates.Checked)
+                    if (checkBoxContractStartDates.Checked || checkBoxReduceCrazyWages.Checked)
                         sr2.ObjectsToBlock("contract.dat", contracts, true);
                     sr2.Write(textBoxOutput.Text, checkBoxSaveCompressed.Checked);
 
