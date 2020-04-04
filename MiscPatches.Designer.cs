@@ -37,16 +37,17 @@
             // checkedListBoxPatches
             // 
             this.checkedListBoxPatches.CheckOnClick = true;
+            this.checkedListBoxPatches.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkedListBoxPatches.FormattingEnabled = true;
             this.checkedListBoxPatches.Location = new System.Drawing.Point(9, 13);
             this.checkedListBoxPatches.Name = "checkedListBoxPatches";
-            this.checkedListBoxPatches.Size = new System.Drawing.Size(436, 259);
+            this.checkedListBoxPatches.Size = new System.Drawing.Size(572, 260);
             this.checkedListBoxPatches.TabIndex = 0;
             this.checkedListBoxPatches.SelectedValueChanged += new System.EventHandler(this.checkedListBoxPatches_SelectedValueChanged);
             // 
             // buttonApply
             // 
-            this.buttonApply.Location = new System.Drawing.Point(281, 286);
+            this.buttonApply.Location = new System.Drawing.Point(367, 280);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(75, 23);
             this.buttonApply.TabIndex = 1;
@@ -56,18 +57,20 @@
             // 
             // textBoxDescription
             // 
-            this.textBoxDescription.Location = new System.Drawing.Point(451, 13);
+            this.textBoxDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.textBoxDescription.Location = new System.Drawing.Point(598, 12);
             this.textBoxDescription.Multiline = true;
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.ReadOnly = true;
-            this.textBoxDescription.Size = new System.Drawing.Size(174, 259);
+            this.textBoxDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxDescription.Size = new System.Drawing.Size(199, 261);
             this.textBoxDescription.TabIndex = 2;
             // 
             // MiscPatches
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(634, 321);
+            this.ClientSize = new System.Drawing.Size(809, 311);
             this.Controls.Add(this.textBoxDescription);
             this.Controls.Add(this.buttonApply);
             this.Controls.Add(this.checkedListBoxPatches);
