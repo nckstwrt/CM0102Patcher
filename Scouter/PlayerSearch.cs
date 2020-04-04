@@ -177,6 +177,10 @@ namespace CM0102Patcher.Scouter
             {
                 RowFilter += string.Format("AND [Contract Age] >= 6 ");
             }
+            if (checkBoxNotAlreadyLeaving.Checked)
+            {
+                RowFilter += string.Format("AND [Leaving Club] LIKE 'No' ");
+            }
 
             // MadScientist's Code
             //Position logic:            

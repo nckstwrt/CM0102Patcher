@@ -32,6 +32,8 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageGeneral = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.checkBoxNotNewContract = new System.Windows.Forms.CheckBox();
+            this.checkBoxNotIndispensible = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.numericUpDownValueMax = new System.Windows.Forms.NumericUpDown();
@@ -106,8 +108,7 @@
             this.comboBoxFilter1 = new System.Windows.Forms.ComboBox();
             this.buttonReset = new System.Windows.Forms.Button();
             this.buttonApply = new System.Windows.Forms.Button();
-            this.checkBoxNotIndispensible = new System.Windows.Forms.CheckBox();
-            this.checkBoxNotNewContract = new System.Windows.Forms.CheckBox();
+            this.checkBoxNotAlreadyLeaving = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -169,6 +170,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.checkBoxNotAlreadyLeaving);
             this.groupBox4.Controls.Add(this.checkBoxNotNewContract);
             this.groupBox4.Controls.Add(this.checkBoxNotIndispensible);
             this.groupBox4.Controls.Add(this.label10);
@@ -181,6 +183,26 @@
             this.groupBox4.TabIndex = 8;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Contract";
+            // 
+            // checkBoxNotNewContract
+            // 
+            this.checkBoxNotNewContract.AutoSize = true;
+            this.checkBoxNotNewContract.Location = new System.Drawing.Point(9, 86);
+            this.checkBoxNotNewContract.Name = "checkBoxNotNewContract";
+            this.checkBoxNotNewContract.Size = new System.Drawing.Size(111, 17);
+            this.checkBoxNotNewContract.TabIndex = 18;
+            this.checkBoxNotNewContract.Text = "Not New Contract";
+            this.checkBoxNotNewContract.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxNotIndispensible
+            // 
+            this.checkBoxNotIndispensible.AutoSize = true;
+            this.checkBoxNotIndispensible.Location = new System.Drawing.Point(9, 63);
+            this.checkBoxNotIndispensible.Name = "checkBoxNotIndispensible";
+            this.checkBoxNotIndispensible.Size = new System.Drawing.Size(107, 17);
+            this.checkBoxNotIndispensible.TabIndex = 12;
+            this.checkBoxNotIndispensible.Text = "Not Indispensible";
+            this.checkBoxNotIndispensible.UseVisualStyleBackColor = true;
             // 
             // label10
             // 
@@ -991,25 +1013,15 @@
             this.buttonApply.UseVisualStyleBackColor = true;
             this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
             // 
-            // checkBoxNotIndispensible
+            // checkBoxNotAlreadyLeaving
             // 
-            this.checkBoxNotIndispensible.AutoSize = true;
-            this.checkBoxNotIndispensible.Location = new System.Drawing.Point(9, 63);
-            this.checkBoxNotIndispensible.Name = "checkBoxNotIndispensible";
-            this.checkBoxNotIndispensible.Size = new System.Drawing.Size(107, 17);
-            this.checkBoxNotIndispensible.TabIndex = 12;
-            this.checkBoxNotIndispensible.Text = "Not Indispensible";
-            this.checkBoxNotIndispensible.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxNotNewContract
-            // 
-            this.checkBoxNotNewContract.AutoSize = true;
-            this.checkBoxNotNewContract.Location = new System.Drawing.Point(9, 86);
-            this.checkBoxNotNewContract.Name = "checkBoxNotNewContract";
-            this.checkBoxNotNewContract.Size = new System.Drawing.Size(111, 17);
-            this.checkBoxNotNewContract.TabIndex = 18;
-            this.checkBoxNotNewContract.Text = "Not New Contract";
-            this.checkBoxNotNewContract.UseVisualStyleBackColor = true;
+            this.checkBoxNotAlreadyLeaving.AutoSize = true;
+            this.checkBoxNotAlreadyLeaving.Location = new System.Drawing.Point(9, 109);
+            this.checkBoxNotAlreadyLeaving.Name = "checkBoxNotAlreadyLeaving";
+            this.checkBoxNotAlreadyLeaving.Size = new System.Drawing.Size(122, 17);
+            this.checkBoxNotAlreadyLeaving.TabIndex = 19;
+            this.checkBoxNotAlreadyLeaving.Text = "Not Already Leaving";
+            this.checkBoxNotAlreadyLeaving.UseVisualStyleBackColor = true;
             // 
             // PlayerSearch
             // 
@@ -1147,5 +1159,6 @@
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.CheckBox checkBoxNotNewContract;
         private System.Windows.Forms.CheckBox checkBoxNotIndispensible;
+        private System.Windows.Forms.CheckBox checkBoxNotAlreadyLeaving;
     }
 }

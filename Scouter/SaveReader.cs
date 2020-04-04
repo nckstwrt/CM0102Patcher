@@ -275,6 +275,7 @@ namespace CM0102Scout
             dataTable.Columns.Add("Player Morale", typeof(byte));
             dataTable.Columns.Add("Squad Status", typeof(string));
             dataTable.Columns.Add("Contract Age", typeof(int));
+            dataTable.Columns.Add("Leaving Club", typeof(string));
             dataTable.Columns.Add("Scouter Rating", typeof(int));
 
             // Creativity = Vision
@@ -358,8 +359,33 @@ namespace CM0102Scout
                         weighter.Add(player.WorkRate, 20, 7);
                         weighter.Add(player.Strength, 20, 5);
                     }
+                    else
+                    // Midfielder (TODO: Do a separate one for for DMs)
+                    if ((player.Midfielder >= 15 || player.DefensiveMidfielder >= 15))
+                    {
+                        weighter.Add(player.Acceleration, 20, 10);
+                        weighter.Add(player.PlayerPace, 20, 10);
+                        weighter.Add(staff.determination, 20, 10);
+                        weighter.Add(player.Aggression, 20, 8);
+                        weighter.Add(player.Balance, 20, 8);
+                        weighter.Add(player.Bravery, 20, 8);
+                        weighter.Add(player.Passing, 20, 8);
+                        weighter.Add(player.Flair, 20, 7);
+                        weighter.Add(player.Technique, 20, 7);
+                        weighter.Add(instrinsicsOn ? player.Passing : player.Convert(player.Passing, true), 20, 8);
+                        weighter.Add(instrinsicsOn ? player.Vision : player.Convert(player.Vision, true), 20, 8);
+                        weighter.Add(instrinsicsOn ? player.Dribbling : player.Convert(player.Dribbling, true), 120, 7);
+                        weighter.Add(instrinsicsOn ? player.Movement : player.Convert(player.Movement, true), 120, 6);
+                        weighter.Add(player.Agility, 20, 7);
+                        weighter.Add(player.Teamwork, 20, 7);
+                        weighter.Add(player.WorkRate, 20, 7);
+                        weighter.Add(player.Strength, 20, 5);
+                    }
+                    
                     if (player.Attacker>=15)
                     {
+                        // If Attacker - reset - overrides everything else
+                        weighter.Reset(instrinsicsOn);
                         weighter.Add(instrinsicsOn ? player.Finishing : player.Convert(player.Finishing, true), 120, 12);
                         weighter.Add(instrinsicsOn ? player.Movement : player.Convert(player.Movement, true), 120, 12);
                         weighter.Add(player.PlayerPace, 20, 7);
@@ -372,7 +398,8 @@ namespace CM0102Scout
                         weighter.Add(player.Bravery, 20, 4);
                     }
 
-                    
+
+                    string leavingClub = "Unknown";
                     string squadStatus = "Unknown";
                     int contractAgesMonths = 0;
                     if (contracts.ContainsKey(staff.staffId))
@@ -399,6 +426,11 @@ namespace CM0102Scout
 
                         DateTime startDate = YearChanger.FromCMDate(contract.DateStarted.Day, contract.DateStarted.Year, contract.DateStarted.LeapYear);
                         contractAgesMonths = (int)Math.Round((gameDate - startDate).TotalDays / 30);
+
+                        if (contract.TransferArrangedFor == -1 && contract.LeavingOnBosman == 0)
+                            leavingClub = "No";
+                        else
+                            leavingClub = "Yes";
                     }
 
                     dataTable.Rows.Add(name, age, club, nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, staff.value,
@@ -448,6 +480,7 @@ namespace CM0102Scout
                         player.PlayerMorale,
                         squadStatus,
                         contractAgesMonths,
+                        leavingClub,
                         weighter.RatingPercentage
                         );
                 }
