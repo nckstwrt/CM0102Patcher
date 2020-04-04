@@ -74,15 +74,22 @@ namespace CM0102Patcher
             var block = FindBlock(blockName);
             if (block != null)
             {
+                int maxSlices = -1;
                 int startAt = 0;
                 if (contractSpecific)
                 {
                     var intPreCount = BitConverter.ToInt32(block.dataBuffer, 0);
                     var blockCount = BitConverter.ToInt32(block.dataBuffer, 4);
                     startAt = (8 + intPreCount * 21);
+
+                    if (intPreCount > 0)
+                    {
+                        blockCount = BitConverter.ToInt32(block.dataBuffer, startAt - 4);
+                    }
+                    maxSlices = blockCount;
                 }
 
-                var slices = SliceBlock(block, Marshal.SizeOf(typeof(T)), startAt);
+                var slices = SliceBlock(block, Marshal.SizeOf(typeof(T)), startAt, maxSlices);
                 ret = CastSlicesToObjects<T>(slices);
             }
             return ret;
@@ -162,7 +169,7 @@ namespace CM0102Patcher
             return ret;
         }
 
-        List<byte[]> SliceBlock(Block block, int sliceSize, int startAt = 0)
+        List<byte[]> SliceBlock(Block block, int sliceSize, int startAt = 0, int maxSlices = -1)
         {
             List<byte[]> slices = new List<byte[]>();
             for (int i = startAt; i < block.dataBuffer.Length; i += sliceSize)
@@ -171,6 +178,8 @@ namespace CM0102Patcher
                 if (i + sliceSize <= block.dataBuffer.Length)
                     Array.Copy(block.dataBuffer, i, slice, 0, sliceSize);
                 slices.Add(slice);
+                if (maxSlices != -1 && slices.Count >= maxSlices)
+                    break;
             }
             return slices;
         }
@@ -215,14 +224,21 @@ namespace CM0102Patcher
             if (contractSpecific)
             {
                 var intPreCount = BitConverter.ToInt32(block.dataBuffer, 0);
-                ptr = (8 + intPreCount * 21);
+                var count = BitConverter.ToInt32(block.dataBuffer, 4);
+                ptr = (8 + (intPreCount * 21));
+                /*
                 newDataBuffer = new byte[totalSliceSize + ptr + 13];
                 Array.Copy(block.dataBuffer, 0, newDataBuffer, 0, ptr);
 
                 // Write new Block Count
-                Array.Copy(BitConverter.GetBytes(slices.Count), 0, newDataBuffer, 4, 4);
+                if (intPreCount == 0)
+                    Array.Copy(BitConverter.GetBytes(slices.Count), 0, newDataBuffer, 4, 4);
 
                 newDataBuffer[newDataBuffer.Length - 1] = 1;
+                */
+                // Simplified version (as we are not expanding or contracting this right now)
+                newDataBuffer = new byte[block.dataBuffer.Length];
+                Array.Copy(block.dataBuffer, 0, newDataBuffer, 0, block.dataBuffer.Length);
             }
             else
                 newDataBuffer = new byte[totalSliceSize];
