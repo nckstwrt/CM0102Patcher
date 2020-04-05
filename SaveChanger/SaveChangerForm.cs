@@ -158,6 +158,14 @@ namespace CM0102Patcher
                         }
                     }
 
+                    // TODO
+                    if (false)
+                    {
+                        var clubs = sr2.BlockToObjects<TClub>("club.dat");
+                        var manutd = clubs.First(x => ArrayToString(x.ShortName) == "Man Utd");
+                        Console.WriteLine();
+                    }
+
                     sr2.ObjectsToBlock("player.dat", players);
                     sr2.ObjectsToBlock("staff.dat", staff);
                     // Only write contracts if changed
@@ -174,6 +182,11 @@ namespace CM0102Patcher
             }
             else
                 MessageBox.Show("Please select both an input and output save game file", "CM0102Patch Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        public string ArrayToString(byte[] array)
+        {
+            return Encoding.GetEncoding("ISO-8859-1").GetString(array, 0, array.Length).TrimEnd('\0');
         }
     }
 }

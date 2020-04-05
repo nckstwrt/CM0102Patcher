@@ -171,6 +171,118 @@ namespace CM0102Patcher
         public byte PlayerMorale;
     }
 
+    // 581
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TClub
+    {
+        public int ID;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)] public byte[] Name;
+        public byte GenderName;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] ShortName;
+        public byte ShortGenderName;
+        public int Nation;
+        public int Division;
+        public int LastDivision;
+        public byte LastPosition;
+        public int ReserveDivision;
+        public byte ProfessionalStatus;
+        public int Cash;
+        public int Stadium;
+        public byte OwnStadium;
+        public int ReserveStadium;
+        public byte MatchDay;
+        public int Attendance;
+        public int MinAttendance;
+        public int MaxAttendance;
+        public byte Training;
+        public UInt16 Reputation;
+        public byte PLC;
+        public int ForeColour1;
+        public int BackColour1;
+        public int ForeColour2;
+        public int BackColour2;
+        public int ForeColour3;
+        public int BackColour3;
+        public int FavStaff1;
+        public int FavStaff2;
+        public int FavStaff3;
+        public int DisStaff1;
+        public int DisStaff2;
+        public int DisStaff3;
+        public int Rival1;
+        public int Rival2;
+        public int Rival3;
+        public int Chairman;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)] public int[] Directors;
+        public int Manager;
+        public int AssistantManager;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)] public int[] Squad;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)] public int[] Coaches;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)] public int[] Scouts;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)] public int[] Physios;
+        public int EuroFlag;
+        public byte EuroSeeding;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)] public int[] TeamSelected;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] public int[] TacticTraining;
+        public int TacticSelected;
+        public byte HasLinkedClub;
+    }
+/*
+    TClub = packed record
+    ID: LongInt;
+    Name: TStandardText;
+    GenderName: Char;
+    ShortName: TShortText;
+    ShortGenderName: Char;
+    Nation: PNation;
+    Division: PDivision;
+    LastDivision: PDivision;
+    LastPosition: Byte;
+    ReserveDivision: PDivision;
+    ProfessionalStatus: Byte;
+    Cash: LongInt;
+    Stadium: LongInt;
+    OwnStadium: Byte;
+    ReserveStadium: LongInt;
+    MatchDay: Byte;
+    Attendance: LongInt;
+    MinAttendance: LongInt;
+    MaxAttendance: LongInt;
+    Training: Byte;
+    Reputation: Word;
+    PLC: Byte;
+    ForeColour1: LongInt;
+    BackColour1: LongInt;
+    ForeColour2: LongInt;
+    BackColour2: LongInt;
+    ForeColour3: LongInt;
+    BackColour3: LongInt;
+    FavStaff1: PStaff;
+    FavStaff2: PStaff;
+    FavStaff3: PStaff;
+    DisStaff1: PStaff;
+    DisStaff2: PStaff;
+    DisStaff3: PStaff;
+    Rival1: PClub;
+    Rival2: PClub;
+    Rival3: PClub;
+    Chairman: PStaff;
+    Directors: array[0..2] of PStaff;
+    Manager: PStaff;
+    AssistantManager: PStaff;
+    Squad: array[0..49] of PStaff;
+    Coaches: array[0..4] of PStaff;
+    Scouts: array[0..6] of PStaff;
+    Physios: array[0..2] of PStaff;
+    EuroFlag: LongInt;
+    EuroSeeding: Byte;
+    TeamSelected: array[0..19] of PStaff;
+    TacticTraining: array[0..3] of LongInt;
+    TacticSelected: LongInt;
+    HasLinkedClub: Byte;
+  end;
+*/
+
     public class Block
     {
         public byte[] blockBuffer;
