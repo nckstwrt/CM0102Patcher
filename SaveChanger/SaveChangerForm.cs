@@ -159,7 +159,7 @@ namespace CM0102Patcher
                     }
 
                     // TODO
-                    if (true)
+                    if (false)
                     {
                         var clubs = sr2.BlockToObjects<TClub>("club.dat");
                         var manutd = clubs.First(x => ArrayToString(x.ShortName) == "Man Utd");
