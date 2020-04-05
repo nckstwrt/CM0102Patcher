@@ -464,9 +464,9 @@
             this.checkBoxRemove3NonEULimit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxRemove3NonEULimit.Location = new System.Drawing.Point(219, 146);
             this.checkBoxRemove3NonEULimit.Name = "checkBoxRemove3NonEULimit";
-            this.checkBoxRemove3NonEULimit.Size = new System.Drawing.Size(200, 20);
+            this.checkBoxRemove3NonEULimit.Size = new System.Drawing.Size(221, 20);
             this.checkBoxRemove3NonEULimit.TabIndex = 30;
-            this.checkBoxRemove3NonEULimit.Text = "Remove 3 foreign player limit";
+            this.checkBoxRemove3NonEULimit.Text = "Remove UK 3 foreign player limit";
             this.toolTips.SetToolTip(this.checkBoxRemove3NonEULimit, "Removes the 3 non-EU player limit from England, Denmark and Sweden");
             this.checkBoxRemove3NonEULimit.UseVisualStyleBackColor = true;
             // 
@@ -654,7 +654,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v1.27";
+            this.Text = "Nick\'s CM0102Patcher v1.28";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
