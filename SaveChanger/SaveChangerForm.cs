@@ -109,19 +109,33 @@ namespace CM0102Patcher
 
                     if (checkBoxContractStartDates.Checked)
                     {
+                        Dictionary<int, List<TContract>> contractLookup = new Dictionary<int, List<TContract>>();
+                        
                         for (int i = 0; i < contracts.Count(); i++)
                         {
                             var contract = contracts[i];
-                            if (contract.DateStarted.Year > 1900 && contract.DateStarted.Year < 3000 && contract.ContractExpires.Year > gameDate.Year)
+                            if (contract.LeavingOnBosman != 1 && contract.DateStarted.Year > 1900 && contract.DateStarted.Year < 3000 && contract.ContractExpires.Year > gameDate.Year)
                             {
                                 contract.DateStarted = TCMDate.FromDateTime(TCMDate.ToDateTime(contract.DateStarted).AddYears(-1));
                                 contracts[i] = contract; 
                             }
+                            if (!contractLookup.ContainsKey(contract.ID))
+                                contractLookup[contract.ID] = new List<TContract>();
+                            contractLookup[contract.ID].Add(contract);
                         }
+
+                        var nathan = sr2.FindPlayer("Nathan", "Baxter", staff);
+                        var nathanContract = contractLookup[nathan[0].ID];
+
                         for (int i = 0; i < staff.Count(); i++)
                         {
                             var staffData = staff[i];
-                            if (staffData.DateJoinedClub.Year > 1900 && staffData.DateJoinedClub.Year < 3000 && staffData.DateExpiresClub.Year > gameDate.Year)
+                            bool LeavingOnBosman = false;
+                            if (contractLookup.ContainsKey(staffData.ID))
+                            {
+                                LeavingOnBosman = (contractLookup[staffData.ID][0].LeavingOnBosman == 1);
+                            }
+                            if (!LeavingOnBosman && staffData.DateJoinedClub.Year > 1900 && staffData.DateJoinedClub.Year < 3000 && staffData.DateExpiresClub.Year > gameDate.Year)
                             {
                                 staffData.DateJoinedClub = TCMDate.FromDateTime(TCMDate.ToDateTime(staffData.DateJoinedClub).AddYears(-1));
                                 staff[i] = staffData;

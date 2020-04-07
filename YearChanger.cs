@@ -46,6 +46,7 @@ namespace CM0102Patcher
         // https://champman0102.co.uk/showthread.php?t=7158&highlight=tapani+euro+crash
         // https://champman0102.co.uk/showthread.php?t=7535&page=2&p=53225#post53225
         // https://champman0102.co.uk/archive/index.php/t-7636-p-2.html  (search for: 5182dc)
+        // https://champman0102.co.uk/archive/index.php/t-6087.html Asia World Cup 00911CB7
         public void ApplyYearChangeToExe(Stream stream, int year)
         {
             // In 4.0 and lower, BinaryWriter closes the outer stream. So don't dispose it and let the streams close themselves
@@ -189,11 +190,11 @@ namespace CM0102Patcher
                 {
                     // Oceania Patch from above?
                     bw.Seek(0x5182dc, SeekOrigin.Begin);
-                    bw.Write((short)2000);
+                    bw.Write((short)1994);
                     bw.Seek(0x518473, SeekOrigin.Begin);
                     bw.Write((byte)0xeb);
                     bw.Seek(0x52036e, SeekOrigin.Begin);
-                    bw.Write((short)2000);
+                    bw.Write((short)1994);
                     bw.Seek(0x5204b8, SeekOrigin.Begin);
                     bw.Write((byte)0xeb);
                 }

@@ -125,46 +125,33 @@ namespace CM0102Patcher
             return TCMDate.ToDateTime(new TCMDate(block.dataBuffer, 3944));
         }
 
-        public TStaff FindPlayer(string firstName, string lastName, List<TStaff> staff, bool ignoreSymbols = false)
+        public List<TStaff> FindPlayer(string firstName, string lastName, List<TStaff> staff)
         {
-            TStaff ret = new TStaff();
+            List<TStaff> ret = new List<TStaff>();
             if (firstNames == null)
             {
                 firstNames = NamesFromBlock("first_names.dat");
                 secondNames = NamesFromBlock("second_names.dat");
             }
 
-            int fname_idx = -1;
-            int sname_idx = -1;
-            if (ignoreSymbols)
+            List<int> fname_idx = new List<int>();
+            List<int> sname_idx = new List<int>();
+            for (int i = 0; i < firstNames.Count(); i++)
             {
-                for (int i = 0; i < firstNames.Count(); i++)
+                if (string.Compare(firstName, firstNames[i], CultureInfo.CurrentCulture, CompareOptions.IgnoreNonSpace) == 0)
                 {
-                    if (string.Compare(firstName, firstNames[i], CultureInfo.CurrentCulture, CompareOptions.IgnoreNonSpace) == 0)
-                    {
-                        fname_idx = i;
-                        break;
-                    }
-                }
-                for (int i = 0; i < secondNames.Count(); i++)
-                {
-                    if (string.Compare(lastName, secondNames[i], CultureInfo.CurrentCulture, CompareOptions.IgnoreNonSpace) == 0)
-                    {
-                        sname_idx = i;
-                        break;
-                    }
+                    fname_idx.Add(i);
                 }
             }
-            else
+            for (int i = 0; i < secondNames.Count(); i++)
             {
-                fname_idx = firstNames.IndexOf(firstName);
-                sname_idx = secondNames.IndexOf(lastName);
+                if (string.Compare(lastName, secondNames[i], CultureInfo.CurrentCulture, CompareOptions.IgnoreNonSpace) == 0)
+                {
+                    sname_idx.Add(i);
+                }
             }
 
-            if (fname_idx != -1 && sname_idx != -1)
-            {
-                ret = staff.FirstOrDefault(x => x.FirstName == fname_idx && x.SecondName == sname_idx);
-            }
+            ret.AddRange(staff.FindAll(x => fname_idx.Contains(x.FirstName) && sname_idx.Contains(x.SecondName)));
 
             return ret;
         }

@@ -207,7 +207,10 @@ namespace CM0102Patcher
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not open executable for patching!\r\n\r\nException:\r\n" + ex.Message, "Error Opening File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void buttonBrowse_Click(object sender, EventArgs e)
@@ -296,6 +299,7 @@ namespace CM0102Patcher
                     // Year Change
                     if (checkBoxChangeStartYear.Checked)
                     {
+                        /*
                         // Assume Staff.data is in Data
                         var staffFile = Path.Combine(dataDir, "staff.dat");
                         var indexFile = Path.Combine(dataDir, "index.dat");
@@ -342,7 +346,7 @@ namespace CM0102Patcher
                             ExceptionMsgBox.Show(ex);
                             return;
                         }
-                        /*
+                        */
                         // New EXE Version
                         YearChanger yearChanger = new YearChanger();
                         var currentYear = yearChanger.GetCurrentExeYear(labelFilename.Text);
@@ -353,7 +357,7 @@ namespace CM0102Patcher
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatch"]);
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatchjumps"]);
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["comphistory_datecalcpatch"]);
-                        }*/
+                        }
                     }
 
                     // Patches

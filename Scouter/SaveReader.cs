@@ -198,7 +198,9 @@ namespace CM0102Scout
                 var ptrObj = Marshal.AllocHGlobal(ContractSize);
                 Marshal.Copy(contractBlock, 0, ptrObj, ContractSize);
                 Contract contract = (Contract)Marshal.PtrToStructure(ptrObj, typeof(Contract));
-                contracts[contract.ID] = contract;
+                // Ignore the fact there's two contracts in there for some people - just take the first
+                if (!contracts.ContainsKey(contract.ID))
+                    contracts[contract.ID] = contract;
                 Marshal.FreeHGlobal(ptrObj);
             }
         }
