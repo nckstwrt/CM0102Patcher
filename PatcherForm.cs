@@ -14,6 +14,8 @@ namespace CM0102Patcher
 {
     public partial class PatcherForm : Form
     {
+        bool isTapani = false;
+
         public PatcherForm()
         {
             InitializeComponent();
@@ -75,6 +77,19 @@ namespace CM0102Patcher
             }
         }
 
+        private void SetComboBox<T>(ComboBox comboBox, T value)
+        {
+            foreach (var item in comboBox.Items)
+            {
+                var castItem = (item as ComboboxItem);
+                var itemValue = (T)Convert.ChangeType(castItem.Value, typeof(T));
+                if (itemValue.Equals(value))
+                {
+                    comboBox.SelectedItem = item;
+                }
+            }
+        }
+
         private void TapaniDetection()
         {
             try
@@ -82,7 +97,7 @@ namespace CM0102Patcher
                 var windowText = " - (TAPANI EXE DETECTED)";
                 var exeFile = labelFilename.Text;
                 // Use the pattern finder in the NoCD patcher
-                bool isTapani = false;
+                isTapani = false;
                 NoCDPatch.FindPattern(exeFile, Encoding.ASCII.GetBytes("Tapani v"), (file, br, bw, offset) => { isTapani = true; });
                 if (!isTapani)
                     NoCDPatch.FindPattern(exeFile, Encoding.ASCII.GetBytes("TapaniPatch"), (file, br, bw, offset) => { isTapani = true; });
@@ -91,12 +106,11 @@ namespace CM0102Patcher
                 this.Text = this.Text.Replace(windowText, "");
                 if (isTapani)
                 {
-                    ResetControls(this);
                     this.Text += windowText;
                 }
+                ResetControls(this);
                 checkBoxChangeStartYear.Enabled = !isTapani;
                 checkBoxIdleSensitivity.Enabled = !isTapani;
-                checkBoxCDRemoval.Enabled = !isTapani;
                 checkBoxDisableSplashScreen.Enabled = !isTapani;
                 checkBox7Subs.Enabled = !isTapani;
                 checkBoxAllowCloseWindow.Enabled = !isTapani;
@@ -105,18 +119,93 @@ namespace CM0102Patcher
                 checkBoxJobsAbroadBoost.Enabled = !isTapani;
                 checkBoxRemove3NonEULimit.Enabled = !isTapani;
                 checkBoxReplaceWelshPremier.Enabled = !isTapani;
+                comboBoxReplacementLeagues.Enabled = !isTapani;
                 checkBoxNewRegenCode.Enabled = !isTapani;
                 checkBoxManageAnyTeam.Enabled = !isTapani;
                 checkBoxUpdateNames.Enabled = !isTapani;
                 checkBoxSwapSKoreaForChina.Enabled = !isTapani;
                 checkBoxChangeStartYear_CheckedChanged(null, null);
 
-                // Do some defaults - as it seems to confuse people without
-                checkBoxEnableColouredAtts.Checked = true;
-                checkBoxDisableUnprotectedContracts.Checked = true;
-                checkBoxHideNonPublicBids.Checked = true;
-                numericCurrencyInflation.Value = 2.5m;
-                comboBoxGameSpeed.SelectedIndex = 4;
+                if (isTapani)
+                {
+                    MessageBox.Show("You have selected to patch an exe that has already been patched by a Tapani/Saturn patch\r\n\r\nSome options will be greyed out because they are either already enabled by the Tapani/Saturn patch or because they are not applyable to a Tapani/Saturn executable", "Tapani/Saturn Exe Detected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                                
+                var patcher = new Patcher();
+                short speedHack;
+                double currencyMultiplier;
+                var appliedPatches = patcher.DetectPatches(exeFile, out speedHack, out currencyMultiplier);
+
+                if (appliedPatches.Count != 0)
+                {
+                    checkBoxIdleSensitivity.Checked = isTapani || appliedPatches.Contains("idlesensitivity"); // Tapani implements it in a different way
+                    checkBoxCDRemoval.Checked = appliedPatches.Contains("disablecdremove");
+                    checkBoxDisableSplashScreen.Checked = appliedPatches.Contains("disablesplashscreen");
+                    checkBox7Subs.Checked = appliedPatches.Contains("sevensubs");
+                    checkBoxAllowCloseWindow.Checked = appliedPatches.Contains("allowclosewindow");
+                    checkBoxShowStarPlayers.Checked = appliedPatches.Contains("showstarplayers");
+                    checkBoxRegenFixes.Checked = isTapani || appliedPatches.Contains("regenfixes"); // Tapani implements it in a different way
+                    checkBoxJobsAbroadBoost.Checked = isTapani || appliedPatches.Contains("jobsabroadboost"); // Tapani implements it in a different way
+                    checkBoxRemove3NonEULimit.Checked = appliedPatches.Contains("remove3playerlimit");
+                    checkBoxNewRegenCode.Checked = isTapani || appliedPatches.Contains("tapaninewregencode"); // Tapani implements it in a different way
+                    checkBoxManageAnyTeam.Checked = appliedPatches.Contains("manageanyteam");
+                    checkBoxSwapSKoreaForChina.Checked = isTapani || appliedPatches.Contains("chinapatch"); // Tapani implements it in a different way (Is Saturn really)
+                    checkBoxUpdateNames.Checked = isTapani || appliedPatches.Contains("transferwindowpatch"); // Tapani implements it in a different way
+                    
+                    // This two are irreversible
+                    if (checkBoxUpdateNames.Checked)
+                        checkBoxUpdateNames.Enabled = false;
+                    if (checkBoxSwapSKoreaForChina.Checked)
+                        checkBoxSwapSKoreaForChina.Enabled = false;
+
+                    if (isTapani)
+                    {
+                        checkBoxReplaceWelshPremier.Checked = true;
+                        comboBoxReplacementLeagues.SelectedItem = "English National League North";
+                        comboBoxReplacementLeagues.Enabled = false;
+                    }
+
+                    // Tapani Selectable
+                    checkBoxEnableColouredAtts.Checked = appliedPatches.Contains("colouredattributes");
+                    checkBoxDisableUnprotectedContracts.Checked = appliedPatches.Contains("disableunprotectedcontracts");
+                    checkBoxHideNonPublicBids.Checked = appliedPatches.Contains("hideprivatebids");
+                    checkBoxForceLoadAllPlayers.Checked = appliedPatches.Contains("forceloadallplayers");
+                    checkBoxMakeExecutablePortable.Checked = (appliedPatches.Contains("changeregistrylocation") && appliedPatches.Contains("memorycheckfix") && appliedPatches.Contains("removemutexcheck"));
+                    checkBoxRestrictTactics.Checked = appliedPatches.Contains("restricttactics");
+
+                    SetComboBox(comboBoxGameSpeed, speedHack);
+                    numericCurrencyInflation.Value = (decimal)currencyMultiplier;
+
+                    YearChanger yearChanger = new YearChanger();
+                    numericGameStartYear.Value = yearChanger.GetCurrentExeYear(exeFile);
+
+                    int resWidth, resHeight;
+                    ResolutionChanger.GetResolution(exeFile, out resWidth, out resHeight);
+                    SetComboBox(comboBoxResolution, new Point(resWidth, resHeight));
+                    checkBoxChangeResolution.Checked = !(resWidth == 800 && resHeight == 600);
+                }
+                else
+                {
+                    var result = MessageBox.Show("You are patching an executable that has not been patched before.\r\n\r\nWould you like the patcher to suggest some options to apply?", "Default Options?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        checkBoxEnableColouredAtts.Checked = true;
+                        checkBoxDisableUnprotectedContracts.Checked = true;
+                        checkBoxHideNonPublicBids.Checked = true;
+                        checkBoxDisableSplashScreen.Checked = true;
+                        checkBoxCDRemoval.Checked = true;
+                        checkBox7Subs.Checked = true;
+                        checkBoxRegenFixes.Checked = true;
+                        checkBoxIdleSensitivity.Checked = true;
+                        checkBoxAllowCloseWindow.Checked = true;
+                        checkBoxShowStarPlayers.Checked = true;
+                        checkBoxJobsAbroadBoost.Checked = true;
+                        checkBoxRemove3NonEULimit.Checked = true;
+                        checkBoxMakeExecutablePortable.Checked = true;
+                        numericCurrencyInflation.Value = 2.5m;
+                        comboBoxGameSpeed.SelectedIndex = 4;
+                    }
+                }
             }
             catch { }
         }
@@ -270,156 +359,233 @@ namespace CM0102Patcher
                     // Patches
                     if (checkBoxEnableColouredAtts.Checked)
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["colouredattributes"]);
-                    if (checkBoxIdleSensitivity.Checked)
-                    {
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["idlesensitivity"]);
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["idlesensitivitytransferscreen"]);
-                    }
+                    else
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["colouredattributes"]);
+
                     if (checkBoxHideNonPublicBids.Checked)
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["hideprivatebids"]);
-                    if (checkBox7Subs.Checked)
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["sevensubs"]);
-                    if (checkBoxShowStarPlayers.Checked)
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["showstarplayers"]);
+                    else
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["hideprivatebids"]);
+
                     if (checkBoxDisableUnprotectedContracts.Checked)
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["disableunprotectedcontracts"]);
-                    if (checkBoxCDRemoval.Checked)
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablecdremove"]);
-                    if (checkBoxDisableSplashScreen.Checked)
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablesplashscreen"]);
-                    if (checkBoxAllowCloseWindow.Checked)
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["allowclosewindow"]);
+                    else
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["disableunprotectedcontracts"]);
+
                     if (checkBoxForceLoadAllPlayers.Checked)
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["forceloadallplayers"]);
-                    if (checkBoxRegenFixes.Checked)
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["regenfixes"]);
-                    if (checkBoxChangeResolution.Checked)
-                    {
-                        int newWidth = ((Point)((comboBoxResolution.SelectedItem as ComboboxItem).Value)).X;
-                        int newHeight = ((Point)((comboBoxResolution.SelectedItem as ComboboxItem).Value)).Y;
+                    else
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["forceloadallplayers"]);
 
-                        if (newWidth == 800 && newHeight == 600)
-                        {
-                            // If 800x600 - revert
-                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["to1280x800"]);
-                        }
-                        else
-                        {
-                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["to1280x800"]);
-                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
-                            ResolutionChanger.SetResolution(labelFilename.Text, newWidth, newHeight);
-                        }
-                        
-                        // Convert the core gfx
-                        int menuWidth = newWidth > 800 ? 126 : 90;
-                        RGNConverter.RGN2RGN(Path.Combine(dataDir, "DEFAULT_PIC.RGN"), Path.Combine(dataDir, "bkg1280_800.rgn"), newWidth, newHeight);
-                        RGNConverter.RGN2RGN(Path.Combine(dataDir, "match.mbr"), Path.Combine(dataDir, "m800.mbr"), menuWidth, newHeight); // 800 => 90 - 1280 => 126
-                        RGNConverter.RGN2RGN(Path.Combine(dataDir, "game.mbr"), Path.Combine(dataDir, "g800.mbr"), menuWidth, newHeight);
-
-                        var picturesDir = Path.Combine(dir, "Pictures");
-
-                        if (Directory.Exists(picturesDir))
-                        {
-                            var yesNo = MessageBox.Show(string.Format("Do you wish to convert your CM0102 Pictures directory to {0}x{1} too?\r\n\r\nIf no, please turn off Background Changes in CM0102's Options else pictures will not appear correctly.\r\n\r\nIf yes, this takes a few moments.", newWidth, newHeight), "CM0102Patcher - Resolution Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                            if (yesNo == DialogResult.Yes)
-                            {
-                                var pf = new PictureConvertProgressForm();
-
-                                pf.OnLoadAction = () =>
-                                {
-                                    new Thread(() =>
-                                    {
-                                        var lastPic = "";
-                                        try
-                                        {
-                                            int converting = 1;
-                                            Thread.CurrentThread.IsBackground = true;
-
-                                            var picFiles = Directory.GetFiles(picturesDir, "*.rgn");
-                                            foreach (var picFile in picFiles)
-                                            {
-                                                lastPic = picFile;
-                                                pf.SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, picFiles.Length, Path.GetFileName(picFile)));
-                                                pf.SetProgressPercent((int)(((double)(converting - 1) / ((double)picFiles.Length)) * 100.0));
-                                                int Width, Height;
-                                                if (RGNConverter.GetImageSize(picFile, out Width, out Height))
-                                                {
-                                                    if (Width == 800 && Height == 600)
-                                                        RGNConverter.RGN2RGN(picFile, picFile + ".tmp", newWidth, newHeight, 0, 35, 0, 100 - 35);
-                                                    else
-                                                        RGNConverter.RGN2RGN(picFile, picFile + ".tmp", newWidth, newHeight);
-                                                    File.SetAttributes(picFile, FileAttributes.Normal);
-                                                    File.Delete(picFile);
-                                                    File.Move(picFile + ".tmp", picFile);
-                                                }
-                                            }
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            MessageBox.Show(string.Format("Failed when converting images!\r\nLast Pic: {0}", lastPic), "Image Convert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                                            ExceptionMsgBox.Show(ex);
-                                        }
-
-                                        pf.CloseForm();
-                                    }).Start();
-                                };
-
-                                pf.ShowDialog();
-                            }
-                        }
-                    }
-                    if (checkBoxJobsAbroadBoost.Checked)
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["jobsabroadboost"]);
-                    if (checkBoxNewRegenCode.Checked)
-                    {
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapaninewregencode"]);
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
-                    }
-                    if (checkBoxUpdateNames.Checked)
-                    {
-                        namePatcher.RunPatch();
-                    }
-                    if (checkBoxManageAnyTeam.Checked)
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["manageanyteam"]);
-                    if (checkBoxRemove3NonEULimit.Checked)
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["remove3playerlimit"]);
-                    if (checkBoxReplaceWelshPremier.Checked)
-                    {
-                        switch (comboBoxReplacementLeagues.SelectedIndex)
-                        {
-                            case 0:
-                                namePatcher.PatchWelshWithNorthernLeague();
-                                break;
-                            case 1:
-                                namePatcher.PatchWelshWithSouthernLeague();
-                                break;
-                            case 2:
-                                namePatcher.PatchWelshWithSouthernPremierCentral();
-                                break;
-                        }
-                    }
                     if (checkBoxRestrictTactics.Checked)
                     {
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["restricttactics"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["changegeneraldat"]);
                     }
+                    else
+                    {
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["restricttactics"]);
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["changegeneraldat"]);
+                    }
+
                     if (checkBoxMakeExecutablePortable.Checked)
                     {
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["changeregistrylocation"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["memorycheckfix"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["removemutexcheck"]);
                     }
-                    if (checkBoxSwapSKoreaForChina.Checked)
+                    else
                     {
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["chinapatch"]);
-                        namePatcher.PatchStaffAward("South Korean Best 11 Of The Year", "Chinese Super League Best XI", true, true);
-                        namePatcher.PatchStaffAward("South Korean Most Assisted Player Of The Year", "Chinese Super League Top Assistor", true, true);
-                        namePatcher.PatchStaffAward("South Korean Top Goal Scorer Of The Year", "Chinese Super League Top Scorer", true, true);
-                        namePatcher.PatchStaffAward("South Korean Young Player Of The Year", "Super League Young Player Of the Year", true, true);
-                        namePatcher.PatchStaffAward("South Korean Manager Of The Year", "Super League Manager Of the Year", true, true);
-                        namePatcher.PatchStaffAward("South Korean Player Of The Month", "Super League Player Of the Month", true, true);
-                        namePatcher.PatchStaffAward("South Korean Player Of The Year", "Super League Player Of The Year", true, true);
-                        namePatcher.PatchComp("Chinese First Division A", "Chinese Super League", "First Division A", "Super League", "CSL");
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["changeregistrylocation"]);
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["memorycheckfix"]);
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["removemutexcheck"]);
+                    }
+                    
+                    if (!isTapani)
+                    {
+                        if (checkBoxIdleSensitivity.Checked)
+                        {
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["idlesensitivity"]);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["idlesensitivitytransferscreen"]);
+                        }
+                        else
+                        {
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["idlesensitivity"]);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["idlesensitivitytransferscreen"]);
+                        }
+
+                        if (checkBox7Subs.Checked)
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["sevensubs"]);
+                        else
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["sevensubs"]);
+
+                        if (checkBoxShowStarPlayers.Checked)
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["showstarplayers"]);
+                        else
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["showstarplayers"]);
+
+                        if (checkBoxCDRemoval.Checked)
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablecdremove"]);
+                        else
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["disablecdremove"]);
+
+                        if (checkBoxDisableSplashScreen.Checked)
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablesplashscreen"]);
+                        else
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["disablesplashscreen"]);
+
+                        if (checkBoxAllowCloseWindow.Checked)
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["allowclosewindow"]);
+                        else
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["allowclosewindow"]);
+
+                        if (checkBoxRegenFixes.Checked)
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["regenfixes"]);
+                        else
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["regenfixes"]);
+
+                        if (checkBoxJobsAbroadBoost.Checked)
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["jobsabroadboost"]);
+                        else
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["jobsabroadboost"]);
+
+                        if (checkBoxManageAnyTeam.Checked)
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["manageanyteam"]);
+                        else
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["manageanyteam"]);
+
+                        if (checkBoxRemove3NonEULimit.Checked)
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["remove3playerlimit"]);
+                        else
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["remove3playerlimit"]);
+
+                        if (checkBoxNewRegenCode.Checked)
+                        {
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapaninewregencode"]);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
+                        }
+                        else
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["tapaninewregencode"]);
+
+                        // Irreversible, only try and apply it if the checkbox is Enabled
+                        if (checkBoxUpdateNames.Checked && checkBoxUpdateNames.Enabled)
+                        {
+                            namePatcher.RunPatch();
+                        }
+
+                        if (checkBoxReplaceWelshPremier.Checked)
+                        {
+                            switch (comboBoxReplacementLeagues.SelectedIndex)
+                            {
+                                case 0:
+                                    namePatcher.PatchWelshWithNorthernLeague();
+                                    break;
+                                case 1:
+                                    namePatcher.PatchWelshWithSouthernLeague();
+                                    break;
+                                case 2:
+                                    namePatcher.PatchWelshWithSouthernPremierCentral();
+                                    break;
+                            }
+                        }
+                        
+                        // Irreversible, only try and apply it if the checkbox is Enabled
+                        if (checkBoxSwapSKoreaForChina.Checked && checkBoxSwapSKoreaForChina.Enabled)
+                        {
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["chinapatch"]);
+                            namePatcher.PatchStaffAward("South Korean Best 11 Of The Year", "Chinese Super League Best XI", true, true);
+                            namePatcher.PatchStaffAward("South Korean Most Assisted Player Of The Year", "Chinese Super League Top Assistor", true, true);
+                            namePatcher.PatchStaffAward("South Korean Top Goal Scorer Of The Year", "Chinese Super League Top Scorer", true, true);
+                            namePatcher.PatchStaffAward("South Korean Young Player Of The Year", "Super League Young Player Of the Year", true, true);
+                            namePatcher.PatchStaffAward("South Korean Manager Of The Year", "Super League Manager Of the Year", true, true);
+                            namePatcher.PatchStaffAward("South Korean Player Of The Month", "Super League Player Of the Month", true, true);
+                            namePatcher.PatchStaffAward("South Korean Player Of The Year", "Super League Player Of The Year", true, true);
+                            namePatcher.PatchComp("Chinese First Division A", "Chinese Super League", "First Division A", "Super League", "CSL");
+                        }
+                    }
+
+                    if (checkBoxChangeResolution.Checked)
+                    {
+                        int newWidth = ((Point)((comboBoxResolution.SelectedItem as ComboboxItem).Value)).X;
+                        int newHeight = ((Point)((comboBoxResolution.SelectedItem as ComboboxItem).Value)).Y;
+
+                        int oldWidth, oldHeight;
+                        ResolutionChanger.GetResolution(labelFilename.Text, out oldWidth, out oldHeight);
+
+                        // Check we should change the resolution
+                        if (newWidth != oldWidth && newHeight != oldHeight)
+                        {
+
+                            if (newWidth == 800 && newHeight == 600)
+                            {
+                                // If 800x600 - revert
+                                patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["to1280x800"]);
+                            }
+                            else
+                            {
+                                patcher.ApplyPatch(labelFilename.Text, patcher.patches["to1280x800"]);
+                                patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
+                                ResolutionChanger.SetResolution(labelFilename.Text, newWidth, newHeight);
+                            }
+
+                            // Convert the core gfx
+                            int menuWidth = newWidth > 800 ? 126 : 90;
+                            RGNConverter.RGN2RGN(Path.Combine(dataDir, "DEFAULT_PIC.RGN"), Path.Combine(dataDir, "bkg1280_800.rgn"), newWidth, newHeight);
+                            RGNConverter.RGN2RGN(Path.Combine(dataDir, "match.mbr"), Path.Combine(dataDir, "m800.mbr"), menuWidth, newHeight); // 800 => 90 - 1280 => 126
+                            RGNConverter.RGN2RGN(Path.Combine(dataDir, "game.mbr"), Path.Combine(dataDir, "g800.mbr"), menuWidth, newHeight);
+
+                            var picturesDir = Path.Combine(dir, "Pictures");
+
+                            if (Directory.Exists(picturesDir))
+                            {
+                                var yesNo = MessageBox.Show(string.Format("Do you wish to convert your CM0102 Pictures directory to {0}x{1} too?\r\n\r\nIf no, please turn off Background Changes in CM0102's Options else pictures will not appear correctly.\r\n\r\nIf yes, this takes a few moments.", newWidth, newHeight), "CM0102Patcher - Resolution Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                if (yesNo == DialogResult.Yes)
+                                {
+                                    var pf = new PictureConvertProgressForm();
+
+                                    pf.OnLoadAction = () =>
+                                    {
+                                        new Thread(() =>
+                                        {
+                                            var lastPic = "";
+                                            try
+                                            {
+                                                int converting = 1;
+                                                Thread.CurrentThread.IsBackground = true;
+
+                                                var picFiles = Directory.GetFiles(picturesDir, "*.rgn");
+                                                foreach (var picFile in picFiles)
+                                                {
+                                                    lastPic = picFile;
+                                                    pf.SetProgressText(string.Format("Converting {0}/{1} ({2})", converting++, picFiles.Length, Path.GetFileName(picFile)));
+                                                    pf.SetProgressPercent((int)(((double)(converting - 1) / ((double)picFiles.Length)) * 100.0));
+                                                    int Width, Height;
+                                                    if (RGNConverter.GetImageSize(picFile, out Width, out Height))
+                                                    {
+                                                        if (Width == 800 && Height == 600)
+                                                            RGNConverter.RGN2RGN(picFile, picFile + ".tmp", newWidth, newHeight, 0, 35, 0, 100 - 35);
+                                                        else
+                                                            RGNConverter.RGN2RGN(picFile, picFile + ".tmp", newWidth, newHeight);
+                                                        File.SetAttributes(picFile, FileAttributes.Normal);
+                                                        File.Delete(picFile);
+                                                        File.Move(picFile + ".tmp", picFile);
+                                                    }
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                MessageBox.Show(string.Format("Failed when converting images!\r\nLast Pic: {0}", lastPic), "Image Convert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                                ExceptionMsgBox.Show(ex);
+                                            }
+
+                                            pf.CloseForm();
+                                        }).Start();
+                                    };
+
+                                    pf.ShowDialog();
+                                }
+                            }
+                        }
                     }
 
                     // NOCD Crack
@@ -524,8 +690,8 @@ namespace CM0102Patcher
                     var dataDir = Path.Combine(dir, "Data");
                     var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
                     var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
-                    //yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, +2, 0x8);
-                    yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, 3, 0x8);
+                    yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, 2, 0x8);
+                    yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, 2, 0x8);
                 }
                 if (e.KeyChar == (char)3 && SecretMode) // C
                 {

@@ -8,6 +8,18 @@ namespace CM0102Patcher
 {
     public class ResolutionChanger
     {
+        public static void GetResolution(string fileName, out int width, out int height)
+        {
+            using (var fin = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var br = new BinaryReader(fin))
+            {
+                fin.Seek(0x001D79F3, SeekOrigin.Begin);
+                width = br.ReadInt16();
+                fin.Seek(0x0000384D, SeekOrigin.Begin);
+                height = br.ReadInt16();
+            }
+        }
+
         public static void SetResolution(string fileName, int width, int height)
         {
             List<int> widthOffsets = new List<int> {

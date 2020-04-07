@@ -117,6 +117,53 @@ namespace CM0102Patcher
             }
         }
 
+        public List<string> DetectPatches(string exeFile, out short speedHack, out double currencyMultiplier)
+        {
+            List<string> appliedPatches = new List<string>();
+            using (var fin = File.Open(exeFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var br = new BinaryReader(fin))
+            {
+                foreach (var patch in patches)
+                {
+                    bool matches = true;
+                    foreach (var hexPatch in patch.Value)
+                    {
+                        fin.Seek(hexPatch.offset, SeekOrigin.Begin);
+                        byte[] patchBytes = HexStringToBytes(hexPatch.hex);
+                        byte[] buffer = br.ReadBytes(patchBytes.Length);
+                        for (int i = 0; i < patchBytes.Length; i++)
+                        {
+                            if (patchBytes[i] != buffer[i])
+                            {
+                                matches = false;
+                                break;
+                            }
+                        }
+                        if (matches == false)
+                            break;
+                    }
+                    if (matches)
+                    {
+                        appliedPatches.Add(patch.Key);
+                    }
+                }
+
+                fin.Seek(0x5472ce, SeekOrigin.Begin);
+                speedHack = br.ReadInt16();
+
+                fin.Seek(0x5196C1, SeekOrigin.Begin);
+                if (br.ReadByte() == 0x90)
+                    currencyMultiplier = 1.0;
+                else
+                {
+                    fin.Seek(0x5196C1, SeekOrigin.Begin);
+                    currencyMultiplier = br.ReadDouble();
+                }
+            }
+
+            return appliedPatches;
+        }
+
         public byte[] HexStringToBytes(string hexString)
         {
             byte[] ret = new byte[hexString.Length / 2];

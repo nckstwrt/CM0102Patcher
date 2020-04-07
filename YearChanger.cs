@@ -43,6 +43,9 @@ namespace CM0102Patcher
             }
         }
 
+        // https://champman0102.co.uk/showthread.php?t=7158&highlight=tapani+euro+crash
+        // https://champman0102.co.uk/showthread.php?t=7535&page=2&p=53225#post53225
+        // https://champman0102.co.uk/archive/index.php/t-7636-p-2.html  (search for: 5182dc)
         public void ApplyYearChangeToExe(Stream stream, int year)
         {
             // In 4.0 and lower, BinaryWriter closes the outer stream. So don't dispose it and let the streams close themselves
@@ -139,7 +142,7 @@ namespace CM0102Patcher
                 // World Cup
                 for (int i = 1930; i < 2000; i += 4)
                 {
-                    if (i >= year)
+                    if (i > year)
                     {
                         bw.Seek(0x1F99A1, SeekOrigin.Begin);        // Normally 7CD (1997)
                         bw.Write((short)(i - 5));
@@ -180,6 +183,19 @@ namespace CM0102Patcher
                     bw.Write((byte)0x0);
                     bw.Seek(0x182895, SeekOrigin.Begin);
                     bw.Write((byte)0xa);
+                }
+
+                if (year == 1994)
+                {
+                    // Oceania Patch from above?
+                    bw.Seek(0x5182dc, SeekOrigin.Begin);
+                    bw.Write((short)2000);
+                    bw.Seek(0x518473, SeekOrigin.Begin);
+                    bw.Write((byte)0xeb);
+                    bw.Seek(0x52036e, SeekOrigin.Begin);
+                    bw.Write((short)2000);
+                    bw.Seek(0x5204b8, SeekOrigin.Begin);
+                    bw.Write((byte)0xeb);
                 }
             }
         }
@@ -282,7 +298,6 @@ namespace CM0102Patcher
                         bw.Seek(0x486e32, SeekOrigin.Begin);
                         bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
                         
-
                         // Special 3 Parts
                         bw.Seek(0x1113b7, SeekOrigin.Begin);
                         bw.Write(YearToBytes(year - 2));
