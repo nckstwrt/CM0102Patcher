@@ -172,26 +172,6 @@ namespace CM0102Patcher
                         }
                     }
 
-                    // TODO
-                    if (false)
-                    {
-                        var clubs = sr2.BlockToObjects<TClub>("club.dat");
-                        var manutd = clubs.First(x => ArrayToString(x.ShortName) == "Man Utd");
-
-                        for (int i = 0; i < contracts.Count(); i++)
-                        {
-                            var contract = contracts[i];
-                            if (contract.Club == manutd.ID)
-                            {
-                                if (contract.Wage == 25000)
-                                {
-                                    contract.Wage = 1;
-                                }
-                                contracts[i] = contract;
-                            }
-                        }
-                    }
-
                     sr2.ObjectsToBlock("player.dat", players);
                     sr2.ObjectsToBlock("staff.dat", staff);
                     // Only write contracts if changed

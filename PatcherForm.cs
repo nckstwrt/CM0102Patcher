@@ -124,13 +124,17 @@ namespace CM0102Patcher
                 checkBoxManageAnyTeam.Enabled = !isTapani;
                 checkBoxUpdateNames.Enabled = !isTapani;
                 checkBoxSwapSKoreaForChina.Enabled = !isTapani;
+                checkBoxPositionInTacticsView.Enabled = !isTapani;
                 checkBoxChangeStartYear_CheckedChanged(null, null);
 
                 if (isTapani)
                 {
                     MessageBox.Show("You have selected to patch an exe that has already been patched by a Tapani/Saturn patch\r\n\r\nSome options will be greyed out because they are either already enabled by the Tapani/Saturn patch or because they are not applyable to a Tapani/Saturn executable", "Tapani/Saturn Exe Detected", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                                
+
+                YearChanger yearChanger = new YearChanger();
+                numericGameStartYear.Value = yearChanger.GetCurrentExeYear(exeFile);
+
                 var patcher = new Patcher();
                 short speedHack;
                 double currencyMultiplier;
@@ -151,8 +155,9 @@ namespace CM0102Patcher
                     checkBoxManageAnyTeam.Checked = appliedPatches.Contains("manageanyteam");
                     checkBoxSwapSKoreaForChina.Checked = isTapani || appliedPatches.Contains("chinapatch"); // Tapani implements it in a different way (Is Saturn really)
                     checkBoxUpdateNames.Checked = isTapani || appliedPatches.Contains("transferwindowpatch"); // Tapani implements it in a different way
-                    
-                    // This two are irreversible
+                    checkBoxPositionInTacticsView.Checked = appliedPatches.Contains("positionintacticsview");
+
+                    // These two are irreversible
                     if (checkBoxUpdateNames.Checked)
                         checkBoxUpdateNames.Enabled = false;
                     if (checkBoxSwapSKoreaForChina.Checked)
@@ -176,9 +181,6 @@ namespace CM0102Patcher
                     SetComboBox(comboBoxGameSpeed, speedHack);
                     numericCurrencyInflation.Value = (decimal)currencyMultiplier;
 
-                    YearChanger yearChanger = new YearChanger();
-                    numericGameStartYear.Value = yearChanger.GetCurrentExeYear(exeFile);
-
                     int resWidth, resHeight;
                     ResolutionChanger.GetResolution(exeFile, out resWidth, out resHeight);
                     SetComboBox(comboBoxResolution, new Point(resWidth, resHeight));
@@ -191,7 +193,6 @@ namespace CM0102Patcher
                     {
                         checkBoxEnableColouredAtts.Checked = true;
                         checkBoxDisableUnprotectedContracts.Checked = true;
-                        checkBoxHideNonPublicBids.Checked = true;
                         checkBoxDisableSplashScreen.Checked = true;
                         checkBoxCDRemoval.Checked = true;
                         checkBox7Subs.Checked = true;
@@ -202,6 +203,7 @@ namespace CM0102Patcher
                         checkBoxJobsAbroadBoost.Checked = true;
                         checkBoxRemove3NonEULimit.Checked = true;
                         checkBoxMakeExecutablePortable.Checked = true;
+                        checkBoxPositionInTacticsView.Checked = true;
                         numericCurrencyInflation.Value = 2.5m;
                         comboBoxGameSpeed.SelectedIndex = 4;
                     }
@@ -299,64 +301,73 @@ namespace CM0102Patcher
                     // Year Change
                     if (checkBoxChangeStartYear.Checked)
                     {
-                        /*
-                        // Assume Staff.data is in Data
-                        var staffFile = Path.Combine(dataDir, "staff.dat");
-                        var indexFile = Path.Combine(dataDir, "index.dat");
-                        var playerConfigFile = Path.Combine(dataDir, "player_setup.cfg");
-                        var staffCompHistoryFile = Path.Combine(dataDir, "staff_comp_history.dat");
-                        var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
-                        var staffHistoryFile = Path.Combine(dataDir, "staff_history.dat");
-                        var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
-
-                        // Old Version
-                        try
+                        if (((int)numericGameStartYear.Value) < 2001)
                         {
+                            // Assume Staff.data is in Data
+                            var staffFile = Path.Combine(dataDir, "staff.dat");
+                            var indexFile = Path.Combine(dataDir, "index.dat");
+                            var playerConfigFile = Path.Combine(dataDir, "player_setup.cfg");
+                            var staffCompHistoryFile = Path.Combine(dataDir, "staff_comp_history.dat");
+                            var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
+                            var staffHistoryFile = Path.Combine(dataDir, "staff_history.dat");
+                            var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
+
+                            // Old Version
+                            try
+                            {
+                                // Reverse out any date patches (this could break Tapani!!)
+                                patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["datecalcpatch"]);
+                                patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["datecalcpatchjumps"]);
+                                patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["comphistory_datecalcpatch"]);
+                                
+                                YearChanger yearChanger = new YearChanger();
+                                var currentYear = yearChanger.GetCurrentExeYear(labelFilename.Text);
+                                if (currentYear != (int)numericGameStartYear.Value)
+                                {
+                                    if (!File.Exists(staffFile) || !File.Exists(indexFile))
+                                    {
+                                        MessageBox.Show("staff.dat or index.dat not found in Data directory. Aborting year change.", "Files Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        return;
+                                    }
+                                    var yesNo = MessageBox.Show("The Start Year Changer before 2001 updates staff.dat and other files in the Data directory with the correct years as well as the cm0102.exe.\r\n\r\nThis should only be done on a fresh exe that has not already been patched!\r\n(else you may get issues with player ages!)\r\n\r\nAre you happy to proceed?", "CM0102Patcher - Year Changer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                    if (yesNo == DialogResult.No)
+                                        return;
+
+                                    int yearIncrement = (((int)numericGameStartYear.Value) - currentYear);
+
+                                    // e.g. When using 2018 data, to make it 2019 birth dates, etc
+                                    yearIncrement -= yearExeSyncDecrement;
+
+                                    yearChanger.ApplyYearChangeToExe(labelFilename.Text, (int)numericGameStartYear.Value);
+                                    yearChanger.UpdateStaff(indexFile, staffFile, yearIncrement);
+                                    yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
+
+                                    yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
+                                    yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8);
+
+                                    yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement + 1, 0x8);
+                                    yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                ExceptionMsgBox.Show(ex);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            // New EXE Version
                             YearChanger yearChanger = new YearChanger();
                             var currentYear = yearChanger.GetCurrentExeYear(labelFilename.Text);
                             if (currentYear != (int)numericGameStartYear.Value)
                             {
-                                if (!File.Exists(staffFile) || !File.Exists(indexFile))
-                                {
-                                    MessageBox.Show("staff.dat or index.dat not found in Data directory. Aborting year change.", "Files Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    return;
-                                }
-                                var yesNo = MessageBox.Show("The Start Year Changer updates staff.dat and other files in the Data directory with the correct years as well as the cm0102.exe. Are you happy to proceed?", "CM0102Patcher - Year Changer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                                if (yesNo == DialogResult.No)
-                                    return;
-
                                 int yearIncrement = (((int)numericGameStartYear.Value) - currentYear);
-
-                                // e.g. When using 2018 data, to make it 2019 birth dates, etc
-                                yearIncrement -= yearExeSyncDecrement;
-
                                 yearChanger.ApplyYearChangeToExe(labelFilename.Text, (int)numericGameStartYear.Value);
-                                yearChanger.UpdateStaff(indexFile, staffFile, yearIncrement);
-                                yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
-
-                                yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
-                                yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8);
-
-                                yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement + 1, 0x8);
-                                yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8);
+                                patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatch"]);
+                                patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatchjumps"]);
+                                patcher.ApplyPatch(labelFilename.Text, patcher.patches["comphistory_datecalcpatch"]);
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            ExceptionMsgBox.Show(ex);
-                            return;
-                        }
-                        */
-                        // New EXE Version
-                        YearChanger yearChanger = new YearChanger();
-                        var currentYear = yearChanger.GetCurrentExeYear(labelFilename.Text);
-                        if (currentYear != (int)numericGameStartYear.Value)
-                        {
-                            int yearIncrement = (((int)numericGameStartYear.Value) - currentYear);
-                            yearChanger.ApplyYearChangeToExe(labelFilename.Text, (int)numericGameStartYear.Value);
-                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatch"]);
-                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatchjumps"]);
-                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["comphistory_datecalcpatch"]);
                         }
                     }
 
@@ -470,6 +481,11 @@ namespace CM0102Patcher
                         }
                         else
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["tapaninewregencode"]);
+
+                        if (checkBoxPositionInTacticsView.Checked)
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["positionintacticsview"]);
+                        else
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["positionintacticsview"]);
 
                         // Irreversible, only try and apply it if the checkbox is Enabled
                         if (checkBoxUpdateNames.Checked && checkBoxUpdateNames.Enabled)
@@ -689,13 +705,15 @@ namespace CM0102Patcher
                 }
                 if (e.KeyChar == (char)2 && SecretMode) // B
                 {
+                    var increment = 11;
                     var yearChanger = new YearChanger();
                     var dir = Path.GetDirectoryName(labelFilename.Text);
                     var dataDir = Path.Combine(dir, "Data");
                     var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
                     var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
-                    yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, 2, 0x8);
-                    yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, 2, 0x8);
+                    yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, increment, 0x8);
+                    //yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, increment, 0x8);
+                    MessageBox.Show(string.Format("Patched Years To Jump By: {0} years", increment), "Data Increment", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (e.KeyChar == (char)3 && SecretMode) // C
                 {

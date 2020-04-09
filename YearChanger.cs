@@ -116,18 +116,19 @@ namespace CM0102Patcher
             // Special 4 - World Cup - Oceania League Fix - So 2012, etc will work
             if ((year % 4) == 0)
             {
-                bw.Seek(0x5182dc, SeekOrigin.Begin);
+                bw.Seek(0x5182dc, SeekOrigin.Begin);        // Euro Qualifier Start
                 bw.Write((short)year);
                 bw.Seek(0x518473, SeekOrigin.Begin);
                 bw.Write((byte)0xeb);
                 bw.Seek(0x52036e, SeekOrigin.Begin);
-                bw.Write((short)year);
+                bw.Write((short)year);                      // South America Qualifier Start
                 bw.Seek(0x5204b8, SeekOrigin.Begin);
                 bw.Write((byte)0xeb);
+                // Asia is at 0x511CB7
             }
 
             // Special 5 - For going back in time (fixes Euros - might be a better generic fix for euros for the future too (unlike Special 3))
-            if (year < 2000)
+            if (year < 2001)
             {
                 // Euro
                 for (int i = 1960; i < 2000; i+=4)
@@ -156,6 +157,10 @@ namespace CM0102Patcher
                 bw.Seek(0x52F2AC, SeekOrigin.Begin);
                 bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
 
+                // Turn off World Cup 1110 error
+                bw.Seek(0x52e7a1, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
                 // Special 3 from 00/01 code
                 bw.Seek(0x13DAE2, SeekOrigin.Begin);
                 bw.Write(YearToBytes(year - 2));
@@ -169,8 +174,12 @@ namespace CM0102Patcher
                 bw.Seek(0x18315B, SeekOrigin.Begin);
                 bw.Write(new byte[] { 0x90, 0x90, 0xEB, 0x18 });
 
+                // Default Birth Year for Players with no DoB (normally is 1980)
+                bw.Seek(0x13687F, SeekOrigin.Begin);
+                bw.Write(YearToBytes(year - 16));
+
                 // If year is 1995 - at least try and get the euros kind of ok
-                if (year == 1995)
+                if (year == 1994 || year == 1995)
                 {
                     // Swap Portugal for England
                     bw.Seek(0x1F9CB4, SeekOrigin.Begin);
@@ -186,17 +195,13 @@ namespace CM0102Patcher
                     bw.Write((byte)0xa);
                 }
 
-                if (year == 1994)
+                // World Cup - especially 27th Dec 2001 is a major issue. This massive patch fixes it - but was a bit of a nuclear option. Needs disecting.
+                patcher.ApplyPatch(stream, patcher.patches["fixworldcuppre2000"]);
+                List<int> worldCupPre2000 = new List<int> { 0x511C4D, 0x511C88, 0x511CA4, 0x511CB8, 0x5182DC, 0x52036E };
+                foreach (var offset in worldCupPre2000)
                 {
-                    // Oceania Patch from above?
-                    bw.Seek(0x5182dc, SeekOrigin.Begin);
-                    bw.Write((short)1994);
-                    bw.Seek(0x518473, SeekOrigin.Begin);
-                    bw.Write((byte)0xeb);
-                    bw.Seek(0x52036e, SeekOrigin.Begin);
-                    bw.Write((short)1994);
-                    bw.Seek(0x5204b8, SeekOrigin.Begin);
-                    bw.Write((byte)0xeb);
+                    bw.Seek(offset, SeekOrigin.Begin);
+                    bw.Write(YearToBytes(year));
                 }
             }
         }
