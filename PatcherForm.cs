@@ -298,13 +298,29 @@ namespace CM0102Patcher
                     if (numericCurrencyInflation.Value != 0)
                         patcher.CurrencyInflationChanger(labelFilename.Text, (double)numericCurrencyInflation.Value);
 
+                    // Check staff.dat file to see if it's original data
+                    bool forceOldMethod = false;
+                    var staffFile = Path.Combine(dataDir, "staff.dat");
+                    if (File.Exists(staffFile))
+                    {
+                        using (var fin = File.Open(staffFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        {
+                            fin.Seek(0x24, SeekOrigin.Begin);
+                            var typeByte = fin.ReadByte();
+                            if (typeByte == 0xfe)
+                            {
+                                var result = MessageBox.Show("This looks like you are changing the date on the original database rather than an update?\r\n\r\nIf so the player's birth years will not update unless you use the old methodology.\r\nDo you want to use the old date changing methodology instead?", "ODB Detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                                if (result == DialogResult.Yes)
+                                    forceOldMethod = true;
+                            }
+                        }
+                    }
+
                     // Year Change
                     if (checkBoxChangeStartYear.Checked)
                     {
-                        if (((int)numericGameStartYear.Value) < 2001)
+                        if (forceOldMethod || ((int)numericGameStartYear.Value) < 2001)
                         {
-                            // Assume Staff.data is in Data
-                            var staffFile = Path.Combine(dataDir, "staff.dat");
                             var indexFile = Path.Combine(dataDir, "index.dat");
                             var playerConfigFile = Path.Combine(dataDir, "player_setup.cfg");
                             var staffCompHistoryFile = Path.Combine(dataDir, "staff_comp_history.dat");
@@ -329,7 +345,7 @@ namespace CM0102Patcher
                                         MessageBox.Show("staff.dat or index.dat not found in Data directory. Aborting year change.", "Files Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         return;
                                     }
-                                    var yesNo = MessageBox.Show("The Start Year Changer before 2001 updates staff.dat and other files in the Data directory with the correct years as well as the cm0102.exe.\r\n\r\nThis should only be done on a fresh exe that has not already been patched!\r\n(else you may get issues with player ages!)\r\n\r\nAre you happy to proceed?", "CM0102Patcher - Year Changer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                    var yesNo = MessageBox.Show("The Start Year Changer updates staff.dat and other files in the Data directory with the correct years as well as the cm0102.exe.\r\n\r\nThis should only be done on a fresh exe that has not already been patched!\r\n(else you may get issues with player ages!)\r\n\r\nAre you happy to proceed?", "CM0102Patcher - Year Changer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                                     if (yesNo == DialogResult.No)
                                         return;
 

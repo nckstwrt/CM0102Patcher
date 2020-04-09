@@ -195,13 +195,16 @@ namespace CM0102Patcher
                     bw.Write((byte)0xa);
                 }
 
-                // World Cup - especially 27th Dec 2001 is a major issue. This massive patch fixes it - but was a bit of a nuclear option. Needs disecting.
-                patcher.ApplyPatch(stream, patcher.patches["fixworldcuppre2000"]);
-                List<int> worldCupPre2000 = new List<int> { 0x511C4D, 0x511C88, 0x511CA4, 0x511CB8, 0x5182DC, 0x52036E };
-                foreach (var offset in worldCupPre2000)
+                if (year == 1994)
                 {
-                    bw.Seek(offset, SeekOrigin.Begin);
-                    bw.Write(YearToBytes(year));
+                    // World Cup - especially 27th Dec 2001 is a major issue. This massive patch fixes it - but was a bit of a nuclear option. Needs disecting.
+                    patcher.ApplyPatch(stream, patcher.patches["fixworldcuppre2000"]);
+                    List<int> worldCupPre2000 = new List<int> { 0x511C4D, 0x511C88, 0x511CA4, 0x511CB8, 0x5182DC, 0x52036E };
+                    foreach (var offset in worldCupPre2000)
+                    {
+                        bw.Seek(offset, SeekOrigin.Begin);
+                        bw.Write(YearToBytes(year));
+                    }
                 }
             }
         }
