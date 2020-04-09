@@ -316,6 +316,9 @@ namespace CM0102Patcher
                         }
                     }
 
+                    if (Control.ModifierKeys == Keys.Shift)
+                        forceOldMethod = true;
+
                     // Year Change
                     if (checkBoxChangeStartYear.Checked)
                     {
