@@ -298,30 +298,30 @@ namespace CM0102Patcher
                     if (numericCurrencyInflation.Value != 0)
                         patcher.CurrencyInflationChanger(labelFilename.Text, (double)numericCurrencyInflation.Value);
 
-                    // Check staff.dat file to see if it's original data
-                    bool forceOldMethod = false;
-                    var staffFile = Path.Combine(dataDir, "staff.dat");
-                    if (File.Exists(staffFile))
-                    {
-                        using (var fin = File.Open(staffFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                        {
-                            fin.Seek(0x24, SeekOrigin.Begin);
-                            var typeByte = fin.ReadByte();
-                            if (typeByte == 0xfe)
-                            {
-                                var result = MessageBox.Show("This looks like you are changing the date on the original database rather than an update?\r\n\r\nIf so the player's birth years will not update unless you use the old methodology.\r\nDo you want to use the old date changing methodology instead?", "ODB Detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                                if (result == DialogResult.Yes)
-                                    forceOldMethod = true;
-                            }
-                        }
-                    }
-
-                    if (Control.ModifierKeys == Keys.Shift)
-                        forceOldMethod = true;
-
                     // Year Change
                     if (checkBoxChangeStartYear.Checked)
                     {
+                        // Check staff.dat file to see if it's original data
+                        bool forceOldMethod = false;
+                        var staffFile = Path.Combine(dataDir, "staff.dat");
+                        if (File.Exists(staffFile))
+                        {
+                            using (var fin = File.Open(staffFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                            {
+                                fin.Seek(0x24, SeekOrigin.Begin);
+                                var typeByte = fin.ReadByte();
+                                if (typeByte == 0xfe)
+                                {
+                                    var result = MessageBox.Show("This looks like you are changing the date on the original database rather than an update?\r\n\r\nIf so the player's birth years will not update unless you use the old methodology.\r\nDo you want to use the old date changing methodology instead?", "ODB Detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                                    if (result == DialogResult.Yes)
+                                        forceOldMethod = true;
+                                }
+                            }
+                        }
+
+                        if (Control.ModifierKeys == Keys.Shift)
+                            forceOldMethod = true;
+
                         if (forceOldMethod || ((int)numericGameStartYear.Value) < 2001)
                         {
                             var indexFile = Path.Combine(dataDir, "index.dat");
