@@ -135,6 +135,13 @@ namespace CM0102Patcher
                         fin.Seek(hexPatch.offset, SeekOrigin.Begin);
                         byte[] patchBytes = HexStringToBytes(hexPatch.hex);
                         byte[] buffer = br.ReadBytes(patchBytes.Length);
+                        if (buffer.Length != patchBytes.Length)
+                        {
+                            // Clearly a completly wrong exe
+                            speedHack = 10000;
+                            currencyMultiplier = 1.0;
+                            return appliedPatches;
+                        }
                         for (int i = 0; i < patchBytes.Length; i++)
                         {
                             if (patchBytes[i] != buffer[i])

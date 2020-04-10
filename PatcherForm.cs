@@ -133,7 +133,9 @@ namespace CM0102Patcher
                 }
 
                 YearChanger yearChanger = new YearChanger();
-                numericGameStartYear.Value = yearChanger.GetCurrentExeYear(exeFile);
+                var detectedYear = yearChanger.GetCurrentExeYear(exeFile);
+                if (detectedYear > 1900 && detectedYear < 2500)
+                    numericGameStartYear.Value = detectedYear;
 
                 var patcher = new Patcher();
                 short speedHack;
