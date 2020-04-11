@@ -142,6 +142,86 @@ namespace CM0102Patcher
             return patched;
         }
 
+        public static void GenericCDCrack(string exeFile)
+        {
+            // Let search for calls to KERNEL32.GetLogicalDriveStringsA. There's always a push PUSH 0C8 beforehand
+            // 0040AF74 |.  68 C8000000 PUSH 0C8; | Bufsize = 200.
+            // 0040AF79 |.FF15 24817700 CALL DWORD PTR DS:[<&KERNEL32.GetLogicalDriveStringsA>]
+            // ^ CM99 
+            var patcher = new Patcher();
+            FindPattern(exeFile, patcher.HexStringToBytes("68C8000000FF15"), (f, br, bw, offset) =>
+            {
+                Console.WriteLine("Offset: {0:x8}", offset);
+
+                // Search for CMP EAX,5 83F805
+                var cmpeax5 = FindNext(f, offset, patcher.HexStringToBytes("83F805"));
+
+                // Swap with CMP EAX, EAX (if not too far away from what we found)
+                if (cmpeax5 != -1 && (cmpeax5 - offset) < 100)
+                {
+                    Console.WriteLine("   Found CMP EAX, 5: {0:x8}", cmpeax5);
+                    bw.Seek(cmpeax5, SeekOrigin.Begin);
+                    bw.Write(patcher.HexStringToBytes("39c090"));
+                }
+
+                /* Search for the pushing of CM0102.exe or similar
+                004131DD  |.  6A 65                     ||PUSH 65                                ; /<%c> = 'e'
+                004131DF  |.  6A 78                     ||PUSH 78                                ; |<%c> = 'x'
+                004131E1  |.  6A 65                     ||PUSH 65                                ; |<%c> = 'e'
+                004131E3  |.  6A 2E                     ||PUSH 2E                                ; |<%c> = '.'
+                004131E5  |.  6A 32                     ||PUSH 32                                ; |<%c> = '2'
+                004131E7  |.  6A 30                     ||PUSH 30                                ; |<%c> = '0'
+                004131E9  |.  6A 31                     ||PUSH 31                                ; |<%c> = '1'
+                004131EB  |.  6A 30                     ||PUSH 30                                ; |<%c> = '0'
+                004131ED  |.  6A 6D                     ||PUSH 6D                                ; |<%c> = 'm'
+                004131EF  |.  6A 63                     ||PUSH 63                                ; |<%c> = 'c'
+                004131F1  |.  56                        ||PUSH ESI                               ; |<%s> */
+                // or PUSH EDI (57)
+
+                // Search for cm 
+                var pushcm = FindNext(f, offset, patcher.HexStringToBytes("6a6d6a6356"));
+                if (pushcm == -1 || (pushcm - offset) >= 200)
+                    pushcm = FindNext(f, offset, patcher.HexStringToBytes("6a6d6a6357"));
+
+                /* Swap with *\0 
+                004131ED |.  6A 00 || PUSH 0; |<% c > = 00
+                004131EF |.  6A 2A || PUSH 2A; |<% c > = '*'
+                004131F1 |.  56 || PUSH ESI; |<% s > */
+                if (pushcm != -1 && (pushcm - offset) < 200)
+                {
+                    Console.WriteLine("   Found Push CM: {0:x8}", pushcm);
+                    bw.Seek(pushcm, SeekOrigin.Begin);
+                    bw.Write(patcher.HexStringToBytes("6a006a2a56"));
+                }
+                else
+                    Console.WriteLine("   NOT Found Push CM: {0:x8}", pushcm);
+            });
+        }
+
+        public static int FindNext(Stream fin, int offset, byte[] pattern)
+        {
+            int retOffset = -1;
+            fin.Seek(offset, SeekOrigin.Begin);
+            int match = 0;
+            while (true)
+            {
+                var readByte = fin.ReadByte();
+                offset++;
+                if (readByte == -1)
+                    break;
+                if (readByte == pattern[match])
+                    match++;
+                else
+                    match = 0;
+                if (match == pattern.Length)
+                {
+                    retOffset = offset - pattern.Length;
+                    break;
+                }
+            }
+            return retOffset;
+        }
+
         public static void PatchEXEFile0001Fix(string exeFile)
         {
             string[] files = new string[] { @"d:\KPWN.AFP", @"d:\SPBB.AFP", @"d:\PWQE.AFP", @"d:\EVWF.AFP" };
