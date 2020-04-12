@@ -266,12 +266,12 @@ namespace CM0102Patcher.Scouter
         private void buttonCopyToClipboard_Click(object sender, EventArgs e)
         {
             var sb = new StringBuilder();
-            var dt = ((DataTable)dataGridView.DataSource);
+            var dt = dataGridView;//((DataTable)dataGridView.DataSource);
             int colsCount = dt.Columns.Count;
             int rowsCount = dt.Rows.Count;
             for (int i = 0; i < colsCount; i++)
             {
-                sb.Append(dt.Columns[i].ColumnName);
+                sb.Append(dt.Columns[i].Name);
                 if (i != colsCount - 1)
                     sb.Append("\t");
             }
@@ -281,7 +281,7 @@ namespace CM0102Patcher.Scouter
             {
                 for (int j = 0; j < colsCount; j++)
                 {
-                    var s = dt.Rows[i][j].ToString();
+                    var s = (dt.Rows[i].Cells[j].Value == null) ? "" : dt.Rows[i].Cells[j].Value.ToString();
                     s = s.Replace("\0", ""); // Occassional oddities in data cause this
                     sb.Append(s);
                     if (j != colsCount - 1)
