@@ -159,7 +159,7 @@ namespace CM0102Patcher
                     checkBoxUpdateNames.Checked = isTapani || appliedPatches.Contains("transferwindowpatch"); // Tapani implements it in a different way
                     checkBoxPositionInTacticsView.Checked = appliedPatches.Contains("positionintacticsview");
 
-                    // These two are irreversible
+                    // These are irreversible
                     if (checkBoxUpdateNames.Checked)
                         checkBoxUpdateNames.Enabled = false;
                     if (checkBoxSwapSKoreaForChina.Checked)
@@ -514,7 +514,8 @@ namespace CM0102Patcher
                             namePatcher.RunPatch();
                         }
 
-                        if (checkBoxReplaceWelshPremier.Checked)
+                        // Irreversible, only try and apply it if the checkbox is Enabled
+                        if (checkBoxReplaceWelshPremier.Checked && checkBoxReplaceWelshPremier.Enabled)
                         {
                             switch (comboBoxReplacementLeagues.SelectedIndex)
                             {
@@ -791,21 +792,6 @@ namespace CM0102Patcher
             }
         }
 
-        public class ComboboxItem
-        {
-            public ComboboxItem(string Text, object Value)
-            {
-                this.Text = Text;
-                this.Value = Value;
-            }
-            public string Text { get; set; }
-            public object Value { get; set; }
-            public override string ToString()
-            {
-                return Text;
-            }
-        }
-
         private void buttonAbout_Click(object sender, EventArgs e)
         {
             MessageBox.Show("CM0102Patcher by Nick\r\n\r\nAll credit should go to the geniuses that found and shared their code and great patching work:\r\nTapani\r\nJohnLocke\r\nSaturn\r\nxeno\r\nMadScientist\r\nAnd so many others!\r\n\r\nThanks to everyone at www.champman0102.co.uk for keeping the game alive :)", "CM0102Patcher", MessageBoxButtons.OK, MessageBoxIcon.None);
@@ -833,6 +819,21 @@ namespace CM0102Patcher
             comboBoxResolution.Enabled = checkBoxChangeResolution.Checked;
             if (checkBoxChangeResolution.Checked && comboBoxResolution.SelectedIndex == -1)
                 comboBoxResolution.SelectedIndex = 5;
+        }
+    }
+
+    public class ComboboxItem
+    {
+        public ComboboxItem(string Text, object Value)
+        {
+            this.Text = Text;
+            this.Value = Value;
+        }
+        public string Text { get; set; }
+        public object Value { get; set; }
+        public override string ToString()
+        {
+            return Text;
         }
     }
 }

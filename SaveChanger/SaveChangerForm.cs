@@ -15,6 +15,13 @@ namespace CM0102Patcher
         public SaveChangerForm()
         {
             InitializeComponent();
+
+            /*
+            comboBoxPlayerName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            comboBoxPlayerName.AutoCompleteSource = AutoCompleteSource.ListItems;
+            comboBoxClub.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            comboBoxClub.AutoCompleteSource = AutoCompleteSource.ListItems;
+            */
         }
 
         private void buttonInputSelectFile_Click(object sender, EventArgs e)
@@ -57,6 +64,7 @@ namespace CM0102Patcher
                     var contracts = sr2.BlockToObjects<TContract>("contract.dat", true);
                     var firstNames = sr2.NamesFromBlock("first_names.dat");
                     var secondNames = sr2.NamesFromBlock("second_names.dat");
+                    var clubs = sr2.BlockToObjects<TClub>("club.dat");
                     var gameDate = sr2.GetCurrentGameDate();
                     
                     if (checkBoxLowerStats.Checked)
@@ -124,9 +132,6 @@ namespace CM0102Patcher
                             contractLookup[contract.ID].Add(contract);
                         }
 
-                        var nathan = sr2.FindPlayer("Nathan", "Baxter", staff);
-                        var nathanContract = contractLookup[nathan[0].ID];
-
                         for (int i = 0; i < staff.Count(); i++)
                         {
                             var staffData = staff[i];
@@ -159,24 +164,99 @@ namespace CM0102Patcher
                         }
                     }
 
-                    if (checkBoxReduceCrazyWages.Checked)
+                    if (checkBoxMovePlayer.Checked)
                     {
-                        for (int i = 0; i < contracts.Count(); i++)
+                        if (comboBoxPlayerName.SelectedIndex == -1 || comboBoxClub.SelectedIndex == -1)
                         {
-                            var contract = contracts[i];
-                            if (contract.Wage >= 250000)
-                            {
-                                contract.Wage /= 10;
-                            }
-                            contracts[i] = contract;
+                            MessageBox.Show("Cannot move player without a PROPER selection of player and club selected from the drop downs", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
                         }
+                        var playerToMove = (TStaff)(comboBoxPlayerName.SelectedItem as ComboboxItem).Value;
+                        var clubToMoveTo = (TClub)(comboBoxClub.SelectedItem as ComboboxItem).Value;
+                        if (!clubToMoveTo.Squad.Contains(-1))
+                        {
+                            MessageBox.Show("Destination club is full! Cannot move player there!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        // If Player has existing club - remove him from their list
+                        if (playerToMove.ClubJob != -1)
+                        {
+                            var currentClub = clubs[playerToMove.ClubJob];
+                            var existingPlayer = Array.IndexOf(currentClub.Squad, playerToMove.ID);
+                            if (existingPlayer != -1)
+                                currentClub.Squad[existingPlayer] = -1;
+                            clubs[currentClub.ID] = currentClub;
+                        }
+
+                        /* NOT WORKING
+                        // Find a spare squad number
+                        var squadNumbers = new byte[50];
+                        for (int i = 0; i < 50; i++ )
+                        {
+                            if (clubToMoveTo.Squad[i] != -1)
+                                squadNumbers[i] = players[staff[clubToMoveTo.Squad[i]].Player].SquadNumber;
+                            else
+                                squadNumbers[i] = 0;
+                        }
+                        byte freeSquadNumber = 1;
+                        for (byte i = 1; i < 51; i++)
+                        {
+                            if (Array.IndexOf(squadNumbers, i) == -1)
+                            {
+                                freeSquadNumber = i;
+                                break;
+                            }
+                        }
+                        
+                        // Set Squad Number
+                        var player = players[staff[playerToMove.ID].Player];
+                        player.SquadNumber = (byte)freeSquadNumber;
+                        players[staff[playerToMove.ID].Player] = player;
+                        */
+
+                        // Find a slot on the destination clubs squad and add the new player
+                        var firstFree = Array.IndexOf(clubToMoveTo.Squad, -1);
+                        clubToMoveTo.Squad[firstFree] = playerToMove.ID;
+                        clubs[clubToMoveTo.ID] = clubToMoveTo;
+
+                        // Save in staff the players new club
+                        playerToMove.ClubJob = clubToMoveTo.ID;
+                        staff[playerToMove.ID] = playerToMove;
+
+                        // Find the contract ID
+                        int contractIdx = -1;
+                        for (int i = 0; i < contracts.Count; i++)
+                        {
+                            if (contracts[i].ID == playerToMove.ID)
+                            {
+                                if (contractIdx != -1)
+                                {
+                                    MessageBox.Show("Player has too many contracts (might already be transferring). Cannot move!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    return;
+                                }
+                                contractIdx = i;
+                            }
+                        }
+                        if (contractIdx == -1)
+                        {
+                            MessageBox.Show("Player does not have a contract. Cannot move!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        // Change the club on the contract
+                        var contract = contracts[contractIdx];
+                        contract.Club = clubToMoveTo.ID;
+                        contracts[contractIdx] = contract;
                     }
 
                     sr2.ObjectsToBlock("player.dat", players);
                     sr2.ObjectsToBlock("staff.dat", staff);
                     // Only write contracts if changed
-                    if (checkBoxContractStartDates.Checked || checkBoxReduceCrazyWages.Checked)
+                    if (checkBoxContractStartDates.Checked || checkBoxMovePlayer.Checked)
                         sr2.ObjectsToBlock("contract.dat", contracts, true);
+                    if (checkBoxMovePlayer.Checked)
+                        sr2.ObjectsToBlock("club.dat", clubs);
                     sr2.Write(textBoxOutput.Text, checkBoxSaveCompressed.Checked);
 
                     MessageBox.Show(string.Format("Modification complete!\r\n\r\nSaved to {0} successfully!", Path.GetFileName(textBoxOutput.Text)), "Modification Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -193,6 +273,95 @@ namespace CM0102Patcher
         public string ArrayToString(byte[] array)
         {
             return Encoding.GetEncoding("ISO-8859-1").GetString(array, 0, array.Length).TrimEnd('\0');
+        }
+
+        bool checkBoxMovePlayerTrigger = true;
+        private void checkBoxMovePlayer_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!checkBoxMovePlayerTrigger)
+                return;
+
+            checkBoxMovePlayerTrigger = false;
+
+            if (checkBoxMovePlayer.Checked)
+            {
+                checkBoxMovePlayer.Checked = false;
+                if (!string.IsNullOrEmpty(textBoxInput.Text))
+                {
+                    var result = MessageBox.Show("This will freeze for a minute or two while it processes. Continue?", "Freeze Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.No)
+                        return;
+                    try
+                    {
+                        SaveReader2 sr2 = new SaveReader2();
+                        sr2.Load(textBoxInput.Text);
+                        var staff = sr2.BlockToObjects<TStaff>("staff.dat");
+                        var contracts = sr2.BlockToObjects<TContract>("contract.dat", true);
+                        var firstNames = sr2.NamesFromBlock("first_names.dat");
+                        var secondNames = sr2.NamesFromBlock("second_names.dat");
+                        var clubs = sr2.BlockToObjects<TClub>("club.dat");
+
+                        comboBoxPlayerName.Items.Clear();
+                        foreach (var player in staff)
+                        {
+                            if (player.Player != -1)
+                                comboBoxPlayerName.Items.Add(new ComboboxItem(firstNames[player.FirstName] + " " + secondNames[player.SecondName], player));
+                        }
+
+                        comboBoxPlayerName.AutoCompleteSource = AutoCompleteSource.ListItems;
+                        comboBoxPlayerName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+
+                        comboBoxClub.Items.Clear();
+                        foreach (var club in clubs)
+                        {
+                            comboBoxClub.Items.Add(new ComboboxItem(sr2.GetTextFromBytes(club.ShortName), club));
+                        }
+
+                        comboBoxClub.AutoCompleteSource = AutoCompleteSource.ListItems;
+                        comboBoxClub.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+
+                        checkBoxMovePlayer.Checked = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        ExceptionMsgBox.Show(ex);
+                        checkBoxMovePlayer.Checked = false;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Select a saved game file first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    checkBoxMovePlayer.Checked = false;
+                }
+            }
+            else
+            {
+                comboBoxPlayerName.Items.Clear();
+                comboBoxClub.Items.Clear();
+            }
+
+            checkBoxMovePlayerTrigger = true;
+        }
+
+        private void comboBoxPlayerName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxPlayerName.SelectedIndex != -1)
+            {
+                var playerItem = comboBoxPlayerName.SelectedItem as ComboboxItem;
+                var staffItem = (TStaff)playerItem.Value;
+                if (staffItem.ClubJob != -1)
+                {
+                    for (int i = 0; i < comboBoxClub.Items.Count; i++)
+                    {
+                        var club = (TClub)(comboBoxClub.Items[i] as ComboboxItem).Value;
+                        if (club.ID == staffItem.ClubJob)
+                        {
+                            comboBoxClub.SelectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 }

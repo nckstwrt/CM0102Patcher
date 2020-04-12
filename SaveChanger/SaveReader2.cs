@@ -114,9 +114,14 @@ namespace CM0102Patcher
                 ret = new List<string>();
                 var slices = SliceBlock(block, 60);
                 foreach (var slice in slices)
-                    ret.Add(latin1.GetString(slice, 0, 50).TrimEnd('\0'));
+                    ret.Add(GetTextFromBytes(slice, 50));
             }
             return ret;
+        }
+
+        public string GetTextFromBytes(byte[] bytes, int length = -1)
+        {
+            return latin1.GetString(bytes, 0, (length == -1) ? bytes.Length : length).TrimEnd('\0');
         }
 
         public DateTime GetCurrentGameDate()

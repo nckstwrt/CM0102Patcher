@@ -42,10 +42,14 @@
             this.checkBoxContractStartDates = new System.Windows.Forms.CheckBox();
             this.checkBoxAddSuperStars = new System.Windows.Forms.CheckBox();
             this.checkBoxLowerStats = new System.Windows.Forms.CheckBox();
-            this.checkBoxReduceCrazyWages = new System.Windows.Forms.CheckBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.comboBoxClub = new System.Windows.Forms.ComboBox();
+            this.comboBoxPlayerName = new System.Windows.Forms.ComboBox();
+            this.checkBoxMovePlayer = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonInputSelectFile
@@ -98,7 +102,7 @@
             this.groupBox2.Controls.Add(this.checkBoxSaveCompressed);
             this.groupBox2.Controls.Add(this.buttonOutputSelectFile);
             this.groupBox2.Controls.Add(this.textBoxOutput);
-            this.groupBox2.Location = new System.Drawing.Point(12, 182);
+            this.groupBox2.Location = new System.Drawing.Point(12, 214);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(406, 70);
             this.groupBox2.TabIndex = 2;
@@ -119,7 +123,7 @@
             // 
             // buttonApply
             // 
-            this.buttonApply.Location = new System.Drawing.Point(180, 262);
+            this.buttonApply.Location = new System.Drawing.Point(180, 294);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(75, 26);
             this.buttonApply.TabIndex = 3;
@@ -129,14 +133,13 @@
             // 
             // groupBox
             // 
-            this.groupBox.Controls.Add(this.checkBoxReduceCrazyWages);
             this.groupBox.Controls.Add(this.checkBoxCapReputation);
             this.groupBox.Controls.Add(this.checkBoxContractStartDates);
             this.groupBox.Controls.Add(this.checkBoxAddSuperStars);
             this.groupBox.Controls.Add(this.checkBoxLowerStats);
             this.groupBox.Location = new System.Drawing.Point(12, 75);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(406, 101);
+            this.groupBox.Size = new System.Drawing.Size(406, 85);
             this.groupBox.TabIndex = 4;
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Options";
@@ -181,21 +184,52 @@
             this.checkBoxLowerStats.Text = "Adjust Key Regen Stats By 15%";
             this.checkBoxLowerStats.UseVisualStyleBackColor = true;
             // 
-            // checkBoxReduceCrazyWages
+            // groupBox3
             // 
-            this.checkBoxReduceCrazyWages.AutoSize = true;
-            this.checkBoxReduceCrazyWages.Location = new System.Drawing.Point(7, 76);
-            this.checkBoxReduceCrazyWages.Name = "checkBoxReduceCrazyWages";
-            this.checkBoxReduceCrazyWages.Size = new System.Drawing.Size(130, 17);
-            this.checkBoxReduceCrazyWages.TabIndex = 4;
-            this.checkBoxReduceCrazyWages.Text = "Reduce Crazy Wages";
-            this.checkBoxReduceCrazyWages.UseVisualStyleBackColor = true;
+            this.groupBox3.Controls.Add(this.comboBoxClub);
+            this.groupBox3.Controls.Add(this.comboBoxPlayerName);
+            this.groupBox3.Controls.Add(this.checkBoxMovePlayer);
+            this.groupBox3.Location = new System.Drawing.Point(12, 162);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(406, 46);
+            this.groupBox3.TabIndex = 5;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Player Mover";
+            // 
+            // comboBoxClub
+            // 
+            this.comboBoxClub.FormattingEnabled = true;
+            this.comboBoxClub.Location = new System.Drawing.Point(256, 16);
+            this.comboBoxClub.Name = "comboBoxClub";
+            this.comboBoxClub.Size = new System.Drawing.Size(138, 21);
+            this.comboBoxClub.TabIndex = 9;
+            // 
+            // comboBoxPlayerName
+            // 
+            this.comboBoxPlayerName.FormattingEnabled = true;
+            this.comboBoxPlayerName.Location = new System.Drawing.Point(108, 16);
+            this.comboBoxPlayerName.Name = "comboBoxPlayerName";
+            this.comboBoxPlayerName.Size = new System.Drawing.Size(135, 21);
+            this.comboBoxPlayerName.TabIndex = 8;
+            this.comboBoxPlayerName.SelectedIndexChanged += new System.EventHandler(this.comboBoxPlayerName_SelectedIndexChanged);
+            // 
+            // checkBoxMovePlayer
+            // 
+            this.checkBoxMovePlayer.AutoSize = true;
+            this.checkBoxMovePlayer.Location = new System.Drawing.Point(8, 18);
+            this.checkBoxMovePlayer.Name = "checkBoxMovePlayer";
+            this.checkBoxMovePlayer.Size = new System.Drawing.Size(85, 17);
+            this.checkBoxMovePlayer.TabIndex = 7;
+            this.checkBoxMovePlayer.Text = "Move Player";
+            this.checkBoxMovePlayer.UseVisualStyleBackColor = true;
+            this.checkBoxMovePlayer.CheckedChanged += new System.EventHandler(this.checkBoxMovePlayer_CheckedChanged);
             // 
             // SaveChangerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(430, 295);
+            this.ClientSize = new System.Drawing.Size(430, 334);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox);
             this.Controls.Add(this.buttonApply);
             this.Controls.Add(this.groupBox2);
@@ -210,6 +244,8 @@
             this.groupBox2.PerformLayout();
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -229,6 +265,9 @@
         private System.Windows.Forms.CheckBox checkBoxSaveCompressed;
         private System.Windows.Forms.CheckBox checkBoxContractStartDates;
         private System.Windows.Forms.CheckBox checkBoxCapReputation;
-        private System.Windows.Forms.CheckBox checkBoxReduceCrazyWages;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.ComboBox comboBoxClub;
+        private System.Windows.Forms.ComboBox comboBoxPlayerName;
+        private System.Windows.Forms.CheckBox checkBoxMovePlayer;
     }
 }
