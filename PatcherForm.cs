@@ -658,6 +658,7 @@ namespace CM0102Patcher
                     }
 
                     MessageBox.Show("Patched Successfully!", "CM0102 Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    TapaniDetection();
                 }
             }
             catch (Exception ex)
