@@ -134,8 +134,9 @@ namespace CM0102Patcher
             }
         }
 
-        public static void Restore(string exeFile)
+        public static bool Restore(string exeFile)
         {
+            bool ret = false;
             try
             {
 
@@ -149,12 +150,12 @@ namespace CM0102Patcher
                 if (Directory.Exists(restorePointDir))
                 {
                     if (MessageBox.Show("Are sure you want to overwrite your current cm0102.exe, data and pictures from the restore point?", "Restore point", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
-                        return;
+                        return ret;
                 }
                 else
                 {
                     MessageBox.Show("Restore point not found. Unable to restore.", "Restore point", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
+                    return ret;
                 }
 
                 var pf = new PictureConvertProgressForm("Restore Point");
@@ -200,11 +201,14 @@ namespace CM0102Patcher
                     }).Start();
                 };
                 pf.ShowDialog();
+                ret = true;
             }
             catch (Exception ex)
             {
                 ExceptionMsgBox.Show(ex);
+                ret = false;
             }
+            return ret;
         }
     }
 }

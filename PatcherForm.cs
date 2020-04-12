@@ -156,7 +156,7 @@ namespace CM0102Patcher
                     checkBoxNewRegenCode.Checked = isTapani || appliedPatches.Contains("tapaninewregencode"); // Tapani implements it in a different way
                     checkBoxManageAnyTeam.Checked = appliedPatches.Contains("manageanyteam");
                     checkBoxSwapSKoreaForChina.Checked = isTapani || appliedPatches.Contains("chinapatch"); // Tapani implements it in a different way (Is Saturn really)
-                    checkBoxUpdateNames.Checked = isTapani || appliedPatches.Contains("transferwindowpatch"); // Tapani implements it in a different way
+                    checkBoxUpdateNames.Checked = isTapani || appliedPatches.Contains("transferwindowpatchdetect"); // Tapani implements it in a different way
                     checkBoxPositionInTacticsView.Checked = appliedPatches.Contains("positionintacticsview");
 
                     // These are irreversible
@@ -164,6 +164,12 @@ namespace CM0102Patcher
                         checkBoxUpdateNames.Enabled = false;
                     if (checkBoxSwapSKoreaForChina.Checked)
                         checkBoxSwapSKoreaForChina.Enabled = false;
+                    if (appliedPatches.Contains("englishleaguenorthpatch") || appliedPatches.Contains("englishleaguesouthawards") || appliedPatches.Contains("englishleaguenorthawards"))
+                    {
+                        comboBoxReplacementLeagues.SelectedIndex = -1;
+                        comboBoxReplacementLeagues.Enabled = false;
+                        checkBoxReplaceWelshPremier.Enabled = false;
+                    }
 
                     if (isTapani)
                     {
@@ -271,6 +277,21 @@ namespace CM0102Patcher
                     if (result == DialogResult.Yes)
                         RestorePoint.Save(labelFilename.Text);
                     if (result == DialogResult.Cancel)
+                        return;
+                }
+
+                // Warn about irreversible patches
+                if (checkBoxUpdateNames.Checked || checkBoxReplaceWelshPremier.Checked || checkBoxSwapSKoreaForChina.Checked)
+                {
+                    string options = "";
+                    if (checkBoxUpdateNames.Checked)
+                        options += "Update Names + Transfer Windows\r\n";
+                    if (checkBoxReplaceWelshPremier.Checked)
+                        options += "Replace Welsh League\r\n";
+                    if (checkBoxSwapSKoreaForChina.Checked)
+                        options += "Swap South Korea for China\r\n";
+                    var result = MessageBox.Show(string.Format("The following options you have selected are irreversible:\r\n\r\n{0}\r\nMeaning that once applied you will not be able unapply them.\r\n\r\nTo unapply them you will have to do a \"Restore\" from a previous \"Save\" point made by this patcher or a reinstall of CM0102.\r\n\r\nDo you wish to continue?", options), "Irreversible Changes Detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.No)
                         return;
                 }
 
@@ -804,7 +825,8 @@ namespace CM0102Patcher
 
         private void buttonRestore_Click(object sender, EventArgs e)
         {
-            RestorePoint.Restore(labelFilename.Text);
+            if (RestorePoint.Restore(labelFilename.Text))
+                TapaniDetection();
         }
 
         private void checkBoxAddNorthernLeague_CheckedChanged(object sender, EventArgs e)
