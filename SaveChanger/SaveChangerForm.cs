@@ -179,6 +179,26 @@ namespace CM0102Patcher
                             return;
                         }
 
+                        // Find the contract ID
+                        int contractIdx = -1;
+                        for (int i = 0; i < contracts.Count; i++)
+                        {
+                            if (contracts[i].ID == playerToMove.ID)
+                            {
+                                if (contractIdx != -1)
+                                {
+                                    MessageBox.Show("Player has too many contracts (might already be transferring). Cannot move!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    return;
+                                }
+                                contractIdx = i;
+                            }
+                        }
+                        if (contractIdx == -1)
+                        {
+                            MessageBox.Show("Player does not have a contract. Cannot move!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
                         // If Player has existing club - remove him from their list
                         if (playerToMove.ClubJob != -1)
                         {
@@ -223,26 +243,6 @@ namespace CM0102Patcher
                         // Save in staff the players new club
                         playerToMove.ClubJob = clubToMoveTo.ID;
                         staff[playerToMove.ID] = playerToMove;
-
-                        // Find the contract ID
-                        int contractIdx = -1;
-                        for (int i = 0; i < contracts.Count; i++)
-                        {
-                            if (contracts[i].ID == playerToMove.ID)
-                            {
-                                if (contractIdx != -1)
-                                {
-                                    MessageBox.Show("Player has too many contracts (might already be transferring). Cannot move!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    return;
-                                }
-                                contractIdx = i;
-                            }
-                        }
-                        if (contractIdx == -1)
-                        {
-                            MessageBox.Show("Player does not have a contract. Cannot move!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
 
                         // Change the club on the contract
                         var contract = contracts[contractIdx];
@@ -301,6 +301,9 @@ namespace CM0102Patcher
                         var secondNames = sr2.NamesFromBlock("second_names.dat");
                         var clubs = sr2.BlockToObjects<TClub>("club.dat");
 
+                        comboBoxPlayerName.AutoCompleteSource = AutoCompleteSource.None;
+                        comboBoxPlayerName.AutoCompleteMode = AutoCompleteMode.None;
+
                         comboBoxPlayerName.Items.Clear();
                         foreach (var player in staff)
                         {
@@ -310,6 +313,9 @@ namespace CM0102Patcher
 
                         comboBoxPlayerName.AutoCompleteSource = AutoCompleteSource.ListItems;
                         comboBoxPlayerName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+
+                        comboBoxClub.AutoCompleteSource = AutoCompleteSource.None;
+                        comboBoxClub.AutoCompleteMode = AutoCompleteMode.None;
 
                         comboBoxClub.Items.Clear();
                         foreach (var club in clubs)
