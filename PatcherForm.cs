@@ -806,6 +806,11 @@ namespace CM0102Patcher
                         }
                     }
                 }
+                if (e.KeyChar == (char)7 && SecretMode) // G
+                {
+                    var patcher = new Patcher();
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
+                }
                 if (e.KeyChar == (char)31 && SecretMode) // -
                 {
                     yearExeSyncDecrement = 1;

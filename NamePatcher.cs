@@ -58,6 +58,7 @@ namespace CM0102Patcher
             PatchStaffAward("Welsh Manager of the Year",        "English National League North Manager of the Year");
             PatchStaffAward("Welsh Manager of the Month",       "English National League North Manager of the Month");
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthawards"]);
+            patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatchrelegation"]);
         }
 
         public void PatchWelshWithSouthernLeague()
@@ -83,6 +84,7 @@ namespace CM0102Patcher
             PatchStaffAward("Welsh Manager of the Year", "National League South Manager of the Year");
             PatchStaffAward("Welsh Manager of the Month", "National League South Manager of the Month");
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguesouthawards"]);
+            patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatchrelegation"]);
 
             patcher.ApplyPatch(exeFile, 0x1751ff, "9c");
         }
@@ -112,6 +114,7 @@ namespace CM0102Patcher
             PatchStaffAward("Welsh Manager of the Year",        "English Southern Premier Manager of the Year");
             PatchStaffAward("Welsh Manager of the Month",       "English Southern Premier Manager of the Month");
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguesouthawards"]);
+            patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatchrelegation"]);
 
             // Let's allow more loans seeing as we don't get many players
             patcher.ApplyPatch(exeFile, 0x179e5B, "07");
