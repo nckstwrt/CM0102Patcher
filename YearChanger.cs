@@ -195,7 +195,7 @@ namespace CM0102Patcher
                     bw.Write((byte)0xa);
                 }
 
-                if (year == 1994)
+                if (year >= 1994 && year <= 1997)
                 {
                     // World Cup - especially 27th Dec 2001 is a major issue. This massive patch fixes it - but was a bit of a nuclear option. Needs disecting.
                     patcher.ApplyPatch(stream, patcher.patches["fixworldcuppre2000"]);
