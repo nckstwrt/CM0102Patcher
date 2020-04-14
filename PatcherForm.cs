@@ -15,6 +15,7 @@ namespace CM0102Patcher
     public partial class PatcherForm : Form
     {
         bool isTapani = false;
+        bool shownTapaniWarning = false;
 
         public PatcherForm()
         {
@@ -22,10 +23,13 @@ namespace CM0102Patcher
 
             try
             {
-                var exeLocation = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
-                if (!string.IsNullOrEmpty(exeLocation))
+                if (!string.IsNullOrEmpty(RegString.GetRegString()))
                 {
-                    labelFilename.Text = Path.Combine(exeLocation, "cm0102.exe");
+                    var exeLocation = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
+                    if (!string.IsNullOrEmpty(exeLocation))
+                    {
+                        labelFilename.Text = Path.Combine(exeLocation, "cm0102.exe");
+                    }
                 }
                 comboBoxGameSpeed.Items.AddRange(new ComboboxItem[]
                 {
@@ -96,6 +100,10 @@ namespace CM0102Patcher
             {
                 var windowText = " - (TAPANI EXE DETECTED)";
                 var exeFile = labelFilename.Text;
+
+                if (string.IsNullOrEmpty(exeFile))
+                    return;
+
                 // Use the pattern finder in the NoCD patcher
                 isTapani = false;
                 NoCDPatch.FindPattern(exeFile, Encoding.ASCII.GetBytes("Tapani v"), (file, br, bw, offset) => { isTapani = true; });
@@ -127,9 +135,10 @@ namespace CM0102Patcher
                 checkBoxPositionInTacticsView.Enabled = !isTapani;
                 checkBoxChangeStartYear_CheckedChanged(null, null);
 
-                if (isTapani)
+                if (isTapani && !shownTapaniWarning)
                 {
                     MessageBox.Show("You have selected to patch an exe that has already been patched by a Tapani/Saturn patch\r\n\r\nSome options will be greyed out because they are either already enabled by the Tapani/Saturn patch or because they are not applyable to a Tapani/Saturn executable", "Tapani/Saturn Exe Detected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    shownTapaniWarning = true;
                 }
 
                 YearChanger yearChanger = new YearChanger();
@@ -230,9 +239,12 @@ namespace CM0102Patcher
             ofd.Title = "Select a CM0102.exe file";
             try
             {
-                var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
-                if (!string.IsNullOrEmpty(path))
-                    ofd.InitialDirectory = path;
+                if (!string.IsNullOrEmpty(RegString.GetRegString()))
+                {
+                    var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
+                    if (!string.IsNullOrEmpty(path))
+                        ofd.InitialDirectory = path;
+                }
             }
             catch { }
             if (ofd.ShowDialog() == DialogResult.OK)
@@ -271,17 +283,21 @@ namespace CM0102Patcher
                 }
 
                 // Check for Restore Point
-                if (!RestorePoint.CheckForRestorePoint(labelFilename.Text))
+                // if on Mono - don't try this
+                if (Type.GetType("Mono.Runtime") != null)
                 {
-                    var result = MessageBox.Show("You have not yet made a Restore Point.\r\n\r\nRestore Points allow you to revert any changes you have made by clicking Restore in the patcher.\r\n\r\nWould you like to make one now before you apply changes?", "Make a Restore Point?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                    if (result == DialogResult.Yes)
-                        RestorePoint.Save(labelFilename.Text);
-                    if (result == DialogResult.Cancel)
-                        return;
+                    if (!RestorePoint.CheckForRestorePoint(labelFilename.Text))
+                    {
+                        var result = MessageBox.Show("You have not yet made a Restore Point.\r\n\r\nRestore Points allow you to revert any changes you have made by clicking Restore in the patcher.\r\n\r\nWould you like to make one now before you apply changes?", "Make a Restore Point?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                        if (result == DialogResult.Yes)
+                            RestorePoint.Save(labelFilename.Text);
+                        if (result == DialogResult.Cancel)
+                            return;
+                    }
                 }
 
                 // Warn about irreversible patches
-                if (checkBoxUpdateNames.Checked || checkBoxReplaceWelshPremier.Checked || checkBoxSwapSKoreaForChina.Checked)
+                if (!isTapani && (checkBoxUpdateNames.Checked || checkBoxReplaceWelshPremier.Checked || checkBoxSwapSKoreaForChina.Checked))
                 {
                     string options = "";
                     if (checkBoxUpdateNames.Checked)

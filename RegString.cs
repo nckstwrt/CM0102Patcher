@@ -10,6 +10,10 @@ namespace CM0102Patcher
     {
         public static string GetRegString()
         {
+            // if on Mono - don't try this
+            if (Type.GetType("Mono.Runtime") != null)
+                return "";
+
             if (Is64BitOperatingSystem())
                 return @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Sports Interactive Ltd\Championship Manager 01-02";
             else

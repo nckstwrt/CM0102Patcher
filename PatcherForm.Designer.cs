@@ -53,6 +53,7 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxPositionInTacticsView = new System.Windows.Forms.CheckBox();
             this.checkBoxSwapSKoreaForChina = new System.Windows.Forms.CheckBox();
             this.comboBoxResolution = new System.Windows.Forms.ComboBox();
             this.checkBoxMakeExecutablePortable = new System.Windows.Forms.CheckBox();
@@ -72,7 +73,6 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonRestore = new System.Windows.Forms.Button();
             this.buttonAbout = new System.Windows.Forms.Button();
-            this.checkBoxPositionInTacticsView = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -158,7 +158,7 @@
             this.numericGameStartYear.Size = new System.Drawing.Size(89, 22);
             this.numericGameStartYear.TabIndex = 6;
             this.numericGameStartYear.Value = new decimal(new int[] {
-            1980,
+            2001,
             0,
             0,
             0});
@@ -178,8 +178,6 @@
             // checkBoxEnableColouredAtts
             // 
             this.checkBoxEnableColouredAtts.AutoSize = true;
-            this.checkBoxEnableColouredAtts.Checked = true;
-            this.checkBoxEnableColouredAtts.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxEnableColouredAtts.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxEnableColouredAtts.Location = new System.Drawing.Point(16, 147);
             this.checkBoxEnableColouredAtts.Name = "checkBoxEnableColouredAtts";
@@ -192,8 +190,6 @@
             // checkBoxDisableUnprotectedContracts
             // 
             this.checkBoxDisableUnprotectedContracts.AutoSize = true;
-            this.checkBoxDisableUnprotectedContracts.Checked = true;
-            this.checkBoxDisableUnprotectedContracts.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxDisableUnprotectedContracts.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxDisableUnprotectedContracts.Location = new System.Drawing.Point(228, 147);
             this.checkBoxDisableUnprotectedContracts.Name = "checkBoxDisableUnprotectedContracts";
@@ -228,8 +224,6 @@
             // checkBoxCDRemoval
             // 
             this.checkBoxCDRemoval.AutoSize = true;
-            this.checkBoxCDRemoval.Checked = true;
-            this.checkBoxCDRemoval.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxCDRemoval.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxCDRemoval.Location = new System.Drawing.Point(228, 173);
             this.checkBoxCDRemoval.Name = "checkBoxCDRemoval";
@@ -253,7 +247,7 @@
             this.numericCurrencyInflation.Size = new System.Drawing.Size(96, 22);
             this.numericCurrencyInflation.TabIndex = 15;
             this.numericCurrencyInflation.Value = new decimal(new int[] {
-            25,
+            10,
             0,
             0,
             65536});
@@ -271,8 +265,6 @@
             // checkBoxDisableSplashScreen
             // 
             this.checkBoxDisableSplashScreen.AutoSize = true;
-            this.checkBoxDisableSplashScreen.Checked = true;
-            this.checkBoxDisableSplashScreen.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxDisableSplashScreen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxDisableSplashScreen.Location = new System.Drawing.Point(7, 68);
             this.checkBoxDisableSplashScreen.Name = "checkBoxDisableSplashScreen";
@@ -285,8 +277,6 @@
             // checkBox7Subs
             // 
             this.checkBox7Subs.AutoSize = true;
-            this.checkBox7Subs.Checked = true;
-            this.checkBox7Subs.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox7Subs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox7Subs.Location = new System.Drawing.Point(16, 225);
             this.checkBox7Subs.Name = "checkBox7Subs";
@@ -299,8 +289,6 @@
             // checkBoxShowStarPlayers
             // 
             this.checkBoxShowStarPlayers.AutoSize = true;
-            this.checkBoxShowStarPlayers.Checked = true;
-            this.checkBoxShowStarPlayers.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxShowStarPlayers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxShowStarPlayers.Location = new System.Drawing.Point(16, 251);
             this.checkBoxShowStarPlayers.Name = "checkBoxShowStarPlayers";
@@ -313,8 +301,6 @@
             // checkBoxChangeStartYear
             // 
             this.checkBoxChangeStartYear.AutoSize = true;
-            this.checkBoxChangeStartYear.Checked = true;
-            this.checkBoxChangeStartYear.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxChangeStartYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxChangeStartYear.Location = new System.Drawing.Point(16, 61);
             this.checkBoxChangeStartYear.Name = "checkBoxChangeStartYear";
@@ -327,8 +313,6 @@
             // checkBoxAllowCloseWindow
             // 
             this.checkBoxAllowCloseWindow.AutoSize = true;
-            this.checkBoxAllowCloseWindow.Checked = true;
-            this.checkBoxAllowCloseWindow.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxAllowCloseWindow.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxAllowCloseWindow.Location = new System.Drawing.Point(228, 225);
             this.checkBoxAllowCloseWindow.Name = "checkBoxAllowCloseWindow";
@@ -340,8 +324,6 @@
             // checkBoxIdleSensitivity
             // 
             this.checkBoxIdleSensitivity.AutoSize = true;
-            this.checkBoxIdleSensitivity.Checked = true;
-            this.checkBoxIdleSensitivity.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxIdleSensitivity.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxIdleSensitivity.Location = new System.Drawing.Point(16, 173);
             this.checkBoxIdleSensitivity.Name = "checkBoxIdleSensitivity";
@@ -383,6 +365,20 @@
             this.groupBox3.Size = new System.Drawing.Size(447, 325);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
+            // 
+            // checkBoxPositionInTacticsView
+            // 
+            this.checkBoxPositionInTacticsView.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxPositionInTacticsView.AutoSize = true;
+            this.checkBoxPositionInTacticsView.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxPositionInTacticsView.Location = new System.Drawing.Point(219, 68);
+            this.checkBoxPositionInTacticsView.Name = "checkBoxPositionInTacticsView";
+            this.checkBoxPositionInTacticsView.Size = new System.Drawing.Size(216, 20);
+            this.checkBoxPositionInTacticsView.TabIndex = 37;
+            this.checkBoxPositionInTacticsView.Text = "Position in tactics condition view";
+            this.toolTips.SetToolTip(this.checkBoxPositionInTacticsView, "From Tapani\'s patch: Adds the position of the player to the Tactics Condition vie" +
+        "w");
+            this.checkBoxPositionInTacticsView.UseVisualStyleBackColor = true;
             // 
             // checkBoxSwapSKoreaForChina
             // 
@@ -461,8 +457,6 @@
             // checkBoxRemove3NonEULimit
             // 
             this.checkBoxRemove3NonEULimit.AutoSize = true;
-            this.checkBoxRemove3NonEULimit.Checked = true;
-            this.checkBoxRemove3NonEULimit.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxRemove3NonEULimit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxRemove3NonEULimit.Location = new System.Drawing.Point(219, 146);
             this.checkBoxRemove3NonEULimit.Name = "checkBoxRemove3NonEULimit";
@@ -502,8 +496,6 @@
             // checkBoxJobsAbroadBoost
             // 
             this.checkBoxJobsAbroadBoost.AutoSize = true;
-            this.checkBoxJobsAbroadBoost.Checked = true;
-            this.checkBoxJobsAbroadBoost.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxJobsAbroadBoost.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxJobsAbroadBoost.Location = new System.Drawing.Point(7, 146);
             this.checkBoxJobsAbroadBoost.Name = "checkBoxJobsAbroadBoost";
@@ -529,8 +521,6 @@
             // checkBoxRegenFixes
             // 
             this.checkBoxRegenFixes.AutoSize = true;
-            this.checkBoxRegenFixes.Checked = true;
-            this.checkBoxRegenFixes.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxRegenFixes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxRegenFixes.Location = new System.Drawing.Point(219, 120);
             this.checkBoxRegenFixes.Name = "checkBoxRegenFixes";
@@ -619,22 +609,6 @@
             this.buttonAbout.Text = "?";
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
-            // 
-            // checkBoxPositionInTacticsView
-            // 
-            this.checkBoxPositionInTacticsView.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
-            this.checkBoxPositionInTacticsView.AutoSize = true;
-            this.checkBoxPositionInTacticsView.Checked = true;
-            this.checkBoxPositionInTacticsView.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxPositionInTacticsView.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxPositionInTacticsView.Location = new System.Drawing.Point(219, 68);
-            this.checkBoxPositionInTacticsView.Name = "checkBoxPositionInTacticsView";
-            this.checkBoxPositionInTacticsView.Size = new System.Drawing.Size(216, 20);
-            this.checkBoxPositionInTacticsView.TabIndex = 37;
-            this.checkBoxPositionInTacticsView.Text = "Position in tactics condition view";
-            this.toolTips.SetToolTip(this.checkBoxPositionInTacticsView, "From Tapani\'s patch: Adds the position of the player to the Tactics Condition vie" +
-        "w");
-            this.checkBoxPositionInTacticsView.UseVisualStyleBackColor = true;
             // 
             // PatcherForm
             // 

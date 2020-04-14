@@ -113,9 +113,12 @@ namespace CM0102Patcher
                 ofd.Title = "Select a CM0102 nation.dat or uncompressed save game file";
                 try
                 {
-                    var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
-                    if (!string.IsNullOrEmpty(path))
-                        ofd.InitialDirectory = Path.Combine(path, "Data");
+                    if (!string.IsNullOrEmpty(RegString.GetRegString()))
+                    {
+                        var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
+                        if (!string.IsNullOrEmpty(path))
+                            ofd.InitialDirectory = Path.Combine(path, "Data");
+                    }
                 }
                 catch { }
 
@@ -173,9 +176,12 @@ namespace CM0102Patcher
                 ofd.Title = "Select a CM0102 stadium.dat file";
                 try
                 {
-                    var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
-                    if (!string.IsNullOrEmpty(path))
-                        ofd.InitialDirectory = Path.Combine(path, "Data");
+                    if (!string.IsNullOrEmpty(RegString.GetRegString()))
+                    {
+                        var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
+                        if (!string.IsNullOrEmpty(path))
+                            ofd.InitialDirectory = Path.Combine(path, "Data");
+                    }
                 }
                 catch { }
 

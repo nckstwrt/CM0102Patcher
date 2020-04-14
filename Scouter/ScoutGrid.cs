@@ -165,9 +165,12 @@ namespace CM0102Patcher.Scouter
             {
                 try
                 {
-                    var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
-                    if (!string.IsNullOrEmpty(path))
-                        ofd.InitialDirectory = path;
+                    if (!string.IsNullOrEmpty(RegString.GetRegString()))
+                    {
+                        var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
+                        if (!string.IsNullOrEmpty(path))
+                            ofd.InitialDirectory = path;
+                    }
                 }
                 catch { }
             }

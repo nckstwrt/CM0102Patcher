@@ -19,11 +19,14 @@ namespace CM0102Patcher
 
             try
             {
-                var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
-                if (!string.IsNullOrEmpty(path))
+                if (!string.IsNullOrEmpty(RegString.GetRegString()))
                 {
-                    var dataPath = Path.Combine(path, "Data");
-                    labelFilename.Text = Path.Combine(dataPath, "officials.dat");
+                    var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        var dataPath = Path.Combine(path, "Data");
+                        labelFilename.Text = Path.Combine(dataPath, "officials.dat");
+                    }
                 }
             }
             catch { }
@@ -38,9 +41,12 @@ namespace CM0102Patcher
                 ofd.Title = "Select a CM0102 officials.dat file";
                 try
                 {
-                    var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
-                    if (!string.IsNullOrEmpty(path))
-                        ofd.InitialDirectory = Path.Combine(path, "Data");
+                    if (!string.IsNullOrEmpty(RegString.GetRegString()))
+                    {
+                        var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
+                        if (!string.IsNullOrEmpty(path))
+                            ofd.InitialDirectory = Path.Combine(path, "Data");
+                    }
                 }
                 catch { }
 
