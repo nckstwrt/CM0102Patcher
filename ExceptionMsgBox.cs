@@ -12,15 +12,22 @@ namespace CM0102Patcher
         {
             var exceptionText = ex.Message + "\r\n\r\n";
             System.Diagnostics.StackTrace trace = new System.Diagnostics.StackTrace(ex, true);
-            var frames = trace.GetFrames();
-            if (frames != null)
+            if (trace != null)
             {
-                foreach (var F in trace.GetFrames())
+                var frames = trace.GetFrames();
+                if (frames != null)
                 {
-                    exceptionText += ("  " + System.IO.Path.GetFileName(F.GetFileName()) + " (" + F.GetFileLineNumber() + ")" + " - " + F.GetMethod().ToString() + "\r\n");
+                    foreach (var F in trace.GetFrames())
+                    {
+                        var methodString = "";
+                        if (F.GetMethod() != null)
+                            methodString = F.GetMethod().ToString();
+                        exceptionText += ("  " + System.IO.Path.GetFileName(F.GetFileName()) + " (" + F.GetFileLineNumber() + ")" + " - " + methodString + "\r\n");
+                    }
                 }
             }
             MessageBox.Show(exceptionText, "!! Exception !!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Console.WriteLine(exceptionText);
         }
     }
 }

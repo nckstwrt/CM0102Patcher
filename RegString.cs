@@ -11,7 +11,7 @@ namespace CM0102Patcher
         public static string GetRegString()
         {
             // if on Mono - don't try this
-            if (Type.GetType("Mono.Runtime") != null)
+            if (Program.RunningInMono())
                 return "";
 
             if (Is64BitOperatingSystem())

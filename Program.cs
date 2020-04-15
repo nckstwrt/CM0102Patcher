@@ -17,5 +17,10 @@ namespace CM0102Patcher
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new PatcherForm());
         }
+
+        public static bool RunningInMono()
+        {
+            return (Type.GetType("Mono.Runtime") != null);
+        }
     }
 }

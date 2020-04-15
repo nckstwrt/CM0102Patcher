@@ -284,7 +284,7 @@ namespace CM0102Patcher
 
                 // Check for Restore Point
                 // if on Mono - don't try this
-                if (Type.GetType("Mono.Runtime") != null)
+                if (!Program.RunningInMono())
                 {
                     if (!RestorePoint.CheckForRestorePoint(labelFilename.Text))
                     {

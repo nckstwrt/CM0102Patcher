@@ -27,8 +27,12 @@ namespace CM0102Patcher.Scouter
             dataGridView.CellFormatting += DataGridView_CellFormatting;
             dataGridView.RowHeadersVisible = false;
             dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            // if on Mono - don't try this
+            if (!Program.RunningInMono())
+            {
+                dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+                dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            }
             dataGridView.AllowUserToResizeColumns = true;
             dataGridView.AllowUserToResizeRows = false;
             dataGridView.AutoSize = false;
@@ -192,20 +196,31 @@ namespace CM0102Patcher.Scouter
             {
                 using (saveReader = new SaveReader(saveFileName))
                 {
-                    dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+                    // if on Mono - don't try this
+                    if (!Program.RunningInMono())
+                        dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+
                     dataGridView.AllowUserToResizeColumns = true;
                     saveReader.LoadPlayers();
                     dataGridView.SuspendLayout();
                     dataGridView.DataSource = saveReader.CreateDataTable(checkBoxShowIntrinstics.Checked);
                     dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
                     dataGridView.AllowUserToResizeColumns = true;
-                    dataGridView.Columns["Value"].DefaultCellStyle.FormatProvider = ci;
-                    dataGridView.Columns["Value"].DefaultCellStyle.Format = "C0";
-                    dataGridView.Columns[1].Width -= 20;
-                    for (int i = 5; i < dataGridView.Columns.Count; i++)
-                        if (i != 7)
-                            dataGridView.Columns[i].Width -= 20;
+
                     dataGridView.ResumeLayout();
+
+                    // if on Mono - don't try this
+                    if (!Program.RunningInMono())
+                    {
+                        //dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+                        //dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                        dataGridView.Columns["Value"].DefaultCellStyle.FormatProvider = ci;
+                        dataGridView.Columns["Value"].DefaultCellStyle.Format = "C0";
+                        dataGridView.Columns[1].Width -= 20;
+                        for (int i = 8; i < dataGridView.Columns.Count; i++)
+                                dataGridView.Columns[i].Width -= 20;
+                    }
+
                     RefreshGrid();
                     ret = true;
                 }
