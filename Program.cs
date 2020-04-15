@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace CM0102Patcher
@@ -13,6 +14,8 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
+            var ss = Marshal.SizeOf(typeof(TNonPlayer));
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new PatcherForm());

@@ -171,6 +171,48 @@ namespace CM0102Patcher
         public byte PlayerMorale;
     }
 
+    // 68
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TNonPlayer
+    {
+        public int ID;
+        public UInt16 CurrentAbility;
+        public UInt16 PotentialAbility;
+        public UInt16 HomeReputation;
+        public UInt16 CurrentReputation;
+        public UInt16 WorldReputation;
+        public sbyte Attacking;
+        public sbyte Business;
+        public sbyte Coaching;
+        public sbyte CoachingGks;
+        public sbyte CoachingTechnique;
+        public sbyte Directness;
+        public sbyte Discipline;
+        public sbyte FreeRoles;
+        public sbyte Interference;
+        public sbyte Judgement;
+        public sbyte JudgingPotential;
+        public sbyte ManHandling;
+        public sbyte Marking;
+        public sbyte Motivating;
+        public sbyte Offside;
+        public sbyte Patience;
+        public sbyte Physiotherapy;
+        public sbyte Pressing;
+        public sbyte Resources;
+        public sbyte Tactics;
+        public sbyte Youngsters;
+        public int Goalkeeper;
+        public int Sweeper;
+        public int Defender;
+        public int DefensiveMidfielder;
+        public int Midfielder;
+        public int AttackingMidfielder;
+        public int Attacker;
+        public int WingBack;
+        public sbyte Formation;
+    }
+    
     // 581
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct TClub
@@ -227,61 +269,6 @@ namespace CM0102Patcher
         public int TacticSelected;
         public byte HasLinkedClub;
     }
-/*
-    TClub = packed record
-    ID: LongInt;
-    Name: TStandardText;
-    GenderName: Char;
-    ShortName: TShortText;
-    ShortGenderName: Char;
-    Nation: PNation;
-    Division: PDivision;
-    LastDivision: PDivision;
-    LastPosition: Byte;
-    ReserveDivision: PDivision;
-    ProfessionalStatus: Byte;
-    Cash: LongInt;
-    Stadium: LongInt;
-    OwnStadium: Byte;
-    ReserveStadium: LongInt;
-    MatchDay: Byte;
-    Attendance: LongInt;
-    MinAttendance: LongInt;
-    MaxAttendance: LongInt;
-    Training: Byte;
-    Reputation: Word;
-    PLC: Byte;
-    ForeColour1: LongInt;
-    BackColour1: LongInt;
-    ForeColour2: LongInt;
-    BackColour2: LongInt;
-    ForeColour3: LongInt;
-    BackColour3: LongInt;
-    FavStaff1: PStaff;
-    FavStaff2: PStaff;
-    FavStaff3: PStaff;
-    DisStaff1: PStaff;
-    DisStaff2: PStaff;
-    DisStaff3: PStaff;
-    Rival1: PClub;
-    Rival2: PClub;
-    Rival3: PClub;
-    Chairman: PStaff;
-    Directors: array[0..2] of PStaff;
-    Manager: PStaff;
-    AssistantManager: PStaff;
-    Squad: array[0..49] of PStaff;
-    Coaches: array[0..4] of PStaff;
-    Scouts: array[0..6] of PStaff;
-    Physios: array[0..2] of PStaff;
-    EuroFlag: LongInt;
-    EuroSeeding: Byte;
-    TeamSelected: array[0..19] of PStaff;
-    TacticTraining: array[0..3] of LongInt;
-    TacticSelected: LongInt;
-    HasLinkedClub: Byte;
-  end;
-*/
 
     public class Block
     {
