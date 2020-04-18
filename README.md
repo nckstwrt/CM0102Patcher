@@ -1,4 +1,4 @@
-# CM0102Patcher v1.27
+# CM0102Patcher v2.00
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/OsOiivx.png)
+![alt text](https://i.imgur.com/2PQR7XT.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -27,6 +27,24 @@ The RGN Image Converter:
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
 ## Updates
+
+v2.00:
+* Big Change: Patcher no longer changes the Date by modifying Data files - it does it all in the exe now (unless changing to before 2001)
+* Big Change: Patcher now detects what patches have been applied and allows you to toggle them on and off
+* Support for working on PlayOnMac
+* Slight fix to the image cropping
+* Alternative "Give More Options In Offers DropDown" Misc Patch
+* Better support for starting before 2001 (mainly to work around Dec 27th '01 crash)
+* Northern League patch now supports relegating teams as well as promoting them
+* Scouter Copy To Clipboard (for pasting to Excel) now saves what's filtered rather than everything
+* Save Game Changer now has option to Move a player to another Team
+* Patcher now warns user if they are about to make a change that is "irreversible" (i.e. without restoring/reinstalling)
+* Increase Number of Loans Allowed patch added to Misc Patches
+* Show Private Bids Patch added to Misc Patches (in case you have applied Hide Private Bids previously in error)
+* Added FixNetworkGames Patch to Misc Patches (This can be applied to Saturn v9 to make it work in Win95 more required for Network games)
+* Save Scouter can now exclude those already about to be transferred in the filter
+* Save Scouter font size increased
+* Added No Foreign Player restrictions patches to Misc Patches
 
 v1.27:
 * Updated Save Game Changer to support setting all contract start dates back a year (stops all teams refusing to sell because they bought recently)
