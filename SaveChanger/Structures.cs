@@ -67,108 +67,207 @@ namespace CM0102Patcher
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct TStaff
     {
+        /*0*/
         public int ID;
+        /*4*/
         public int FirstName;
+        /*8*/
         public int SecondName;
+        /*C*/
         public int CommonName;
+        /*10*/
         public TCMDate DateOfBirth;
+        /*18*/
         public UInt16 YearOfBirth;
+        /*1A*/
         public int Nation;
+        /*1E*/
         public int SecondNation;
+        /*22*/
         public byte IntApps;
+        /*23*/
         public byte IntGoals;
+        /*24*/
         public int NationalJob;
+        /*28*/
         public byte JobForNation;
+        /*29*/
         public TCMDate DateJoinedNation;
+        /*31*/
         public TCMDate DateExpiresNation;
+        /*39*/
         public int ClubJob;
+        /*3D*/
         public byte JobForClub;
+        /*3E*/
         public TCMDate DateJoinedClub;
+        /*46*/
         public TCMDate DateExpiresClub;
+        /*4E*/
         public int Wage;
+        /*52*/
         public int Value;
+        /*56*/
         public byte Adaptability;
+        /*57*/
         public byte Ambition;
+        /*58*/
         public byte Determination;
+        /*59*/
         public byte Loyality;
+        /*5A*/
         public byte Pressure;
+        /*5B*/
         public byte Professionalism;
+        /*5C*/
         public byte Sportsmanship;
+        /*5D*/
         public byte Temperament;
+        /*5E*/
         public byte PlayingSquad;
+        /*5F*/
         public byte Classification;
+        /*60*/
         public byte ClubValuation;
+        /*61*/
         public int Player;
+        /*65*/
         public int StaffPreferences;
+        /*69*/
         public int NonPlayer;
+        /*6D*/
         public byte SquadSelectedFor;
+        /*Total: 0x6E (110)*/
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct TPlayer
     {
+        /*0*/
         public int ID;
+        /*4*/
         public byte SquadNumber;
+        /*5*/
         public UInt16 CurrentAbility;
+        /*7*/
         public UInt16 PotentialAbility;
+        /*9*/
         public UInt16 HomeReputation;
+        /*B*/
         public UInt16 CurrentReputation;
+        /*D*/
         public UInt16 WorldReputation;
+        /*F*/
         public sbyte Goalkeeper;
+        /*10*/
         public sbyte Sweeper;
+        /*11*/
         public sbyte Defender;
+        /*12*/
         public sbyte DefensiveMidfielder;
+        /*13*/
         public sbyte Midfielder;
+        /*14*/
         public sbyte AttackingMidfielder;
+        /*15*/
         public sbyte Attacker;
+        /*16*/
         public sbyte WingBack;
+        /*17*/
         public sbyte RightSide;
+        /*18*/
         public sbyte LeftSide;
+        /*19*/
         public sbyte Central;
+        /*1A*/
         public sbyte FreeRole;
+        /*1B*/
         public sbyte Acceleration;
+        /*1C*/
         public sbyte Aggression;
+        /*1D*/
         public sbyte Agility;
+        /*1E*/
         public sbyte Anticipation;
+        /*1F*/
         public sbyte Balance;
+        /*20*/
         public sbyte Bravery;
+        /*21*/
         public sbyte Consistency;
+        /*22*/
         public sbyte Corners;
+        /*23*/
         public sbyte Crossing;
+        /*24*/
         public sbyte Decisions;
+        /*25*/
         public sbyte Dirtiness;
+        /*26*/
         public sbyte Dribbling;
+        /*27*/
         public sbyte Finishing;
+        /*28*/
         public sbyte Flair;
+        /*29*/
         public sbyte FreeKicks;
+        /*2A*/
         public sbyte Handling;
+        /*2B*/
         public sbyte Heading;
+        /*2C*/
         public sbyte ImportantMatches;
+        /*2D*/
         public sbyte InjuryProneness;
+        /*2E*/
         public sbyte Jumping;
+        /*2F*/
         public sbyte Leadership;
+        /*30*/
         public sbyte LeftFoot;
+        /*31*/
         public sbyte LongShots;
+        /*32*/
         public sbyte Marking;
+        /*33*/
         public sbyte Movement;
+        /*34*/
         public sbyte NaturalFitness;
+        /*35*/
         public sbyte OneOnOnes;
+        /*36*/
         public sbyte PlayerPace;
+        /*37*/
         public sbyte Passing;
+        /*38*/
         public sbyte Penalties;
+        /*39*/
         public sbyte Positioning;
+        /*3A*/
         public sbyte Reflexes;
+        /*3B*/
         public sbyte RightFoot;
+        /*3C*/
         public sbyte Stamina;
+        /*3D*/
         public sbyte Strength;
+        /*3E*/
         public sbyte Tackling;
+        /*3F*/
         public sbyte Teamwork;
+        /*40*/
         public sbyte Technique;
+        /*41*/
         public sbyte ThrowIns;
+        /*42*/
         public sbyte Versatility;
+        /*43*/
         public sbyte Vision;
+        /*44*/
         public sbyte WorkRate;
+        /*45*/
         public byte PlayerMorale;
+        /*Total: 0x46 (70)*/
     }
 
     // 68

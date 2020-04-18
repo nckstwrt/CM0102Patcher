@@ -610,8 +610,12 @@ namespace CM0102Patcher
                             // Convert the core gfx
                             int menuWidth = newWidth > 800 ? 126 : 90;
                             RGNConverter.RGN2RGN(Path.Combine(dataDir, "DEFAULT_PIC.RGN"), Path.Combine(dataDir, "bkg1280_800.rgn"), newWidth, newHeight);
-                            RGNConverter.RGN2RGN(Path.Combine(dataDir, "match.mbr"), Path.Combine(dataDir, "m800.mbr"), menuWidth, newHeight); // 800 => 90 - 1280 => 126
-                            RGNConverter.RGN2RGN(Path.Combine(dataDir, "game.mbr"), Path.Combine(dataDir, "g800.mbr"), menuWidth, newHeight);
+
+                            // For Alan + Cam F and the like who hate menu bars :)
+                            if (File.Exists(Path.Combine(dataDir, "match.mbr")))
+                                RGNConverter.RGN2RGN(Path.Combine(dataDir, "match.mbr"), Path.Combine(dataDir, "m800.mbr"), menuWidth, newHeight); // 800 => 90 - 1280 => 126
+                            if (File.Exists(Path.Combine(dataDir, "game.mbr")))
+                                RGNConverter.RGN2RGN(Path.Combine(dataDir, "game.mbr"), Path.Combine(dataDir, "g800.mbr"), menuWidth, newHeight);
 
                             var picturesDir = Path.Combine(dir, "Pictures");
 
@@ -641,10 +645,12 @@ namespace CM0102Patcher
                                                     int Width, Height;
                                                     if (RGNConverter.GetImageSize(picFile, out Width, out Height))
                                                     {
-                                                        if (Width == 800 && Height == 600)
-                                                            RGNConverter.RGN2RGN(picFile, picFile + ".tmp", newWidth, newHeight, 0, 35, 0, 100 - 35);
+                                                        if (Width == 800 && Height == 600 && newWidth == 1280 && newHeight == 800)
+                                                            RGNConverter.RGN2RGN(picFile, picFile + ".tmp", newWidth, newHeight, 0, 35, 0, 100);
                                                         else
+                                                        {
                                                             RGNConverter.RGN2RGN(picFile, picFile + ".tmp", newWidth, newHeight);
+                                                        }
                                                         File.SetAttributes(picFile, FileAttributes.Normal);
                                                         File.Delete(picFile);
                                                         File.Move(picFile + ".tmp", picFile);
