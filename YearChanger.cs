@@ -195,7 +195,7 @@ namespace CM0102Patcher
                     bw.Write((byte)0xa);
                 }
 
-                if (year >= 1994 && year <= 1997)
+                if (year >= 1994 && year < 1997)
                 {
                     // World Cup - especially 27th Dec 2001 is a major issue. This massive patch fixes it - but was a bit of a nuclear option. Needs disecting.
                     patcher.ApplyPatch(stream, patcher.patches["fixworldcuppre2000"]);
@@ -205,6 +205,35 @@ namespace CM0102Patcher
                         bw.Seek(offset, SeekOrigin.Begin);
                         bw.Write(YearToBytes(year));
                     }
+                }
+                if (year == 1997)
+                {
+                    // World Cup Fixes
+                    // Fix Asia to 2000
+                    bw.Seek(0x511CB8, SeekOrigin.Begin);
+                    bw.Write(YearToBytes(2000));
+
+                    // Fix South American
+                    bw.Seek(0x52036E, SeekOrigin.Begin);
+                    bw.Write(YearToBytes(2000));
+
+                    // Fix Euro
+                    bw.Seek(0x5182DC, SeekOrigin.Begin);
+                    bw.Write(YearToBytes(2000));
+
+                    // Turn off Africa being auto inserted early for 2001
+                    bw.Seek(0x52DFCA, SeekOrigin.Begin);
+                    bw.Write(new byte[] {0xe9, 0x5e, 0x07, 0x00 });
+
+                    // Fix Freeze at 27th Dec 2001
+                    bw.Seek(0x51DBBE, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xe9, 0x7f, 0x02, 0x00 });
+                    bw.Seek(0x51F48C, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xe9, 0x78, 0x01, 0x00 });
+                    bw.Seek(0x52EB4C, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xe9, 0x9e, 0x04, 0x00, 0x00, 0x90});
+                    bw.Seek(0x52F246, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, });
                 }
             }
         }
@@ -437,7 +466,38 @@ namespace CM0102Patcher
             }
         }
 
-        int GetStaffOffset(string indexFileName, out int staffCount, out int staffVersion)
+        public void UpdateIndexCount(string indexFileName, string fileToUpdate, int reduceBlocksBy)
+        {
+            using (var indexFile = File.Open(indexFileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                // Skip header
+                indexFile.Seek(8, SeekOrigin.Begin);
+                using (var br = new BinaryReader(indexFile))
+                using (var bw = new BinaryWriter(indexFile))
+                {
+                    while (true)
+                    {
+                        var fileNameBytes = br.ReadBytes(51);
+                        if (fileNameBytes == null || fileNameBytes.Length == 0)
+                            break;
+                        var fileName = Encoding.ASCII.GetString(fileNameBytes.ToList().GetRange(0, fileNameBytes.ToList().IndexOf(0)).ToArray());
+                        var fileType = br.ReadInt32();
+                        var count = br.ReadInt32();
+                        var offset = br.ReadInt32();
+                        var version = br.ReadInt32();
+
+                        if (fileName == fileToUpdate)
+                        {
+                            indexFile.Seek(-12, SeekOrigin.Current);
+                            bw.Write(count - reduceBlocksBy);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        public int GetStaffOffset(string indexFileName, out int staffCount, out int staffVersion)
         {
             int ret = -1;
             staffCount = 0;
@@ -649,18 +709,24 @@ namespace CM0102Patcher
             }
         }
 
-        public void UpdateHistoryFile(string historyFile, int blockSize, int yearIncrement, params int[] yearOffsets)
+        public int UpdateHistoryFile(string historyFile, int blockSize, int yearIncrement, int yearOffset1, int yearOffset2 = 0, int cutIfEqualOrAbove = 0, string indexFile = null)
         {
             using (var file = File.Open(historyFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
                 var fileLength = (int)file.Length;
                 var bytes = new byte[fileLength];
+                var newBytes = new List<byte[]>();
+                var yearOffsets = new int[] { yearOffset1, yearOffset2 };
                 file.Read(bytes, 0, fileLength);
 
                 for (int i = 0; i < fileLength; i += blockSize)
                 {
+                    bool yearsAreOk = true;
                     foreach (var yearOffset in yearOffsets)
                     {
+                        if (yearOffset == 0)
+                            continue;
+
                         // March 2019 update seemed truncated, so don't except if it is
                         if ((i + yearOffset + 1) >= bytes.Length)
                             continue;
@@ -671,12 +737,36 @@ namespace CM0102Patcher
                         {
                             year += (short)yearIncrement;
                             BitConverter.GetBytes(year).CopyTo(bytes, i + yearOffset);
+
+                            if (yearsAreOk && cutIfEqualOrAbove != 0 && year >= cutIfEqualOrAbove)
+                                yearsAreOk = false;
                         }
+                    }
+
+                    // Include this block
+                    if (yearsAreOk)
+                    {
+                        var newBlock = new byte[blockSize];
+                        Array.Copy(bytes, i, newBlock, 0, blockSize);
+                        newBytes.Add(newBlock);
                     }
                 }
 
+                var newBytesArray = newBytes.SelectMany(x => x).ToArray();
                 file.Seek(0, SeekOrigin.Begin);
-                file.Write(bytes, 0, fileLength);
+                file.SetLength(0);  // Truncate the file
+                file.Write(newBytesArray, 0, newBytesArray.Length);
+
+                int newNumberOfBlocks = newBytesArray.Length / blockSize;
+                int reductionInBlocks = (bytes.Length / blockSize) - newNumberOfBlocks;
+
+                // Update the Index file with the new number of blocks (if supplied)
+                if (cutIfEqualOrAbove != 0 && !string.IsNullOrEmpty(indexFile))
+                {
+                    UpdateIndexCount(indexFile, Path.GetFileName(historyFile), reductionInBlocks);
+                }
+
+                return newNumberOfBlocks;
             }
         }
     }

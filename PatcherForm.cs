@@ -397,14 +397,22 @@ namespace CM0102Patcher
                                     yearIncrement -= yearExeSyncDecrement;
 
                                     yearChanger.ApplyYearChangeToExe(labelFilename.Text, (int)numericGameStartYear.Value);
-                                    yearChanger.UpdateStaff(indexFile, staffFile, yearIncrement);
-                                    yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
 
-                                    yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
-                                    yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8);
+                                    if (Control.ModifierKeys != Keys.Control)
+                                    {
+                                        yearChanger.UpdateStaff(indexFile, staffFile, yearIncrement);
+                                        yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
 
-                                    yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement + 1, 0x8);
-                                    yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8);
+                                        yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
+                                        yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8);
+
+                                        yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement + 1, 0x8);
+                                        yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Because Control was held down - did not update Data files!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    }
                                 }
                             }
                             catch (Exception ex)
@@ -771,15 +779,31 @@ namespace CM0102Patcher
                 }
                 if (e.KeyChar == (char)2 && SecretMode) // B
                 {
-                    var increment = 11;
+                    var yearIncrement = 0;
+                    var cutIfEqualOrAbove = 1997;
+
                     var yearChanger = new YearChanger();
                     var dir = Path.GetDirectoryName(labelFilename.Text);
                     var dataDir = Path.Combine(dir, "Data");
-                    var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
+
+                    var staffFile = Path.Combine(dataDir, "staff.dat");
+                    var indexFile = Path.Combine(dataDir, "index.dat");
+                    var playerConfigFile = Path.Combine(dataDir, "player_setup.cfg");
+                    var staffCompHistoryFile = Path.Combine(dataDir, "staff_comp_history.dat");
                     var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
-                    yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, increment, 0x8);
-                    //yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, increment, 0x8);
-                    MessageBox.Show(string.Format("Patched Years To Jump By: {0} years", increment), "Data Increment", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    var staffHistoryFile = Path.Combine(dataDir, "staff_history.dat");
+                    var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
+                   
+                    //yearChanger.UpdateStaff(indexFile, staffFile, yearIncrement);
+                    //yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
+
+                    // Update History
+                    yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
+                    yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8, 0);
+                    yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8, 0, cutIfEqualOrAbove, indexFile);
+                    yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement, 0x8, 0, cutIfEqualOrAbove, indexFile);
+
+                    MessageBox.Show(string.Format("Patched Years To Jump By: {0} years", yearIncrement), "Data Increment", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (e.KeyChar == (char)3 && SecretMode) // C
                 {
@@ -833,6 +857,13 @@ namespace CM0102Patcher
                     var patcher = new Patcher();
                     patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
                 }
+                if (e.KeyChar == (char)8 && SecretMode) // H
+                {
+                    var yearChanger = new YearChanger();
+                    yearChanger.ApplyYearChangeToExe(labelFilename.Text, (int)numericGameStartYear.Value);
+                    MessageBox.Show("Forced Exe to Year: " + ((int)numericGameStartYear.Value).ToString(), "Forced Year", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
                 if (e.KeyChar == (char)31 && SecretMode) // -
                 {
                     yearExeSyncDecrement = 1;
