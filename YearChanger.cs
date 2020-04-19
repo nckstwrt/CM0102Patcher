@@ -206,20 +206,29 @@ namespace CM0102Patcher
                         bw.Write(YearToBytes(year));
                     }
                 }
-                if (year == 1997)
+                if (year == 1997 || year == 1989)
                 {
+                    var setWorldCupQualTo = 2000;
+
+                    switch (year)
+                    {
+                        case 1989:
+                            setWorldCupQualTo = 1992;
+                            break;
+                    }
+                    
                     // World Cup Fixes
-                    // Fix Asia to 2000
+                    // Fix Asia Qualifiers
                     bw.Seek(0x511CB8, SeekOrigin.Begin);
-                    bw.Write(YearToBytes(2000));
+                    bw.Write(YearToBytes(setWorldCupQualTo));
 
                     // Fix South American
                     bw.Seek(0x52036E, SeekOrigin.Begin);
-                    bw.Write(YearToBytes(2000));
+                    bw.Write(YearToBytes(setWorldCupQualTo));
 
                     // Fix Euro
                     bw.Seek(0x5182DC, SeekOrigin.Begin);
-                    bw.Write(YearToBytes(2000));
+                    bw.Write(YearToBytes(setWorldCupQualTo));
 
                     // Turn off Africa being auto inserted early for 2001
                     bw.Seek(0x52DFCA, SeekOrigin.Begin);

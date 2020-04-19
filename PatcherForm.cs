@@ -779,8 +779,8 @@ namespace CM0102Patcher
                 }
                 if (e.KeyChar == (char)2 && SecretMode) // B
                 {
-                    var yearIncrement = 0;
-                    var cutIfEqualOrAbove = 1997;
+                    var yearIncrement = -1;
+                    var cutIfEqualOrAbove = 0;
 
                     var yearChanger = new YearChanger();
                     var dir = Path.GetDirectoryName(labelFilename.Text);
@@ -798,8 +798,9 @@ namespace CM0102Patcher
                     //yearChanger.UpdatePlayerConfig(playerConfigFile, yearIncrement);
 
                     // Update History
-                    yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
-                    yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8, 0);
+                    //yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
+                    //yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8, 0);
+
                     yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8, 0, cutIfEqualOrAbove, indexFile);
                     yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement, 0x8, 0, cutIfEqualOrAbove, indexFile);
 
