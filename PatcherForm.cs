@@ -229,6 +229,7 @@ namespace CM0102Patcher
             catch (Exception ex)
             {
                 MessageBox.Show("Could not open executable for patching!\r\n\r\nException:\r\n" + ex.Message, "Error Opening File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                labelFilename.Text = "";
             }
         }
 
