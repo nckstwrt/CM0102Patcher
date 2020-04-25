@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/2PQR7XT.png)
+![alt text](https://i.imgur.com/oT112T3.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -26,7 +26,16 @@ The RGN Image Converter:
 
 ![alt text](https://i.imgur.com/8vuKuwq.png)
 
+Competition History Editor:
+
+![alt text](https://i.imgur.com/n3RuoZg.png)
+
 ## Updates
+
+v2.01:
+* Add Competition History Editor
+* Add extra Misc Patches (IgnorePlayerHistoriesOnLoad, Wales Patch, Remove4MonthLoanLimit)
+* Protect against users trying to patch running executables
 
 v2.00:
 * Big Change: Patcher no longer changes the Date by modifying Data files - it does it all in the exe now (unless changing to before 2001)
