@@ -33,8 +33,8 @@ Competition History Editor:
 ## Updates
 
 v2.01:
-* Add Competition History Editor
-* Add extra Misc Patches (IgnorePlayerHistoriesOnLoad, Wales Patch, Remove4MonthLoanLimit)
+* Added Competition History Editor
+* Added extra Misc Patches (IgnorePlayerHistoriesOnLoad, Wales Patch, Remove4MonthLoanLimit)
 * Protect against users trying to patch running executables
 
 v2.00:
