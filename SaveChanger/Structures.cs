@@ -369,6 +369,101 @@ namespace CM0102Patcher
         public byte HasLinkedClub;
     }
 
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TComp
+    {
+        public int ID;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)] public byte[] Name;
+        public byte GenderName;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] ShortName;
+        public byte ShortGenderName;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] public byte[] ThreeLetterName;
+        public sbyte ClubCompScope;
+        public sbyte ClubCompSelected;
+        public int ClubCompContinent;
+        public int ClubCompNation;
+        public int ClubCompForegroundColour;
+        public int ClubCompBackgroundColour;
+        public Int16 ClubCompReputation; // Version 0x02 - Changed char->short
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TCompHistory
+    {
+        public int ID;
+        public int Comp;
+        public Int16 Year;
+        public int Winners;
+        public int RunnersUp;
+        public int ThirdPlace;
+        public int Host;
+    };
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TNation
+    {
+        // original data
+        public int ID;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)] public byte[] Name;
+        public byte GenderName;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] ShortName;
+        public byte ShortGenderName;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] public byte[] ThreeLetterName;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] Nationality;
+        public int Continent;
+        public sbyte Region;
+        public sbyte ActualRegion;
+        public sbyte FirstLanguage;
+        public sbyte SecondLanguage;
+        public sbyte ThirdLanguage;
+        public int CapitalCity;
+        public sbyte StateOfDevelopment;
+        public sbyte GroupMembership;
+        public int NationalStadium;
+        public sbyte GameImportance;
+        public sbyte LeagueStandard;
+        public Int16 NumberClubs;
+        public int NumberStaff;
+        public Int16 SeasonUpdateDay;
+        public Int16 Reputation;
+        public int ForegroundColour1;
+        public int BackgroundColour1;
+        public int ForegroundColour2;
+        public int BackgroundColour2;
+        public int ForegroundColour3;
+        public int BackgroundColour3;
+        public double FIFACoefficient;
+        public double FIFACoefficient91;
+        public double FIFACoefficient92;
+        public double FIFACoefficient93;
+        public double FIFACoefficient94;
+        public double FIFACoefficient95;
+        public double FIFACoefficient96;
+        public double UEFACoefficient91;
+        public double UEFACoefficient92;
+        public double UEFACoefficient93;
+        public double UEFACoefficient94;
+        public double UEFACoefficient95;
+        public double UEFACoefficient96;
+        public int Rivals1;
+        public int Rivals2;
+        public int Rivals3;
+
+        public sbyte NationLeagueSelected;
+        public int NationShortlistOffset; // Version 0x02 - Added
+        public sbyte NationGamesPlayed; // Version 0x02 - Moved to runtime
+    };
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TIndex
+    {
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)] public byte[] Name;
+        public int FileType;
+        public int Count;
+        public int Offset;
+        public int Version;
+    }
+
     public class Block
     {
         public byte[] blockBuffer;

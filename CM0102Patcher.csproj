@@ -61,6 +61,13 @@
     <Compile Include="FixtureScheduler.Designer.cs">
       <DependentUpon>FixtureScheduler.cs</DependentUpon>
     </Compile>
+    <Compile Include="History Editor\HistoryEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="History Editor\HistoryEditorForm.Designer.cs">
+      <DependentUpon>HistoryEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="History Editor\HistoryLoader.cs" />
     <Compile Include="ImageConverterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,6 +162,9 @@
     <Compile Include="ZipStorer.cs" />
     <EmbeddedResource Include="FixtureScheduler.resx">
       <DependentUpon>FixtureScheduler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="History Editor\HistoryEditorForm.resx">
+      <DependentUpon>HistoryEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ImageConverterForm.resx">
       <DependentUpon>ImageConverterForm.cs</DependentUpon>

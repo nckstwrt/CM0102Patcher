@@ -194,12 +194,12 @@ namespace CM0102Patcher
         List<byte[]> CastObjectsToSlices<T>(List<T> objects)
         {
             var ret = new List<byte[]>();
-            foreach (var objbect in objects)
+            foreach (var obj in objects)
             {
                 int objSize = Marshal.SizeOf(typeof(T));
                 byte[] arr = new byte[objSize];
                 IntPtr ptr = Marshal.AllocHGlobal(objSize);
-                Marshal.StructureToPtr(objbect, ptr, true);
+                Marshal.StructureToPtr(obj, ptr, true);
                 Marshal.Copy(ptr, arr, 0, objSize);
                 Marshal.FreeHGlobal(ptr);
                 ret.Add(arr);

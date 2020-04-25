@@ -220,5 +220,18 @@ namespace CM0102Patcher
                 ExceptionMsgBox.Show(ex);
             }
         }
+
+        private void buttonHistoryEditor_Click(object sender, EventArgs e)
+        {
+            HistoryEditorForm hef = new HistoryEditorForm();
+            try
+            {
+                var indexFile = Path.Combine(Path.Combine(Path.GetDirectoryName(exeFile), "Data"), "index.dat");
+                if (File.Exists(indexFile))
+                    hef.IndexFile = indexFile;
+            }
+            catch { }
+            hef.ShowDialog();
+        }
     }
 }
