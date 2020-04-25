@@ -31,6 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HistoryEditorForm));
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageNationComp = new System.Windows.Forms.TabPage();
+            this.numericNationUpDown = new System.Windows.Forms.NumericUpDown();
+            this.buttonNationShiftYears = new System.Windows.Forms.Button();
+            this.buttonNationDeleteRow = new System.Windows.Forms.Button();
             this.dataGridViewNationComp = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -39,6 +42,9 @@
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.listBoxNationComps = new System.Windows.Forms.ListBox();
             this.tabPageClubComps = new System.Windows.Forms.TabPage();
+            this.numericClubUpDown = new System.Windows.Forms.NumericUpDown();
+            this.buttonClubShiftYears = new System.Windows.Forms.Button();
+            this.buttonClubDeleteRow = new System.Windows.Forms.Button();
             this.dataGridViewClubComp = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -53,8 +59,10 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPageNationComp.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericNationUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNationComp)).BeginInit();
             this.tabPageClubComps.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericClubUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClubComp)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -71,6 +79,9 @@
             // 
             // tabPageNationComp
             // 
+            this.tabPageNationComp.Controls.Add(this.numericNationUpDown);
+            this.tabPageNationComp.Controls.Add(this.buttonNationShiftYears);
+            this.tabPageNationComp.Controls.Add(this.buttonNationDeleteRow);
             this.tabPageNationComp.Controls.Add(this.dataGridViewNationComp);
             this.tabPageNationComp.Controls.Add(this.listBoxNationComps);
             this.tabPageNationComp.Location = new System.Drawing.Point(4, 22);
@@ -80,6 +91,44 @@
             this.tabPageNationComp.TabIndex = 0;
             this.tabPageNationComp.Text = "International Comp";
             this.tabPageNationComp.UseVisualStyleBackColor = true;
+            // 
+            // numericNationUpDown
+            // 
+            this.numericNationUpDown.Location = new System.Drawing.Point(501, 207);
+            this.numericNationUpDown.Maximum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            this.numericNationUpDown.Minimum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            -2147483648});
+            this.numericNationUpDown.Name = "numericNationUpDown";
+            this.numericNationUpDown.Size = new System.Drawing.Size(75, 20);
+            this.numericNationUpDown.TabIndex = 6;
+            this.numericNationUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // buttonNationShiftYears
+            // 
+            this.buttonNationShiftYears.Location = new System.Drawing.Point(583, 205);
+            this.buttonNationShiftYears.Name = "buttonNationShiftYears";
+            this.buttonNationShiftYears.Size = new System.Drawing.Size(75, 23);
+            this.buttonNationShiftYears.TabIndex = 5;
+            this.buttonNationShiftYears.Text = "Shift Years";
+            this.buttonNationShiftYears.UseVisualStyleBackColor = true;
+            this.buttonNationShiftYears.Click += new System.EventHandler(this.buttonNationShiftYears_Click);
+            // 
+            // buttonNationDeleteRow
+            // 
+            this.buttonNationDeleteRow.Location = new System.Drawing.Point(664, 205);
+            this.buttonNationDeleteRow.Name = "buttonNationDeleteRow";
+            this.buttonNationDeleteRow.Size = new System.Drawing.Size(75, 23);
+            this.buttonNationDeleteRow.TabIndex = 4;
+            this.buttonNationDeleteRow.Text = "Delete Row";
+            this.buttonNationDeleteRow.UseVisualStyleBackColor = true;
+            this.buttonNationDeleteRow.Click += new System.EventHandler(this.buttonNationDeleteRow_Click);
             // 
             // dataGridViewNationComp
             // 
@@ -147,6 +196,9 @@
             // 
             // tabPageClubComps
             // 
+            this.tabPageClubComps.Controls.Add(this.numericClubUpDown);
+            this.tabPageClubComps.Controls.Add(this.buttonClubShiftYears);
+            this.tabPageClubComps.Controls.Add(this.buttonClubDeleteRow);
             this.tabPageClubComps.Controls.Add(this.dataGridViewClubComp);
             this.tabPageClubComps.Controls.Add(this.listBoxClubComps);
             this.tabPageClubComps.Location = new System.Drawing.Point(4, 22);
@@ -156,6 +208,44 @@
             this.tabPageClubComps.TabIndex = 1;
             this.tabPageClubComps.Text = "Club Comp";
             this.tabPageClubComps.UseVisualStyleBackColor = true;
+            // 
+            // numericClubUpDown
+            // 
+            this.numericClubUpDown.Location = new System.Drawing.Point(501, 207);
+            this.numericClubUpDown.Maximum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            this.numericClubUpDown.Minimum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            -2147483648});
+            this.numericClubUpDown.Name = "numericClubUpDown";
+            this.numericClubUpDown.Size = new System.Drawing.Size(75, 20);
+            this.numericClubUpDown.TabIndex = 9;
+            this.numericClubUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // buttonClubShiftYears
+            // 
+            this.buttonClubShiftYears.Location = new System.Drawing.Point(583, 205);
+            this.buttonClubShiftYears.Name = "buttonClubShiftYears";
+            this.buttonClubShiftYears.Size = new System.Drawing.Size(75, 23);
+            this.buttonClubShiftYears.TabIndex = 8;
+            this.buttonClubShiftYears.Text = "Shift Years";
+            this.buttonClubShiftYears.UseVisualStyleBackColor = true;
+            this.buttonClubShiftYears.Click += new System.EventHandler(this.buttonClubShiftYears_Click);
+            // 
+            // buttonClubDeleteRow
+            // 
+            this.buttonClubDeleteRow.Location = new System.Drawing.Point(664, 205);
+            this.buttonClubDeleteRow.Name = "buttonClubDeleteRow";
+            this.buttonClubDeleteRow.Size = new System.Drawing.Size(75, 23);
+            this.buttonClubDeleteRow.TabIndex = 7;
+            this.buttonClubDeleteRow.Text = "Delete Row";
+            this.buttonClubDeleteRow.UseVisualStyleBackColor = true;
+            this.buttonClubDeleteRow.Click += new System.EventHandler(this.buttonClubDeleteRow_Click);
             // 
             // dataGridViewClubComp
             // 
@@ -284,8 +374,10 @@
             this.Load += new System.EventHandler(this.HistoryEditorForm_Load);
             this.tabControl.ResumeLayout(false);
             this.tabPageNationComp.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericNationUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNationComp)).EndInit();
             this.tabPageClubComps.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericClubUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClubComp)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -317,5 +409,11 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn2;
         private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn3;
         private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn4;
+        private System.Windows.Forms.NumericUpDown numericNationUpDown;
+        private System.Windows.Forms.Button buttonNationShiftYears;
+        private System.Windows.Forms.Button buttonNationDeleteRow;
+        private System.Windows.Forms.NumericUpDown numericClubUpDown;
+        private System.Windows.Forms.Button buttonClubShiftYears;
+        private System.Windows.Forms.Button buttonClubDeleteRow;
     }
 }

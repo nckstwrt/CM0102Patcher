@@ -379,6 +379,44 @@ namespace CM0102Patcher
                 buttonLoad_Click(null, null);
             }
         }
+
+        private void buttonNationDeleteRow_Click(object sender, EventArgs e)
+        {
+            dataGridViewNationComp.Rows.Remove(dataGridViewNationComp.CurrentRow);
+        }
+
+        private void buttonClubDeleteRow_Click(object sender, EventArgs e)
+        {
+            dataGridViewClubComp.Rows.Remove(dataGridViewClubComp.CurrentRow);
+        }
+
+        private void ShiftYears(DataGridView dgv, NumericUpDown upDown)
+        {
+            for (int i = 0; i < dgv.Rows.Count; i++)
+            {
+                try
+                {
+                    var value = dgv.Rows[i].Cells[0].Value;
+                    short year;
+                    if (value != null && short.TryParse(value as string, out year))
+                    {
+                        year += (short)upDown.Value;
+                        dgv.Rows[i].Cells[0].Value = year.ToString();
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private void buttonNationShiftYears_Click(object sender, EventArgs e)
+        {
+            ShiftYears(dataGridViewNationComp, numericNationUpDown);
+        }
+
+        private void buttonClubShiftYears_Click(object sender, EventArgs e)
+        {
+            ShiftYears(dataGridViewClubComp, numericClubUpDown);
+        }
     }
 
     public class ListBoxItem
