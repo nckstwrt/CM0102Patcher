@@ -1,4 +1,4 @@
-# CM0102Patcher v2.00
+# CM0102Patcher v2.02
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/oT112T3.png)
+![alt text](https://i.imgur.com/eaVGBj1.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -31,6 +31,11 @@ Competition History Editor:
 ![alt text](https://i.imgur.com/n3RuoZg.png)
 
 ## Updates
+
+v2.02:
+* Fix when turning off coloured attributes
+* Add Staff Comps to History Editor
+* Updates to Loan patches in Misc Patches
 
 v2.01:
 * Added Competition History Editor
