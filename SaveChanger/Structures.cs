@@ -388,6 +388,21 @@ namespace CM0102Patcher
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TStaffComp
+    {
+        public int ID;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)] public byte[] Name;
+        public byte GenderName;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] ShortName;
+        public sbyte GenderNameShort;
+        public int Continent;
+        public int Nation;
+        public int ForegroundColour;
+        public int BackgroundColour;
+        public Int16 StaffCompReputation;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct TCompHistory
     {
         public int ID;
@@ -398,6 +413,47 @@ namespace CM0102Patcher
         public int ThirdPlace;
         public int Host;
     };
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TStaffCompHistory
+    {
+        public int ID;
+        public int Comp;
+        public Int16 Year;
+        public int WinnersFirstName;
+        public int WinnersSecondName;
+        public int WinnerID;
+        public int WinnerInfo;
+        public int RunnersUpFirstName;
+        public int RunnersUpSecondName;
+        public int RunnersUpID;
+        public int RunnersUpInfo;
+        public int ThirdPlaceFirstName;
+        public int ThirdPlaceSecondName;
+        public int ThirdPlaceID;
+        public int ThirdPlaceInfo;
+    };
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TStaffHistory
+    {
+        public int ID;
+        public int StaffID;
+        public Int16 Year;
+        public int ClubID;
+        public sbyte OnLoan;
+        public sbyte Apps;
+        public sbyte Goals;
+    };
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TNames
+    {
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)] public byte[] Name;
+        public int ID;
+        public int Nation;
+        public sbyte Count;
+    }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct TNation

@@ -14,7 +14,8 @@ namespace CM0102Patcher
         enum HistoryType
         {
             International,
-            Club
+            Club,
+            StaffComp
         }
 
         HistoryLoader historyLoader = new HistoryLoader();
@@ -22,6 +23,8 @@ namespace CM0102Patcher
         List<List<string>> lastSelectNationCompRows = null;
         ListBoxItem lastSelectedClubComp = null;
         List<List<string>> lastSelectClubCompRows = null;
+        ListBoxItem lastSelectedStaffComp = null;
+        Dictionary<int, ComboboxItem> StaffIDToComboBoxMap;
 
         public HistoryEditorForm()
         {
@@ -39,7 +42,7 @@ namespace CM0102Patcher
         private void LoadComboBoxes(HistoryType historyType)
         {
             DataGridView dgv;
-            List<TClub> compClubs;
+            List<TClub> compClubs = null;
 
             switch (historyType)
             {
@@ -52,22 +55,56 @@ namespace CM0102Patcher
                     compClubs = historyLoader.club;
                     dgv = dataGridViewClubComp;
                     break;
+                case HistoryType.StaffComp:
+                    dgv = dataGridViewStaffComp;
+                    break;
             }
 
             var nationWinners = (dgv.Columns[1] as DataGridViewComboBoxColumn).Items;
             var nationRunnersUp = (dgv.Columns[2] as DataGridViewComboBoxColumn).Items;
             var nationThirdPlace = (dgv.Columns[3] as DataGridViewComboBoxColumn).Items;
-            var nationHost = (dgv.Columns[4] as DataGridViewComboBoxColumn).Items;
+
+            DataGridViewComboBoxCell.ObjectCollection nationHost = null;
             nationWinners.Clear();
             nationRunnersUp.Clear();
             nationThirdPlace.Clear();
-            nationHost.Clear();
 
-            var orderedClubs = compClubs.OrderBy(x => historyLoader.GetTextFromBytes(x.Name)).Select(y => historyLoader.GetTextFromBytes(y.Name)).Distinct().ToArray();
-            nationWinners.AddRange(orderedClubs);
-            nationRunnersUp.AddRange(orderedClubs);
-            nationThirdPlace.AddRange(orderedClubs);
-            nationHost.AddRange(orderedClubs);
+            if (historyType != HistoryType.StaffComp)
+            {
+                nationHost = (dgv.Columns[4] as DataGridViewComboBoxColumn).Items;
+                nationHost.Clear();
+            }
+
+            if (historyType == HistoryType.StaffComp)
+            {
+                (dgv.Columns[1] as DataGridViewComboBoxColumn).ValueType = typeof(ComboboxItem);
+                (dgv.Columns[2] as DataGridViewComboBoxColumn).ValueType = typeof(ComboboxItem);
+                (dgv.Columns[3] as DataGridViewComboBoxColumn).ValueType = typeof(ComboboxItem);
+
+                List<ComboboxItem> comboBoxItems = new List<ComboboxItem>();
+                foreach (var staffMember in historyLoader.staff)
+                {
+                    if (historyLoader.staffNames.ContainsKey(staffMember.ID))
+                        comboBoxItems.Add(new ComboboxItem(historyLoader.staffNames[staffMember.ID], staffMember));
+                }
+                var orderedArray = comboBoxItems.OrderBy(x => x.Text).Distinct().ToArray();
+                nationWinners.AddRange(orderedArray);
+                nationRunnersUp.AddRange(orderedArray);
+                nationThirdPlace.AddRange(orderedArray);
+                StaffIDToComboBoxMap = new Dictionary<int, ComboboxItem>();
+                foreach (var comboBox in orderedArray)
+                {
+                    StaffIDToComboBoxMap[((TStaff)comboBox.Value).ID] = comboBox;
+                }
+            }
+            else
+            {
+                var orderedClubs = compClubs.OrderBy(x => historyLoader.GetTextFromBytes(x.Name)).Select(y => historyLoader.GetTextFromBytes(y.Name)).Distinct().ToArray();
+                nationWinners.AddRange(orderedClubs);
+                nationRunnersUp.AddRange(orderedClubs);
+                nationThirdPlace.AddRange(orderedClubs);
+                nationHost.AddRange(orderedClubs);
+            }
         }
 
         private List<List<string>> MakeRows(int compID, HistoryType historyType)
@@ -221,34 +258,88 @@ namespace CM0102Patcher
 
         private void CheckAndSave(HistoryType historyType)
         {
-            ListBoxItem lastSelected;
-            List<List<string>> lastRows;
-
-            switch (historyType)
+            if (historyType == HistoryType.StaffComp)
             {
-                default:
-                case HistoryType.International:
-                    lastSelected = lastSelectedNationComp;
-                    lastRows = lastSelectNationCompRows;
-                    break;
-                case HistoryType.Club:
-                    lastSelected = lastSelectedClubComp;
-                    lastRows = lastSelectClubCompRows;
-                    break;
-            }
-
-            if (lastSelected != null)
-            {
-                // Check if changes
-                var gridRows = GetRowsFromGrid(historyType);
-
-                // Compare
-                bool matched = CompareGridWithRows(lastRows, gridRows);
-                if (!matched)
+                if (lastSelectedStaffComp != null)
                 {
-                    // Save data
-                    var compID = ((TComp)lastSelected.Obj).ID;
-                    SaveFromGrid(compID, gridRows, historyType);
+                    // Save the data
+                    var LastCompID = ((TStaffComp)lastSelectedStaffComp.Obj).ID;
+                    historyLoader.staff_comp_history.RemoveAll(x => x.Comp == LastCompID);
+                    for (int i = 0; i < dataGridViewStaffComp.Rows.Count; i++)
+                    {
+                        var yearValue = dataGridViewStaffComp.Rows[i].Cells[0].Value;
+                        var winnerValue = dataGridViewStaffComp.Rows[i].Cells[1].Value;
+                        var runnersUpValue = dataGridViewStaffComp.Rows[i].Cells[2].Value;
+                        var thirdPlaceValue = dataGridViewStaffComp.Rows[i].Cells[3].Value;
+                        if (yearValue != null)
+                        {
+                            short year = 1970;
+                            short.TryParse(yearValue.ToString(), out year);
+                            TStaffCompHistory newHistory = new TStaffCompHistory();
+                            newHistory.ID = historyLoader.staff_comp_history.Max(x => x.ID) + 1;
+                            newHistory.Comp = LastCompID;
+                            newHistory.Year = year;
+                            newHistory.WinnerID = newHistory.WinnersFirstName = newHistory.WinnersSecondName = newHistory.WinnerInfo = -1;
+                            newHistory.RunnersUpID = newHistory.RunnersUpFirstName = newHistory.RunnersUpSecondName = newHistory.RunnersUpInfo = -1;
+                            newHistory.ThirdPlaceID = newHistory.ThirdPlaceFirstName = newHistory.ThirdPlaceSecondName = newHistory.ThirdPlaceInfo = -1;
+                            if (winnerValue != null)
+                            {
+                                newHistory.WinnerID = ((TStaff)(winnerValue as ComboboxItem).Value).ID;
+                                newHistory.WinnersFirstName = ((TStaff)(winnerValue as ComboboxItem).Value).FirstName;
+                                newHistory.WinnersSecondName = ((TStaff)(winnerValue as ComboboxItem).Value).SecondName;
+                                newHistory.WinnerInfo = 28;
+                            }
+                            if (runnersUpValue != null)
+                            {
+                                newHistory.RunnersUpID = ((TStaff)(runnersUpValue as ComboboxItem).Value).ID;
+                                newHistory.RunnersUpFirstName = ((TStaff)(runnersUpValue as ComboboxItem).Value).FirstName;
+                                newHistory.RunnersUpSecondName = ((TStaff)(runnersUpValue as ComboboxItem).Value).SecondName;
+                                newHistory.RunnersUpInfo = 28;
+                            }
+                            if (thirdPlaceValue != null)
+                            {
+                                newHistory.ThirdPlaceID = ((TStaff)(thirdPlaceValue as ComboboxItem).Value).ID;
+                                newHistory.ThirdPlaceFirstName = ((TStaff)(thirdPlaceValue as ComboboxItem).Value).FirstName;
+                                newHistory.ThirdPlaceSecondName = ((TStaff)(thirdPlaceValue as ComboboxItem).Value).SecondName;
+                                newHistory.ThirdPlaceInfo = 28;
+                            }
+
+                            historyLoader.staff_comp_history.Add(newHistory);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                ListBoxItem lastSelected;
+                List<List<string>> lastRows;
+
+                switch (historyType)
+                {
+                    default:
+                    case HistoryType.International:
+                        lastSelected = lastSelectedNationComp;
+                        lastRows = lastSelectNationCompRows;
+                        break;
+                    case HistoryType.Club:
+                        lastSelected = lastSelectedClubComp;
+                        lastRows = lastSelectClubCompRows;
+                        break;
+                }
+
+                if (lastSelected != null)
+                {
+                    // Check if changes
+                    var gridRows = GetRowsFromGrid(historyType);
+
+                    // Compare
+                    bool matched = CompareGridWithRows(lastRows, gridRows);
+                    if (!matched)
+                    {
+                        // Save data
+                        var compID = ((TComp)lastSelected.Obj).ID;
+                        SaveFromGrid(compID, gridRows, historyType);
+                    }
                 }
             }
         }
@@ -297,10 +388,41 @@ namespace CM0102Patcher
             }
         }
 
+        private void listBoxStaffComps_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CheckAndSave(HistoryType.StaffComp);
+
+            var selectedItem = listBoxStaffComps.SelectedItem as ListBoxItem;
+            lastSelectedStaffComp = selectedItem;
+
+            dataGridViewStaffComp.Rows.Clear();
+
+            var CompID = ((TStaffComp)selectedItem.Obj).ID;
+            var staff_comp_history = historyLoader.staff_comp_history.Where(x => x.Comp == CompID).ToList();//FindAll(x => x.Comp == CompID);
+            int count = 0;
+            foreach (var history in staff_comp_history)
+            {
+                ComboboxItem winner = null, runnersup = null, thirdplace = null;
+                var year = history.Year.ToString();
+                if (history.WinnerID != -1)
+                    winner = StaffIDToComboBoxMap[history.WinnerID];
+                if (history.RunnersUpID != -1)
+                    runnersup = StaffIDToComboBoxMap[history.RunnersUpID];
+                if (history.ThirdPlaceID != -1)
+                    thirdplace = StaffIDToComboBoxMap[history.ThirdPlaceID];
+                dataGridViewStaffComp.Rows.Add(year, winner, runnersup, thirdplace);
+                
+                // Some data updates have broken staff comp data - so cut off after 100 years worth
+                if (count++ == 100)
+                    break;
+            }
+        }
+
         private void buttonSave_Click(object sender, EventArgs e)
         {
             CheckAndSave(HistoryType.International);
             CheckAndSave(HistoryType.Club);
+            CheckAndSave(HistoryType.StaffComp);
             historyLoader.Save(textBoxIndexFile.Text);
             MessageBox.Show("History Saved!", "History Editor", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -332,6 +454,7 @@ namespace CM0102Patcher
                 lastSelectNationCompRows = null;
                 lastSelectedClubComp = null;
                 lastSelectClubCompRows = null;
+                lastSelectedStaffComp = null;
 
                 historyLoader.Load(textBoxIndexFile.Text);
 
@@ -351,8 +474,17 @@ namespace CM0102Patcher
                 foreach (var clubCompsItem in clubCompsItems)
                     listBoxClubComps.Items.Add(clubCompsItem);
 
+                listBoxStaffComps.Items.Clear();
+                List<ListBoxItem> staffCompsItems = new List<ListBoxItem>();
+                for (int i = 0; i < historyLoader.staff_comp.Count; i++)
+                    staffCompsItems.Add(new ListBoxItem(historyLoader.GetTextFromBytes(historyLoader.staff_comp[i].Name), i, historyLoader.staff_comp[i]));
+                staffCompsItems = staffCompsItems.OrderBy(x => x.Name).ToList();
+                foreach (var staffCompsItem in staffCompsItems)
+                    listBoxStaffComps.Items.Add(staffCompsItem);
+
                 LoadComboBoxes(HistoryType.International);
                 LoadComboBoxes(HistoryType.Club);
+                LoadComboBoxes(HistoryType.StaffComp);
             }
             catch (Exception ex)
             {
@@ -390,6 +522,11 @@ namespace CM0102Patcher
             dataGridViewClubComp.Rows.Remove(dataGridViewClubComp.CurrentRow);
         }
 
+        private void buttonStaffDeleteRow_Click(object sender, EventArgs e)
+        {
+            dataGridViewStaffComp.Rows.Remove(dataGridViewStaffComp.CurrentRow);
+        }
+
         private void ShiftYears(DataGridView dgv, NumericUpDown upDown)
         {
             for (int i = 0; i < dgv.Rows.Count; i++)
@@ -416,6 +553,11 @@ namespace CM0102Patcher
         private void buttonClubShiftYears_Click(object sender, EventArgs e)
         {
             ShiftYears(dataGridViewClubComp, numericClubUpDown);
+        }
+
+        private void buttonStaffCompShiftYears_Click(object sender, EventArgs e)
+        {
+            ShiftYears(dataGridViewStaffComp, numericStaffCompUpDown);
         }
     }
 

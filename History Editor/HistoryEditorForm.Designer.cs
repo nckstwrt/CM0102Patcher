@@ -52,6 +52,16 @@
             this.dataGridViewComboBoxColumn3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dataGridViewComboBoxColumn4 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.listBoxClubComps = new System.Windows.Forms.ListBox();
+            this.tabPageStaffComp = new System.Windows.Forms.TabPage();
+            this.numericStaffCompUpDown = new System.Windows.Forms.NumericUpDown();
+            this.buttonStaffCompShiftYears = new System.Windows.Forms.Button();
+            this.buttonStaffDeleteRow = new System.Windows.Forms.Button();
+            this.dataGridViewStaffComp = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewComboBoxColumn5 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.dataGridViewComboBoxColumn6 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.dataGridViewComboBoxColumn7 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.listBoxStaffComps = new System.Windows.Forms.ListBox();
             this.buttonBrowse = new System.Windows.Forms.Button();
             this.textBoxIndexFile = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -64,6 +74,9 @@
             this.tabPageClubComps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericClubUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClubComp)).BeginInit();
+            this.tabPageStaffComp.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericStaffCompUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStaffComp)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,6 +84,7 @@
             // 
             this.tabControl.Controls.Add(this.tabPageNationComp);
             this.tabControl.Controls.Add(this.tabPageClubComps);
+            this.tabControl.Controls.Add(this.tabPageStaffComp);
             this.tabControl.Location = new System.Drawing.Point(12, 65);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
@@ -311,6 +325,119 @@
             this.listBoxClubComps.TabIndex = 1;
             this.listBoxClubComps.SelectedIndexChanged += new System.EventHandler(this.listBoxClubComps_SelectedIndexChanged);
             // 
+            // tabPageStaffComp
+            // 
+            this.tabPageStaffComp.Controls.Add(this.numericStaffCompUpDown);
+            this.tabPageStaffComp.Controls.Add(this.buttonStaffCompShiftYears);
+            this.tabPageStaffComp.Controls.Add(this.buttonStaffDeleteRow);
+            this.tabPageStaffComp.Controls.Add(this.dataGridViewStaffComp);
+            this.tabPageStaffComp.Controls.Add(this.listBoxStaffComps);
+            this.tabPageStaffComp.Location = new System.Drawing.Point(4, 22);
+            this.tabPageStaffComp.Name = "tabPageStaffComp";
+            this.tabPageStaffComp.Size = new System.Drawing.Size(746, 236);
+            this.tabPageStaffComp.TabIndex = 2;
+            this.tabPageStaffComp.Text = "Staff Comp";
+            this.tabPageStaffComp.UseVisualStyleBackColor = true;
+            // 
+            // numericStaffCompUpDown
+            // 
+            this.numericStaffCompUpDown.Location = new System.Drawing.Point(501, 207);
+            this.numericStaffCompUpDown.Maximum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            this.numericStaffCompUpDown.Minimum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            -2147483648});
+            this.numericStaffCompUpDown.Name = "numericStaffCompUpDown";
+            this.numericStaffCompUpDown.Size = new System.Drawing.Size(75, 20);
+            this.numericStaffCompUpDown.TabIndex = 11;
+            this.numericStaffCompUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // buttonStaffCompShiftYears
+            // 
+            this.buttonStaffCompShiftYears.Location = new System.Drawing.Point(583, 205);
+            this.buttonStaffCompShiftYears.Name = "buttonStaffCompShiftYears";
+            this.buttonStaffCompShiftYears.Size = new System.Drawing.Size(75, 23);
+            this.buttonStaffCompShiftYears.TabIndex = 10;
+            this.buttonStaffCompShiftYears.Text = "Shift Years";
+            this.buttonStaffCompShiftYears.UseVisualStyleBackColor = true;
+            this.buttonStaffCompShiftYears.Click += new System.EventHandler(this.buttonStaffCompShiftYears_Click);
+            // 
+            // buttonStaffDeleteRow
+            // 
+            this.buttonStaffDeleteRow.Location = new System.Drawing.Point(664, 205);
+            this.buttonStaffDeleteRow.Name = "buttonStaffDeleteRow";
+            this.buttonStaffDeleteRow.Size = new System.Drawing.Size(75, 23);
+            this.buttonStaffDeleteRow.TabIndex = 9;
+            this.buttonStaffDeleteRow.Text = "Delete Row";
+            this.buttonStaffDeleteRow.UseVisualStyleBackColor = true;
+            this.buttonStaffDeleteRow.Click += new System.EventHandler(this.buttonStaffDeleteRow_Click);
+            // 
+            // dataGridViewStaffComp
+            // 
+            this.dataGridViewStaffComp.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewStaffComp.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn7,
+            this.dataGridViewComboBoxColumn5,
+            this.dataGridViewComboBoxColumn6,
+            this.dataGridViewComboBoxColumn7});
+            this.dataGridViewStaffComp.Location = new System.Drawing.Point(213, 6);
+            this.dataGridViewStaffComp.Name = "dataGridViewStaffComp";
+            this.dataGridViewStaffComp.Size = new System.Drawing.Size(526, 193);
+            this.dataGridViewStaffComp.TabIndex = 8;
+            this.dataGridViewStaffComp.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComp_CellEnter);
+            this.dataGridViewStaffComp.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridViewComp_CurrentCellDirtyStateChanged);
+            // 
+            // dataGridViewTextBoxColumn7
+            // 
+            this.dataGridViewTextBoxColumn7.FillWeight = 65F;
+            this.dataGridViewTextBoxColumn7.HeaderText = "Season";
+            this.dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
+            this.dataGridViewTextBoxColumn7.Width = 65;
+            // 
+            // dataGridViewComboBoxColumn5
+            // 
+            this.dataGridViewComboBoxColumn5.FillWeight = 130F;
+            this.dataGridViewComboBoxColumn5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.dataGridViewComboBoxColumn5.HeaderText = "Winners";
+            this.dataGridViewComboBoxColumn5.Name = "dataGridViewComboBoxColumn5";
+            this.dataGridViewComboBoxColumn5.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewComboBoxColumn5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.dataGridViewComboBoxColumn5.Width = 130;
+            // 
+            // dataGridViewComboBoxColumn6
+            // 
+            this.dataGridViewComboBoxColumn6.FillWeight = 130F;
+            this.dataGridViewComboBoxColumn6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.dataGridViewComboBoxColumn6.HeaderText = "Runners up";
+            this.dataGridViewComboBoxColumn6.Name = "dataGridViewComboBoxColumn6";
+            this.dataGridViewComboBoxColumn6.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewComboBoxColumn6.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.dataGridViewComboBoxColumn6.Width = 130;
+            // 
+            // dataGridViewComboBoxColumn7
+            // 
+            this.dataGridViewComboBoxColumn7.FillWeight = 130F;
+            this.dataGridViewComboBoxColumn7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.dataGridViewComboBoxColumn7.HeaderText = "Third place";
+            this.dataGridViewComboBoxColumn7.Name = "dataGridViewComboBoxColumn7";
+            this.dataGridViewComboBoxColumn7.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewComboBoxColumn7.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.dataGridViewComboBoxColumn7.Width = 130;
+            // 
+            // listBoxStaffComps
+            // 
+            this.listBoxStaffComps.FormattingEnabled = true;
+            this.listBoxStaffComps.Location = new System.Drawing.Point(6, 6);
+            this.listBoxStaffComps.Name = "listBoxStaffComps";
+            this.listBoxStaffComps.Size = new System.Drawing.Size(201, 225);
+            this.listBoxStaffComps.TabIndex = 7;
+            this.listBoxStaffComps.SelectedIndexChanged += new System.EventHandler(this.listBoxStaffComps_SelectedIndexChanged);
+            // 
             // buttonBrowse
             // 
             this.buttonBrowse.Location = new System.Drawing.Point(314, 17);
@@ -379,6 +506,9 @@
             this.tabPageClubComps.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericClubUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClubComp)).EndInit();
+            this.tabPageStaffComp.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericStaffCompUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStaffComp)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -415,5 +545,15 @@
         private System.Windows.Forms.NumericUpDown numericClubUpDown;
         private System.Windows.Forms.Button buttonClubShiftYears;
         private System.Windows.Forms.Button buttonClubDeleteRow;
+        private System.Windows.Forms.TabPage tabPageStaffComp;
+        private System.Windows.Forms.NumericUpDown numericStaffCompUpDown;
+        private System.Windows.Forms.Button buttonStaffCompShiftYears;
+        private System.Windows.Forms.Button buttonStaffDeleteRow;
+        private System.Windows.Forms.DataGridView dataGridViewStaffComp;
+        private System.Windows.Forms.ListBox listBoxStaffComps;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn7;
+        private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn5;
+        private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn6;
+        private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn7;
     }
 }

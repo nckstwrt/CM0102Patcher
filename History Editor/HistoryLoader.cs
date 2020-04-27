@@ -12,15 +12,23 @@ namespace CM0102Patcher
         public List<TIndex> index;
         public List<TComp> nation_comp;
         public List<TComp> club_comp;
+        public List<TStaffComp> staff_comp;
         public List<TClub> club;
         public List<TClub> nat_club;
         public List<TNation> nation;
         public List<TCompHistory> nation_comp_history;
         public List<TCompHistory> club_comp_history;
-        
+        public List<TStaffCompHistory> staff_comp_history;
+        public List<TStaff> staff;
+        public List<TStaffHistory> staff_history;
+        public List<TNames> first_names;
+        public List<TNames> second_names;
+        public List<TNames> common_names;
+        public Dictionary<int, string> staffNames;
+
         Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
 
-        List<T> ReadFile<T>(string fileName, int seekTo = 0)
+        List<T> ReadFile<T>(string fileName, int seekTo = 0, int count = 0)
         {
             List<T> ret = new List<T>();
 
@@ -30,9 +38,12 @@ namespace CM0102Patcher
                 fin.Seek(seekTo, SeekOrigin.Begin);
                 int objSize = Marshal.SizeOf(typeof(T));
 
+                int counter = 0;
                 while (true)
                 {
                     var bytes = br.ReadBytes(objSize);
+                    if (count != 0 && counter == count)
+                        break;
                     if (bytes == null || bytes.Length != objSize)
                         break;
                     var ptrObj = Marshal.AllocHGlobal(objSize);
@@ -40,6 +51,7 @@ namespace CM0102Patcher
                     var obj = (T)Marshal.PtrToStructure(ptrObj, typeof(T));
                     ret.Add(obj);
                     Marshal.FreeHGlobal(ptrObj);
+                    counter++;
                 }
             }
             
@@ -90,16 +102,37 @@ namespace CM0102Patcher
             nation = ReadFile<TNation>(Path.Combine(dir, "nation.dat"));
             nation_comp_history = ReadFile<TCompHistory>(Path.Combine(dir, "nation_comp_history.dat"));
             club_comp_history = ReadFile<TCompHistory>(Path.Combine(dir, "club_comp_history.dat"));
+            
+            staff_comp = ReadFile<TStaffComp>(Path.Combine(dir, "staff_comp.dat"));
+            staff_comp_history = ReadFile<TStaffCompHistory>(Path.Combine(dir, "staff_comp_history.dat"));
 
-            var xx = nation_comp_history.OrderByDescending(x => x.ID).ToList();
-            var indexData = index.First(x => GetTextFromBytes(x.Name) == "nation_comp_history.dat");
+            var staffDetails = index.Find(x => GetTextFromBytes(x.Name) == "staff.dat" && x.FileType == 6);
 
-            foreach (var obj in nation_comp)
+            if (staffDetails.Version == 1)
             {
-                Console.WriteLine(GetTextFromBytes(obj.Name));
+                throw new Exception("This is a very old version of the data!\r\n\r\nLoad in the Champ Man Editor and then save it to update it before history editing!\r\n\r\n");
+            }
+
+            staff = ReadFile<TStaff>(Path.Combine(dir, "staff.dat"), staffDetails.Offset, staffDetails.Count);
+            staff_history = ReadFile<TStaffHistory>(Path.Combine(dir, "staff_history.dat"));
+
+            first_names = ReadFile<TNames>(Path.Combine(dir, "first_names.dat"));
+            second_names = ReadFile<TNames>(Path.Combine(dir, "second_names.dat"));
+            common_names = ReadFile<TNames>(Path.Combine(dir, "common_names.dat"));
+
+            staffNames = new Dictionary<int, string>();
+            foreach (var staffMember in staff)
+            {
+                if (staffMember.ID >= 0 && staffMember.FirstName >= 0 && staffMember.FirstName < first_names.Count && staffMember.SecondName >= 0 && staffMember.SecondName < second_names.Count)
+                {
+                    if (staffMember.CommonName >= 0 && staffMember.CommonName < common_names.Count && GetTextFromBytes(common_names[staffMember.CommonName].Name).Trim() != "")
+                        staffNames[staffMember.ID] = GetTextFromBytes(common_names[staffMember.CommonName].Name);
+                    else
+                        staffNames[staffMember.ID] = GetTextFromBytes(second_names[staffMember.SecondName].Name) + ", " + GetTextFromBytes(first_names[staffMember.FirstName].Name);
+                }
             }
         }
-
+        
         void UpdateIndex<T>(string fileName, List<T> data)
         {
             int idx = index.FindIndex(x => GetTextFromBytes(x.Name) == fileName);
@@ -120,6 +153,7 @@ namespace CM0102Patcher
             */
             UpdateIndex("nation_comp_history.dat", nation_comp_history);
             UpdateIndex("club_comp_history.dat", club_comp_history);
+            UpdateIndex("staff_comp_history.dat", staff_comp_history);
 
             SaveFile<TIndex>(indexFile, index, 8);
             /*
@@ -131,6 +165,7 @@ namespace CM0102Patcher
             */
             SaveFile<TCompHistory>(Path.Combine(dir, "nation_comp_history.dat"), nation_comp_history);
             SaveFile<TCompHistory>(Path.Combine(dir, "club_comp_history.dat"), club_comp_history);
+            SaveFile<TStaffCompHistory>(Path.Combine(dir, "staff_comp_history.dat"), staff_comp_history);
         }
     }
 }
