@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -60,6 +61,7 @@ namespace CM0102Patcher
                     break;
             }
 
+            dgv.Rows.Clear();
             var nationWinners = (dgv.Columns[1] as DataGridViewComboBoxColumn).Items;
             var nationRunnersUp = (dgv.Columns[2] as DataGridViewComboBoxColumn).Items;
             var nationThirdPlace = (dgv.Columns[3] as DataGridViewComboBoxColumn).Items;
@@ -78,8 +80,15 @@ namespace CM0102Patcher
             if (historyType == HistoryType.StaffComp)
             {
                 (dgv.Columns[1] as DataGridViewComboBoxColumn).ValueType = typeof(ComboboxItem);
+                (dgv.Columns[1] as DataGridViewComboBoxColumn).ValueMember = "Self";
+                (dgv.Columns[1] as DataGridViewComboBoxColumn).DisplayMember = "Description";
                 (dgv.Columns[2] as DataGridViewComboBoxColumn).ValueType = typeof(ComboboxItem);
+                (dgv.Columns[2] as DataGridViewComboBoxColumn).ValueMember = "Self";
+                (dgv.Columns[2] as DataGridViewComboBoxColumn).DisplayMember = "Description";
                 (dgv.Columns[3] as DataGridViewComboBoxColumn).ValueType = typeof(ComboboxItem);
+                (dgv.Columns[3] as DataGridViewComboBoxColumn).ValueMember = "Self";
+                (dgv.Columns[3] as DataGridViewComboBoxColumn).DisplayMember = "Description";
+
 
                 List<ComboboxItem> comboBoxItems = new List<ComboboxItem>();
                 foreach (var staffMember in historyLoader.staff)
@@ -87,7 +96,7 @@ namespace CM0102Patcher
                     if (historyLoader.staffNames.ContainsKey(staffMember.ID))
                         comboBoxItems.Add(new ComboboxItem(historyLoader.staffNames[staffMember.ID], staffMember));
                 }
-                var orderedArray = comboBoxItems.OrderBy(x => x.Text).Distinct().ToArray();
+                var orderedArray = comboBoxItems.OrderBy(x => x.Text).ToArray();
                 nationWinners.AddRange(orderedArray);
                 nationRunnersUp.AddRange(orderedArray);
                 nationThirdPlace.AddRange(orderedArray);

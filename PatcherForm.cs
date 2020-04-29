@@ -907,6 +907,12 @@ namespace CM0102Patcher
 
     public class ComboboxItem
     {
+        public ComboboxItem()
+        {
+            Text = "";
+            Value = null;
+        }
+
         public ComboboxItem(string Text, object Value)
         {
             this.Text = Text;
@@ -918,5 +924,7 @@ namespace CM0102Patcher
         {
             return Text;
         }
+        public ComboboxItem Self { get { return this; } }
+        public string Description { get { return ToString(); } }
     }
 }
