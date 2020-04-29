@@ -90,6 +90,16 @@ namespace CM0102Patcher
             return ret;
         }
 
+        public int StringCompare(string a, string b, bool ignoreCase = true)
+        {
+            if (ignoreCase)
+            {
+                a = a.ToLower();
+                b = b.ToLower();
+            }
+            return Encoding.UTF8.GetString(latin1.GetBytes(a)).CompareTo(Encoding.UTF8.GetString(latin1.GetBytes(b)));
+        }
+
         public void Load(string indexFile)
         {
             var dir = Path.GetDirectoryName(indexFile);
@@ -154,6 +164,7 @@ namespace CM0102Patcher
             UpdateIndex("nation_comp_history.dat", nation_comp_history);
             UpdateIndex("club_comp_history.dat", club_comp_history);
             UpdateIndex("staff_comp_history.dat", staff_comp_history);
+            UpdateIndex("staff_history.dat", staff_history);
 
             SaveFile<TIndex>(indexFile, index, 8);
             /*
@@ -166,6 +177,7 @@ namespace CM0102Patcher
             SaveFile<TCompHistory>(Path.Combine(dir, "nation_comp_history.dat"), nation_comp_history);
             SaveFile<TCompHistory>(Path.Combine(dir, "club_comp_history.dat"), club_comp_history);
             SaveFile<TStaffCompHistory>(Path.Combine(dir, "staff_comp_history.dat"), staff_comp_history);
+            SaveFile<TStaffHistory>(Path.Combine(dir, "staff_history.dat"), staff_history);
         }
     }
 }

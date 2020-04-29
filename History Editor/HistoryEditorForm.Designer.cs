@@ -62,6 +62,19 @@
             this.dataGridViewComboBoxColumn6 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dataGridViewComboBoxColumn7 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.listBoxStaffComps = new System.Windows.Forms.ListBox();
+            this.tabPageStaffHistory = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBoxSearchStaff = new System.Windows.Forms.TextBox();
+            this.numericStaffHistoryUpDown = new System.Windows.Forms.NumericUpDown();
+            this.buttonStaffHistoryShiftYears = new System.Windows.Forms.Button();
+            this.buttonStaffHistoryDeleteRow = new System.Windows.Forms.Button();
+            this.dataGridViewStaffHistory = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewComboBoxColumn8 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.dataGridViewComboBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewComboBoxColumn10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.listBoxStaff = new System.Windows.Forms.ListBox();
             this.buttonBrowse = new System.Windows.Forms.Button();
             this.textBoxIndexFile = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -77,6 +90,9 @@
             this.tabPageStaffComp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericStaffCompUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStaffComp)).BeginInit();
+            this.tabPageStaffHistory.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericStaffHistoryUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStaffHistory)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,6 +101,7 @@
             this.tabControl.Controls.Add(this.tabPageNationComp);
             this.tabControl.Controls.Add(this.tabPageClubComps);
             this.tabControl.Controls.Add(this.tabPageStaffComp);
+            this.tabControl.Controls.Add(this.tabPageStaffHistory);
             this.tabControl.Location = new System.Drawing.Point(12, 65);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
@@ -438,6 +455,142 @@
             this.listBoxStaffComps.TabIndex = 7;
             this.listBoxStaffComps.SelectedIndexChanged += new System.EventHandler(this.listBoxStaffComps_SelectedIndexChanged);
             // 
+            // tabPageStaffHistory
+            // 
+            this.tabPageStaffHistory.Controls.Add(this.label1);
+            this.tabPageStaffHistory.Controls.Add(this.textBoxSearchStaff);
+            this.tabPageStaffHistory.Controls.Add(this.numericStaffHistoryUpDown);
+            this.tabPageStaffHistory.Controls.Add(this.buttonStaffHistoryShiftYears);
+            this.tabPageStaffHistory.Controls.Add(this.buttonStaffHistoryDeleteRow);
+            this.tabPageStaffHistory.Controls.Add(this.dataGridViewStaffHistory);
+            this.tabPageStaffHistory.Controls.Add(this.listBoxStaff);
+            this.tabPageStaffHistory.Location = new System.Drawing.Point(4, 22);
+            this.tabPageStaffHistory.Name = "tabPageStaffHistory";
+            this.tabPageStaffHistory.Size = new System.Drawing.Size(746, 236);
+            this.tabPageStaffHistory.TabIndex = 3;
+            this.tabPageStaffHistory.Text = "Staff History";
+            this.tabPageStaffHistory.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(212, 211);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(133, 13);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "<--- Type player name here";
+            // 
+            // textBoxSearchStaff
+            // 
+            this.textBoxSearchStaff.Location = new System.Drawing.Point(7, 208);
+            this.textBoxSearchStaff.Name = "textBoxSearchStaff";
+            this.textBoxSearchStaff.Size = new System.Drawing.Size(201, 20);
+            this.textBoxSearchStaff.TabIndex = 17;
+            this.textBoxSearchStaff.TextChanged += new System.EventHandler(this.textBoxSearchStaff_TextChanged);
+            // 
+            // numericStaffHistoryUpDown
+            // 
+            this.numericStaffHistoryUpDown.Location = new System.Drawing.Point(502, 210);
+            this.numericStaffHistoryUpDown.Maximum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            this.numericStaffHistoryUpDown.Minimum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            -2147483648});
+            this.numericStaffHistoryUpDown.Name = "numericStaffHistoryUpDown";
+            this.numericStaffHistoryUpDown.Size = new System.Drawing.Size(75, 20);
+            this.numericStaffHistoryUpDown.TabIndex = 16;
+            this.numericStaffHistoryUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // buttonStaffHistoryShiftYears
+            // 
+            this.buttonStaffHistoryShiftYears.Location = new System.Drawing.Point(584, 208);
+            this.buttonStaffHistoryShiftYears.Name = "buttonStaffHistoryShiftYears";
+            this.buttonStaffHistoryShiftYears.Size = new System.Drawing.Size(75, 23);
+            this.buttonStaffHistoryShiftYears.TabIndex = 15;
+            this.buttonStaffHistoryShiftYears.Text = "Shift Years";
+            this.buttonStaffHistoryShiftYears.UseVisualStyleBackColor = true;
+            this.buttonStaffHistoryShiftYears.Click += new System.EventHandler(this.buttonStaffHistoryShiftYears_Click);
+            // 
+            // buttonStaffHistoryDeleteRow
+            // 
+            this.buttonStaffHistoryDeleteRow.Location = new System.Drawing.Point(665, 208);
+            this.buttonStaffHistoryDeleteRow.Name = "buttonStaffHistoryDeleteRow";
+            this.buttonStaffHistoryDeleteRow.Size = new System.Drawing.Size(75, 23);
+            this.buttonStaffHistoryDeleteRow.TabIndex = 14;
+            this.buttonStaffHistoryDeleteRow.Text = "Delete Row";
+            this.buttonStaffHistoryDeleteRow.UseVisualStyleBackColor = true;
+            this.buttonStaffHistoryDeleteRow.Click += new System.EventHandler(this.buttonStaffHistoryDeleteRow_Click);
+            // 
+            // dataGridViewStaffHistory
+            // 
+            this.dataGridViewStaffHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewStaffHistory.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn8,
+            this.dataGridViewComboBoxColumn8,
+            this.dataGridViewComboBoxColumn9,
+            this.dataGridViewComboBoxColumn10,
+            this.Column1});
+            this.dataGridViewStaffHistory.Location = new System.Drawing.Point(214, 6);
+            this.dataGridViewStaffHistory.Name = "dataGridViewStaffHistory";
+            this.dataGridViewStaffHistory.Size = new System.Drawing.Size(526, 199);
+            this.dataGridViewStaffHistory.TabIndex = 13;
+            this.dataGridViewStaffHistory.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewComp_CellEnter);
+            this.dataGridViewStaffHistory.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridViewComp_CurrentCellDirtyStateChanged);
+            // 
+            // dataGridViewTextBoxColumn8
+            // 
+            this.dataGridViewTextBoxColumn8.FillWeight = 65F;
+            this.dataGridViewTextBoxColumn8.HeaderText = "Season";
+            this.dataGridViewTextBoxColumn8.Name = "dataGridViewTextBoxColumn8";
+            this.dataGridViewTextBoxColumn8.Width = 65;
+            // 
+            // dataGridViewComboBoxColumn8
+            // 
+            this.dataGridViewComboBoxColumn8.FillWeight = 150F;
+            this.dataGridViewComboBoxColumn8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.dataGridViewComboBoxColumn8.HeaderText = "Club";
+            this.dataGridViewComboBoxColumn8.Name = "dataGridViewComboBoxColumn8";
+            this.dataGridViewComboBoxColumn8.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewComboBoxColumn8.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.dataGridViewComboBoxColumn8.Width = 150;
+            // 
+            // dataGridViewComboBoxColumn9
+            // 
+            this.dataGridViewComboBoxColumn9.FillWeight = 80F;
+            this.dataGridViewComboBoxColumn9.HeaderText = "Apps";
+            this.dataGridViewComboBoxColumn9.Name = "dataGridViewComboBoxColumn9";
+            this.dataGridViewComboBoxColumn9.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewComboBoxColumn9.Width = 80;
+            // 
+            // dataGridViewComboBoxColumn10
+            // 
+            this.dataGridViewComboBoxColumn10.FillWeight = 80F;
+            this.dataGridViewComboBoxColumn10.HeaderText = "Goals";
+            this.dataGridViewComboBoxColumn10.Name = "dataGridViewComboBoxColumn10";
+            this.dataGridViewComboBoxColumn10.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewComboBoxColumn10.Width = 80;
+            // 
+            // Column1
+            // 
+            this.Column1.FillWeight = 70F;
+            this.Column1.HeaderText = "Loan";
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 70;
+            // 
+            // listBoxStaff
+            // 
+            this.listBoxStaff.FormattingEnabled = true;
+            this.listBoxStaff.Location = new System.Drawing.Point(7, 6);
+            this.listBoxStaff.Name = "listBoxStaff";
+            this.listBoxStaff.Size = new System.Drawing.Size(201, 199);
+            this.listBoxStaff.TabIndex = 12;
+            this.listBoxStaff.SelectedIndexChanged += new System.EventHandler(this.listBoxStaff_SelectedIndexChanged);
+            // 
             // buttonBrowse
             // 
             this.buttonBrowse.Location = new System.Drawing.Point(314, 17);
@@ -509,6 +662,10 @@
             this.tabPageStaffComp.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericStaffCompUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStaffComp)).EndInit();
+            this.tabPageStaffHistory.ResumeLayout(false);
+            this.tabPageStaffHistory.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericStaffHistoryUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStaffHistory)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -555,5 +712,18 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn5;
         private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn6;
         private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn7;
+        private System.Windows.Forms.TabPage tabPageStaffHistory;
+        private System.Windows.Forms.NumericUpDown numericStaffHistoryUpDown;
+        private System.Windows.Forms.Button buttonStaffHistoryShiftYears;
+        private System.Windows.Forms.Button buttonStaffHistoryDeleteRow;
+        private System.Windows.Forms.DataGridView dataGridViewStaffHistory;
+        private System.Windows.Forms.ListBox listBoxStaff;
+        private System.Windows.Forms.TextBox textBoxSearchStaff;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
+        private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn8;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewComboBoxColumn9;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewComboBoxColumn10;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
     }
 }

@@ -16,7 +16,8 @@ namespace CM0102Patcher
         {
             International,
             Club,
-            StaffComp
+            StaffComp,
+            StaffHistory
         }
 
         HistoryLoader historyLoader = new HistoryLoader();
@@ -26,6 +27,9 @@ namespace CM0102Patcher
         List<List<string>> lastSelectClubCompRows = null;
         ListBoxItem lastSelectedStaffComp = null;
         Dictionary<int, ComboboxItem> StaffIDToComboBoxMap;
+        ListBoxItem lastSelectedStaffHistory = null;
+        Dictionary<int, ComboboxItem> ClubIDToComboBoxMap;
+        List<ListBoxItem> staffItemsStore = null;
 
         public HistoryEditorForm()
         {
@@ -59,9 +63,38 @@ namespace CM0102Patcher
                 case HistoryType.StaffComp:
                     dgv = dataGridViewStaffComp;
                     break;
+                case HistoryType.StaffHistory:
+                    dgv = dataGridViewStaffHistory;
+                    break;
             }
 
             dgv.Rows.Clear();
+
+
+            if (historyType == HistoryType.StaffHistory)
+            {
+                // Only loading clubs, so can hack this in
+                var clubColumn = dgv.Columns[1] as DataGridViewComboBoxColumn;
+                clubColumn.ValueType = typeof(ComboboxItem);
+                clubColumn.ValueMember = "Self";
+                clubColumn.DisplayMember = "Description";
+
+                List<ComboboxItem> comboBoxItems = new List<ComboboxItem>();
+                foreach (var club in historyLoader.club)
+                {
+                    if (historyLoader.staffNames.ContainsKey(club.ID))
+                        comboBoxItems.Add(new ComboboxItem(historyLoader.GetTextFromBytes(club.Name), club));
+                }
+                comboBoxItems.Sort((x, y) => x.Text.CompareTo(y.Text));
+                clubColumn.DataSource = comboBoxItems.ToArray();
+
+                ClubIDToComboBoxMap = new Dictionary<int, ComboboxItem>();
+                foreach (var comboBox in comboBoxItems)
+                    ClubIDToComboBoxMap[((TClub)comboBox.Value).ID] = comboBox;
+
+                return;
+            }
+            
             var nationWinners = (dgv.Columns[1] as DataGridViewComboBoxColumn).Items;
             var nationRunnersUp = (dgv.Columns[2] as DataGridViewComboBoxColumn).Items;
             var nationThirdPlace = (dgv.Columns[3] as DataGridViewComboBoxColumn).Items;
@@ -267,7 +300,62 @@ namespace CM0102Patcher
 
         private void CheckAndSave(HistoryType historyType)
         {
-            if (historyType == HistoryType.StaffComp)
+            if (historyType == HistoryType.StaffHistory)
+            {
+                if (lastSelectedStaffHistory != null)
+                {
+                    var StaffID = ((TStaff)lastSelectedStaffHistory.Obj).ID;
+                    historyLoader.staff_history.RemoveAll(x => x.StaffID == StaffID);
+                    for (int i = 0; i < dataGridViewStaffHistory.Rows.Count; i++)
+                    {
+                        var yearValue = dataGridViewStaffHistory.Rows[i].Cells[0].Value;
+                        var clubValue = dataGridViewStaffHistory.Rows[i].Cells[1].Value;
+                        var appsValue = dataGridViewStaffHistory.Rows[i].Cells[2].Value;
+                        var goalsValue = dataGridViewStaffHistory.Rows[i].Cells[3].Value;
+                        var loanValue = dataGridViewStaffHistory.Rows[i].Cells[4].Value;
+                        if (yearValue != null)
+                        {
+                            short year = 1970;
+                            short.TryParse(yearValue.ToString(), out year);
+                            TStaffHistory newHistory = new TStaffHistory();
+                            newHistory.Year = year;
+                            newHistory.ID = historyLoader.staff_history.Max(x => x.ID) + 1;
+                            newHistory.StaffID = StaffID;
+                            if (clubValue != null)
+                                newHistory.ClubID = ((TClub)(clubValue as ComboboxItem).Value).ID;
+                            else
+                                newHistory.ClubID = -1;
+
+                            if (appsValue != null && appsValue is string)
+                            {
+                                sbyte tempApps = 0;
+                                sbyte.TryParse(appsValue as string, out tempApps);
+                                newHistory.Apps = tempApps;
+                            }
+                            else
+                                newHistory.Apps = 0;
+                            if (goalsValue != null && goalsValue is string)
+                            {
+                                sbyte tempGoals = 0;
+                                sbyte.TryParse(goalsValue as string, out tempGoals);
+                                newHistory.Goals = tempGoals;
+                            }
+                            else
+                                newHistory.Goals = 0;
+                            if (loanValue != null && loanValue is string)
+                            {
+                                sbyte tempLoan = 0;
+                                sbyte.TryParse(loanValue as string, out tempLoan);
+                                newHistory.OnLoan = tempLoan;
+                            }
+                            else
+                                newHistory.OnLoan = 0;
+                            historyLoader.staff_history.Add(newHistory);
+                        }
+                    }
+                }
+            }
+            else if (historyType == HistoryType.StaffComp)
             {
                 if (lastSelectedStaffComp != null)
                 {
@@ -365,7 +453,7 @@ namespace CM0102Patcher
                 dataGridViewNationComp.Rows.Clear();
 
                 var rows = MakeRows(((TComp)selectedItem.Obj).ID, HistoryType.International);
-
+                rows.Sort((x, y) => x[0].CompareTo(y[0]));
                 foreach (var row in rows)
                 {
                     dataGridViewNationComp.Rows.Add(row[0], row[1], row[2], row[3], row[4]);
@@ -387,7 +475,7 @@ namespace CM0102Patcher
                 dataGridViewClubComp.Rows.Clear();
 
                 var rows = MakeRows(((TComp)selectedItem.Obj).ID, HistoryType.Club);
-
+                rows.Sort((x, y) => x[0].CompareTo(y[0]));
                 foreach (var row in rows)
                 {
                     dataGridViewClubComp.Rows.Add(row[0], row[1], row[2], row[3], row[4]);
@@ -427,11 +515,39 @@ namespace CM0102Patcher
             }
         }
 
+        private void listBoxStaff_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CheckAndSave(HistoryType.StaffHistory);
+            var selectedItem = listBoxStaff.SelectedItem as ListBoxItem;
+            lastSelectedStaffHistory = selectedItem;
+
+            dataGridViewStaffHistory.Rows.Clear();
+
+            var StaffID = ((TStaff)selectedItem.Obj).ID;
+            var staff_history = historyLoader.staff_history.Where(x => x.StaffID == StaffID).ToList();
+            staff_history.Sort((x, y) => x.Year.CompareTo(y.Year));
+            foreach (var staff in staff_history)
+            {
+                ComboboxItem club = null;
+                var year = staff.Year.ToString();
+                var apps = staff.Apps.ToString();
+                var goals = staff.Goals.ToString();
+                var loan = staff.OnLoan.ToString();
+                if (staff.ClubID != -1)
+                {
+                    if (ClubIDToComboBoxMap.ContainsKey(staff.ClubID))
+                        club = ClubIDToComboBoxMap[staff.ClubID];
+                }
+                dataGridViewStaffHistory.Rows.Add(year, club, apps, goals, loan);
+            }
+        }
+
         private void buttonSave_Click(object sender, EventArgs e)
         {
             CheckAndSave(HistoryType.International);
             CheckAndSave(HistoryType.Club);
             CheckAndSave(HistoryType.StaffComp);
+            CheckAndSave(HistoryType.StaffHistory);
             historyLoader.Save(textBoxIndexFile.Text);
             MessageBox.Show("History Saved!", "History Editor", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -442,10 +558,12 @@ namespace CM0102Patcher
             var datagridview = sender as DataGridView;
 
             // Check to make sure the cell clicked is the cell containing the combobox 
-            if (datagridview.Columns[e.ColumnIndex] is DataGridViewComboBoxColumn && validClick)
+            if (validClick)
             {
                 datagridview.BeginEdit(true);
-                ((ComboBox)datagridview.EditingControl).DroppedDown = true;
+
+                if (datagridview.Columns[e.ColumnIndex] is DataGridViewComboBoxColumn)
+                    ((ComboBox)datagridview.EditingControl).DroppedDown = true;
             }
         }
 
@@ -464,6 +582,8 @@ namespace CM0102Patcher
                 lastSelectedClubComp = null;
                 lastSelectClubCompRows = null;
                 lastSelectedStaffComp = null;
+                lastSelectedStaffHistory = null;
+                staffItemsStore = null;
 
                 historyLoader.Load(textBoxIndexFile.Text);
 
@@ -491,9 +611,17 @@ namespace CM0102Patcher
                 foreach (var staffCompsItem in staffCompsItems)
                     listBoxStaffComps.Items.Add(staffCompsItem);
 
+                listBoxStaff.Items.Clear();
+                staffItemsStore = new List<ListBoxItem>();
+                for (int i = 0; i < historyLoader.staff.Count; i++)
+                    staffItemsStore.Add(new ListBoxItem(historyLoader.staffNames[historyLoader.staff[i].ID], i, historyLoader.staff[i]));
+                //staffItems.Sort((x, y) => x.Name.CompareTo(y.Name));
+                //listBoxStaff.Items.AddRange(staffItems.ToArray());
+
                 LoadComboBoxes(HistoryType.International);
                 LoadComboBoxes(HistoryType.Club);
                 LoadComboBoxes(HistoryType.StaffComp);
+                LoadComboBoxes(HistoryType.StaffHistory);
             }
             catch (Exception ex)
             {
@@ -536,6 +664,11 @@ namespace CM0102Patcher
             dataGridViewStaffComp.Rows.Remove(dataGridViewStaffComp.CurrentRow);
         }
 
+        private void buttonStaffHistoryDeleteRow_Click(object sender, EventArgs e)
+        {
+            dataGridViewStaffHistory.Rows.Remove(dataGridViewStaffHistory.CurrentRow);
+        }
+
         private void ShiftYears(DataGridView dgv, NumericUpDown upDown)
         {
             for (int i = 0; i < dgv.Rows.Count; i++)
@@ -567,6 +700,22 @@ namespace CM0102Patcher
         private void buttonStaffCompShiftYears_Click(object sender, EventArgs e)
         {
             ShiftYears(dataGridViewStaffComp, numericStaffCompUpDown);
+        }
+
+        private void buttonStaffHistoryShiftYears_Click(object sender, EventArgs e)
+        {
+            ShiftYears(dataGridViewStaffHistory, numericStaffHistoryUpDown);
+        }
+
+        private void textBoxSearchStaff_TextChanged(object sender, EventArgs e)
+        {
+            if (staffItemsStore != null)
+            {
+                var searchText = textBoxSearchStaff.Text.ToLower();
+
+                listBoxStaff.Items.Clear();
+                listBoxStaff.Items.AddRange(staffItemsStore.Where(x => x.Name.ToLower().Contains(searchText)).ToArray());
+            }
         }
     }
 
