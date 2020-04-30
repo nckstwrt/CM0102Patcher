@@ -43,6 +43,30 @@ namespace CM0102Patcher
             PatchComp("English First Division", "English Football League Championship", "First Division", "Championship", "FLC");
             PatchComp("English Second Division", "English Football League One", "Second Division", "League One", "FL1");
             PatchComp("English Third Division", "English Football League Two", "Third Division", "League Two", "FL2");
+
+            // Patch eng.lng too!
+            PatchEngLng("European Champions Cup", "UEFA Champions League", "Champions Cup", "Champions League");
+            PatchEngLng("UEFA Cup", "UEFA Europa League");
+            PatchEngLng("English Premier Division", "English Premier League", "Premier Division", "Premier League", "EPL");
+            PatchEngLng("English First Division", "English Football League Championship", "First Division", "Championship", "FLC");
+            PatchEngLng("English Second Division", "English Football League One", "Second Division", "League One", "FL1");
+            PatchEngLng("English Third Division", "English Football League Two", "Third Division", "League Two", "FL2");
+        }
+
+        private void PatchEngLng(string oldName, string newName, string oldShortName = null, string newShortName = null, string newAcronym = null)
+        {
+            var engLng = Path.Combine(dataDir, "eng.lng");
+            newName += "\0";
+            oldName += "\0";
+            int changePos = ByteWriter.BinFileReplace(engLng, oldName, newName, 0, 1);
+            if (oldShortName != null)
+            {
+                oldShortName += "\0";
+                newShortName += "\0";
+                ByteWriter.BinFileReplace(engLng, oldShortName, newShortName, changePos, 1);
+                if (newAcronym != null && changePos != -1)
+                    PatchCompAcronym(engLng, changePos, newAcronym);
+            }
         }
 
         public void PatchWelshWithNorthernLeague()
