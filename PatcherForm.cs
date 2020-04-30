@@ -865,7 +865,12 @@ namespace CM0102Patcher
                     yearChanger.ApplyYearChangeToExe(labelFilename.Text, (int)numericGameStartYear.Value);
                     MessageBox.Show("Forced Exe to Year: " + ((int)numericGameStartYear.Value).ToString(), "Forced Year", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-
+                if (e.KeyChar == (char)9 && SecretMode) // I
+                {
+                    var patcher = new Patcher();
+                    patcher.ExpandExe(labelFilename.Text);
+                    MessageBox.Show("EXE EXPANDED!!!", "Expando Magico", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
                 if (e.KeyChar == (char)31 && SecretMode) // -
                 {
                     yearExeSyncDecrement = 1;
