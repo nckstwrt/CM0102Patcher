@@ -13,7 +13,7 @@ namespace CM0102Patcher
         List<int> startYearMinus3 = new List<int> { 0x3e6819, 0x461E36 };
         List<int> startYearMinus2 = new List<int> { 0x135d83, 0x135df2 };
         List<int> startYearMinus1 = new List<int> { 0x55fd1, 0xdc02c, 0x12d2e2, 0x2B4FF4, 0x3e68fe, 0x3e691f, 0x45e98f };
-        List<int> startYearPlus1 = new List<int> { 0xdc135 };
+        List<int> startYearPlus1 = new List<int> { 0xdc135, /* Zero Season Ticket Money First Year */ 0x19B56C };
         List<int> startYearPlus2 = new List<int> { 0x12d321, 0x29e84e /*, 0x45b841, 0x45b898,  0x45c40c */ };
         List<int> startYearPlus3 = new List<int> { 0xdc113, 0x19ba24 };
         List<int> startYearPlus9 = new List<int> { 0x135d89, 0x135df8, 0x3A3D64, 0x3A3FD1, 0x3A4224, 0x3A4844, 0x3A4CB4, 0x3A4F68, 0x3A4FA1 };
