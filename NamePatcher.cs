@@ -156,6 +156,14 @@ namespace CM0102Patcher
             ByteWriter.BinFileReplace(Path.Combine(dataDir, "nat_club.dat"), "Holland", "Netherlands");
             // euro.cfg
             ByteWriter.TextFileReplace(Path.Combine(dataDir, "euro.cfg"), "Holland", "Netherlands");
+            // eng.lng
+            var engLng = ByteWriter.LoadFile(Path.Combine(dataDir, "eng.lng"));
+            var engLngHollandBytes = ByteWriter.SearchBytesForAll(engLng, Encoding.ASCII.GetBytes("Holland"));
+            if (engLngHollandBytes.Contains(0x109FA1) && engLngHollandBytes.Contains(0x109FD5))
+            {
+                ByteWriter.WriteToFile(Path.Combine(dataDir, "eng.lng"), 0x109FA1, "Netherlands");
+                ByteWriter.WriteToFile(Path.Combine(dataDir, "eng.lng"), 0x109FD5, "Netherlands");
+            }
         }
 
         public static void PatchCompAcronym(string fileName, int startPos, string acronym)

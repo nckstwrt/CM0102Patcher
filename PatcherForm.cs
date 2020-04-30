@@ -298,7 +298,7 @@ namespace CM0102Patcher
                 }
 
                 // Warn about irreversible patches
-                if (!isTapani && (checkBoxUpdateNames.Checked || checkBoxReplaceWelshPremier.Checked || checkBoxSwapSKoreaForChina.Checked))
+                if (!isTapani && (checkBoxUpdateNames.Checked && checkBoxUpdateNames.Enabled) || (checkBoxReplaceWelshPremier.Checked && checkBoxReplaceWelshPremier.Enabled) || (checkBoxSwapSKoreaForChina.Checked && checkBoxSwapSKoreaForChina.Enabled))
                 {
                     string options = "";
                     if (checkBoxUpdateNames.Checked)
