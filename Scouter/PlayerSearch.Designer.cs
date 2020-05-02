@@ -32,6 +32,7 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageGeneral = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.checkBoxNotAlreadyLeaving = new System.Windows.Forms.CheckBox();
             this.checkBoxNotNewContract = new System.Windows.Forms.CheckBox();
             this.checkBoxNotIndispensible = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -108,7 +109,8 @@
             this.comboBoxFilter1 = new System.Windows.Forms.ComboBox();
             this.buttonReset = new System.Windows.Forms.Button();
             this.buttonApply = new System.Windows.Forms.Button();
-            this.checkBoxNotAlreadyLeaving = new System.Windows.Forms.CheckBox();
+            this.textBoxNationality = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -183,6 +185,16 @@
             this.groupBox4.TabIndex = 8;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Contract";
+            // 
+            // checkBoxNotAlreadyLeaving
+            // 
+            this.checkBoxNotAlreadyLeaving.AutoSize = true;
+            this.checkBoxNotAlreadyLeaving.Location = new System.Drawing.Point(9, 109);
+            this.checkBoxNotAlreadyLeaving.Name = "checkBoxNotAlreadyLeaving";
+            this.checkBoxNotAlreadyLeaving.Size = new System.Drawing.Size(122, 17);
+            this.checkBoxNotAlreadyLeaving.TabIndex = 19;
+            this.checkBoxNotAlreadyLeaving.Text = "Not Already Leaving";
+            this.checkBoxNotAlreadyLeaving.UseVisualStyleBackColor = true;
             // 
             // checkBoxNotNewContract
             // 
@@ -536,6 +548,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.textBoxNationality);
+            this.groupBox1.Controls.Add(this.label21);
             this.groupBox1.Controls.Add(this.textBoxClub);
             this.groupBox1.Controls.Add(this.label20);
             this.groupBox1.Controls.Add(this.label3);
@@ -561,7 +575,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(7, 77);
+            this.label20.Location = new System.Drawing.Point(4, 77);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(31, 13);
             this.label20.TabIndex = 6;
@@ -586,7 +600,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 48);
+            this.label2.Location = new System.Drawing.Point(4, 48);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(29, 13);
             this.label2.TabIndex = 3;
@@ -609,7 +623,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 21);
+            this.label1.Location = new System.Drawing.Point(4, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 0;
@@ -1013,15 +1027,21 @@
             this.buttonApply.UseVisualStyleBackColor = true;
             this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
             // 
-            // checkBoxNotAlreadyLeaving
+            // textBoxNationality
             // 
-            this.checkBoxNotAlreadyLeaving.AutoSize = true;
-            this.checkBoxNotAlreadyLeaving.Location = new System.Drawing.Point(9, 109);
-            this.checkBoxNotAlreadyLeaving.Name = "checkBoxNotAlreadyLeaving";
-            this.checkBoxNotAlreadyLeaving.Size = new System.Drawing.Size(122, 17);
-            this.checkBoxNotAlreadyLeaving.TabIndex = 19;
-            this.checkBoxNotAlreadyLeaving.Text = "Not Already Leaving";
-            this.checkBoxNotAlreadyLeaving.UseVisualStyleBackColor = true;
+            this.textBoxNationality.Location = new System.Drawing.Point(63, 101);
+            this.textBoxNationality.Name = "textBoxNationality";
+            this.textBoxNationality.Size = new System.Drawing.Size(114, 20);
+            this.textBoxNationality.TabIndex = 9;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(4, 104);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(59, 13);
+            this.label21.TabIndex = 8;
+            this.label21.Text = "Nationality:";
             // 
             // PlayerSearch
             // 
@@ -1160,5 +1180,7 @@
         private System.Windows.Forms.CheckBox checkBoxNotNewContract;
         private System.Windows.Forms.CheckBox checkBoxNotIndispensible;
         private System.Windows.Forms.CheckBox checkBoxNotAlreadyLeaving;
+        private System.Windows.Forms.TextBox textBoxNationality;
+        private System.Windows.Forms.Label label21;
     }
 }
