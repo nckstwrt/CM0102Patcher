@@ -13,8 +13,14 @@ namespace CM0102Patcher
 {
     public class RGNConverter
     {
-        public static Bitmap ResizeImage(Image image, int width, int height, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0)
+        public static Bitmap ResizeImage(Image image, int width, int height, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
         {
+            if (width <= 0 || height <= 0)
+            {
+                width = image.Width;
+                height = image.Height;
+            }
+
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
 
@@ -35,7 +41,45 @@ namespace CM0102Patcher
                 }
             }
 
+            if (brightness != 0)
+            {
+                var tempImage = AdjustBrightness(destImage, brightness);
+                destImage.Dispose();
+                destImage = tempImage;
+            }
+
             return destImage;
+        }
+
+        private static Bitmap AdjustBrightness(Image image, float brightness)
+        {
+            // Make the ColorMatrix.
+            float b = brightness;
+            ColorMatrix cm = new ColorMatrix(new float[][] {
+                new float[] {b, 0, 0, 0, 0},
+                new float[] {0, b, 0, 0, 0},
+                new float[] {0, 0, b, 0, 0},
+                new float[] {0, 0, 0, 1, 0},
+                new float[] {0, 0, 0, 0, 1} 
+            });
+            ImageAttributes attributes = new ImageAttributes();
+            attributes.SetColorMatrix(cm);
+
+            // Draw the image onto the new bitmap while applying
+            // the new ColorMatrix.
+            Point[] points = {
+                new Point(0, 0),
+                new Point(image.Width, 0),
+                new Point(0, image.Height),
+            };
+            Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
+
+            // Make the result bitmap.
+            Bitmap bm = new Bitmap(image.Width, image.Height);
+            using (Graphics gr = Graphics.FromImage(bm))
+                gr.DrawImage(image, points, rect, GraphicsUnit.Pixel, attributes);
+
+            return bm;
         }
 
         public static bool GetImageSize(string inFile, out int Width, out int Height)
@@ -71,17 +115,17 @@ namespace CM0102Patcher
             return ret;
         }
 
-        public static void RGN2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0)
+        public static void RGN2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
         {
-            using (var bmp = RGN2BMP(inFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom))
+            using (var bmp = RGN2BMP(inFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom, brightness))
             {
                 BMP2RGN(bmp, outFile);
             }
         }
 
-        public static void RGN2BMP(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0)
+        public static void RGN2BMP(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
         {
-            using (var bmp = RGN2BMP(inFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom))
+            using (var bmp = RGN2BMP(inFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom, brightness))
             {
 
                 if (!File.Exists(outFile) && Directory.Exists(outFile))
@@ -93,7 +137,7 @@ namespace CM0102Patcher
             }
         }
 
-        public static Bitmap RGN2BMP(string inFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0)
+        public static Bitmap RGN2BMP(string inFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
         {
             using (var stream = File.OpenRead(inFile))
             using (var br = new BinaryReader(stream))
@@ -124,31 +168,31 @@ namespace CM0102Patcher
                 }
                 System.Runtime.InteropServices.Marshal.Copy(bytes, 0, bmpBits.Scan0, bytes.Length);
                 bmp.UnlockBits(bmpBits);
-                if (newWidth == -1 && newHeight == -1)
+                if (newWidth == -1 && newHeight == -1 && cropLeft == 0 && CropTop == 0 && cropRight == 0 && cropBottom == 0 && brightness == 0)
                 {
                     return bmp;
                 }
                 else
                 {
-                    var newBMP = ResizeImage(bmp, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom);
+                    var newBMP = ResizeImage(bmp, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom, brightness);
                     bmp.Dispose();
                     return newBMP;
                 }
             }
         }
 
-        public static void BMP2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0)
+        public static void BMP2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
         {
             using (var bmp = new Bitmap(inFile))
             {
-                BMP2RGN(bmp, outFile, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
+                BMP2RGN(bmp, outFile, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
             }
         }
 
-        public static void BMP2RGN(Bitmap bmp, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0)
+        public static void BMP2RGN(Bitmap bmp, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
         {
             // Resize BMP if need be
-            if (newWidth != -1 && newHeight != -1)
+            if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0)
                 bmp = ResizeImage(bmp, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
 
             using (var stream = File.Create(outFile))
@@ -190,7 +234,7 @@ namespace CM0102Patcher
             }
 
             // If we created a new BMP dispose of it
-            if (newWidth != -1 && newHeight != -1)
+            if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0)
                 bmp.Dispose();
         }
     }

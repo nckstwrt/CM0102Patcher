@@ -76,7 +76,6 @@ namespace CM0102Patcher
             textBoxLeft.Enabled = textBoxTop.Enabled = textBoxRight.Enabled = textBoxBottom.Enabled = checkBoxCrop.Checked;
         }
 
-
         private void buttonConvert_Click(object sender, EventArgs e)
         {
             try
@@ -114,7 +113,10 @@ namespace CM0102Patcher
                 {
                     newWidth = int.Parse(textBoxResizeImageWidth.Text);
                     newHeight = int.Parse(textBoxResizeImageHeight.Text);
+                    
                 }
+
+                float brightness = ((float)numericBrightness.Value) + 1.0f;
 
                 int cropLeft = -1, cropTop = -1, cropRight = -1, cropBottom = -1;
                 if (checkBoxCrop.Checked)
@@ -157,13 +159,13 @@ namespace CM0102Patcher
                                 if (Path.GetExtension(picFile).ToLower() == ".rgn")
                                 {
                                     if (!isDirectory && Path.GetExtension(outputTo).ToLower() != ".rgn")
-                                        RGNConverter.RGN2BMP(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
+                                        RGNConverter.RGN2BMP(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
                                     else
-                                        RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
+                                        RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
                                 }
                                 else
                                 {
-                                    RGNConverter.BMP2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
+                                    RGNConverter.BMP2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
                                 }
                             }
                         }

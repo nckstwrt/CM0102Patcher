@@ -58,11 +58,16 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxTop = new System.Windows.Forms.TextBox();
             this.checkBoxCrop = new System.Windows.Forms.CheckBox();
+            this.numericBrightness = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericBrightness)).BeginInit();
+            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -163,7 +168,7 @@
             this.groupBox3.Controls.Add(this.checkBoxResizeImagesTo);
             this.groupBox3.Location = new System.Drawing.Point(12, 186);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(481, 49);
+            this.groupBox3.Size = new System.Drawing.Size(351, 49);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Resize Images";
@@ -346,8 +351,6 @@
             // checkBoxCrop
             // 
             this.checkBoxCrop.AutoSize = true;
-            this.checkBoxCrop.Checked = true;
-            this.checkBoxCrop.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxCrop.Location = new System.Drawing.Point(7, 20);
             this.checkBoxCrop.Name = "checkBoxCrop";
             this.checkBoxCrop.Size = new System.Drawing.Size(117, 17);
@@ -356,11 +359,56 @@
             this.checkBoxCrop.UseVisualStyleBackColor = true;
             this.checkBoxCrop.CheckedChanged += new System.EventHandler(this.checkBoxCrop_CheckedChanged);
             // 
+            // numericBrightness
+            // 
+            this.numericBrightness.DecimalPlaces = 1;
+            this.numericBrightness.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericBrightness.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numericBrightness.Location = new System.Drawing.Point(70, 17);
+            this.numericBrightness.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericBrightness.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.numericBrightness.Name = "numericBrightness";
+            this.numericBrightness.Size = new System.Drawing.Size(47, 22);
+            this.numericBrightness.TabIndex = 16;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(5, 21);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(59, 13);
+            this.label7.TabIndex = 17;
+            this.label7.Text = "Brightness:";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.numericBrightness);
+            this.groupBox6.Controls.Add(this.label7);
+            this.groupBox6.Location = new System.Drawing.Point(370, 186);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(123, 49);
+            this.groupBox6.TabIndex = 18;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Brightness (-1 to +1)";
+            // 
             // ImageConverterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(505, 336);
+            this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.buttonConvert);
             this.Controls.Add(this.groupBox4);
@@ -382,6 +430,9 @@
             this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericBrightness)).EndInit();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -417,5 +468,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBoxTop;
         private System.Windows.Forms.CheckBox checkBoxCrop;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.NumericUpDown numericBrightness;
+        private System.Windows.Forms.GroupBox groupBox6;
     }
 }

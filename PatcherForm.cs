@@ -780,8 +780,8 @@ namespace CM0102Patcher
                 }
                 if (e.KeyChar == (char)2 && SecretMode) // B
                 {
-                    var yearIncrement = -1;
-                    var cutIfEqualOrAbove = 0;
+                    var yearIncrement = 0;
+                    var cutIfEqualOrAbove = 1999;
 
                     var yearChanger = new YearChanger();
                     var dir = Path.GetDirectoryName(labelFilename.Text);
