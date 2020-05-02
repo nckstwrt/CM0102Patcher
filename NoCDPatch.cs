@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,15 +11,15 @@ namespace CM0102Patcher
     {
         public static byte[] pattern = new byte[] { 0x75, 0x00, 0x6a, 0x65, 0x6a, 0x78, 0x6a, 0x65, 0x6a, 0x2e, 0x6a, 0x00, 0x6a, 0x30 };
 
-        public static int FindPattern(string fileName, byte[] pattern, Action<Stream, BinaryReader, BinaryWriter, int> func)
+        public static int FindPattern(string fileName, byte[] pattern, Action<Stream, BinaryReader, BinaryWriter, int> func, bool zeroIsWildCard = true)
         {
             using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
-                return FindPattern(file, pattern, func);
+                return FindPattern(file, pattern, func, zeroIsWildCard);
             }
         }
 
-        public static int FindPattern(Stream stream, byte[] pattern, Action<Stream, BinaryReader, BinaryWriter, int> func)
+        public static int FindPattern(Stream stream, byte[] pattern, Action<Stream, BinaryReader, BinaryWriter, int> func, bool zeroIsWildCard = true)
         {
             int patched = 0;
             using (var bw = new BinaryWriter(stream))
@@ -30,7 +31,7 @@ namespace CM0102Patcher
                     var fileContent = br.ReadBytes(fileLength);
                     for (int i = 0; i < fileLength; i++)
                     {
-                        if (pattern[match] == 0)
+                        if (zeroIsWildCard && pattern[match] == 0)
                         {
                             match++;
                             continue;
@@ -142,26 +143,36 @@ namespace CM0102Patcher
             return patched;
         }
 
+        static byte[] HexStringToBytes(string hexString)
+        {
+            byte[] ret = new byte[hexString.Length / 2];
+            hexString = hexString.ToLower();
+            for (int i = 0; i < hexString.Length; i += 2)
+            {
+                ret[i / 2] = byte.Parse(hexString.Substring(i, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+            }
+            return ret;
+        }
+
         public static void GenericCDCrack(string exeFile)
         {
             // Let search for calls to KERNEL32.GetLogicalDriveStringsA. There's always a push PUSH 0C8 beforehand
             // 0040AF74 |.  68 C8000000 PUSH 0C8; | Bufsize = 200.
             // 0040AF79 |.FF15 24817700 CALL DWORD PTR DS:[<&KERNEL32.GetLogicalDriveStringsA>]
             // ^ CM99 
-            var patcher = new Patcher();
-            FindPattern(exeFile, patcher.HexStringToBytes("68C8000000FF15"), (f, br, bw, offset) =>
+            FindPattern(exeFile, HexStringToBytes("68C8000000FF15"), (f, br, bw, offset) =>
             {
                 Console.WriteLine("Offset: {0:x8}", offset);
 
                 // Search for CMP EAX,5 83F805
-                var cmpeax5 = FindNext(f, offset, patcher.HexStringToBytes("83F805"));
+                var cmpeax5 = FindNext(f, offset, HexStringToBytes("83F805"));
 
                 // Swap with CMP EAX, EAX (if not too far away from what we found)
                 if (cmpeax5 != -1 && (cmpeax5 - offset) < 100)
                 {
                     Console.WriteLine("   Found CMP EAX, 5: {0:x8}", cmpeax5);
                     bw.Seek(cmpeax5, SeekOrigin.Begin);
-                    bw.Write(patcher.HexStringToBytes("39c090"));
+                    bw.Write(HexStringToBytes("39c090"));
                 }
 
                 /* Search for the pushing of CM0102.exe or similar
@@ -179,9 +190,9 @@ namespace CM0102Patcher
                 // or PUSH EDI (57)
 
                 // Search for cm 
-                var pushcm = FindNext(f, offset, patcher.HexStringToBytes("6a6d6a6356"));
+                var pushcm = FindNext(f, offset, HexStringToBytes("6a6d6a6356"));
                 if (pushcm == -1 || (pushcm - offset) >= 200)
-                    pushcm = FindNext(f, offset, patcher.HexStringToBytes("6a6d6a6357"));
+                    pushcm = FindNext(f, offset, HexStringToBytes("6a6d6a6357"));
 
                 /* Swap with *\0 
                 004131ED |.  6A 00 || PUSH 0; |<% c > = 00
@@ -191,11 +202,63 @@ namespace CM0102Patcher
                 {
                     Console.WriteLine("   Found Push CM: {0:x8}", pushcm);
                     bw.Seek(pushcm, SeekOrigin.Begin);
-                    bw.Write(patcher.HexStringToBytes("6a006a2a56"));
+                    bw.Write(HexStringToBytes("6a006a2a56"));
                 }
                 else
                     Console.WriteLine("   NOT Found Push CM: {0:x8}", pushcm);
             });
+        }
+
+        public static void GenericCDCrack2(string exeFile)
+        {
+            // We are going to hook every call to GetLogicalDriveStringsA and GetDriveTypeA to call our own function that will:
+            // GetLogicalDriveStringsA = return ".\" in the buffer and 1 in EAX
+            // GetDriveTypeA return EAX with 5 (meaning every drive is a CD Drive)
+            var newGetLogialDriveStringsA = HexStringToBytes("8B442408C7002E5C000031C040C20800"); // 16 bytes   <--- This was originally 8B44E4 <- Which is incorrect, needs to be 24 not e4 (Olly issue)
+            var newGetDriveTypeA = HexStringToBytes("B805000000C20400"); // 8 bytes
+
+            // Going to place at the very end of the exe code space - 0x966FFF (the last byte) - 24 bytes = 966FE7 (+1) = 966FE8
+            // The save space for two pointer too that point to the functions 966FE8 - 4 - 4 = 966FE0
+            UInt32 pointerToinjectnewGetLogialDriveStringsAAt = 0x966FE0;
+            UInt32 pointerToinjectnewGetDriveTypeAAt = pointerToinjectnewGetLogialDriveStringsAAt + 4;
+            UInt32 injectnewGetLogialDriveStringsAAt = pointerToinjectnewGetDriveTypeAAt + 4;
+            UInt32 injectnewGetDriveTypeAAt = injectnewGetLogialDriveStringsAAt + 16;
+            using (var file = File.Open(exeFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                // Write the pointers to the new functions
+                file.Seek(pointerToinjectnewGetLogialDriveStringsAAt - 0x400000, SeekOrigin.Begin);
+                file.Write(BitConverter.GetBytes(injectnewGetLogialDriveStringsAAt), 0, 4);
+                file.Write(BitConverter.GetBytes(injectnewGetDriveTypeAAt), 0, 4);
+
+                // Write the two new functions
+                file.Seek(injectnewGetLogialDriveStringsAAt - 0x400000, SeekOrigin.Begin);
+                file.Write(newGetLogialDriveStringsA, 0, newGetLogialDriveStringsA.Length);
+                file.Write(newGetDriveTypeA, 0, newGetDriveTypeA.Length);
+            }
+
+            // Now need to patch all occurances of calling GetLogicalDriveStringsA or GetDriveTypeA to point to our new functions.
+            // Currently they are pointing to pointers of pointers, this is why we store the pointers just before the functions
+            // Sometimes they are not called directly like: 
+            // 00828186 |.FF15 F8709600 CALL DWORD PTR DS:[< &KERNEL32.GetLogicalDriveStringsA >]; \KERNEL32.GetLogicalDriveStringsA
+            // 004131D2  |.  FF15 00719600             ||CALL DWORD PTR DS:[<&KERNEL32.GetDrive ; \KERNEL32.GetDriveTypeA
+            // But like this:
+            // 0082AA7B  |.  8B2D F8709600             MOV EBP,DWORD PTR DS:[<&KERNEL32.GetLogi
+            // 00442ACF |.  8B3D 00719600             MOV EDI, DWORD PTR DS:[<&KERNEL32.GetDriv
+
+            var bytePrefixes = new string[] { "FF15", "8B3D", "8B2D" };
+            var byteOffsets = new string[] { "F8709600", "00719600" };
+            var byteReplacements = new UInt32[] { pointerToinjectnewGetLogialDriveStringsAAt, pointerToinjectnewGetDriveTypeAAt };
+            for (int i = 0; i < byteOffsets.Length; i++)
+            {
+                foreach (var prefix in bytePrefixes)
+                {
+                    FindPattern(exeFile, HexStringToBytes(prefix + byteOffsets[i]), (f, br, bw, offset) =>
+                    {
+                        f.Seek(offset+2, SeekOrigin.Begin);
+                        bw.Write(byteReplacements[i]);
+                    }, false);
+                }
+            }
         }
 
         public static int FindNext(Stream fin, int offset, byte[] pattern)

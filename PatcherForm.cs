@@ -871,6 +871,11 @@ namespace CM0102Patcher
                     patcher.ExpandExe(labelFilename.Text);
                     MessageBox.Show("EXE EXPANDED!!!", "Expando Magico", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                if (e.KeyChar == (char)10 && SecretMode) // J
+                {
+                    NoCDPatch.GenericCDCrack2(labelFilename.Text);
+                    MessageBox.Show("Generic Crack 2 Applied", "Secret", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
                 if (e.KeyChar == (char)31 && SecretMode) // -
                 {
                     yearExeSyncDecrement = 1;
