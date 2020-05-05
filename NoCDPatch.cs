@@ -259,6 +259,14 @@ namespace CM0102Patcher
                     }, false);
                 }
             }
+
+            // Now patch string "%s%c%c%c%c%c%c%c%c%c%c" to point to something in data
+            // This way you can rename the exe to whatever
+            FindPattern(exeFile, Encoding.ASCII.GetBytes("%s%c%c%c%c%c%c%c%c%c%c\0"), (f, br, bw, offset) =>
+            {
+                f.Seek(offset, SeekOrigin.Begin);
+                bw.Write(Encoding.ASCII.GetBytes("%sdata\\index.dat\0"));
+            }, false);
         }
 
         public static int FindNext(Stream fin, int offset, byte[] pattern)
