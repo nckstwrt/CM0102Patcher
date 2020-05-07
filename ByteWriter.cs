@@ -58,10 +58,10 @@ namespace CM0102Patcher
             return -1;
         }
 
-        public static List<int> SearchBytesForAll(byte[] toSearch, byte[] searchBytes, bool ignoreCase = false)
+        public static List<int> SearchBytesForAll(byte[] toSearch, byte[] searchBytes, int startIndex = 0, bool ignoreCase = false)
         {
             List<int> offsets = new List<int>();
-            int idx = 0;
+            int idx = startIndex;
             while (true)
             {
                 var found = SearchBytes(toSearch, searchBytes, idx, ignoreCase);
@@ -135,18 +135,15 @@ namespace CM0102Patcher
             var bytes = ByteWriter.LoadFile(file);
             Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
             var stringBytes = latin1.GetBytes(toReplace);
-            var bytePositions = SearchBytesForAll(bytes, stringBytes, ignoreCase);
+            var bytePositions = SearchBytesForAll(bytes, stringBytes, startPosition, ignoreCase);
             int numberChanged = 0;
             foreach (var pos in bytePositions)
             {
-                if (pos >= startPosition)
-                {
-                    WriteToFile(file, pos, replaceWith, toReplace.Length);
-                    lastPosChanged = pos;
-                    numberChanged++;
-                    if (timesToReplace != 0 && numberChanged >= timesToReplace)
-                        break;
-                }
+                WriteToFile(file, pos, replaceWith, toReplace.Length);
+                lastPosChanged = pos;
+                numberChanged++;
+                if (timesToReplace != 0 && numberChanged >= timesToReplace)
+                    break;
             }
             return lastPosChanged;
         }

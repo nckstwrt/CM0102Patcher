@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using System.Security.Policy;
 using System.Text;
 
 namespace CM0102Patcher
@@ -11,7 +13,9 @@ namespace CM0102Patcher
         string exeFile;
         string dataDir;
         Patcher patcher;
-        
+        byte[] exeBytes;
+
+
         int freePos = (0x6DC000 + 0x200000) - 0x20000; // last 128kb can be used for renaming
 
         public NamePatcher(string exeFile, string dataDir)
@@ -19,6 +23,7 @@ namespace CM0102Patcher
             this.exeFile = exeFile;
             this.dataDir = dataDir;
             this.patcher = new Patcher();
+            this.exeBytes = null;
         }
 
         public void RunPatch()
@@ -35,23 +40,67 @@ namespace CM0102Patcher
             // Expand the EXE
             patcher.ExpandExe(exeFile);
 
+            // Make better error messages to help me debug
+            ByteWriter.WriteToFile(exeFile, 0x20d7e2, patcher.HexStringToBytes("641fde"));
+
+            // Patch League Select Items
+            PatchExeString("Regional Divisions", "3. Liga", 0x5Eb02c);
+            PatchExeString("Second Division", "Division 1", 0x5Eb02c);
+
+            // Stupidly complex code for Second Division B for Spain and Portugal
+            // 0066A076 |.  68 3CB09E00 PUSH OFFSET 009EB03C; / Format = "Second Division B"
+            // 0066A07B |.  50            PUSH EAX; Arg1 = 19FFCC
+            // Trying to make this generic is overkill. Although learnt the trick of absolute jumping
+            // PUSH offset-to-jmp-to RET
+            int portugalText, segundaDivisionText, leagueSelectCodePos;
+            var textSelectionBytes = patcher.HexStringToBytes("0000003B0D88F49C007407683CB09E00EB05683CB09E00687BA06600C3000000");
+            portugalText = freePos;
+            freePos += ByteWriter.WriteToFile(exeFile, freePos, "Campeonato de Portugal\0");
+            segundaDivisionText = freePos;
+            freePos += ByteWriter.WriteToFile(exeFile, freePos, "Segunda División B\0");
+            leagueSelectCodePos = freePos;
+            BitConverter.GetBytes(portugalText + 0x70B000).ToArray().CopyTo(textSelectionBytes, 12);
+            BitConverter.GetBytes(segundaDivisionText + 0x70B000).ToArray().CopyTo(textSelectionBytes, 19);
+            freePos += ByteWriter.WriteToFile(exeFile, freePos, textSelectionBytes);
+            var jumpBytes = new byte[5] { 0xe9, 0x00, 0x00, 0x00, 0x00 };
+            BitConverter.GetBytes(((leagueSelectCodePos+ 0x70b000) - (0x26A076 + 0x400000)) - 5 + 3).ToArray().CopyTo(jumpBytes, 1); // - 5 for the length of the jmp, + 3 for prefix 00s
+            ByteWriter.WriteToFile(exeFile, 0x26A076, jumpBytes);
+
             // Patch Holland
             PatchHolland();
 
-            // Patch Comps
-            PatchComp("European Champions Cup", "UEFA Champions League", "Champions Cup", "Champions League");
-            PatchComp("UEFA Cup", "UEFA Europa League");
+            // Patch Nation Comps
+            PatchNationComp("European Football Championship", "UEFA European Championship");
+            PatchNationComp("European Championship Qualifying", "UEFA European Championship Qualifying", "Euro Ch'ship Quals", "European Championship Qlf");
+            PatchNationComp("Copa America", "Copa América", "Copa America", "Copa América");
+            PatchNationComp("Oceania Nations Cup", "OFC Nations Cup", "OFC Nations Cup", "OFC Nations Cup");
+            PatchNationComp("Asian Cup", "AFC Asian Cup", "Asian Cup", "Asian Cup");
+            PatchNationComp("Confederations Cup", "FIFA Confederations Cup", "Confederations Cup", "Confederations Cup");
+
+            // Patch Club Comps
+            PatchClubComp("Asian Club Championship", "AFC Champions League", "Club Championship", "Champions League");
+            PatchClubComp("CONCACAF Champions Cup", "CONCACAF Champions League", "Champions Cup", "Champions League");
+            PatchClubComp("European Champions Cup", "UEFA Champions League", "Champions Cup", "Champions League");
+            PatchClubComp("European Super Cup", "UEFA Super Cup", "Super Cup", "Super Cup");
+            PatchClubComp("FIFA Club World Championship", "FIFA Club World Cup", "World Championship", "Club World Cup");
+            PatchClubComp("Inter-American Cup", "Copa Interamericana", "Inter-American Cup", "Copa Interamericana");
+            PatchClubComp("Inter-Toto Cup", "UEFA Europa League Qualifying", "Inter-Toto Cup", "Europa League Qualifying");
+            PatchClubComp("Oceania Champions Cup", "OFC Champions League", "OFC Champions Cup", "Champions League");
+            PatchClubComp("South American Copa Libertadores", "Copa Libertadores de América", "Copa Libertadores", "Copa Libertadores");
+            PatchClubComp("South American Copa Mercosur", "Copa Sudamericana", "Copa Mercosur", "Copa Sudamericana");
+            PatchClubComp("UEFA Cup", "UEFA Europa League", "UEFA Cup", "Europa League");
+            PatchClubComp("African Champions League", "CAF Champions League", "African Champions League", "CAF Champions League");
 
             // English
-            PatchComp("English Premier Division", "English Premier League", "Premier Division", "Premier League", "EPL");
-            PatchComp("English First Division", "English Football League Championship", "First Division", "Championship", "FLC");
-            PatchComp("English Second Division", "English Football League One", "Second Division", "League One", "FL1");
-            PatchComp("English Third Division", "English Football League Two", "Third Division", "League Two", "FL2");
+            PatchClubComp("English Premier Division", "English Premier League", "Premier Division", "Premier League", "EPL");
+            PatchClubComp("English First Division", "English Football League Championship", "First Division", "Championship", "FLC");
+            PatchClubComp("English Second Division", "English Football League One", "Second Division", "League One", "FL1");
+            PatchClubComp("English Third Division", "English Football League Two", "Third Division", "League Two", "FL2");
         }
 
         public void PatchWelshWithNorthernLeague()
         {
-            PatchComp("English Northern Premier League Premier Division", "English National League North", "Northern Premier", "National League North", "NLN");
+            PatchClubComp("English Northern Premier League Premier Division", "English National League North", "Northern Premier", "National League North", "NLN");
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatch"]);
             ByteWriter.WriteToFile(exeFile, 0x6d56b8, "English National League North" + "\0");
 
@@ -79,7 +128,7 @@ namespace CM0102Patcher
             ByteWriter.WriteToFile(exeFile, 0x525B3C, BitConverter.GetBytes(southernTeams * 59));
             ByteWriter.WriteToFile(exeFile, 0x525B46, new byte[] { ((byte)southernTeams) });
 
-            PatchComp("English Southern League Premier Division", "English National League South", "Southern Premier", "National League South", "NLS");
+            PatchClubComp("English Southern League Premier Division", "English National League South", "Southern Premier", "National League South", "NLS");
             ByteWriter.WriteToFile(exeFile, 0x6d56b8, "English National League South" + "\0");
 
             PatchStaffAward("Welsh Team of the Week", "English National League South Team of the Week");
@@ -109,8 +158,8 @@ namespace CM0102Patcher
             ByteWriter.WriteToFile(exeFile, 0x525B46, new byte[] { ((byte)southernTeams) });
 
             //ByteWriter.WriteToFile(exeFile, 0x6d56b8, "English Southern League Premier Division" + "\0");
-                        
-            PatchComp("English Southern League Premier Division", "English Southern Premier Central", "Southern Premier", "Southern Premier", "SPC");
+
+            PatchClubComp("English Southern League Premier Division", "English Southern Premier Central", "Southern Premier", "Southern Premier", "SPC");
             ByteWriter.WriteToFile(exeFile, 0x6d56b8, "English Southern Premier Central" + "\0");
             
             PatchStaffAward("Welsh Team of the Week",           "English Southern Premier Team of the Week");
@@ -144,10 +193,7 @@ namespace CM0102Patcher
         // 0060E100     68 D0619800 PUSH OFFSET 009861D0
         void PatchHolland()
         {
-            var pushBytes = new byte[] { 0x68, 0, 0, 0, 0 };
-            BitConverter.GetBytes(freePos + 0x70B000).ToArray().CopyTo(pushBytes, 1);
-            freePos += ByteWriter.WriteToFile(exeFile, freePos, "Netherlands\0");
-            ByteWriter.WriteToFile(exeFile, 0x20e100, pushBytes);
+            PatchExeString("Holland", "Netherlands", 0x5b1534);
 
             // nation.dat
             var nationDatFilename = Path.Combine(dataDir, "nation.dat");
@@ -188,56 +234,85 @@ namespace CM0102Patcher
                 ByteWriter.BinFileReplace(exeFile, oldName, newName, 0, 0, ignoreCase);
         }
 
-        public void PatchComp(string oldName, string newName, string oldShortName, string newShortName, string newAcronym = null)
+        public void PatchClubComp(string oldName, string newName, string oldShortName = null, string newShortName = null, string newAcronym = null)
+        {
+            PatchComp("club_comp.dat", oldName, newName, oldShortName, newShortName, newAcronym);
+        }
+
+        public void PatchNationComp(string oldName, string newName, string oldShortName = null, string newShortName = null, string newAcronym = null)
+        {
+            PatchComp("nation_comp.dat", oldName, newName, oldShortName, newShortName, newAcronym);
+        }
+
+        public void PatchComp(string fileName, string oldName, string newName, string oldShortName, string newShortName, string newAcronym = null)
         {
             oldName = AddTerminator(oldName);
             newName = AddTerminator(newName);
             oldShortName = AddTerminator(oldShortName);
             newShortName = AddTerminator(newShortName);
 
-            int compChangePos = PatchComp(oldName, newName);
-            if (compChangePos != -1)
+            int compChangePos = PatchComp(fileName, oldName, newName);
+            if (compChangePos != -1 && oldShortName != null && newShortName != null)
             {
-                PatchComp(oldShortName, newShortName, compChangePos, -1);
+                PatchComp(fileName, oldShortName, newShortName, compChangePos, -1);
                 if (newAcronym != null)
-                    PatchCompAcronym(Path.Combine(dataDir, "club_comp.dat"), compChangePos, newAcronym);
+                    PatchCompAcronym(Path.Combine(dataDir, fileName), compChangePos, newAcronym);
                 PatchEngLng(oldName, newName, oldShortName, newShortName, newAcronym);
             }
         }
 
-        public int PatchComp(string fromComp, string toComp, int clubCompStartPos = 0, int exeStartPos = 0x5d9590)
+        void LoadExeBytes()
         {
-            var club_comp = Path.Combine(dataDir, "club_comp.dat");
+            if (exeBytes == null)
+                exeBytes = ByteWriter.LoadFile(exeFile);
+        }
+
+        public int PatchComp(string fileName, string fromComp, string toComp, int clubCompStartPos = 0, int exeStartPos = 0x5d9590)
+        {
+            var club_comp = Path.Combine(dataDir, fileName);
 
             fromComp = AddTerminator(fromComp);
             toComp = AddTerminator(toComp);
 
-            var exeBytes = ByteWriter.LoadFile(exeFile);
             int compChangePos = ByteWriter.BinFileReplace(club_comp, fromComp, toComp, clubCompStartPos, clubCompStartPos != 0 ? 1 : 0);
 
             if (exeStartPos != -1)
-            {
-                // Find where the string is held
-                var pos = ByteWriter.SearchBytes(exeBytes, fromComp, exeStartPos);
-                // Convert the position of the current string, to a PUSH statement in the exe
-                var searchBytes = new byte[5] { 0x68, 0x00, 0x00, 0x00, 0x00 };
-                BitConverter.GetBytes(pos + 0x400000).ToArray().CopyTo(searchBytes, 1);
-                // Find the PUSH Statement in the EXE to this string
-                var posExePush = ByteWriter.SearchBytes(exeBytes, searchBytes);
-                if (posExePush != -1)
-                {
-                    // Get the next free position of text and convert to a PUSH
-                    BitConverter.GetBytes(freePos + 0x70B000).ToArray().CopyTo(searchBytes, 1);
-                    // Write the new PUSH statement to the free pos
-                    ByteWriter.WriteToFile(exeFile, posExePush, searchBytes);
-                    // Write the new string to the free pos and increment the free pos
-                    ByteWriter.WriteToFile(exeFile, freePos, toComp);
-                }
-                // Just because it wasn't found this time doesn't mean it wasn't already written to, so push the ptr forward anyway
-                freePos += toComp.Length + 1;
-            }
+                PatchExeString(fromComp, toComp, exeStartPos);
 
             return compChangePos;
+        }
+
+        public void PatchExeString(string from, string to, int exeStartPos)
+        {
+            LoadExeBytes();
+
+            from = AddTerminator(from);
+            to = AddTerminator(to);
+
+            // Find where the string is held
+            var pos = ByteWriter.SearchBytes(exeBytes, from, exeStartPos);
+
+            // Check for lower case version
+            if (pos == -1)
+                pos = ByteWriter.SearchBytes(exeBytes, from, exeStartPos, true);
+
+            // Convert the position of the current string, to a PUSH statement in the exe
+            var searchBytes = new byte[5] { 0x68, 0x00, 0x00, 0x00, 0x00 };
+            BitConverter.GetBytes(pos + 0x400000).ToArray().CopyTo(searchBytes, 1);
+
+            // Find the PUSH Statement in the EXE to this string
+            var positions = ByteWriter.SearchBytesForAll(exeBytes, searchBytes, 0);
+            foreach (var position in positions)
+            {
+                // Get the next free position of text and convert to a PUSH
+                BitConverter.GetBytes(freePos + 0x70B000).ToArray().CopyTo(searchBytes, 1);
+
+                // Write the new PUSH statement to the free pos
+                ByteWriter.WriteToFile(exeFile, position, searchBytes);
+
+                // Write the new string to the free pos and increment the free pos
+                freePos += ByteWriter.WriteToFile(exeFile, freePos, to);
+            }
         }
 
         private void PatchEngLng(string oldName, string newName, string oldShortName = null, string newShortName = null, string newAcronym = null)
