@@ -237,6 +237,7 @@ namespace CM0102Patcher
             return patchList;
         }
 
+        // 006DC000 in the file will equal 00DE7000 in memory = 70B000 Difference
         public void ExpandExe(string fileName)
         {
             ApplyPatch(fileName, patches["addextraspaceheader"]);

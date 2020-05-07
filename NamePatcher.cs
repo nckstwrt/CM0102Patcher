@@ -11,7 +11,8 @@ namespace CM0102Patcher
         string exeFile;
         string dataDir;
         Patcher patcher;
-        int freePos = 0x5861d0;
+        
+        int freePos = (0x6DC000 + 0x200000) - 0x20000; // last 128kb can be used for renaming
 
         public NamePatcher(string exeFile, string dataDir)
         {
@@ -31,6 +32,9 @@ namespace CM0102Patcher
             // Add Transfer Window Patch (from Saturn's v3 Patches)
             patcher.ApplyPatch(exeFile, patcher.patches["transferwindowpatch"]);
 
+            // Expand the EXE
+            patcher.ExpandExe(exeFile);
+
             // Patch Holland
             PatchHolland();
 
@@ -43,30 +47,6 @@ namespace CM0102Patcher
             PatchComp("English First Division", "English Football League Championship", "First Division", "Championship", "FLC");
             PatchComp("English Second Division", "English Football League One", "Second Division", "League One", "FL1");
             PatchComp("English Third Division", "English Football League Two", "Third Division", "League Two", "FL2");
-
-            // Patch eng.lng too!
-            PatchEngLng("European Champions Cup", "UEFA Champions League", "Champions Cup", "Champions League");
-            PatchEngLng("UEFA Cup", "UEFA Europa League");
-            PatchEngLng("English Premier Division", "English Premier League", "Premier Division", "Premier League", "EPL");
-            PatchEngLng("English First Division", "English Football League Championship", "First Division", "Championship", "FLC");
-            PatchEngLng("English Second Division", "English Football League One", "Second Division", "League One", "FL1");
-            PatchEngLng("English Third Division", "English Football League Two", "Third Division", "League Two", "FL2");
-        }
-
-        private void PatchEngLng(string oldName, string newName, string oldShortName = null, string newShortName = null, string newAcronym = null)
-        {
-            var engLng = Path.Combine(dataDir, "eng.lng");
-            newName += "\0";
-            oldName += "\0";
-            int changePos = ByteWriter.BinFileReplace(engLng, oldName, newName, 0, 1);
-            if (oldShortName != null)
-            {
-                oldShortName += "\0";
-                newShortName += "\0";
-                ByteWriter.BinFileReplace(engLng, oldShortName, newShortName, changePos, 1);
-                if (newAcronym != null && changePos != -1)
-                    PatchCompAcronym(engLng, changePos, newAcronym);
-            }
         }
 
         public void PatchWelshWithNorthernLeague()
@@ -164,8 +144,11 @@ namespace CM0102Patcher
         // 0060E100     68 D0619800 PUSH OFFSET 009861D0
         void PatchHolland()
         {
+            var pushBytes = new byte[] { 0x68, 0, 0, 0, 0 };
+            BitConverter.GetBytes(freePos + 0x70B000).ToArray().CopyTo(pushBytes, 1);
             freePos += ByteWriter.WriteToFile(exeFile, freePos, "Netherlands\0");
-            patcher.ApplyPatch(exeFile, 0x20e100, "68D0619800");
+            ByteWriter.WriteToFile(exeFile, 0x20e100, pushBytes);
+
             // nation.dat
             var nationDatFilename = Path.Combine(dataDir, "nation.dat");
             var nationDat = ByteWriter.LoadFile(nationDatFilename);
@@ -195,28 +178,40 @@ namespace CM0102Patcher
             ByteWriter.WriteToFile(fileName, startPos + 79, acronym, 3);
         }
 
+        public void PatchStaffAward(string oldName, string newName, bool patchExe = false, bool ignoreCase = false)
+        {
+            var staff_comp = Path.Combine(dataDir, "staff_comp.dat");
+            oldName = AddTerminator(oldName);
+            newName = AddTerminator(newName);
+            ByteWriter.BinFileReplace(staff_comp, oldName, newName, 0, 0, ignoreCase);
+            if (patchExe)
+                ByteWriter.BinFileReplace(exeFile, oldName, newName, 0, 0, ignoreCase);
+        }
+
         public void PatchComp(string oldName, string newName, string oldShortName, string newShortName, string newAcronym = null)
         {
+            oldName = AddTerminator(oldName);
+            newName = AddTerminator(newName);
+            oldShortName = AddTerminator(oldShortName);
+            newShortName = AddTerminator(newShortName);
+
             int compChangePos = PatchComp(oldName, newName);
             if (compChangePos != -1)
             {
                 PatchComp(oldShortName, newShortName, compChangePos, -1);
                 if (newAcronym != null)
                     PatchCompAcronym(Path.Combine(dataDir, "club_comp.dat"), compChangePos, newAcronym);
+                PatchEngLng(oldName, newName, oldShortName, newShortName, newAcronym);
             }
         }
 
-        public void PatchStaffAward(string oldName, string newName, bool patchExe = false, bool ignoreCase = false)
-        {
-            var staff_comp = Path.Combine(dataDir, "staff_comp.dat");
-            ByteWriter.BinFileReplace(staff_comp, oldName, newName + "\0", 0, 0, ignoreCase);
-            if (patchExe)
-                ByteWriter.BinFileReplace(exeFile, oldName, newName + "\0", 0, 0, ignoreCase);
-        }
-
-        int PatchComp(string fromComp, string toComp, int clubCompStartPos = 0, int exeStartPos = 0x5d9590)
+        public int PatchComp(string fromComp, string toComp, int clubCompStartPos = 0, int exeStartPos = 0x5d9590)
         {
             var club_comp = Path.Combine(dataDir, "club_comp.dat");
+
+            fromComp = AddTerminator(fromComp);
+            toComp = AddTerminator(toComp);
+
             var exeBytes = ByteWriter.LoadFile(exeFile);
             int compChangePos = ByteWriter.BinFileReplace(club_comp, fromComp, toComp, clubCompStartPos, clubCompStartPos != 0 ? 1 : 0);
 
@@ -232,17 +227,45 @@ namespace CM0102Patcher
                 if (posExePush != -1)
                 {
                     // Get the next free position of text and convert to a PUSH
-                    BitConverter.GetBytes(freePos + 0x400000).ToArray().CopyTo(searchBytes, 1);
+                    BitConverter.GetBytes(freePos + 0x70B000).ToArray().CopyTo(searchBytes, 1);
                     // Write the new PUSH statement to the free pos
                     ByteWriter.WriteToFile(exeFile, posExePush, searchBytes);
                     // Write the new string to the free pos and increment the free pos
-                    ByteWriter.WriteToFile(exeFile, freePos, toComp + "\0");
+                    ByteWriter.WriteToFile(exeFile, freePos, toComp);
                 }
                 // Just because it wasn't found this time doesn't mean it wasn't already written to, so push the ptr forward anyway
                 freePos += toComp.Length + 1;
             }
 
             return compChangePos;
+        }
+
+        private void PatchEngLng(string oldName, string newName, string oldShortName = null, string newShortName = null, string newAcronym = null)
+        {
+            var engLng = Path.Combine(dataDir, "eng.lng");
+            
+            newName = AddTerminator(newName);
+            oldName = AddTerminator(oldName);
+            newShortName = AddTerminator(newShortName);
+            oldShortName = AddTerminator(oldShortName);
+
+            int changePos = ByteWriter.BinFileReplace(engLng, oldName, newName, 0, 1);
+            if (oldShortName != null)
+            {
+                ByteWriter.BinFileReplace(engLng, oldShortName, newShortName, changePos, 1);
+            }
+            if (newAcronym != null && changePos != -1)
+                PatchCompAcronym(engLng, changePos, newAcronym);
+        }
+
+        private string AddTerminator(string inString)
+        {
+            if (!string.IsNullOrEmpty(inString))
+            {
+                if (inString[inString.Length - 1] != '\0')
+                    inString += "\0";
+            }
+            return inString;
         }
     }
 }
