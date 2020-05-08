@@ -301,11 +301,11 @@ namespace CM0102Patcher
                 if (!isTapani && (checkBoxUpdateNames.Checked && checkBoxUpdateNames.Enabled) || (checkBoxReplaceWelshPremier.Checked && checkBoxReplaceWelshPremier.Enabled) || (checkBoxSwapSKoreaForChina.Checked && checkBoxSwapSKoreaForChina.Enabled))
                 {
                     string options = "";
-                    if (checkBoxUpdateNames.Checked)
+                    if (checkBoxUpdateNames.Checked && checkBoxUpdateNames.Enabled)
                         options += "Update Names + Transfer Windows\r\n";
-                    if (checkBoxReplaceWelshPremier.Checked)
+                    if (checkBoxReplaceWelshPremier.Checked && checkBoxReplaceWelshPremier.Enabled)
                         options += "Replace Welsh League\r\n";
-                    if (checkBoxSwapSKoreaForChina.Checked)
+                    if (checkBoxSwapSKoreaForChina.Checked && checkBoxSwapSKoreaForChina.Enabled)
                         options += "Swap South Korea for China\r\n";
                     var result = MessageBox.Show(string.Format("The following options you have selected are irreversible:\r\n\r\n{0}\r\nMeaning that once applied you will not be able unapply them.\r\n\r\nTo unapply them you will have to do a \"Restore\" from a previous \"Save\" point made by this patcher or a reinstall of CM0102.\r\n\r\nDo you wish to continue?", options), "Irreversible Changes Detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.No)
