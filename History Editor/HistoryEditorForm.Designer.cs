@@ -80,6 +80,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.buttonYearShifter = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPageNationComp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericNationUpDown)).BeginInit();
@@ -94,6 +96,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericStaffHistoryUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStaffHistory)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -640,11 +643,32 @@
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.buttonYearShifter);
+            this.groupBox2.Location = new System.Drawing.Point(639, 5);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(123, 54);
+            this.groupBox2.TabIndex = 5;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Year Shifter";
+            // 
+            // buttonYearShifter
+            // 
+            this.buttonYearShifter.Location = new System.Drawing.Point(6, 19);
+            this.buttonYearShifter.Name = "buttonYearShifter";
+            this.buttonYearShifter.Size = new System.Drawing.Size(107, 23);
+            this.buttonYearShifter.TabIndex = 0;
+            this.buttonYearShifter.Text = "Year Shifter Tool";
+            this.buttonYearShifter.UseVisualStyleBackColor = true;
+            this.buttonYearShifter.Click += new System.EventHandler(this.buttonYearShifter_Click);
+            // 
             // HistoryEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(778, 369);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.groupBox1);
@@ -668,6 +692,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStaffHistory)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -725,5 +750,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewComboBoxColumn9;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewComboBoxColumn10;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button buttonYearShifter;
     }
 }

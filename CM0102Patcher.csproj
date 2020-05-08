@@ -159,6 +159,12 @@
       <DependentUpon>Tools.cs</DependentUpon>
     </Compile>
     <Compile Include="YearChanger.cs" />
+    <Compile Include="History Editor\YearShifterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="History Editor\YearShifterForm.Designer.cs">
+      <DependentUpon>YearShifterForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ZipStorer.cs" />
     <EmbeddedResource Include="FixtureScheduler.resx">
       <DependentUpon>FixtureScheduler.cs</DependentUpon>
@@ -211,6 +217,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tools.resx">
       <DependentUpon>Tools.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="History Editor\YearShifterForm.resx">
+      <DependentUpon>YearShifterForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest">
       <SubType>Designer</SubType>

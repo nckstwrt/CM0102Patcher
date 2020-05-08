@@ -717,6 +717,16 @@ namespace CM0102Patcher
                 listBoxStaff.Items.AddRange(staffItemsStore.Where(x => x.Name.ToLower().Contains(searchText)).ToArray());
             }
         }
+
+        private void buttonYearShifter_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBoxIndexFile.Text))
+            {
+                YearShifterForm ysf = new YearShifterForm(textBoxIndexFile.Text);
+                ysf.ShowDialog();
+                buttonLoad_Click(null, null);
+            }
+        }
     }
 
     public class ListBoxItem
