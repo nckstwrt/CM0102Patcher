@@ -32,7 +32,8 @@ namespace CM0102Patcher
             YearChanger yearChanger = new YearChanger();
             var currentYear = yearChanger.GetCurrentExeYear(exeFile);
             var newGameName = currentYear.ToString() + "/" + (currentYear+1).ToString().Substring(2);
-            ByteWriter.WriteToFile(exeFile, 0x68029d, newGameName);
+            ByteWriter.WriteToFile(exeFile, 0x5cd328, newGameName + "\0");  // Window Title
+            ByteWriter.WriteToFile(exeFile, 0x68029d, newGameName + "\0");  // Main Menu Screen
 
             // Add Transfer Window Patch (from Saturn's v3 Patches)
             patcher.ApplyPatch(exeFile, patcher.patches["transferwindowpatch"]);
