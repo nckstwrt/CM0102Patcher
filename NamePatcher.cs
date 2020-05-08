@@ -46,6 +46,7 @@ namespace CM0102Patcher
             // Patch League Select Items
             PatchExeString("Regional Divisions", "3. Liga", 0x5Eb02c);
             PatchExeString("Second Division", "Division 1", 0x5Eb02c);
+            PatchExeString("Conference Division<%s - COMMENT - English Conference>", "National Leagues", 0x5Eb02c);
 
             // Stupidly complex code for Second Division B for Spain and Portugal
             // 0066A076 |.  68 3CB09E00 PUSH OFFSET 009EB03C; / Format = "Second Division B"
@@ -90,12 +91,73 @@ namespace CM0102Patcher
             PatchClubComp("South American Copa Mercosur", "Copa Sudamericana", "Copa Mercosur", "Copa Sudamericana");
             PatchClubComp("UEFA Cup", "UEFA Europa League", "UEFA Cup", "Europa League");
             PatchClubComp("African Champions League", "CAF Champions League", "African Champions League", "CAF Champions League");
+            PatchClubComp("African Super Cup", "CAF Super Cup", "African Super Cup", "CAF Super Cup");
+            PatchClubComp("Arab Club Champions Cup", "Arab World Club Cup", "Arab Champions Cup", "Arab World Club Cup");
+            PatchClubComp("CONCACAF Cup Winners Cup", "Cup Winners Cup", "Cup Winners Cup", "Cup Winners Cup");
+            PatchClubComp("European Cup Winners Cup", "Cup Winners' Cup", "Cup Winners Cup", "Cup Winners' Cup");
+            PatchClubComp("Gulf Club Champions Cup", "GCC Champions League", "Gulf Club Champions Cup", "GCC Champions League");
+            PatchClubComp("South American CONMEBOL Cup", "Copa CONMEBOL", "CONMEBOL Cup", "Copa CONMEBOL");
+            PatchClubComp("South American Recopa", "Recopa Sudamericana", "Recopa", "Recopa Sudamericana");
+            PatchClubComp("South American Super Cup", "Supercopa Libertadores", "Super Cup", "Supercopa Libertadores");
 
             // English
             PatchClubComp("English Premier Division", "English Premier League", "Premier Division", "Premier League", "EPL");
             PatchClubComp("English First Division", "English Football League Championship", "First Division", "Championship", "FLC");
             PatchClubComp("English Second Division", "English Football League One", "Second Division", "League One", "FL1");
             PatchClubComp("English Third Division", "English Football League Two", "Third Division", "League Two", "FL2");
+            PatchClubComp("English Conference", "English National League", "Conference", "National League", "ENL");
+            PatchClubComp("English Football EFL Cup", "English Football League Cup", "League Cup", "EFL Cup");
+            PatchClubComp("English Vans Trophy", "English Football League Trophy", "Vans Trophy", "Football League Trophy");
+            PatchClubComp("English Charity Shield", "English FA Community Shield", "Charity Shield", "FA Community Shield");
+            PatchClubComp("English Conference Cup", "Conference League Cup", "Conference Cup", "Conference League Cup");
+
+            // Spanish
+            PatchClubComp("Spanish First Division", "Spanish La Liga", "First Division", "La Liga", "LL");
+            PatchClubComp("Spanish Second Division", "Spanish Segunda División", "Second Division", "Segunda División", "SD");
+            PatchClubComp("Spanish Second Division B", "Spanish Segunda División B", "Second Division B", "Segunda División B", "SDB");
+            PatchClubComp("Spanish Second Division B1", "Spanish Segunda División B1", "Second Division B1", "Segunda División B1", "SDB");
+            PatchClubComp("Spanish Second Division B2", "Spanish Segunda División B2", "Second Division B2", "Segunda División B2", "SDB");
+            PatchClubComp("Spanish Second Division B3", "Spanish Segunda División B3", "Second Division B3", "Segunda División B3", "SDB");
+            PatchClubComp("Spanish Second Division B4", "Spanish Segunda División B4", "Second Division B4", "Segunda División B4", "SDB");
+            PatchClubComp("Spanish Lower Division", "Tercera División", "Lower Division", "Tercera División", "TD");
+            PatchClubComp("Spanish Cup", "Spanish Copa del Rey", "Spanish Cup", "Copa del Rey");
+            PatchClubComp("Spanish Super Cup", "Supercopa de España", "Super Cup", "Supercopa");
+
+            // Germany
+            PatchClubComp("German First Division", "German Bundesliga", "First Division", "Bundesliga", "BUN");
+            PatchClubComp("German Second Division", "German 2. Bundesliga", "Second Division", "2. Bundesliga", "2B");
+            PatchClubComp("German Regional", "German 3. Liga", "Regional", "3. Liga", "3L");
+            PatchClubComp("German Regional Division East", "German 3. Liga Osten", "Regional Division East", "3. Liga Osten", "3LO");
+            PatchClubComp("German Regional Division North", "German 3. Liga Nord", "Regional Division North", "3. Liga Nord", "3LN");
+            PatchClubComp("German Regional Division South", "German 3. Liga Süd", "Regional Division South", "3. Liga Süd", "3LS");
+            PatchClubComp("German Regional Division West/Southwest", "German 3. Liga West", "Regional Division West", "3. Liga West", "3LW");
+            PatchClubComp("German Cup", "German DFB-Pokal", "German Cup", "DFB-Pokal");
+            PatchClubComp("German League Cup", "German DFB-Ligapokal", "German League Cup", "DFB-Ligapokal");
+
+            // Portugal
+            PatchClubComp("Portuguese Premier League", "Portuguese Primeira Liga", "Premier League", "Primeira Liga", "PRM");
+            PatchClubComp("Portuguese Second League", "Portuguese LigaPro", "Second League", "LigaPro", "LP");
+            PatchClubComp("Portuguese Second Division B", "Campeonato de Portugal", "Second Division B", "Campeonato de Portugal", "CAM");
+            PatchClubComp("Portuguese Second Division B Central", "Campeonato de Portugal Central", "Second Division B Central", "Campeonato Central", "D3C");
+            PatchClubComp("Portuguese Second Division B North", "Campeonato de Portugal North", "Second Division B North", "Campeonato North", "D3N");
+            PatchClubComp("Portuguese Second Division B South", "Campeonato de Portugal South", "Second Division B South", "Campeonato South", "D3S");
+            PatchClubComp("Portuguese Third Division", "Campeonato Distrital", "Third Division", "Campeonato Distrital", "D4");
+            PatchClubComp("Portuguese Cup", "Taça de Portugal", "Portuguese Cup", "Taça de Portugal");
+            PatchClubComp("Portuguese Super Cup", "Supertaça Cândido de Oliveira", "Portuguese Super Cup", "Supertaça");
+
+            // Italy
+            PatchClubComp("Italian Cup", "Coppa Italia", "Italian Cup", "Coppa Italia");
+            PatchClubComp("Italian Serie C Cup", "Coppa Italia Lega Pro", "Serie C Cup", "Coppa Italia Lega Pro");
+            PatchClubComp("Italian Super Cup", "Supercoppa Italiana", "Super Cup", "Supercoppa");
+            PatchClubComp("Italian C1 Super Cup", "Supercoppa di Lega Pro", "C1 Super Cup", "Supercoppa di Lega Pro");
+
+            // Poland
+            PatchClubComp("Polish First Division", "Polish Ekstraklasa", "First Division", "Ekstraklasa", "EKS");
+            PatchClubComp("Polish Second Division", "Polish I Liga", "Second Division", "I Liga", "LI");
+            PatchClubComp("Polish Lower Division", "II Liga", "Lower Division", "II Liga", "IIL");
+            PatchClubComp("Polish FA Cup", "Puchar Polski", "Polish FA Cup", "Puchar Polski");
+            PatchClubComp("Polish League Cup", "Puchar Ekstraklasa", "League Cup", "Puchar Ekstraklasa");
+            PatchClubComp("Polish Super Cup", "SuperPuchar Polski", "Super Cup", "SuperPuchar");
         }
 
         public void PatchWelshWithNorthernLeague()
@@ -267,7 +329,7 @@ namespace CM0102Patcher
                 exeBytes = ByteWriter.LoadFile(exeFile);
         }
 
-        public int PatchComp(string fileName, string fromComp, string toComp, int clubCompStartPos = 0, int exeStartPos = 0x5d9590)
+        public int PatchComp(string fileName, string fromComp, string toComp, int clubCompStartPos = 0, int exeStartPos = 0x5d9e30)
         {
             var club_comp = Path.Combine(dataDir, fileName);
 
