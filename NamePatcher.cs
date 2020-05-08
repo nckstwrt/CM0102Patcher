@@ -158,6 +158,15 @@ namespace CM0102Patcher
             PatchClubComp("Polish FA Cup", "Puchar Polski", "Polish FA Cup", "Puchar Polski");
             PatchClubComp("Polish League Cup", "Puchar Ekstraklasa", "League Cup", "Puchar Ekstraklasa");
             PatchClubComp("Polish Super Cup", "SuperPuchar Polski", "Super Cup", "SuperPuchar");
+
+            // France
+            PatchClubComp("French First Division", "French Ligue 1", "First Division", "Ligue 1", "L1");
+            PatchClubComp("French Second Division", "French Ligue 2", "Second Division", "Ligue 2", "L2");
+            PatchClubComp("French National", "French Championnat National", "National", "National", "NAT");
+            PatchClubComp("French Lower Division", "French Lower Division", "Lower Division", "CFA2");
+            PatchClubComp("French Cup", "Coupe de France", "French Cup", "Coupe de France");
+            PatchClubComp("French League Cup", "Coupe de la Ligue", "League Cup", "Coupe de la Ligue");
+            PatchClubComp("French Champions Trophy", "Trophée des Champions", "Champions Trophy", "Trophée des Champions");
         }
 
         public void PatchWelshWithNorthernLeague()
@@ -316,7 +325,7 @@ namespace CM0102Patcher
             int compChangePos = PatchComp(fileName, oldName, newName);
             if (compChangePos != -1 && oldShortName != null && newShortName != null)
             {
-                PatchComp(fileName, oldShortName, newShortName, compChangePos, -1);
+                PatchComp(fileName, oldShortName, newShortName, compChangePos + newName.Length, -1);
                 if (newAcronym != null)
                     PatchCompAcronym(Path.Combine(dataDir, fileName), compChangePos, newAcronym);
                 PatchEngLng(oldName, newName, oldShortName, newShortName, newAcronym);
