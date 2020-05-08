@@ -1,4 +1,4 @@
-# CM0102Patcher v2.02
+# CM0102Patcher v2.03
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/eaVGBj1.png)
+![alt text](https://i.imgur.com/Y2Ck8LL.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -28,9 +28,21 @@ The RGN Image Converter:
 
 Competition History Editor:
 
-![alt text](https://i.imgur.com/n3RuoZg.png)
+![alt text](https://i.imgur.com/BKAvFzB.png)
 
 ## Updates
+
+v2.03:
+* Staff History Editor Added
+* Competition/Name Renaming Updated: England, Spain, Italy, France, Portugal, Germany + Poland leagues/cups now renamed.
+* Award Names Updates: Just England so far
+* Save Scouter now allows searching by nationality
+* Brightness control added to RGN Converter
+* Date changing code now patches it so there is zero season ticket money in the first year
+* Code to expand the Executable to 9mb when needed
+* Now patches eng.lng when changing names to cope with loading game in a different language
+* Misc Patch "SwapNationalLeagueNorthForSouthernPremierOnSaturn" Added
+* Misc Patch "PolishFACupRemove2ndLegs" Added
 
 v2.02:
 * Fix when turning off coloured attributes
