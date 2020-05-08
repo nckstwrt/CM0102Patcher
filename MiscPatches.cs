@@ -31,6 +31,32 @@ namespace CM0102Patcher
 
             foreach (var patch in patchFiles)
                 checkedListBoxPatches.Items.Add(patch);
+
+            Detect();
+        }
+
+        void Detect()
+        {
+            var patcher = new Patcher();
+            using (var zs = OpenZip())
+            {
+                for (int i = 0; i < checkedListBoxPatches.Items.Count; i++)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        var patch = (ZipStorer.ZipFileEntry)checkedListBoxPatches.Items[i];
+                        zs.ExtractFile(patch, ms);
+                        ms.Seek(0, SeekOrigin.Begin);
+
+                        var hexPatch = patcher.LoadPatchFile(ms);
+                        if (patcher.DetectPatch(exeFile, hexPatch))
+                        {
+                            checkedListBoxPatches.SetItemChecked(i, true);
+                            checkedListBoxPatches.SetItemCheckState(i, CheckState.Indeterminate);
+                        }
+                    }
+                }
+            }
         }
 
         private void buttonApply_Click(object sender, EventArgs e)
@@ -45,19 +71,22 @@ namespace CM0102Patcher
             var yesNo = MessageBox.Show("Are you sure you want to apply these to your exe?\r\nYou could break your cm0102.exe - are you really sure?", "Misc Patches", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (yesNo == DialogResult.Yes)
             {
-                foreach (var checkedItem in checkedListBoxPatches.CheckedItems)
+                for (int i = 0; i < checkedListBoxPatches.Items.Count; i++)
                 {
-                    var patch = (ZipStorer.ZipFileEntry)checkedItem;
-                    using (var zs = OpenZip())
+                    if (checkedListBoxPatches.GetItemChecked(i) && checkedListBoxPatches.GetItemCheckState(i) != CheckState.Indeterminate)
                     {
-                        using (var ms = new MemoryStream())
+                        var patch = (ZipStorer.ZipFileEntry)checkedListBoxPatches.Items[i];
+                        using (var zs = OpenZip())
                         {
-                            zs.ExtractFile(patch, ms);
-                            ms.Seek(0, SeekOrigin.Begin);
+                            using (var ms = new MemoryStream())
+                            {
+                                zs.ExtractFile(patch, ms);
+                                ms.Seek(0, SeekOrigin.Begin);
 
-                            Patcher patcher = new Patcher();
-                            var hexPatch = patcher.LoadPatchFile(ms);
-                            patcher.ApplyPatch(exeFile, hexPatch);
+                                Patcher patcher = new Patcher();
+                                var hexPatch = patcher.LoadPatchFile(ms);
+                                patcher.ApplyPatch(exeFile, hexPatch);
+                            }
                         }
                     }
                 }

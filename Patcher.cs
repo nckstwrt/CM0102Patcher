@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace CM0102Patcher
 {
@@ -123,6 +124,43 @@ namespace CM0102Patcher
                     Console.WriteLine(hexes);
                 }
             }
+        }
+
+        // TODO: Refactor these two functions
+        public bool DetectPatch(string exeFile, IEnumerable<HexPatch> HexPatches)
+        {
+            bool ret = false;
+            using (var fin = File.Open(exeFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var br = new BinaryReader(fin))
+            {
+                bool matches = true;
+                foreach (var hexPatch in HexPatches)
+                {
+                    fin.Seek(hexPatch.offset, SeekOrigin.Begin);
+                    byte[] patchBytes = HexStringToBytes(hexPatch.hex);
+                    byte[] buffer = br.ReadBytes(patchBytes.Length);
+                    if (buffer.Length != patchBytes.Length)
+                    {
+                        // Clearly a completly wrong exe
+                        return false;
+                    }
+                    for (int i = 0; i < patchBytes.Length; i++)
+                    {
+                        if (patchBytes[i] != buffer[i])
+                        {
+                            matches = false;
+                            break;
+                        }
+                    }
+                    if (matches == false)
+                        break;
+                }
+                if (matches)
+                {
+                    ret = true;
+                }
+            }
+            return ret;
         }
 
         public List<string> DetectPatches(string exeFile, out short speedHack, out double currencyMultiplier)
