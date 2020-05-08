@@ -111,6 +111,40 @@ namespace CM0102Patcher
             PatchClubComp("English Charity Shield", "English FA Community Shield", "Charity Shield", "FA Community Shield");
             PatchClubComp("English Conference Cup", "Conference League Cup", "Conference Cup", "Conference League Cup");
 
+            // English Awards
+            PatchStaffAward("English Players Player of the Year", "English PFA Players' Player of the Year");
+            PatchStaffAward("English Players Young Player of the Year", "English PFA Young Player of the Year");
+            PatchStaffAward("English Premier Division Team of the Week", "English Premier League Team of the Week");
+            PatchStaffAward("English Premier Division Manager of the Month", "English Premier League Manager of the Month");
+            PatchStaffAward("English Premier Division Player of the Month", "English Premier League Player of the Month");
+            PatchStaffAward("English Premier Division Young Player of the Month", "English Premier League Young Player of the Month");
+            PatchStaffAward("English Premier Division Manager of the Year", "English Premier League Manager of the Year");
+            PatchStaffAward("English Players Premier Division Select", "English Premier League Team of the Year");
+            PatchStaffAward("English First Division Team of the Week", "EFL Championship Team of the Week");
+            PatchStaffAward("English First Division Manager of the Month", "EFL Championship Manager of the Month");
+            PatchStaffAward("English First Division Player of the Month", "EFL Championship Player of the Month");
+            PatchStaffAward("English First Division Young Player of the Month", "EFL Championship Young Player of the Month");
+            PatchStaffAward("English First Division Manager of the Year", "EFL Championship Manager of the Year");
+            PatchStaffAward("English Players First Division Select", "EFL Championship Team of the Year");
+            PatchStaffAward("English Second Division Team of the Week", "EFL One Team of the Week");
+            PatchStaffAward("English Second Division Manager of the Month", "EFL One Manager of the Month");
+            PatchStaffAward("English Second Division Player of the Month", "EFL One Player of the Month");
+            PatchStaffAward("English Second Division Young Player of the Month", "EFL One Young Player of the Month");
+            PatchStaffAward("English Second Division Manager of the Year", "EFL One Manager of the Year");
+            PatchStaffAward("English Players Second Division Select", "EFL One Team of the Year");
+            PatchStaffAward("English Third Division Team of the Week", "EFL Two Team of the Week");
+            PatchStaffAward("English Third Division Manager of the Month", "EFL Two Manager of the Month");
+            PatchStaffAward("English Third Division Player of the Month", "EFL Two Player of the Month");
+            PatchStaffAward("English Third Division Young Player of the Month", "EFL Two Young Player of the Month");
+            PatchStaffAward("English Third Division Manager of the Year", "EFL Two Manager of the Year");
+            PatchStaffAward("English Players Third Division Select", "EFL Two Team of the Year");
+            PatchStaffAward("English Conference Team of the Week", "English National League Team of the Week");
+            PatchStaffAward("English Conference Manager of the Month", "English National League Manager of the Month");
+            PatchStaffAward("English Conference Player of the Month", "English National League Player of the Month");
+            PatchStaffAward("English Conference Young Player of the Month", "English National League Young Player of the Month");
+            PatchStaffAward("English Conference Manager of the Year", "English National League Manager of the Year");
+            PatchStaffAward("English Players Conference Select", "English National League Team of the Year");
+
             // Spanish
             PatchClubComp("Spanish First Division", "Spanish La Liga", "First Division", "La Liga", "LL");
             PatchClubComp("Spanish Second Division", "Spanish Segunda División", "Second Division", "Segunda División", "SD");
@@ -171,16 +205,17 @@ namespace CM0102Patcher
 
         public void PatchWelshWithNorthernLeague()
         {
+            patcher.ExpandExe(exeFile);
             PatchClubComp("English Northern Premier League Premier Division", "English National League North", "Northern Premier", "National League North", "NLN");
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatch"]);
             ByteWriter.WriteToFile(exeFile, 0x6d56b8, "English National League North" + "\0");
 
-            PatchStaffAward("Welsh Team of the Week",           "English National League North Team of the Week");
-            PatchStaffAward("Welsh Player of the Year",         "English National League North Player of the Year");
-            PatchStaffAward("Welsh Young Player of the Year",   "English National League North Youth of the Year");
-            PatchStaffAward("Welsh Top Goalscorer",             "English National League North Top Goalscorer");
-            PatchStaffAward("Welsh Manager of the Year",        "English National League North Manager of the Year");
-            PatchStaffAward("Welsh Manager of the Month",       "English National League North Manager of the Month");
+            PatchStaffAward("Welsh Team of the Week",           "English National League North Team of the Week", false);
+            PatchStaffAward("Welsh Player of the Year",         "English National League North Player of the Year", false);
+            PatchStaffAward("Welsh Young Player of the Year",   "English National League North Youth of the Year", false);
+            PatchStaffAward("Welsh Top Goalscorer",             "English National League North Top Goalscorer", false);
+            PatchStaffAward("Welsh Manager of the Year",        "English National League North Manager of the Year", false);
+            PatchStaffAward("Welsh Manager of the Month",       "English National League North Manager of the Month", false);
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthawards"]);
             patcher.ApplyPatch(exeFile, patcher.patches["tapanispacemaker"]);
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatchrelegation"]);
@@ -188,6 +223,8 @@ namespace CM0102Patcher
 
         public void PatchWelshWithSouthernLeague()
         {
+            patcher.ExpandExe(exeFile);
+
             // Apply the standard north patch first
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatch"]);
 
@@ -202,12 +239,12 @@ namespace CM0102Patcher
             PatchClubComp("English Southern League Premier Division", "English National League South", "Southern Premier", "National League South", "NLS");
             ByteWriter.WriteToFile(exeFile, 0x6d56b8, "English National League South" + "\0");
 
-            PatchStaffAward("Welsh Team of the Week", "English National League South Team of the Week");
-            PatchStaffAward("Welsh Player of the Year", "English National League South Player of the Year");
-            PatchStaffAward("Welsh Young Player of the Year", "English National League South Youth of the Year");
-            PatchStaffAward("Welsh Top Goalscorer", "English National League South Top Goalscorer");
-            PatchStaffAward("Welsh Manager of the Year", "National League South Manager of the Year");
-            PatchStaffAward("Welsh Manager of the Month", "National League South Manager of the Month");
+            PatchStaffAward("Welsh Team of the Week", "English National League South Team of the Week", false);
+            PatchStaffAward("Welsh Player of the Year", "English National League South Player of the Year", false);
+            PatchStaffAward("Welsh Young Player of the Year", "English National League South Youth of the Year", false);
+            PatchStaffAward("Welsh Top Goalscorer", "English National League South Top Goalscorer", false);
+            PatchStaffAward("Welsh Manager of the Year", "National League South Manager of the Year", false);
+            PatchStaffAward("Welsh Manager of the Month", "National League South Manager of the Month", false);
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguesouthawards"]);
             patcher.ApplyPatch(exeFile, patcher.patches["tapanispacemaker"]);
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatchrelegation"]);
@@ -217,6 +254,8 @@ namespace CM0102Patcher
 
         public void PatchWelshWithSouthernPremierCentral()
         {
+            patcher.ExpandExe(exeFile);
+
             // Apply the standard north patch first
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatch"]);
             
@@ -295,14 +334,14 @@ namespace CM0102Patcher
             ByteWriter.WriteToFile(fileName, startPos + 79, acronym, 3);
         }
 
-        public void PatchStaffAward(string oldName, string newName, bool patchExe = false, bool ignoreCase = false)
+        public void PatchStaffAward(string oldName, string newName, bool patchExe = true, bool ignoreCase = false)
         {
             var staff_comp = Path.Combine(dataDir, "staff_comp.dat");
             oldName = AddTerminator(oldName);
             newName = AddTerminator(newName);
             ByteWriter.BinFileReplace(staff_comp, oldName, newName, 0, 0, ignoreCase);
             if (patchExe)
-                ByteWriter.BinFileReplace(exeFile, oldName, newName, 0, 0, ignoreCase);
+                PatchExeString(oldName, newName, 0);
         }
 
         public void PatchClubComp(string oldName, string newName, string oldShortName = null, string newShortName = null, string newAcronym = null)
