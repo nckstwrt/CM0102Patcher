@@ -672,6 +672,7 @@
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "HistoryEditorForm";
             this.Text = "History Editor";
