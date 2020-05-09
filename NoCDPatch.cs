@@ -144,6 +144,11 @@ namespace CM0102Patcher
             return patched;
         }
 
+        static string BytesToHexString(byte[] bytes)
+        {
+            return BitConverter.ToString(bytes).Replace("-", string.Empty);
+        }
+
         static byte[] HexStringToBytes(string hexString)
         {
             byte[] ret = new byte[hexString.Length / 2];
@@ -212,13 +217,8 @@ namespace CM0102Patcher
 
         public static void GenericCDCrack2(string exeFile)
         {
-            var byteOffsetsCM0102_3968 = new string[] { "F8709600", "00719600" };
-            var byteOffsetsCM0001_381 = new string[] { "2C718E00", "58708E00" };
-
-            UInt32 placeCodeAt;
-            string[] byteOffsets;
-
-            byteOffsets = byteOffsetsCM0001_381;
+            //var byteOffsetsCM0102_3968 = new string[] { "F8709600", "00719600" };
+            //var byteOffsetsCM0001_381 = new string[] { "2C718E00", "58708E00" };
 
             // Find the very end of the .text section
             var exeBytes = ByteWriter.LoadFile(exeFile);
@@ -226,8 +226,24 @@ namespace CM0102Patcher
             var textSize = BitConverter.ToUInt32(exeBytes, textPos + 16);
             var endOfCode = 0x401000 + textSize;
 
-            // GetLogicalDriveStringsA offset is +2c into the imports - which is straight after the text
-            var GetLogicalDriveStringsAOffset = endOfCode + 0x2c;
+            // GetLogicalDriveStringsA offset can always be found by searching for PUSH C8 that is normally before it
+            var posGLDSOffset = ByteWriter.SearchBytes(exeBytes, HexStringToBytes("5068c8000000ff15"));
+            var GetLogicalDriveStringsAOffset = BitConverter.ToUInt32(exeBytes, posGLDSOffset + HexStringToBytes("5068c8000000ff15").Length);
+
+            // The call to get drive type is not always after it, but sometimes is and nearby will have to go through all of them and find one where this applies
+            UInt32 GetDriveTypeAOffset = 0;
+            var allGLDSOffsets = ByteWriter.SearchBytesForAll(exeBytes, HexStringToBytes("5068c8000000ff15"));
+            foreach (var allGLDSOffset in allGLDSOffsets)
+            {
+                var ff15Location = ByteWriter.SearchBytes(exeBytes, HexStringToBytes("FF15"), allGLDSOffset + HexStringToBytes("5068c8000000ff15").Length);
+                if (ff15Location != -1 && (ff15Location - allGLDSOffset) < 50)
+                {
+                    GetDriveTypeAOffset = BitConverter.ToUInt32(exeBytes, ff15Location + HexStringToBytes("FF15").Length);
+                }
+            }
+
+            if (GetDriveTypeAOffset == 0)
+                return;
 
             // We are going to hook every call to GetLogicalDriveStringsA and GetDriveTypeA to call our own function that will:
             // GetLogicalDriveStringsA = return ".\" in the buffer and 1 in EAX
@@ -236,7 +252,7 @@ namespace CM0102Patcher
             var newGetDriveTypeA = HexStringToBytes("B805000000C20400"); // 8 bytes
 
             // Stick the code at the end, as per the details below
-            placeCodeAt = (uint)(((endOfCode - newGetLogialDriveStringsA.Length) - newGetDriveTypeA.Length) - 8);
+            UInt32 placeCodeAt = (UInt32)(((endOfCode - newGetLogialDriveStringsA.Length) - newGetDriveTypeA.Length) - 8);
 
             // Going to place at the very end of the exe code space - 0x966FFF (the last byte) - 24 bytes = 966FE7 (+1) = 966FE8
             // The save space for two pointer too that point to the functions 966FE8 - 4 - 4 = 966FE0
@@ -267,11 +283,14 @@ namespace CM0102Patcher
             // 00442ACF |.  8B3D 00719600             MOV EDI, DWORD PTR DS:[<&KERNEL32.GetDriv
             var bytePrefixes = new string[] { "FF15", "8B3D", "8B2D" };
             var byteReplacements = new UInt32[] { pointerToinjectnewGetLogialDriveStringsAAt, pointerToinjectnewGetDriveTypeAAt };
+            var byteOffsets = new UInt32[] { GetLogicalDriveStringsAOffset, GetDriveTypeAOffset };
             for (int i = 0; i < byteOffsets.Length; i++)
             {
+                var offsetBytes = BytesToHexString(BitConverter.GetBytes(byteOffsets[i]));
+                
                 foreach (var prefix in bytePrefixes)
                 {
-                    FindPattern(exeFile, HexStringToBytes(prefix + byteOffsets[i]), (f, br, bw, offset) =>
+                    FindPattern(exeFile, HexStringToBytes(prefix + offsetBytes), (f, br, bw, offset) =>
                     {
                         f.Seek(offset+2, SeekOrigin.Begin);
                         bw.Write(byteReplacements[i]);
