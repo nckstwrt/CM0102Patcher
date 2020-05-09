@@ -31,9 +31,10 @@ namespace CM0102Patcher
             // Change game name :)
             YearChanger yearChanger = new YearChanger();
             var currentYear = yearChanger.GetCurrentExeYear(exeFile);
-            var newGameName = currentYear.ToString() + "/" + (currentYear+1).ToString().Substring(2);
-            ByteWriter.WriteToFile(exeFile, 0x5cd328, newGameName + "\0");  // Window Title
-            ByteWriter.WriteToFile(exeFile, 0x68029d, newGameName + "\0");  // Main Menu Screen
+            var newGameName1 = currentYear.ToString().Substring(2) + "/" + (currentYear + 1).ToString().Substring(2);
+            var newGameName2 = currentYear.ToString() + "/" + (currentYear+1).ToString().Substring(2);
+            ByteWriter.WriteToFile(exeFile, 0x5cd33d, newGameName1 + "\0");  // Window Title
+            ByteWriter.WriteToFile(exeFile, 0x68029d, newGameName2 + "\0");  // Main Menu Screen
 
             // Add Transfer Window Patch (from Saturn's v3 Patches)
             patcher.ApplyPatch(exeFile, patcher.patches["transferwindowpatch"]);
@@ -67,7 +68,7 @@ namespace CM0102Patcher
             var jumpBytes = new byte[5] { 0xe9, 0x00, 0x00, 0x00, 0x00 };
             BitConverter.GetBytes(((leagueSelectCodePos+ 0x70b000) - (0x26A076 + 0x400000)) - 5 + 3).ToArray().CopyTo(jumpBytes, 1); // - 5 for the length of the jmp, + 3 for prefix 00s
             ByteWriter.WriteToFile(exeFile, 0x26A076, jumpBytes);
-
+            
             // Patch Holland
             PatchHolland();
 
@@ -193,7 +194,7 @@ namespace CM0102Patcher
             PatchClubComp("Polish FA Cup", "Puchar Polski", "Polish FA Cup", "Puchar Polski");
             PatchClubComp("Polish League Cup", "Puchar Ekstraklasa", "League Cup", "Puchar Ekstraklasa");
             PatchClubComp("Polish Super Cup", "SuperPuchar Polski", "Super Cup", "SuperPuchar");
-
+            
             // France
             PatchClubComp("French First Division", "French Ligue 1", "First Division", "Ligue 1", "L1");
             PatchClubComp("French Second Division", "French Ligue 2", "Second Division", "Ligue 2", "L2");
@@ -343,6 +344,7 @@ namespace CM0102Patcher
             ByteWriter.BinFileReplace(staff_comp, oldName, newName, 0, 0, ignoreCase);
             if (patchExe)
                 PatchExeString(oldName, newName, 0);
+            PatchEngLng(oldName, newName);
         }
 
         public void PatchClubComp(string oldName, string newName, string oldShortName = null, string newShortName = null, string newAcronym = null)
@@ -363,9 +365,10 @@ namespace CM0102Patcher
             newShortName = AddTerminator(newShortName);
 
             int compChangePos = PatchComp(fileName, oldName, newName);
-            if (compChangePos != -1 && oldShortName != null && newShortName != null)
+            if (compChangePos != -1)
             {
-                PatchComp(fileName, oldShortName, newShortName, compChangePos + newName.Length, -1);
+                if (oldShortName != null && newShortName != null)
+                    PatchComp(fileName, oldShortName, newShortName, compChangePos + newName.Length, -1);
                 if (newAcronym != null)
                     PatchCompAcronym(Path.Combine(dataDir, fileName), compChangePos, newAcronym);
                 PatchEngLng(oldName, newName, oldShortName, newShortName, newAcronym);
@@ -438,7 +441,7 @@ namespace CM0102Patcher
             int changePos = ByteWriter.BinFileReplace(engLng, oldName, newName, 0, 1);
             if (oldShortName != null)
             {
-                ByteWriter.BinFileReplace(engLng, oldShortName, newShortName, changePos, 1);
+                ByteWriter.BinFileReplace(engLng, oldShortName, newShortName, changePos + newName.Length, 1);
             }
             if (newAcronym != null && changePos != -1)
                 PatchCompAcronym(engLng, changePos, newAcronym);

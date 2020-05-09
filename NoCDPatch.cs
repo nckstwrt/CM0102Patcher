@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms.VisualStyles;
 
 namespace CM0102Patcher
 {
@@ -211,15 +212,35 @@ namespace CM0102Patcher
 
         public static void GenericCDCrack2(string exeFile)
         {
+            var byteOffsetsCM0102_3968 = new string[] { "F8709600", "00719600" };
+            var byteOffsetsCM0001_381 = new string[] { "2C718E00", "58708E00" };
+
+            UInt32 placeCodeAt;
+            string[] byteOffsets;
+
+            byteOffsets = byteOffsetsCM0001_381;
+
+            // Find the very end of the .text section
+            var exeBytes = ByteWriter.LoadFile(exeFile);
+            var textPos = ByteWriter.SearchBytes(exeBytes, Encoding.ASCII.GetBytes(".text"));
+            var textSize = BitConverter.ToUInt32(exeBytes, textPos + 16);
+            var endOfCode = 0x401000 + textSize;
+
+            // GetLogicalDriveStringsA offset is +2c into the imports - which is straight after the text
+            var GetLogicalDriveStringsAOffset = endOfCode + 0x2c;
+
             // We are going to hook every call to GetLogicalDriveStringsA and GetDriveTypeA to call our own function that will:
             // GetLogicalDriveStringsA = return ".\" in the buffer and 1 in EAX
             // GetDriveTypeA return EAX with 5 (meaning every drive is a CD Drive)
             var newGetLogialDriveStringsA = HexStringToBytes("8B442408C7002E5C000031C040C20800"); // 16 bytes   <--- This was originally 8B44E4 <- Which is incorrect, needs to be 24 not e4 (Olly issue)
             var newGetDriveTypeA = HexStringToBytes("B805000000C20400"); // 8 bytes
 
+            // Stick the code at the end, as per the details below
+            placeCodeAt = (uint)(((endOfCode - newGetLogialDriveStringsA.Length) - newGetDriveTypeA.Length) - 8);
+
             // Going to place at the very end of the exe code space - 0x966FFF (the last byte) - 24 bytes = 966FE7 (+1) = 966FE8
             // The save space for two pointer too that point to the functions 966FE8 - 4 - 4 = 966FE0
-            UInt32 pointerToinjectnewGetLogialDriveStringsAAt = 0x966FE0;
+            UInt32 pointerToinjectnewGetLogialDriveStringsAAt = placeCodeAt;
             UInt32 pointerToinjectnewGetDriveTypeAAt = pointerToinjectnewGetLogialDriveStringsAAt + 4;
             UInt32 injectnewGetLogialDriveStringsAAt = pointerToinjectnewGetDriveTypeAAt + 4;
             UInt32 injectnewGetDriveTypeAAt = injectnewGetLogialDriveStringsAAt + 16;
@@ -244,9 +265,7 @@ namespace CM0102Patcher
             // But like this:
             // 0082AA7B  |.  8B2D F8709600             MOV EBP,DWORD PTR DS:[<&KERNEL32.GetLogi
             // 00442ACF |.  8B3D 00719600             MOV EDI, DWORD PTR DS:[<&KERNEL32.GetDriv
-
             var bytePrefixes = new string[] { "FF15", "8B3D", "8B2D" };
-            var byteOffsets = new string[] { "F8709600", "00719600" };
             var byteReplacements = new UInt32[] { pointerToinjectnewGetLogialDriveStringsAAt, pointerToinjectnewGetDriveTypeAAt };
             for (int i = 0; i < byteOffsets.Length; i++)
             {
@@ -267,6 +286,43 @@ namespace CM0102Patcher
                 f.Seek(offset, SeekOrigin.Begin);
                 bw.Write(Encoding.ASCII.GetBytes("%sdata\\index.dat\0"));
             }, false);
+        }
+
+        public static void SPBBGenericCrack(string exeFile)
+        {
+            // The files it looks for are: d:\SPBB.AFP d:\PWQE.AFP d:\KPWN.AFP d:\EVWF.AFP
+            // Find all the times they are pushed on the stack in the code
+            var files = new string [] { @"d:\SPBB.AFP", @"d:\PWQE.AFP", @"d:\KPWN.AFP", @"d:\EVWF.AFP" };
+            var exeBytes = ByteWriter.LoadFile(exeFile);
+            
+            foreach (var file in files)
+            {
+                // Find the file position
+                var pos = ByteWriter.SearchBytes(exeBytes, Encoding.ASCII.GetBytes(file));
+                if (pos != -1)
+                {
+                    var searchBytes = new byte[5] { 0x68, 0x00, 0x00, 0x00, 0x00 };
+                    BitConverter.GetBytes(pos + 0x400000).ToArray().CopyTo(searchBytes, 1);
+
+                    // Search for all PUSHs of the file
+                    var references = ByteWriter.SearchBytesForAll(exeBytes, searchBytes);
+
+                    // For each PUSH, then search for the JNE (0x75) after it - as that is the good jump
+                    foreach (var reference in references)
+                    {
+                        var PosOf75 = ByteWriter.SearchBytes(exeBytes, new byte[] { 0x75 }, reference);
+                        if (PosOf75 != -1)
+                        {
+                            // The next byte is the distance to the good exit
+                            var byteDistance = exeBytes[PosOf75 + 1];
+                            var newByteDistance = (byte)(byteDistance + (PosOf75 - reference) + 5);
+
+                            // Now the PUSH behind the PUSH to the string is a PUSH of "rb", We will turn this into a JMP to the exit
+                            ByteWriter.WriteToFile(exeFile, reference - 5, new byte[] { 0xeb, newByteDistance, 0x90, 0x90, 0x90 });
+                        }
+                    }
+                }
+            }
         }
 
         public static int FindNext(Stream fin, int offset, byte[] pattern)

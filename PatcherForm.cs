@@ -874,6 +874,7 @@ namespace CM0102Patcher
                 if (e.KeyChar == (char)10 && SecretMode) // J
                 {
                     NoCDPatch.GenericCDCrack2(labelFilename.Text);
+                    NoCDPatch.SPBBGenericCrack(labelFilename.Text);
                     MessageBox.Show("Generic Crack 2 Applied", "Secret", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (e.KeyChar == (char)31 && SecretMode) // -
