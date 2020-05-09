@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(YearShifterForm));
             this.numericNationUpDownStaffAges = new System.Windows.Forms.NumericUpDown();
             this.buttonShiftYears = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -302,6 +303,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonShiftYears);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "YearShifterForm";
             this.Text = "Year Shifter";
             ((System.ComponentModel.ISupportInitialize)(this.numericNationUpDownStaffAges)).EndInit();

@@ -720,11 +720,14 @@ namespace CM0102Patcher
 
         private void buttonYearShifter_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(textBoxIndexFile.Text))
+            if (MessageBox.Show("This is only meant for people that know what they are doing. Do not use if you do not.\r\n\r\nUnderstand?", "Year Shifter", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                YearShifterForm ysf = new YearShifterForm(textBoxIndexFile.Text);
-                ysf.ShowDialog();
-                buttonLoad_Click(null, null);
+                if (!string.IsNullOrEmpty(textBoxIndexFile.Text))
+                {
+                    YearShifterForm ysf = new YearShifterForm(textBoxIndexFile.Text);
+                    ysf.ShowDialog();
+                    buttonLoad_Click(null, null);
+                }
             }
         }
     }
