@@ -1,4 +1,4 @@
-# CM0102Patcher v2.03
+# CM0102Patcher v2.04
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/Y2Ck8LL.png)
+![alt text](https://i.imgur.com/1NDZeq3.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -31,6 +31,11 @@ Competition History Editor:
 ![alt text](https://i.imgur.com/BKAvFzB.png)
 
 ## Updates
+
+v2.04:
+* Fix for renaming competitions and running in a foreign language
+* Basic Year Shifter tool in History Editor
+* Misc Patches now detects patches previously applied
 
 v2.03:
 * Staff History Editor Added
