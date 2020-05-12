@@ -167,6 +167,7 @@ namespace CM0102Patcher
                     checkBoxSwapSKoreaForChina.Checked = isTapani || appliedPatches.Contains("chinapatch"); // Tapani implements it in a different way (Is Saturn really)
                     checkBoxUpdateNames.Checked = isTapani || appliedPatches.Contains("transferwindowpatchdetect"); // Tapani implements it in a different way
                     checkBoxPositionInTacticsView.Checked = appliedPatches.Contains("positionintacticsview");
+                    checkBoxShowHiddenAttributes.Checked = appliedPatches.Contains("addadditionalcolumns");
 
                     // These are irreversible
                     if (checkBoxUpdateNames.Checked)
@@ -553,6 +554,14 @@ namespace CM0102Patcher
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["positionintacticsview"]);
                         else
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["positionintacticsview"]);
+
+                        if (checkBoxShowHiddenAttributes.Checked)
+                        {
+                            patcher.ExpandExe(labelFilename.Text);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["addadditionalcolumns"]);
+                        }
+                        else
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["addadditionalcolumns"]);
 
                         // Irreversible, only try and apply it if the checkbox is Enabled
                         if (checkBoxUpdateNames.Checked && checkBoxUpdateNames.Enabled)

@@ -73,6 +73,7 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonRestore = new System.Windows.Forms.Button();
             this.buttonAbout = new System.Windows.Forms.Button();
+            this.checkBoxShowHiddenAttributes = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -167,7 +168,7 @@
             // 
             this.buttonApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonApply.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonApply.Location = new System.Drawing.Point(381, 464);
+            this.buttonApply.Location = new System.Drawing.Point(381, 489);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(75, 31);
             this.buttonApply.TabIndex = 7;
@@ -213,7 +214,7 @@
             // 
             this.buttonTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTools.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonTools.Location = new System.Drawing.Point(9, 464);
+            this.buttonTools.Location = new System.Drawing.Point(9, 489);
             this.buttonTools.Name = "buttonTools";
             this.buttonTools.Size = new System.Drawing.Size(75, 31);
             this.buttonTools.TabIndex = 11;
@@ -343,6 +344,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBoxShowHiddenAttributes);
             this.groupBox3.Controls.Add(this.checkBoxPositionInTacticsView);
             this.groupBox3.Controls.Add(this.checkBoxSwapSKoreaForChina);
             this.groupBox3.Controls.Add(this.comboBoxResolution);
@@ -362,7 +364,7 @@
             this.groupBox3.Controls.Add(this.checkBoxUpdateNames);
             this.groupBox3.Location = new System.Drawing.Point(9, 131);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(447, 325);
+            this.groupBox3.Size = new System.Drawing.Size(447, 350);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
             // 
@@ -562,7 +564,7 @@
             // 
             this.checkBoxRemoveCDChecks.AutoSize = true;
             this.checkBoxRemoveCDChecks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(294, 470);
+            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(294, 495);
             this.checkBoxRemoveCDChecks.Name = "checkBoxRemoveCDChecks";
             this.checkBoxRemoveCDChecks.Size = new System.Drawing.Size(69, 20);
             this.checkBoxRemoveCDChecks.TabIndex = 23;
@@ -574,7 +576,7 @@
             // 
             this.buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSave.Location = new System.Drawing.Point(135, 464);
+            this.buttonSave.Location = new System.Drawing.Point(135, 489);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(66, 31);
             this.buttonSave.TabIndex = 26;
@@ -588,7 +590,7 @@
             // 
             this.buttonRestore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRestore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonRestore.Location = new System.Drawing.Point(211, 464);
+            this.buttonRestore.Location = new System.Drawing.Point(211, 489);
             this.buttonRestore.Name = "buttonRestore";
             this.buttonRestore.Size = new System.Drawing.Size(66, 31);
             this.buttonRestore.TabIndex = 27;
@@ -602,7 +604,7 @@
             // 
             this.buttonAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAbout.Location = new System.Drawing.Point(95, 464);
+            this.buttonAbout.Location = new System.Drawing.Point(95, 489);
             this.buttonAbout.Name = "buttonAbout";
             this.buttonAbout.Size = new System.Drawing.Size(30, 31);
             this.buttonAbout.TabIndex = 23;
@@ -610,11 +612,25 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
+            // checkBoxShowHiddenAttributes
+            // 
+            this.checkBoxShowHiddenAttributes.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxShowHiddenAttributes.AutoSize = true;
+            this.checkBoxShowHiddenAttributes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxShowHiddenAttributes.Location = new System.Drawing.Point(7, 324);
+            this.checkBoxShowHiddenAttributes.Name = "checkBoxShowHiddenAttributes";
+            this.checkBoxShowHiddenAttributes.Size = new System.Drawing.Size(161, 20);
+            this.checkBoxShowHiddenAttributes.TabIndex = 38;
+            this.checkBoxShowHiddenAttributes.Text = "Show hidden attributes";
+            this.toolTips.SetToolTip(this.checkBoxShowHiddenAttributes, "Adds an additional column to the player attributes screen that shows the hidden v" +
+        "alues");
+            this.checkBoxShowHiddenAttributes.UseVisualStyleBackColor = true;
+            // 
             // PatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(465, 504);
+            this.ClientSize = new System.Drawing.Size(465, 528);
             this.Controls.Add(this.buttonRestore);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonAbout);
@@ -644,7 +660,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v2.04";
+            this.Text = "Nick\'s CM0102Patcher v2.05";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
@@ -701,6 +717,7 @@
         private System.Windows.Forms.ComboBox comboBoxResolution;
         private System.Windows.Forms.CheckBox checkBoxSwapSKoreaForChina;
         private System.Windows.Forms.CheckBox checkBoxPositionInTacticsView;
+        private System.Windows.Forms.CheckBox checkBoxShowHiddenAttributes;
     }
 }
 
