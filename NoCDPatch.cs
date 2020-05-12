@@ -217,8 +217,9 @@ namespace CM0102Patcher
 
         public static void GenericCDCrack2(string exeFile)
         {
-            //var byteOffsetsCM0102_3968 = new string[] { "F8709600", "00719600" };
-            //var byteOffsetsCM0001_381 = new string[] { "2C718E00", "58708E00" };
+            UInt32 GetLogicalDriveStringsAOffset = 0;           // CM0304 415 == 90 60 AB 00 i.e 0xAB6090
+            UInt32 GetDriveTypeAOffset = 0;                     // CM0304 415 == C4 60 AB 00 i.e 0xAB60C4
+            string newGetLogicalDriveStringsReturns = "2E5C";   // Normally ".\" (2E5C) for CM0304 415 == needs to be "*\0" so just "2A00"
 
             // Find the very end of the .text section
             var exeBytes = ByteWriter.LoadFile(exeFile);
@@ -226,19 +227,22 @@ namespace CM0102Patcher
             var textSize = BitConverter.ToUInt32(exeBytes, textPos + 16);
             var endOfCode = 0x401000 + textSize;
 
-            // GetLogicalDriveStringsA offset can always be found by searching for PUSH C8 that is normally before it
-            var posGLDSOffset = ByteWriter.SearchBytes(exeBytes, HexStringToBytes("5068c8000000ff15"));
-            var GetLogicalDriveStringsAOffset = BitConverter.ToUInt32(exeBytes, posGLDSOffset + HexStringToBytes("5068c8000000ff15").Length);
-
-            // The call to get drive type is not always after it, but sometimes is and nearby will have to go through all of them and find one where this applies
-            UInt32 GetDriveTypeAOffset = 0;
-            var allGLDSOffsets = ByteWriter.SearchBytesForAll(exeBytes, HexStringToBytes("5068c8000000ff15"));
-            foreach (var allGLDSOffset in allGLDSOffsets)
+            if (GetLogicalDriveStringsAOffset == 0 && GetDriveTypeAOffset == 0)
             {
-                var ff15Location = ByteWriter.SearchBytes(exeBytes, HexStringToBytes("FF15"), allGLDSOffset + HexStringToBytes("5068c8000000ff15").Length);
-                if (ff15Location != -1 && (ff15Location - allGLDSOffset) < 50)
+                // GetLogicalDriveStringsA offset can always be found by searching for PUSH C8 that is normally before it
+                var posGLDSOffset = ByteWriter.SearchBytes(exeBytes, HexStringToBytes("5068c8000000ff15"));
+                GetLogicalDriveStringsAOffset = BitConverter.ToUInt32(exeBytes, posGLDSOffset + HexStringToBytes("5068c8000000ff15").Length);
+
+                // The call to get drive type is not always after it, but sometimes is and nearby will have to go through all of them and find one where this applies
+                GetDriveTypeAOffset = 0;
+                var allGLDSOffsets = ByteWriter.SearchBytesForAll(exeBytes, HexStringToBytes("5068c8000000ff15"));
+                foreach (var allGLDSOffset in allGLDSOffsets)
                 {
-                    GetDriveTypeAOffset = BitConverter.ToUInt32(exeBytes, ff15Location + HexStringToBytes("FF15").Length);
+                    var ff15Location = ByteWriter.SearchBytes(exeBytes, HexStringToBytes("FF15"), allGLDSOffset + HexStringToBytes("5068c8000000ff15").Length);
+                    if (ff15Location != -1 && (ff15Location - allGLDSOffset) < 50)
+                    {
+                        GetDriveTypeAOffset = BitConverter.ToUInt32(exeBytes, ff15Location + HexStringToBytes("FF15").Length);
+                    }
                 }
             }
 
@@ -248,7 +252,7 @@ namespace CM0102Patcher
             // We are going to hook every call to GetLogicalDriveStringsA and GetDriveTypeA to call our own function that will:
             // GetLogicalDriveStringsA = return ".\" in the buffer and 1 in EAX
             // GetDriveTypeA return EAX with 5 (meaning every drive is a CD Drive)
-            var newGetLogialDriveStringsA = HexStringToBytes("8B442408C7002E5C000031C040C20800"); // 16 bytes   <--- This was originally 8B44E4 <- Which is incorrect, needs to be 24 not e4 (Olly issue)
+            var newGetLogialDriveStringsA = HexStringToBytes("8B442408C700" + newGetLogicalDriveStringsReturns + "000031C040C20800"); // 16 bytes   <--- This was originally 8B44E4 <- Which is incorrect, needs to be 24 not e4 (Olly issue)
             var newGetDriveTypeA = HexStringToBytes("B805000000C20400"); // 8 bytes
 
             // Stick the code at the end, as per the details below
