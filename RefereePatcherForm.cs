@@ -65,6 +65,12 @@ namespace CM0102Patcher
         {
             try
             {
+                if (string.IsNullOrEmpty(labelFilename.Text))
+                {
+                    MessageBox.Show("Please select an officals.dat to modify", "Select File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 if (checkBoxDiscplineFixed.Checked && (((int)numericModifier.Value) > 20 || ((int)numericModifier.Value) < 1))
                 {
                     MessageBox.Show("Set Discipine Value Between 1-20!", "Discipline Only Mode", MessageBoxButtons.OK, MessageBoxIcon.Error);
