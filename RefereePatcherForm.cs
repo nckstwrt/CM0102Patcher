@@ -65,8 +65,13 @@ namespace CM0102Patcher
         {
             try
             {
+                if (checkBoxDiscplineFixed.Checked && (((int)numericModifier.Value) > 20 || ((int)numericModifier.Value) < 1))
+                {
+                    MessageBox.Show("Set Discipine Value Between 1-20!", "Discipline Only Mode", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 var rp = new RefereePatcher();
-                rp.PatchOfficialsFile(labelFilename.Text, (int)numericModifier.Value);
+                rp.PatchOfficialsFile(labelFilename.Text, (int)numericModifier.Value, checkBoxDiscplineFixed.Checked);
                 MessageBox.Show("Officals.dat Patched!", "Referee Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Close();
             }
@@ -74,6 +79,18 @@ namespace CM0102Patcher
             {
                 ExceptionMsgBox.Show(ex);
             }
+        }
+
+        private void checkBoxDiscplineFixed_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxDiscplineFixed.Checked)
+            {
+                label3.Text = "Set All Refs Discipline To:";
+                if (numericModifier.Value > 20)
+                    numericModifier.Value = 5;
+            }
+            else
+                label3.Text = "CA/PA/Discipline Percentage Modifier:";
         }
     }
 }

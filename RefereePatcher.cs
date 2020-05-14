@@ -8,7 +8,7 @@ namespace CM0102Patcher
 {
     public class RefereePatcher
     {
-        public void PatchOfficialsFile(string officialsFileName, int percentChange)
+        public void PatchOfficialsFile(string officialsFileName, int percentChange, bool disciplineOnlyMode)
         {
             using (var officialsFile = File.Open(officialsFileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
@@ -21,20 +21,30 @@ namespace CM0102Patcher
                     var pa = BitConverter.ToInt16(fileBytes, i + 32);
                     var discipline = fileBytes[i + 37];
 
-                    if (ca > 0)
-                    { 
-                        ca = (short)((((double)ca) * (((double)percentChange) / 100.0)) + 0.5);
-                        BitConverter.GetBytes(ca).CopyTo(fileBytes, i + 30);
-                    }
-                    if (pa > 0)
+                    if (!disciplineOnlyMode)
                     {
-                        pa = (short)((((double)pa) * (((double)percentChange) / 100.0)) + 0.5);
-                        BitConverter.GetBytes(ca).CopyTo(fileBytes, i + 32);
+                        if (ca > 0)
+                        {
+                            ca = (short)((((double)ca) * (((double)percentChange) / 100.0)) + 0.5);
+                            BitConverter.GetBytes(ca).CopyTo(fileBytes, i + 30);
+                        }
+                        if (pa > 0)
+                        {
+                            pa = (short)((((double)pa) * (((double)percentChange) / 100.0)) + 0.5);
+                            BitConverter.GetBytes(ca).CopyTo(fileBytes, i + 32);
+                        }
                     }
-                    if (discipline > 0)
+                    if (discipline > 0 || disciplineOnlyMode)
                     {
-                        discipline = (byte)((((double)discipline) * (((double)percentChange) / 100.0)) + 0.5);
-                        fileBytes[i + 37] = discipline;
+                        if (disciplineOnlyMode)
+                        {
+                            fileBytes[i + 37] = (byte)percentChange;
+                        }
+                        else
+                        {
+                            discipline = (byte)((((double)discipline) * (((double)percentChange) / 100.0)) + 0.5);
+                            fileBytes[i + 37] = discipline;
+                        }
                     }
                 }
 

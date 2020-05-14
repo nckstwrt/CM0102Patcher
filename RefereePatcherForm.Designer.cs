@@ -38,6 +38,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.checkBoxDiscplineFixed = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericModifier)).BeginInit();
             this.SuspendLayout();
@@ -143,11 +144,23 @@
             this.label4.Text = "by a percentage to help overcome any problem if too many red cards are seen in an" +
     " update.";
             // 
+            // checkBoxDiscplineFixed
+            // 
+            this.checkBoxDiscplineFixed.AutoSize = true;
+            this.checkBoxDiscplineFixed.Location = new System.Drawing.Point(16, 162);
+            this.checkBoxDiscplineFixed.Name = "checkBoxDiscplineFixed";
+            this.checkBoxDiscplineFixed.Size = new System.Drawing.Size(160, 17);
+            this.checkBoxDiscplineFixed.TabIndex = 22;
+            this.checkBoxDiscplineFixed.Text = "Set Discipline to Fixed Value";
+            this.checkBoxDiscplineFixed.UseVisualStyleBackColor = true;
+            this.checkBoxDiscplineFixed.CheckedChanged += new System.EventHandler(this.checkBoxDiscplineFixed_CheckedChanged);
+            // 
             // RefereePatcherForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(464, 196);
+            this.Controls.Add(this.checkBoxDiscplineFixed);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -179,5 +192,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox checkBoxDiscplineFixed;
     }
 }
