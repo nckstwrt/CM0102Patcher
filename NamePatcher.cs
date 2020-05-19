@@ -49,6 +49,7 @@ namespace CM0102Patcher
             PatchExeString("Regional Divisions", "3. Liga", 0x5Eb02c);
             PatchExeString("Second Division", "Division 1", 0x5Eb02c);
             PatchExeString("Conference Division<%s - COMMENT - English Conference>", "National Leagues", 0x5Eb02c);
+            PatchExeString("Serie C2 A, B, C", "Lega Pro", 0x5Eb02c);
 
             // Stupidly complex code for Second Division B for Spain and Portugal
             // 0066A076 |.  68 3CB09E00 PUSH OFFSET 009EB03C; / Format = "Second Division B"
