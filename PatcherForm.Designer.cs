@@ -53,6 +53,7 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxShowHiddenAttributes = new System.Windows.Forms.CheckBox();
             this.checkBoxPositionInTacticsView = new System.Windows.Forms.CheckBox();
             this.checkBoxSwapSKoreaForChina = new System.Windows.Forms.CheckBox();
             this.comboBoxResolution = new System.Windows.Forms.ComboBox();
@@ -73,7 +74,6 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonRestore = new System.Windows.Forms.Button();
             this.buttonAbout = new System.Windows.Forms.Button();
-            this.checkBoxShowHiddenAttributes = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericCurrencyInflation)).BeginInit();
@@ -151,7 +151,7 @@
             0,
             0});
             this.numericGameStartYear.Minimum = new decimal(new int[] {
-            1980,
+            1950,
             0,
             0,
             0});
@@ -367,6 +367,20 @@
             this.groupBox3.Size = new System.Drawing.Size(447, 350);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
+            // 
+            // checkBoxShowHiddenAttributes
+            // 
+            this.checkBoxShowHiddenAttributes.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxShowHiddenAttributes.AutoSize = true;
+            this.checkBoxShowHiddenAttributes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxShowHiddenAttributes.Location = new System.Drawing.Point(7, 324);
+            this.checkBoxShowHiddenAttributes.Name = "checkBoxShowHiddenAttributes";
+            this.checkBoxShowHiddenAttributes.Size = new System.Drawing.Size(161, 20);
+            this.checkBoxShowHiddenAttributes.TabIndex = 38;
+            this.checkBoxShowHiddenAttributes.Text = "Show hidden attributes";
+            this.toolTips.SetToolTip(this.checkBoxShowHiddenAttributes, "Adds an additional column to the player attributes screen that shows the hidden v" +
+        "alues");
+            this.checkBoxShowHiddenAttributes.UseVisualStyleBackColor = true;
             // 
             // checkBoxPositionInTacticsView
             // 
@@ -611,20 +625,6 @@
             this.buttonAbout.Text = "?";
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
-            // 
-            // checkBoxShowHiddenAttributes
-            // 
-            this.checkBoxShowHiddenAttributes.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
-            this.checkBoxShowHiddenAttributes.AutoSize = true;
-            this.checkBoxShowHiddenAttributes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxShowHiddenAttributes.Location = new System.Drawing.Point(7, 324);
-            this.checkBoxShowHiddenAttributes.Name = "checkBoxShowHiddenAttributes";
-            this.checkBoxShowHiddenAttributes.Size = new System.Drawing.Size(161, 20);
-            this.checkBoxShowHiddenAttributes.TabIndex = 38;
-            this.checkBoxShowHiddenAttributes.Text = "Show hidden attributes";
-            this.toolTips.SetToolTip(this.checkBoxShowHiddenAttributes, "Adds an additional column to the player attributes screen that shows the hidden v" +
-        "alues");
-            this.checkBoxShowHiddenAttributes.UseVisualStyleBackColor = true;
             // 
             // PatcherForm
             // 
