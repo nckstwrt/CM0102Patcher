@@ -53,6 +53,7 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxMakeYourPotential200 = new System.Windows.Forms.CheckBox();
             this.checkBoxShowHiddenAttributes = new System.Windows.Forms.CheckBox();
             this.checkBoxPositionInTacticsView = new System.Windows.Forms.CheckBox();
             this.checkBoxSwapSKoreaForChina = new System.Windows.Forms.CheckBox();
@@ -344,6 +345,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBoxMakeYourPotential200);
             this.groupBox3.Controls.Add(this.checkBoxShowHiddenAttributes);
             this.groupBox3.Controls.Add(this.checkBoxPositionInTacticsView);
             this.groupBox3.Controls.Add(this.checkBoxSwapSKoreaForChina);
@@ -367,6 +369,19 @@
             this.groupBox3.Size = new System.Drawing.Size(447, 350);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
+            // 
+            // checkBoxMakeYourPotential200
+            // 
+            this.checkBoxMakeYourPotential200.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxMakeYourPotential200.AutoSize = true;
+            this.checkBoxMakeYourPotential200.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxMakeYourPotential200.Location = new System.Drawing.Point(219, 324);
+            this.checkBoxMakeYourPotential200.Name = "checkBoxMakeYourPotential200";
+            this.checkBoxMakeYourPotential200.Size = new System.Drawing.Size(199, 20);
+            this.checkBoxMakeYourPotential200.TabIndex = 39;
+            this.checkBoxMakeYourPotential200.Text = "Enable your potential to grow";
+            this.toolTips.SetToolTip(this.checkBoxMakeYourPotential200, resources.GetString("checkBoxMakeYourPotential200.ToolTip"));
+            this.checkBoxMakeYourPotential200.UseVisualStyleBackColor = true;
             // 
             // checkBoxShowHiddenAttributes
             // 
@@ -718,6 +733,7 @@
         private System.Windows.Forms.CheckBox checkBoxSwapSKoreaForChina;
         private System.Windows.Forms.CheckBox checkBoxPositionInTacticsView;
         private System.Windows.Forms.CheckBox checkBoxShowHiddenAttributes;
+        private System.Windows.Forms.CheckBox checkBoxMakeYourPotential200;
     }
 }
 

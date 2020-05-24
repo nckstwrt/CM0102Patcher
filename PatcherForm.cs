@@ -133,6 +133,7 @@ namespace CM0102Patcher
                 checkBoxUpdateNames.Enabled = !isTapani;
                 checkBoxSwapSKoreaForChina.Enabled = !isTapani;
                 checkBoxPositionInTacticsView.Enabled = !isTapani;
+                checkBoxMakeYourPotential200.Enabled = !isTapani;
                 checkBoxChangeStartYear_CheckedChanged(null, null);
 
                 if (isTapani && !shownTapaniWarning)
@@ -168,6 +169,7 @@ namespace CM0102Patcher
                     checkBoxUpdateNames.Checked = isTapani || appliedPatches.Contains("transferwindowpatchdetect"); // Tapani implements it in a different way
                     checkBoxPositionInTacticsView.Checked = appliedPatches.Contains("positionintacticsview");
                     checkBoxShowHiddenAttributes.Checked = appliedPatches.Contains("addadditionalcolumns");
+                    checkBoxMakeYourPotential200.Checked = appliedPatches.Contains("makeyourpotential200");
 
                     // These are irreversible
                     if (checkBoxUpdateNames.Checked)
@@ -549,6 +551,14 @@ namespace CM0102Patcher
                         }
                         else
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["tapaninewregencode"]);
+
+                        if (checkBoxMakeYourPotential200.Checked)
+                        {
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["makeyourpotential200"]);
+                        }
+                        else
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["makeyourpotential200"]);
 
                         if (checkBoxPositionInTacticsView.Checked)
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["positionintacticsview"]);
