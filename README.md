@@ -1,4 +1,4 @@
-# CM0102Patcher v2.05
+# CM0102Patcher v2.06
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/aKPvGCZ.png)
+![alt text](https://i.imgur.com/wk02Wr3.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,9 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.06:
+* Bug fix for S.Korea->China Patch and Wales->Lower English Leagues
 
 v2.05:
 * Added "Show hidden attributes" which adds a fourth column to the attributes screen
