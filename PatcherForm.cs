@@ -582,6 +582,7 @@ namespace CM0102Patcher
                         // Irreversible, only try and apply it if the checkbox is Enabled
                         if (checkBoxReplaceWelshPremier.Checked && checkBoxReplaceWelshPremier.Enabled)
                         {
+                            patcher.ExpandExe(labelFilename.Text);
                             switch (comboBoxReplacementLeagues.SelectedIndex)
                             {
                                 case 0:
@@ -599,6 +600,7 @@ namespace CM0102Patcher
                         // Irreversible, only try and apply it if the checkbox is Enabled
                         if (checkBoxSwapSKoreaForChina.Checked && checkBoxSwapSKoreaForChina.Enabled)
                         {
+                            patcher.ExpandExe(labelFilename.Text);
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["chinapatch"]);
                             namePatcher.PatchStaffAward("South Korean Best 11 Of The Year", "Chinese Super League Best XI", true, true);
                             namePatcher.PatchStaffAward("South Korean Most Assisted Player Of The Year", "Chinese Super League Top Assistor", true, true);
@@ -607,7 +609,7 @@ namespace CM0102Patcher
                             namePatcher.PatchStaffAward("South Korean Manager Of The Year", "Super League Manager Of the Year", true, true);
                             namePatcher.PatchStaffAward("South Korean Player Of The Month", "Super League Player Of the Month", true, true);
                             namePatcher.PatchStaffAward("South Korean Player Of The Year", "Super League Player Of The Year", true, true);
-                            namePatcher.PatchComp("Chinese First Division A", "Chinese Super League", "First Division A", "Super League", "CSL");
+                            namePatcher.PatchComp("club_comp.dat", "Chinese First Division A", "Chinese Super League", "First Division A", "Super League", "CSL");
                         }
                     }
 

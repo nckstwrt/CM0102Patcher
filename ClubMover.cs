@@ -117,7 +117,7 @@ namespace CM0102Patcher
                 if (southernClub == null)
                 {
                     allTeamsExist = false;
-                    MessageBox.Show(string.Format("Team {0} does not exist! So can create Southern Premier Central League!", southernTeam), "League Creation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format("Team {0} does not exist! So can't create Southern Premier Central League!", southernTeam), "League Creation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
                 }
             }
