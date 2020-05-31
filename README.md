@@ -1,4 +1,4 @@
-# CM0102Patcher v2.04
+# CM0102Patcher v2.05
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/1NDZeq3.png)
+![alt text](https://i.imgur.com/aKPvGCZ.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -30,7 +30,20 @@ Competition History Editor:
 
 ![alt text](https://i.imgur.com/BKAvFzB.png)
 
+Also allows you to add a fourth column to the attributes screen to show a players hidden attributes:
+
+![alt text](https://i.imgur.com/4LD4Gnu.png)
+
 ## Updates
+
+v2.05:
+* Added "Show hidden attributes" which adds a fourth column to the attributes screen
+* Misc Patches Added: CleanUpOnCloseWindow, Uncap20s, MakeFutureLineProperlyTransparent, Fitness, NicksFitness, BTeamsIncreaseTo50Players, SeeAnyTeamsFinances and ScoreboardPatch
+* Added Tapani code to enable your manager's "potential" to grow as you play the game
+* Let the date be set all the way back to 1950+ rather than 1980+
+* Updated xeno's regen fix code to stop regens goign to clubs with 45+ players
+* Added some 3.9.65 patches to Misc Patches
+* Allow you to force Referees discipline to a fixed value in the Referee Patcher
 
 v2.04:
 * Fix for renaming competitions and running in a foreign language
