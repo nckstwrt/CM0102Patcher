@@ -20,7 +20,7 @@ An unfinished scouter, based on CM Scout, but allows you to view and sort by the
 
 Also there is a little officials.dat patcher for patching up referees as per recent discussions on getting too many red cards from recent updates:
 
-![alt text](https://i.imgur.com/6q6ltuS.png)
+![alt text](https://i.imgur.com/xdWqNTy.png)
 
 The RGN Image Converter:
 
