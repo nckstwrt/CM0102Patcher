@@ -168,8 +168,7 @@ namespace CM0102Patcher
                     checkBoxSwapSKoreaForChina.Checked = isTapani || appliedPatches.Contains("chinapatch"); // Tapani implements it in a different way (Is Saturn really)
                     checkBoxUpdateNames.Checked = isTapani || appliedPatches.Contains("transferwindowpatchdetect"); // Tapani implements it in a different way
                     checkBoxPositionInTacticsView.Checked = appliedPatches.Contains("positionintacticsview");
-                    checkBoxShowHiddenAttributes.Checked = appliedPatches.Contains("addadditionalcolumns");
-                    checkBoxMakeYourPotential200.Checked = appliedPatches.Contains("makeyourpotential200");
+                    checkBoxMakeYourPotential200.Checked = isTapani || appliedPatches.Contains("makeyourpotential200"); // Tapani implements it in a different way
 
                     // These are irreversible
                     if (checkBoxUpdateNames.Checked)
@@ -197,6 +196,7 @@ namespace CM0102Patcher
                     checkBoxForceLoadAllPlayers.Checked = appliedPatches.Contains("forceloadallplayers");
                     checkBoxMakeExecutablePortable.Checked = (appliedPatches.Contains("changeregistrylocation") && appliedPatches.Contains("memorycheckfix") && appliedPatches.Contains("removemutexcheck"));
                     checkBoxRestrictTactics.Checked = appliedPatches.Contains("restricttactics");
+                    checkBoxShowHiddenAttributes.Checked = appliedPatches.Contains("addadditionalcolumns");
 
                     SetComboBox(comboBoxGameSpeed, speedHack);
                     numericCurrencyInflation.Value = (decimal)currencyMultiplier;
