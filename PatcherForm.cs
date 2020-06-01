@@ -485,7 +485,15 @@ namespace CM0102Patcher
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["memorycheckfix"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["removemutexcheck"]);
                     }
-                    
+
+                    if (checkBoxShowHiddenAttributes.Checked)
+                    {
+                        patcher.ExpandExe(labelFilename.Text);
+                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["addadditionalcolumns"]);
+                    }
+                    else
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["addadditionalcolumns"]);
+
                     if (!isTapani)
                     {
                         if (checkBoxIdleSensitivity.Checked)
@@ -564,14 +572,6 @@ namespace CM0102Patcher
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["positionintacticsview"]);
                         else
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["positionintacticsview"]);
-
-                        if (checkBoxShowHiddenAttributes.Checked)
-                        {
-                            patcher.ExpandExe(labelFilename.Text);
-                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["addadditionalcolumns"]);
-                        }
-                        else
-                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["addadditionalcolumns"]);
 
                         // Irreversible, only try and apply it if the checkbox is Enabled
                         if (checkBoxUpdateNames.Checked && checkBoxUpdateNames.Enabled)
