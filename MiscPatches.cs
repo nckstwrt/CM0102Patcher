@@ -37,22 +37,25 @@ namespace CM0102Patcher
 
         void Detect()
         {
-            var patcher = new Patcher();
-            using (var zs = OpenZip())
+            if (!string.IsNullOrEmpty(exeFile))
             {
-                for (int i = 0; i < checkedListBoxPatches.Items.Count; i++)
+                var patcher = new Patcher();
+                using (var zs = OpenZip())
                 {
-                    using (var ms = new MemoryStream())
+                    for (int i = 0; i < checkedListBoxPatches.Items.Count; i++)
                     {
-                        var patch = (ZipStorer.ZipFileEntry)checkedListBoxPatches.Items[i];
-                        zs.ExtractFile(patch, ms);
-                        ms.Seek(0, SeekOrigin.Begin);
-
-                        var hexPatch = patcher.LoadPatchFile(ms);
-                        if (patcher.DetectPatch(exeFile, hexPatch))
+                        using (var ms = new MemoryStream())
                         {
-                            checkedListBoxPatches.SetItemChecked(i, true);
-                            checkedListBoxPatches.SetItemCheckState(i, CheckState.Indeterminate);
+                            var patch = (ZipStorer.ZipFileEntry)checkedListBoxPatches.Items[i];
+                            zs.ExtractFile(patch, ms);
+                            ms.Seek(0, SeekOrigin.Begin);
+
+                            var hexPatch = patcher.LoadPatchFile(ms);
+                            if (patcher.DetectPatch(exeFile, hexPatch))
+                            {
+                                checkedListBoxPatches.SetItemChecked(i, true);
+                                checkedListBoxPatches.SetItemCheckState(i, CheckState.Indeterminate);
+                            }
                         }
                     }
                 }
@@ -61,6 +64,13 @@ namespace CM0102Patcher
 
         private void buttonApply_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(exeFile))
+            {
+                MessageBox.Show("No exe selected. Closing.", "Misc Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Close();
+                return;
+            }
+
             if (checkedListBoxPatches.CheckedItems.Count == 0)
             {
                 MessageBox.Show("No patches selected. Closing.", "Misc Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
