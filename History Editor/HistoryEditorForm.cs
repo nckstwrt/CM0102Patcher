@@ -730,6 +730,16 @@ namespace CM0102Patcher
                 }
             }
         }
+
+        private void buttonOrderClubNames_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("This is only meant for people that know what they are doing. Do not use if you do not.\r\n\r\nUnderstand?", "Club Name Reorder", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            {
+                historyLoader.SortClubNames();
+                historyLoader.Save(textBoxIndexFile.Text, true, true);
+                MessageBox.Show("Data Saved", "Club Reorderer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
     }
 
     public class ListBoxItem

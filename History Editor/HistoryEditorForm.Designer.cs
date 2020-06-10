@@ -82,6 +82,8 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.buttonYearShifter = new System.Windows.Forms.Button();
+            this.buttonOrderClubNames = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tabControl.SuspendLayout();
             this.tabPageNationComp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericNationUpDown)).BeginInit();
@@ -97,6 +99,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStaffHistory)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -663,11 +666,32 @@
             this.buttonYearShifter.UseVisualStyleBackColor = true;
             this.buttonYearShifter.Click += new System.EventHandler(this.buttonYearShifter_Click);
             // 
+            // buttonOrderClubNames
+            // 
+            this.buttonOrderClubNames.Location = new System.Drawing.Point(6, 19);
+            this.buttonOrderClubNames.Name = "buttonOrderClubNames";
+            this.buttonOrderClubNames.Size = new System.Drawing.Size(107, 23);
+            this.buttonOrderClubNames.TabIndex = 0;
+            this.buttonOrderClubNames.Text = "Order Club Names";
+            this.buttonOrderClubNames.UseVisualStyleBackColor = true;
+            this.buttonOrderClubNames.Click += new System.EventHandler(this.buttonOrderClubNames_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.buttonOrderClubNames);
+            this.groupBox3.Location = new System.Drawing.Point(504, 5);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(123, 54);
+            this.groupBox3.TabIndex = 6;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Order Club Names";
+            // 
             // HistoryEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(778, 369);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.tabControl);
@@ -695,6 +719,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -754,5 +779,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button buttonYearShifter;
+        private System.Windows.Forms.Button buttonOrderClubNames;
+        private System.Windows.Forms.GroupBox groupBox3;
     }
 }

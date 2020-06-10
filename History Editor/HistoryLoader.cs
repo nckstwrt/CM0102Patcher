@@ -10,6 +10,7 @@ namespace CM0102Patcher
     public class HistoryLoader
     {
         public List<TIndex> index;
+        public TIndex staffDetails;
         public List<TComp> nation_comp;
         public List<TComp> club_comp;
         public List<TStaffComp> staff_comp;
@@ -28,7 +29,7 @@ namespace CM0102Patcher
 
         Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
 
-        List<T> ReadFile<T>(string fileName, int seekTo = 0, int count = 0)
+        public List<T> ReadFile<T>(string fileName, int seekTo = 0, int count = 0)
         {
             List<T> ret = new List<T>();
 
@@ -58,13 +59,13 @@ namespace CM0102Patcher
             return ret;
         }
 
-        void SaveFile<T>(string fileName, List<T> data, int seekTo = 0)
+        public void SaveFile<T>(string fileName, List<T> data, int seekTo = 0)
         {
             using (var fout = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             using (var bw = new BinaryWriter(fout))
             {
                 int objSize = Marshal.SizeOf(typeof(T));
-                fout.SetLength(seekTo);
+                // fout.SetLength(seekTo);
                 fout.Seek(seekTo, SeekOrigin.Begin);
 
                 foreach (var obj in data)
@@ -90,16 +91,6 @@ namespace CM0102Patcher
             return ret;
         }
 
-        public int StringCompare(string a, string b, bool ignoreCase = true)
-        {
-            if (ignoreCase)
-            {
-                a = a.ToLower();
-                b = b.ToLower();
-            }
-            return Encoding.UTF8.GetString(latin1.GetBytes(a)).CompareTo(Encoding.UTF8.GetString(latin1.GetBytes(b)));
-        }
-
         public void Load(string indexFile)
         {
             var dir = Path.GetDirectoryName(indexFile);
@@ -116,7 +107,7 @@ namespace CM0102Patcher
             staff_comp = ReadFile<TStaffComp>(Path.Combine(dir, "staff_comp.dat"));
             staff_comp_history = ReadFile<TStaffCompHistory>(Path.Combine(dir, "staff_comp_history.dat"));
 
-            var staffDetails = index.Find(x => GetTextFromBytes(x.Name) == "staff.dat" && x.FileType == 6);
+            staffDetails = index.Find(x => GetTextFromBytes(x.Name) == "staff.dat" && x.FileType == 6);
 
             if (staffDetails.Version == 1)
             {
@@ -151,26 +142,41 @@ namespace CM0102Patcher
             index[idx] = indexItem;
         }
 
-        public void Save(string indexFile)
+        public void Save(string indexFile, bool saveClubData = false, bool saveStaffData = false)
         {
             var dir = Path.GetDirectoryName(indexFile);
 
             /*
             UpdateIndex("nation_comp.dat", nation_comp);
-            UpdateIndex("club_comp.dat", club_comp);
-            UpdateIndex("club.dat", club);
             UpdateIndex("nation.dat", nation);
             */
+
+            if (saveClubData)
+            {
+                UpdateIndex("club_comp.dat", club_comp);
+                UpdateIndex("club.dat", club);
+            }
+
             UpdateIndex("nation_comp_history.dat", nation_comp_history);
             UpdateIndex("club_comp_history.dat", club_comp_history);
             UpdateIndex("staff_comp_history.dat", staff_comp_history);
             UpdateIndex("staff_history.dat", staff_history);
 
             SaveFile<TIndex>(indexFile, index, 8);
+
+            if (saveClubData)
+            {
+                SaveFile<TComp>(Path.Combine(dir, "club_comp.dat"), club_comp);
+                SaveFile<TClub>(Path.Combine(dir, "club.dat"), club);
+            }
+
+            if (saveStaffData)
+            {
+                SaveFile<TStaff>(Path.Combine(dir, "staff.dat"), staff, staffDetails.Offset);
+            }
+
             /*
             SaveFile<TComp>(Path.Combine(dir, "nation_comp.dat"), nation_comp);
-            SaveFile<TComp>(Path.Combine(dir, "club_comp.dat"), club_comp);
-            SaveFile<TClub>(Path.Combine(dir, "club.dat"), club);
             SaveFile<TClub>(Path.Combine(dir, "nat_club.dat"), nat_club);
             SaveFile<TNation>(Path.Combine(dir, "nation.dat"), nation);
             */
@@ -178,6 +184,53 @@ namespace CM0102Patcher
             SaveFile<TCompHistory>(Path.Combine(dir, "club_comp_history.dat"), club_comp_history);
             SaveFile<TStaffCompHistory>(Path.Combine(dir, "staff_comp_history.dat"), staff_comp_history);
             SaveFile<TStaffHistory>(Path.Combine(dir, "staff_history.dat"), staff_history);
+        }
+
+        public void SortClubNames()
+        {
+            // Sort
+            club.Sort((x, y) => GetTextFromBytes(x.ShortName).CompareTo(GetTextFromBytes(y.ShortName)));
+
+            // Update IDs
+            int[] clubMap = new int[club.Count];
+            for (int i = 0; i < club.Count; i++)
+            {
+                var tempClub = club[i];
+                clubMap[tempClub.ID] = i;
+                tempClub.ID = i;
+                club[i] = tempClub;
+            }
+
+            // Update Staff
+            for (int i = 0; i < staff.Count; i++)
+            {
+                var temp = staff[i];
+                if (temp.ClubJob >= 0)
+                    temp.ClubJob = clubMap[temp.ClubJob];
+                staff[i] = temp;
+            }
+
+            // Update Club Comp History
+            for (int i = 0; i < club_comp_history.Count; i++)
+            {
+                var temp = club_comp_history[i];
+                if (temp.Winners >= 0)
+                    temp.Winners = clubMap[temp.Winners];
+                if (temp.RunnersUp >= 0)
+                    temp.RunnersUp = clubMap[temp.RunnersUp];
+                if (temp.ThirdPlace >= 0)
+                    temp.ThirdPlace = clubMap[temp.ThirdPlace];
+                club_comp_history[i] = temp;
+            }
+
+            // Update Staff History
+            for (int i = 0; i < staff_history.Count; i++)
+            {
+                var temp = staff_history[i];
+                if (temp.ClubID >= 0)
+                    temp.ClubID = clubMap[temp.ClubID];
+                staff_history[i] = temp;
+            }
         }
     }
 }
