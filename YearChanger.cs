@@ -206,7 +206,7 @@ namespace CM0102Patcher
                         bw.Write(YearToBytes(year));
                     }
                 }
-                if (year == 1997 || year == 1989)
+                if (year == 1997 || year == 1989 || year == 1993)
                 {
                     var setWorldCupQualTo = 2000;
 
