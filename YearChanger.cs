@@ -49,6 +49,8 @@ namespace CM0102Patcher
         // https://champman0102.co.uk/archive/index.php/t-6087.html Asia World Cup 00911CB7
         public void ApplyYearChangeToExe(Stream stream, int year)
         {
+            var patcher = new Patcher();
+
             // In 4.0 and lower, BinaryWriter closes the outer stream. So don't dispose it and let the streams close themselves
             var bw = new BinaryWriter(stream);
             foreach (var offset in startYear)
@@ -153,6 +155,77 @@ namespace CM0102Patcher
                         break;
                     }
                 }
+
+                // 1993 - Special World Cup Set Up
+                if (year == 1993)
+                {
+                    // Set to normally be a USA start
+                    bw.Seek(0x1F99A1, SeekOrigin.Begin);        // Normally 7CD (1997)
+                    bw.Write((short)(1993));
+                    bw.Seek(0x1F99BC, SeekOrigin.Begin);        // Normally 7CE (1998)
+                    bw.Write((short)(1994));
+
+                    // Make USA The Hosts Replacing France
+                    bw.Seek(0x1F99E9, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x8B, 0x0D, 0xf8, 0xf4, 0x9c, 0x00 }); // Make USA the hosts (replacing France)
+                    bw.Seek(0x4b0d93, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xA1, 0x54, 0xf2, 0x9c, 0x00 }); // Make Bolivia replace USA in qualifiers so we don't get 2 USAs
+
+                    // This, like the Euros shunts everything along, so the 1998 World Cup would get hosted by S.Korea and Japan. Replace with just France.
+                    bw.Seek(0x1F9A21, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x8B, 0x15, 0x00, 0xf3, 0x9c, 0x00, 0x89, 0x51, 0x28, 0x8B, 0x06, 0xB9, 0xFF, 0xFF, 0xFF, 0xFF, 0x90 });
+
+                    // Make Germany = S.Korea + Japan
+                    bw.Seek(0x1F9A5D, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x84, 0xf4 });
+                    bw.Seek(0x1F9A64, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xC7, 0x40, 0x4E, 0x61, 0x00, 0x00, 0x00 });    /// <---- Put 61 in (which is Japan)
+
+                    // We have the space maker - so we can put in the reputation fix for when we don't have qualifiers
+                    // Currently, if we don't have qualifiers the world cup will pick teams in alphabetical order. This fixes that based on rep.
+                    patcher.ApplyPatch(stream, new[] { new Patcher.HexPatch(0x201a83, "90e84799f3ff80787f0a0f8d7ad8320083c404ff4c2414e982d832009090"), new Patcher.HexPatch(0x52f308, "e97727cd") });
+
+                    bw.Seek(0x1F9DD3, SeekOrigin.Begin);    // Switzerland -> Belgium
+                    bw.Write(new byte[] { 0xA1, 0x44, 0xf2, 0x9c, 0x00, 0x89, 0x82, 0xC0, 0x01, 0x00, 0x00, 0xC7, 0x81, 0xC4, 0x01, 0x00, 0x00, 0x53, 0x00, 0x00, 0x00 });
+
+                    // New Approach for Switzerland + Sweden:
+                    // Doesn't work either - or maybe it does if you make BL = FD rather than FE
+                    bw.Seek(0x1F9D04, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x44, 0xf2 });
+                    bw.Seek(0x1F9D0E, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xC7, 0x82, 0x66, 0x01, 0x00, 0x00, 0x53, 0x00, 0x00, 0x00 });
+
+                    bw.Seek(0x1F9D19, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x44, 0xf2 });
+                    bw.Seek(0x1F9D23, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xC7, 0x82, 0x6e, 0x01, 0x00, 0x00, 0x53, 0x00, 0x00, 0x00 });
+
+                    // Change BL to FD, (use EDX rather than EAX)
+                    bw.Seek(0x1F9D2D, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xC6, 0x82, 0x72, 0x01, 0x00, 0x00, 0xFD, 0x90 });
+                    bw.Seek(0x1F9D3c, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x8a });
+
+                    bw.Seek(0x1F9CE9, SeekOrigin.Begin); // Wales/Scotland (easier as already dual nation hosted)
+                    bw.Write(new byte[] { 0x44, 0xf2 });
+                    bw.Seek(0x1F9CF7, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x38, 0xf3 });
+
+                    // Make 2004 Portugal
+                    bw.Seek(0x1F9D37, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x34, 0xf4 });
+                    bw.Seek(0x1F9D4D, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x34, 0xf4 });
+                    bw.Seek(0x1F9D63, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x34, 0xf4 });
+
+                    // Wembley Fix
+                    bw.Seek(0x45b843, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xeb });
+                    bw.Seek(0x45c40e, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xeb });
+                }
+
                 // Turn off World Cup 1438 error
                 bw.Seek(0x52F2AC, SeekOrigin.Begin);
                 bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
@@ -166,7 +239,6 @@ namespace CM0102Patcher
                 bw.Write(YearToBytes(year - 2));
 
                 // Patcher for Tapani Euro Fix
-                var patcher = new Patcher();
                 patcher.ApplyPatch(stream, patcher.patches["tapanispacemaker"]);
                 patcher.ApplyPatch(stream, patcher.patches["tapanieurofix"]);
 
@@ -179,7 +251,7 @@ namespace CM0102Patcher
                 bw.Write(YearToBytes(year - 16));
 
                 // If year is 1995 - at least try and get the euros kind of ok
-                if (year == 1994 || year == 1995)
+                if (year == 1993 || year == 1994 || year == 1995)
                 {
                     // Swap Portugal for England
                     bw.Seek(0x1F9CB4, SeekOrigin.Begin);
@@ -214,6 +286,9 @@ namespace CM0102Patcher
                     {
                         case 1989:
                             setWorldCupQualTo = 1992;
+                            break;
+                        case 1993:
+                            setWorldCupQualTo = 1996;
                             break;
                     }
                     
@@ -361,7 +436,7 @@ namespace CM0102Patcher
                             // Making that dual hosted means finding the host (e.g. Switzerland), Replacing it with Belgium and then 
                             // Making the next 4 bytes be the dual host, using 0x53 - which is the ID for Holland
                             
-                            bw.Seek(0x1c3c03, SeekOrigin.Begin);    // Switzerland
+                            bw.Seek(0x1c3c03, SeekOrigin.Begin);    // Switzerland to Belgium
                             bw.Write(new byte[] { 0xA1, 0xE4, 0x63, 0x94, 0x00, 0x89, 0x82, 0xC0, 0x01, 0x00, 0x00, 0xC7, 0x81, 0xC4, 0x01, 0x00, 0x00, 0x53, 0x00, 0x00, 0x00 });
                             // ^ Suspicious of this - probably not necessary
                             /*
@@ -414,7 +489,7 @@ namespace CM0102Patcher
                             bw.Seek(0x1c388d, SeekOrigin.Begin);
                             bw.Write(new byte[] { 0x24, 0x66 });
                             bw.Seek(0x1c3894, SeekOrigin.Begin);
-                            bw.Write(new byte[] { 0xC7, 0x40, 0x4E, 0x61, 0x00, 0x00, 0x00 });
+                            bw.Write(new byte[] { 0xC7, 0x40, 0x4E, 0x61, 0x00, 0x00, 0x00 });    /// <---- Put 61 in (which is Japan)
 
                         }
 
