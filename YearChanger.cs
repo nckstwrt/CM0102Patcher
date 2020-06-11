@@ -267,6 +267,8 @@ namespace CM0102Patcher
                     var newGameName2 = year.ToString() + "/" + (year + 1).ToString().Substring(2);
                     ByteWriter.WriteToBinaryWriter(bw, 0x5cd33d, newGameName1 + "\0");  // Window Title
                     ByteWriter.WriteToBinaryWriter(bw, 0x68029d, newGameName2 + "\0");  // Main Menu Screen
+
+                    // History Notes: Shift Years 7 years forward. Then run cut off of 1993. Then correct Nissan so it has a league.
                 }
 
                 // Turn off World Cup 1438 error
