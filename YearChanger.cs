@@ -156,7 +156,7 @@ namespace CM0102Patcher
                     }
                 }
 
-                // 1993 - Special World Cup Set Up
+                // 1993 - Special World Cup / Euro Set Up + Extras
                 if (year == 1993)
                 {
                     // Set to normally be a USA start
@@ -224,6 +224,49 @@ namespace CM0102Patcher
                     bw.Write(new byte[] { 0xeb });
                     bw.Seek(0x45c40e, SeekOrigin.Begin);
                     bw.Write(new byte[] { 0xeb });
+
+                    // Turn off transfer_manager..cpp 10691
+                    // This is a bad one - you need to do more than turn it off
+                    // This occurs when the staff member being transferred does not have a Player pointer at +61
+                    // So you need to eject! :)
+                    // bw.Seek(0x4CC7BB, SeekOrigin.Begin);
+                    // bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+                    bw.Seek(0x4CC76A, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xEB, 0xA4, 0x90, 0x90, });
+
+                    // Turn off match_eng..cpp 612
+                    bw.Seek(0x2B896E, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+                    // German Regional
+                    List<int> startYearMinus1_GerRegional = new List<int> { /* All German Regional */ 0x001DCF10, 0x001DD7FF, 0x001DD9FE, /* End of German */ };
+                    foreach (var offset in startYearMinus1_GerRegional)
+                    {
+                        bw.Seek(offset, SeekOrigin.Begin);
+                        bw.Write(YearToBytes(year - 1));
+                    }
+
+                    // Scotland
+                    List<int> startYearMinus1_Scotland = new List<int> { 0x3EE026, 0x3EEE61, 0x3EEF79, 0x3F0413, 0x3F0C00, 0x3F0E95, 0x3F2831, 0x3F297E, 0x3F2A4E, 0x3F2A8D, 0x3F31D4, 0x3F3F8B, 0x3F4F3F };
+                    foreach (var offset in startYearMinus1_Scotland)
+                    {
+                        bw.Seek(offset, SeekOrigin.Begin);
+                        bw.Write(YearToBytes(year - 1));
+                    }
+
+                    // Remove Eidos Logo Splash Screen
+                    bw.Seek(0x1CCFB6, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+                    bw.Seek(0x1CCFD1, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xeb });
+                    bw.Seek(0x1CCFF9, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+                    // Change the name
+                    var newGameName1 = year.ToString().Substring(2) + "/" + (year + 1).ToString().Substring(2);
+                    var newGameName2 = year.ToString() + "/" + (year + 1).ToString().Substring(2);
+                    ByteWriter.WriteToBinaryWriter(bw, 0x5cd33d, newGameName1 + "\0");  // Window Title
+                    ByteWriter.WriteToBinaryWriter(bw, 0x68029d, newGameName2 + "\0");  // Main Menu Screen
                 }
 
                 // Turn off World Cup 1438 error
