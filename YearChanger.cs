@@ -276,6 +276,10 @@ namespace CM0102Patcher
                     ByteWriter.WriteToBinaryWriter(bw, 0x5cd33d, newGameName1 + "\0");  // Window Title
                     ByteWriter.WriteToBinaryWriter(bw, 0x68029d, newGameName2 + "\0");  // Main Menu Screen
 
+                    // Remove the non-playable leagues for the 93 update
+                    patcher.ApplyPatch(stream, new Patcher.HexPatch[] { new Patcher.HexPatch(0x202f05, "0f8473ac21"), new Patcher.HexPatch(0x202f0b, "807d000b74f4807d002a74ee807d002f74e8807d004474e2807d004b74dc807d00aa74d6807d008074d0807d009474ca807d005c74c4807d009a74be807d00c074b8807d00cf74b2e915a8210090"), new Patcher.HexPatch(0x41d767, "e99957deff90") });
+
+
                     // History Notes: Shift Years 7 years forward. Then run cut off of 1993. Then correct Nissan so it has a league.
                 }
 
