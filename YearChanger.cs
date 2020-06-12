@@ -104,6 +104,10 @@ namespace CM0102Patcher
             int mod4year = ((year + 1) - ((year - 1) % 4));
             bw.Write(YearToBytes(mod4year));
 
+            // Special - When looking at the Fixtures view, if you change the date, you cannot look at the first season played. This fixes that.
+            bw.Seek(0x1AEE52, SeekOrigin.Begin);
+            bw.Write(new byte[] { 0xB8 });
+
             // Special 2 (the calc for season selection can cause England 18/09 without this)
             bw.Seek(0x41e9ca, SeekOrigin.Begin);
             bw.Write((byte)0x64);
@@ -168,7 +172,7 @@ namespace CM0102Patcher
                     // Make USA The Hosts Replacing France
                     bw.Seek(0x1F99E9, SeekOrigin.Begin);
                     bw.Write(new byte[] { 0x8B, 0x0D, 0xf8, 0xf4, 0x9c, 0x00 }); // Make USA the hosts (replacing France)
-                    bw.Seek(0x4b0d93, SeekOrigin.Begin);
+                    bw.Seek(0x52DD67, SeekOrigin.Begin);
                     bw.Write(new byte[] { 0xA1, 0x54, 0xf2, 0x9c, 0x00 }); // Make Bolivia replace USA in qualifiers so we don't get 2 USAs
 
                     // This, like the Euros shunts everything along, so the 1998 World Cup would get hosted by S.Korea and Japan. Replace with just France.
@@ -236,6 +240,10 @@ namespace CM0102Patcher
 
                     // Turn off match_eng..cpp 612
                     bw.Seek(0x2B896E, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+                    // Turn off match_eng..cpp 652
+                    bw.Seek(0x2B8AC5, SeekOrigin.Begin);
                     bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
 
                     // German Regional
