@@ -284,6 +284,10 @@ namespace CM0102Patcher
                     bw.Seek(0x26A096, SeekOrigin.Begin);
                     bw.Write(new byte[] { 0xE9, 0x3B, 0xFF, 0xFF, 0xFF, 0x90 });
 
+                    // Turn off Merconorte Cup
+                    bw.Seek(0x431856, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0xEB });
+
                     // History Notes: Shift Years 7 years forward. Then run cut off of 1993. Then correct Nissan so it has a league.
                 }
 
