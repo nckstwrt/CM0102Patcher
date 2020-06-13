@@ -246,6 +246,10 @@ namespace CM0102Patcher
                     bw.Seek(0x2B8AC5, SeekOrigin.Begin);
                     bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
 
+                    // Turn off Cup 1187 error
+                    bw.Seek(0x11A396, SeekOrigin.Begin);
+                    bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
                     // German Regional
                     List<int> startYearMinus1_GerRegional = new List<int> { /* All German Regional */ 0x001DCF10, 0x001DD7FF, 0x001DD9FE, /* End of German */ };
                     foreach (var offset in startYearMinus1_GerRegional)
