@@ -46,10 +46,11 @@ namespace CM0102Patcher
                 if (numericUpDownPlayerHistories.Value != 0)
                     yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, (int)numericUpDownPlayerHistories.Value, 0x8, 0);
 
+                int startIndexNationCompHistory = -1;
                 if (numericUpDownClub.Value != 0 || numericUpDownYearCutOff.Value != 0)
-                    yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, (int)numericUpDownClub.Value, 0x8, 0, (int)numericUpDownYearCutOff.Value, indexFile);
+                    startIndexNationCompHistory = yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, (int)numericUpDownClub.Value, 0x8, 0, (int)numericUpDownYearCutOff.Value, indexFile, 0);
                 if (numericUpDownNation.Value != 0 || numericUpDownYearCutOff.Value != 0)
-                    yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, (int)numericUpDownNation.Value, 0x8, 0, (int)numericUpDownYearCutOff.Value, indexFile);
+                    yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, (int)numericUpDownNation.Value, 0x8, 0, (int)numericUpDownYearCutOff.Value, indexFile, startIndexNationCompHistory);
 
                 MessageBox.Show("Years Shifted!", "Year Shifter", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Close();

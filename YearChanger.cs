@@ -281,8 +281,10 @@ namespace CM0102Patcher
                     ByteWriter.WriteToBinaryWriter(bw, 0x68029d, newGameName2 + "\0");  // Main Menu Screen
 
                     // Remove the non-playable leagues for the 93 update (with fix so Select All does not select unselectable leagues)
+                    // (These should be all one patch - but i'm lazy and pressed for time :) )
                     patcher.ApplyPatch(stream, new Patcher.HexPatch[] { new Patcher.HexPatch(0x202f05, "0f8473ac21"), new Patcher.HexPatch(0x202f0b, "807d000b74f4807d002a74ee807d002f74e8807d004474e2807d004b74dc807d00aa74d6807d008074d0807d009474ca807d005c74c4807d009a74be807d00c074b8807d00cf74b2e915a8210090"), new Patcher.HexPatch(0x41d767, "e99957deff90") });
                     patcher.ApplyPatch(stream, new Patcher.HexPatch[] { new Patcher.HexPatch(0x202f10, "47"), new Patcher.HexPatch(0x202f16, "41"), new Patcher.HexPatch(0x202f1c, "3b"), new Patcher.HexPatch(0x202f22, "35"), new Patcher.HexPatch(0x202f28, "2f"), new Patcher.HexPatch(0x202f2e, "29"), new Patcher.HexPatch(0x202f34, "23"), new Patcher.HexPatch(0x202f3a, "1d"), new Patcher.HexPatch(0x202f40, "17"), new Patcher.HexPatch(0x202f46, "11"), new Patcher.HexPatch(0x202f4c, "0b"), new Patcher.HexPatch(0x202f52, "05"), new Patcher.HexPatch(0x202f58, "c6851c010000"), new Patcher.HexPatch(0x202f5f, "e91aac210090") });
+                    patcher.ApplyPatch(stream, new Patcher.HexPatch[] { new Patcher.HexPatch(0x202f5f, "833d042dae00107e0ac705042dae001000"), new Patcher.HexPatch(0x202f71, "00e907ac21"), new Patcher.HexPatch(0x41d5e3, "10") });
 
                     // Turn off Swedish Second Division too
                     bw.Seek(0x26A096, SeekOrigin.Begin);
@@ -862,7 +864,7 @@ namespace CM0102Patcher
             }
         }
 
-        public int UpdateHistoryFile(string historyFile, int blockSize, int yearIncrement, int yearOffset1, int yearOffset2 = 0, int cutIfEqualOrAbove = 0, string indexFile = null)
+        public int UpdateHistoryFile(string historyFile, int blockSize, int yearIncrement, int yearOffset1, int yearOffset2 = 0, int cutIfEqualOrAbove = 0, string indexFile = null, int startIndex = -1)
         {
             using (var file = File.Open(historyFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
@@ -905,7 +907,25 @@ namespace CM0102Patcher
                     }
                 }
 
-                var newBytesArray = newBytes.SelectMany(x => x).ToArray();
+                
+                // All histories have a 4 byte ID at the start - let's make these run in order
+                if (startIndex != -1)
+                {
+                    for (uint i = 0; i < newBytes.Count; i++)
+                    {
+                        var block = newBytes[(int)i];
+                        Array.Copy(BitConverter.GetBytes(startIndex + i), 0, block, 0, 4);
+                        newBytes[(int)i] = block;
+                    }
+                }
+
+                // Write to a single big array (no need to do this, as we could just write it instead - but this will do for now)
+                var newBytesArray = new byte[newBytes.Count * blockSize]; 
+                for (int i = 0; i < newBytes.Count; i++)
+                {
+                    Array.Copy(newBytes[i], 0, newBytesArray, i * blockSize, blockSize);
+                }
+
                 file.Seek(0, SeekOrigin.Begin);
                 file.SetLength(0);  // Truncate the file
                 file.Write(newBytesArray, 0, newBytesArray.Length);
