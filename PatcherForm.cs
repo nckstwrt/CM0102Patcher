@@ -494,6 +494,11 @@ namespace CM0102Patcher
                     else
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["addadditionalcolumns"]);
 
+                    if (checkBoxCDRemoval.Checked)
+                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablecdremove"]);
+                    else
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["disablecdremove"]);
+
                     if (!isTapani)
                     {
                         if (checkBoxIdleSensitivity.Checked)
@@ -516,11 +521,6 @@ namespace CM0102Patcher
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["showstarplayers"]);
                         else
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["showstarplayers"]);
-
-                        if (checkBoxCDRemoval.Checked)
-                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablecdremove"]);
-                        else
-                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["disablecdremove"]);
 
                         if (checkBoxDisableSplashScreen.Checked)
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablesplashscreen"]);
