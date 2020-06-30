@@ -74,6 +74,7 @@
     <Compile Include="ImageConverterForm.Designer.cs">
       <DependentUpon>ImageConverterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MiscFunctions.cs" />
     <Compile Include="NamePatcher.cs" />
     <Compile Include="NoCDPatch.cs" />
     <Compile Include="OffsetCalculator.cs">
