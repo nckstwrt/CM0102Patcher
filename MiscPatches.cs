@@ -23,7 +23,7 @@ namespace CM0102Patcher
             this.exeFile = exeFile;
             InitializeComponent();
 
-            using (var zs = OpenZip())
+            using (var zs = MiscFunctions.OpenZip("MiscPatches.zip"))
             {
                 patchFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".patch"));
                 txtFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".txt"));
@@ -40,7 +40,7 @@ namespace CM0102Patcher
             if (!string.IsNullOrEmpty(exeFile))
             {
                 var patcher = new Patcher();
-                using (var zs = OpenZip())
+                using (var zs = MiscFunctions.OpenZip("MiscPatches.zip"))
                 {
                     for (int i = 0; i < checkedListBoxPatches.Items.Count; i++)
                     {
@@ -86,7 +86,7 @@ namespace CM0102Patcher
                     if (checkedListBoxPatches.GetItemChecked(i) && checkedListBoxPatches.GetItemCheckState(i) != CheckState.Indeterminate)
                     {
                         var patch = (ZipStorer.ZipFileEntry)checkedListBoxPatches.Items[i];
-                        using (var zs = OpenZip())
+                        using (var zs = MiscFunctions.OpenZip("MiscPatches.zip"))
                         {
                             using (var ms = new MemoryStream())
                             {
@@ -105,13 +105,6 @@ namespace CM0102Patcher
             }
         }
 
-        private ZipStorer OpenZip()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("MiscPatches.zip"));
-            return ZipStorer.Open(assembly.GetManifestResourceStream(resourceName), FileAccess.Read);
-        }
-
         private void checkedListBoxPatches_SelectedValueChanged(object sender, EventArgs e)
         {
             var patch = (ZipStorer.ZipFileEntry)checkedListBoxPatches.SelectedItem;
@@ -119,7 +112,7 @@ namespace CM0102Patcher
             if (txtFiles.Exists(x => x.FilenameInZip == txtFileName))
             {
                 var txtFile = txtFiles.First(x => x.FilenameInZip == txtFileName);
-                using (var zs = OpenZip())
+                using (var zs = MiscFunctions.OpenZip("MiscPatches.zip"))
                 {
                     using (var ms = new MemoryStream())
                     {

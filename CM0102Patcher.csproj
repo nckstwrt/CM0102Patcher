@@ -222,6 +222,7 @@
     <EmbeddedResource Include="History Editor\YearShifterForm.resx">
       <DependentUpon>YearShifterForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AITactics.zip" />
     <None Include="app.manifest">
       <SubType>Designer</SubType>
     </None>

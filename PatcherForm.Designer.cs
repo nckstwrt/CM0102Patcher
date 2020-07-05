@@ -53,6 +53,9 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxFixSuperKeepers = new System.Windows.Forms.CheckBox();
+            this.comboBoxReplaceAITactics = new System.Windows.Forms.ComboBox();
+            this.checkBoxReplaceAITactics = new System.Windows.Forms.CheckBox();
             this.checkBoxMakeYourPotential200 = new System.Windows.Forms.CheckBox();
             this.checkBoxShowHiddenAttributes = new System.Windows.Forms.CheckBox();
             this.checkBoxPositionInTacticsView = new System.Windows.Forms.CheckBox();
@@ -169,7 +172,7 @@
             // 
             this.buttonApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonApply.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonApply.Location = new System.Drawing.Point(381, 493);
+            this.buttonApply.Location = new System.Drawing.Point(381, 544);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(75, 31);
             this.buttonApply.TabIndex = 7;
@@ -204,7 +207,7 @@
             // 
             this.checkBoxHideNonPublicBids.AutoSize = true;
             this.checkBoxHideNonPublicBids.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxHideNonPublicBids.Location = new System.Drawing.Point(219, 224);
+            this.checkBoxHideNonPublicBids.Location = new System.Drawing.Point(219, 250);
             this.checkBoxHideNonPublicBids.Name = "checkBoxHideNonPublicBids";
             this.checkBoxHideNonPublicBids.Size = new System.Drawing.Size(150, 20);
             this.checkBoxHideNonPublicBids.TabIndex = 10;
@@ -215,7 +218,7 @@
             // 
             this.buttonTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTools.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonTools.Location = new System.Drawing.Point(9, 493);
+            this.buttonTools.Location = new System.Drawing.Point(9, 544);
             this.buttonTools.Name = "buttonTools";
             this.buttonTools.Size = new System.Drawing.Size(75, 31);
             this.buttonTools.TabIndex = 11;
@@ -345,6 +348,9 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBoxFixSuperKeepers);
+            this.groupBox3.Controls.Add(this.comboBoxReplaceAITactics);
+            this.groupBox3.Controls.Add(this.checkBoxReplaceAITactics);
             this.groupBox3.Controls.Add(this.checkBoxMakeYourPotential200);
             this.groupBox3.Controls.Add(this.checkBoxShowHiddenAttributes);
             this.groupBox3.Controls.Add(this.checkBoxPositionInTacticsView);
@@ -366,16 +372,55 @@
             this.groupBox3.Controls.Add(this.checkBoxUpdateNames);
             this.groupBox3.Location = new System.Drawing.Point(9, 131);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(447, 352);
+            this.groupBox3.Size = new System.Drawing.Size(447, 407);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
+            // 
+            // checkBoxFixSuperKeepers
+            // 
+            this.checkBoxFixSuperKeepers.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxFixSuperKeepers.AutoSize = true;
+            this.checkBoxFixSuperKeepers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxFixSuperKeepers.Location = new System.Drawing.Point(7, 380);
+            this.checkBoxFixSuperKeepers.Name = "checkBoxFixSuperKeepers";
+            this.checkBoxFixSuperKeepers.Size = new System.Drawing.Size(191, 20);
+            this.checkBoxFixSuperKeepers.TabIndex = 42;
+            this.checkBoxFixSuperKeepers.Text = "Fix \"super keepers\" (BETA)";
+            this.toolTips.SetToolTip(this.checkBoxFixSuperKeepers, "\"Super keepers\" is a common issues where occassionally in some games you can\'t sc" +
+        "ore as every shot you have on goal is saved. This should reduce the problem.");
+            this.checkBoxFixSuperKeepers.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxReplaceAITactics
+            // 
+            this.comboBoxReplaceAITactics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxReplaceAITactics.Enabled = false;
+            this.comboBoxReplaceAITactics.FormattingEnabled = true;
+            this.comboBoxReplaceAITactics.Location = new System.Drawing.Point(219, 224);
+            this.comboBoxReplaceAITactics.Name = "comboBoxReplaceAITactics";
+            this.comboBoxReplaceAITactics.Size = new System.Drawing.Size(220, 21);
+            this.comboBoxReplaceAITactics.TabIndex = 41;
+            // 
+            // checkBoxReplaceAITactics
+            // 
+            this.checkBoxReplaceAITactics.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxReplaceAITactics.AutoSize = true;
+            this.checkBoxReplaceAITactics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxReplaceAITactics.Location = new System.Drawing.Point(7, 224);
+            this.checkBoxReplaceAITactics.Name = "checkBoxReplaceAITactics";
+            this.checkBoxReplaceAITactics.Size = new System.Drawing.Size(169, 20);
+            this.checkBoxReplaceAITactics.TabIndex = 40;
+            this.checkBoxReplaceAITactics.Text = "Replace AI Tactics with:";
+            this.toolTips.SetToolTip(this.checkBoxReplaceAITactics, "Replaces the tactics the computer uses with a generally much harder set of tactic" +
+        "s");
+            this.checkBoxReplaceAITactics.UseVisualStyleBackColor = true;
+            this.checkBoxReplaceAITactics.CheckedChanged += new System.EventHandler(this.checkBoxReplaceAITactics_CheckedChanged);
             // 
             // checkBoxMakeYourPotential200
             // 
             this.checkBoxMakeYourPotential200.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxMakeYourPotential200.AutoSize = true;
             this.checkBoxMakeYourPotential200.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxMakeYourPotential200.Location = new System.Drawing.Point(219, 328);
+            this.checkBoxMakeYourPotential200.Location = new System.Drawing.Point(219, 354);
             this.checkBoxMakeYourPotential200.Name = "checkBoxMakeYourPotential200";
             this.checkBoxMakeYourPotential200.Size = new System.Drawing.Size(199, 20);
             this.checkBoxMakeYourPotential200.TabIndex = 39;
@@ -388,7 +433,7 @@
             this.checkBoxShowHiddenAttributes.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxShowHiddenAttributes.AutoSize = true;
             this.checkBoxShowHiddenAttributes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxShowHiddenAttributes.Location = new System.Drawing.Point(7, 328);
+            this.checkBoxShowHiddenAttributes.Location = new System.Drawing.Point(7, 354);
             this.checkBoxShowHiddenAttributes.Name = "checkBoxShowHiddenAttributes";
             this.checkBoxShowHiddenAttributes.Size = new System.Drawing.Size(161, 20);
             this.checkBoxShowHiddenAttributes.TabIndex = 38;
@@ -416,7 +461,7 @@
             this.checkBoxSwapSKoreaForChina.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxSwapSKoreaForChina.AutoSize = true;
             this.checkBoxSwapSKoreaForChina.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxSwapSKoreaForChina.Location = new System.Drawing.Point(7, 302);
+            this.checkBoxSwapSKoreaForChina.Location = new System.Drawing.Point(7, 328);
             this.checkBoxSwapSKoreaForChina.Name = "checkBoxSwapSKoreaForChina";
             this.checkBoxSwapSKoreaForChina.Size = new System.Drawing.Size(167, 20);
             this.checkBoxSwapSKoreaForChina.TabIndex = 36;
@@ -438,7 +483,7 @@
             // 
             this.checkBoxMakeExecutablePortable.AutoSize = true;
             this.checkBoxMakeExecutablePortable.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxMakeExecutablePortable.Location = new System.Drawing.Point(7, 276);
+            this.checkBoxMakeExecutablePortable.Location = new System.Drawing.Point(7, 302);
             this.checkBoxMakeExecutablePortable.Name = "checkBoxMakeExecutablePortable";
             this.checkBoxMakeExecutablePortable.Size = new System.Drawing.Size(183, 20);
             this.checkBoxMakeExecutablePortable.TabIndex = 34;
@@ -452,7 +497,7 @@
             this.checkBoxRestrictTactics.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxRestrictTactics.AutoSize = true;
             this.checkBoxRestrictTactics.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxRestrictTactics.Location = new System.Drawing.Point(219, 276);
+            this.checkBoxRestrictTactics.Location = new System.Drawing.Point(219, 302);
             this.checkBoxRestrictTactics.Name = "checkBoxRestrictTactics";
             this.checkBoxRestrictTactics.Size = new System.Drawing.Size(218, 20);
             this.checkBoxRestrictTactics.TabIndex = 33;
@@ -501,7 +546,7 @@
             // 
             this.checkBoxManageAnyTeam.AutoSize = true;
             this.checkBoxManageAnyTeam.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxManageAnyTeam.Location = new System.Drawing.Point(7, 250);
+            this.checkBoxManageAnyTeam.Location = new System.Drawing.Point(7, 276);
             this.checkBoxManageAnyTeam.Name = "checkBoxManageAnyTeam";
             this.checkBoxManageAnyTeam.Size = new System.Drawing.Size(135, 20);
             this.checkBoxManageAnyTeam.TabIndex = 29;
@@ -515,7 +560,7 @@
             this.checkBoxNewRegenCode.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxNewRegenCode.AutoSize = true;
             this.checkBoxNewRegenCode.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxNewRegenCode.Location = new System.Drawing.Point(219, 250);
+            this.checkBoxNewRegenCode.Location = new System.Drawing.Point(219, 276);
             this.checkBoxNewRegenCode.Name = "checkBoxNewRegenCode";
             this.checkBoxNewRegenCode.Size = new System.Drawing.Size(180, 20);
             this.checkBoxNewRegenCode.TabIndex = 27;
@@ -566,7 +611,7 @@
             // 
             this.checkBoxForceLoadAllPlayers.AutoSize = true;
             this.checkBoxForceLoadAllPlayers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxForceLoadAllPlayers.Location = new System.Drawing.Point(7, 224);
+            this.checkBoxForceLoadAllPlayers.Location = new System.Drawing.Point(7, 250);
             this.checkBoxForceLoadAllPlayers.Name = "checkBoxForceLoadAllPlayers";
             this.checkBoxForceLoadAllPlayers.Size = new System.Drawing.Size(157, 20);
             this.checkBoxForceLoadAllPlayers.TabIndex = 23;
@@ -579,7 +624,7 @@
             this.checkBoxUpdateNames.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxUpdateNames.AutoSize = true;
             this.checkBoxUpdateNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxUpdateNames.Location = new System.Drawing.Point(219, 302);
+            this.checkBoxUpdateNames.Location = new System.Drawing.Point(219, 328);
             this.checkBoxUpdateNames.Name = "checkBoxUpdateNames";
             this.checkBoxUpdateNames.Size = new System.Drawing.Size(227, 20);
             this.checkBoxUpdateNames.TabIndex = 28;
@@ -593,7 +638,7 @@
             // 
             this.checkBoxRemoveCDChecks.AutoSize = true;
             this.checkBoxRemoveCDChecks.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(294, 499);
+            this.checkBoxRemoveCDChecks.Location = new System.Drawing.Point(294, 550);
             this.checkBoxRemoveCDChecks.Name = "checkBoxRemoveCDChecks";
             this.checkBoxRemoveCDChecks.Size = new System.Drawing.Size(69, 20);
             this.checkBoxRemoveCDChecks.TabIndex = 23;
@@ -605,7 +650,7 @@
             // 
             this.buttonSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSave.Location = new System.Drawing.Point(135, 493);
+            this.buttonSave.Location = new System.Drawing.Point(135, 544);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(66, 31);
             this.buttonSave.TabIndex = 26;
@@ -619,7 +664,7 @@
             // 
             this.buttonRestore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRestore.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonRestore.Location = new System.Drawing.Point(211, 493);
+            this.buttonRestore.Location = new System.Drawing.Point(211, 544);
             this.buttonRestore.Name = "buttonRestore";
             this.buttonRestore.Size = new System.Drawing.Size(66, 31);
             this.buttonRestore.TabIndex = 27;
@@ -633,7 +678,7 @@
             // 
             this.buttonAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAbout.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAbout.Location = new System.Drawing.Point(95, 493);
+            this.buttonAbout.Location = new System.Drawing.Point(95, 544);
             this.buttonAbout.Name = "buttonAbout";
             this.buttonAbout.Size = new System.Drawing.Size(30, 31);
             this.buttonAbout.TabIndex = 23;
@@ -645,7 +690,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(465, 532);
+            this.ClientSize = new System.Drawing.Size(465, 584);
             this.Controls.Add(this.buttonRestore);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.buttonAbout);
@@ -675,7 +720,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v2.07";
+            this.Text = "Nick\'s CM0102Patcher v2.08";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
@@ -734,6 +779,9 @@
         private System.Windows.Forms.CheckBox checkBoxPositionInTacticsView;
         private System.Windows.Forms.CheckBox checkBoxShowHiddenAttributes;
         private System.Windows.Forms.CheckBox checkBoxMakeYourPotential200;
+        private System.Windows.Forms.CheckBox checkBoxFixSuperKeepers;
+        private System.Windows.Forms.ComboBox comboBoxReplaceAITactics;
+        private System.Windows.Forms.CheckBox checkBoxReplaceAITactics;
     }
 }
 

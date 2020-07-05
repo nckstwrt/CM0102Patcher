@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -219,6 +221,31 @@ namespace CM0102Patcher
                     bw.Write(arr);
                 }
             }
+        }
+
+        public static ZipStorer OpenZip(string zipFileName)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith(zipFileName));
+            return ZipStorer.Open(assembly.GetManifestResourceStream(resourceName), FileAccess.Read);
+        }
+
+        public static bool CompareByteArrays(byte[] array1, byte[] array2)
+        {
+            bool bEqual = false;
+            if (array1.Length == array2.Length)
+            {
+                int i = 0;
+                while ((i < array1.Length) && (array1[i] == array2[i]))
+                {
+                    i += 1;
+                }
+                if (i == array1.Length)
+                {
+                    bEqual = true;
+                }
+            }
+            return bEqual;
         }
     }
 }

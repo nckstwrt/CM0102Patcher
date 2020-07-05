@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -66,6 +67,13 @@ namespace CM0102Patcher
                     new ComboboxItem("1680 x 1050", new Point(1680, 1050)),
                     new ComboboxItem("1920 x 1080", new Point(1920, 1080)),
                 });
+
+                // Add AI Tactics to Combobox
+                using (var zs = MiscFunctions.OpenZip("AITactics.zip"))
+                {
+                    var folders = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.EndsWith("/"));
+                    comboBoxReplaceAITactics.Items.AddRange(folders.Select(x => x.FilenameInZip.Substring(0, x.FilenameInZip.Length - 1)).ToArray());
+                }
 
                 // Set Default Start Year to this year if we're past July (else use last year) 
                 var currentYear = DateTime.Now.Year;
@@ -147,6 +155,8 @@ namespace CM0102Patcher
                 if (detectedYear > 1900 && detectedYear < 2500)
                     numericGameStartYear.Value = detectedYear;
 
+                DetectAndSelectAITactics();
+
                 var patcher = new Patcher();
                 short speedHack;
                 double currencyMultiplier;
@@ -197,6 +207,7 @@ namespace CM0102Patcher
                     checkBoxMakeExecutablePortable.Checked = (appliedPatches.Contains("changeregistrylocation") && appliedPatches.Contains("memorycheckfix") && appliedPatches.Contains("removemutexcheck"));
                     checkBoxRestrictTactics.Checked = appliedPatches.Contains("restricttactics");
                     checkBoxShowHiddenAttributes.Checked = appliedPatches.Contains("addadditionalcolumns");
+                    checkBoxFixSuperKeepers.Checked = appliedPatches.Contains("fixsuperkeepers");
 
                     SetComboBox(comboBoxGameSpeed, speedHack);
                     numericCurrencyInflation.Value = (decimal)currencyMultiplier;
@@ -494,6 +505,11 @@ namespace CM0102Patcher
                     else
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["addadditionalcolumns"]);
 
+                    if (checkBoxFixSuperKeepers.Checked)
+                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["fixsuperkeepers"]);
+                    else
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["fixsuperkeepers"]);
+
                     if (checkBoxCDRemoval.Checked)
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablecdremove"]);
                     else
@@ -698,6 +714,24 @@ namespace CM0102Patcher
                                     };
 
                                     pf.ShowDialog();
+                                }
+                            }
+                        }
+                    }
+
+                    if (checkBoxReplaceAITactics.Checked && comboBoxReplaceAITactics.SelectedIndex >= 0)
+                    {
+                        var selectedPack = comboBoxReplaceAITactics.SelectedItem as string;
+
+                        using (var zs = MiscFunctions.OpenZip("AITactics.zip"))
+                        {
+                            var files = zs.ReadCentralDir();
+                            foreach (var file in files)
+                            {
+                                if (file.FilenameInZip.StartsWith(selectedPack) && !file.FilenameInZip.EndsWith("/"))
+                                {
+                                    var fileName = file.FilenameInZip.Substring(file.FilenameInZip.IndexOf('/')+1);
+                                    zs.ExtractFile(file, Path.Combine(dataDir, fileName));
                                 }
                             }
                         }
@@ -934,6 +968,67 @@ namespace CM0102Patcher
             comboBoxResolution.Enabled = checkBoxChangeResolution.Checked;
             if (checkBoxChangeResolution.Checked && comboBoxResolution.SelectedIndex == -1)
                 comboBoxResolution.SelectedIndex = 5;
+        }
+
+        private void checkBoxReplaceAITactics_CheckedChanged(object sender, EventArgs e)
+        {
+            comboBoxReplaceAITactics.Enabled = checkBoxReplaceAITactics.Checked;
+        }
+
+        private void DetectAndSelectAITactics()
+        {
+            var selectedTactics = "Original 3.9.68 Tactics";
+
+            try
+            {
+                if (!string.IsNullOrEmpty(labelFilename.Text))
+                {
+                    var compareTactic = "343_default.pct";
+                    var dir = Path.GetDirectoryName(labelFilename.Text);
+                    var dataDir = Path.Combine(dir, "Data");
+                    var pct424defaultFile = Path.Combine(dataDir, compareTactic);
+
+                    if (File.Exists(pct424defaultFile))
+                    {
+                        byte[] ourHash;
+                        using (var outPCTFile = File.Open(pct424defaultFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        {
+                            var md5 = MD5.Create();
+                            ourHash = md5.ComputeHash(outPCTFile);
+                        }
+
+                        using (var zs = MiscFunctions.OpenZip("AITactics.zip"))
+                        {
+                            var files = zs.ReadCentralDir();
+                            foreach (var file in files)
+                            {
+                                if (file.FilenameInZip.EndsWith(compareTactic))
+                                {
+                                    using (var ms = new MemoryStream())
+                                    {
+                                        zs.ExtractFile(file, ms);
+                                        ms.Position = 0;
+                                        var md5 = MD5.Create();
+                                        var hashBytes = md5.ComputeHash(ms);
+                                        if (MiscFunctions.CompareByteArrays(hashBytes, ourHash))
+                                        {
+                                            var slash = file.FilenameInZip.IndexOf('/');
+                                            if (slash != -1)
+                                            {
+                                                selectedTactics = file.FilenameInZip.Substring(0, slash);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            comboBoxReplaceAITactics.SelectedItem = selectedTactics;
         }
     }
 
