@@ -477,11 +477,13 @@ namespace CM0102Patcher
                     {
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["restricttactics"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["changegeneraldat"]);
+                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["changenamecolour"]);
                     }
                     else
                     {
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["restricttactics"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["changegeneraldat"]);
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["changenamecolour"]);
                     }
 
                     if (checkBoxMakeExecutablePortable.Checked)
