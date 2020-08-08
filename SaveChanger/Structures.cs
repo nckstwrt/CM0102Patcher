@@ -472,15 +472,25 @@ namespace CM0102Patcher
         public sbyte FirstLanguage;
         public sbyte SecondLanguage;
         public sbyte ThirdLanguage;
+        /*7A*/
         public int CapitalCity;
+        /*7E*/
         public sbyte StateOfDevelopment;
+        /*7F*/
         public sbyte GroupMembership;
+        /*80*/
         public int NationalStadium;
+        /*84*/
         public sbyte GameImportance;
+        /*85*/
         public sbyte LeagueStandard;
+        /*86*/
         public Int16 NumberClubs;
+        /*88*/
         public int NumberStaff;
+        /*8C*/
         public Int16 SeasonUpdateDay;
+        /*8E*/
         public Int16 Reputation;
         public int ForegroundColour1;
         public int BackgroundColour1;
