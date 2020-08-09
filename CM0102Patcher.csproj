@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="ByteWriter.cs" />
     <Compile Include="ClubMover.cs" />
+    <Compile Include="CM2.cs" />
     <Compile Include="ExceptionMsgBox.cs" />
     <Compile Include="FixtureScheduler.cs">
       <SubType>Form</SubType>

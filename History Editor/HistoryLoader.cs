@@ -11,6 +11,7 @@ namespace CM0102Patcher
     {
         public List<TIndex> index;
         public TIndex staffDetails;
+        public TIndex playerDetails;
         public List<TComp> nation_comp;
         public List<TComp> club_comp;
         public List<TStaffComp> staff_comp;
@@ -22,6 +23,7 @@ namespace CM0102Patcher
         public List<TStaffCompHistory> staff_comp_history;
         public List<TStaff> staff;
         public List<TStaffHistory> staff_history;
+        public List<TPlayer> players;
         public List<TNames> first_names;
         public List<TNames> second_names;
         public List<TNames> common_names;
@@ -63,8 +65,12 @@ namespace CM0102Patcher
                 throw new Exception("This is a very old version of the data!\r\n\r\nLoad in the Champ Man Editor and then save it to update it before history editing!\r\n\r\n");
             }
 
+            playerDetails = index.Find(x => GetTextFromBytes(x.Name) == "staff.dat" && x.FileType == 10);
+
             staff = MiscFunctions.ReadFile<TStaff>(Path.Combine(dir, "staff.dat"), staffDetails.Offset, staffDetails.Count);
             staff_history = MiscFunctions.ReadFile<TStaffHistory>(Path.Combine(dir, "staff_history.dat"));
+
+            players = MiscFunctions.ReadFile<TPlayer>(Path.Combine(dir, "staff.dat"), playerDetails.Offset, playerDetails.Count);
 
             first_names = MiscFunctions.ReadFile<TNames>(Path.Combine(dir, "first_names.dat"));
             second_names = MiscFunctions.ReadFile<TNames>(Path.Combine(dir, "second_names.dat"));

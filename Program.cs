@@ -13,6 +13,10 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
+            /*
+            CM2 cm2 = new CM2();
+            cm2.ReadData();
+            */
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new PatcherForm());

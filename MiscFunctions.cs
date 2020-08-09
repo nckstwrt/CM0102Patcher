@@ -24,6 +24,13 @@ namespace CM0102Patcher
             return ret;
         }
 
+        public static byte[] GetBytesFromText(string text, int byteArraySize)
+        {
+            var bytes = new byte[byteArraySize];
+            Array.Copy(latin1.GetBytes(text), bytes, text.Length);
+            return bytes;
+        }
+
         static Dictionary<string, string> foreign_characters = new Dictionary<string, string>
         {
             { "äæǽ", "ae" },
@@ -202,13 +209,14 @@ namespace CM0102Patcher
             return ret;
         }
 
-        public static void SaveFile<T>(string fileName, List<T> data, int seekTo = 0)
+        public static void SaveFile<T>(string fileName, List<T> data, int seekTo = 0, bool truncateFirst = false)
         {
             using (var fout = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             using (var bw = new BinaryWriter(fout))
             {
                 int objSize = Marshal.SizeOf(typeof(T));
-                // fout.SetLength(seekTo);
+                if (truncateFirst)
+                    fout.SetLength(seekTo);
                 fout.Seek(seekTo, SeekOrigin.Begin);
 
                 foreach (var obj in data)
