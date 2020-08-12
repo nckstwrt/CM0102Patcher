@@ -456,6 +456,34 @@ namespace CM0102Patcher
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TStadiums
+    {
+        public int ID;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)] public byte[] Name;
+        public byte StadiumGenderName;
+        public int StadiumCity;
+        public int StadiumCapacity;
+        public int StadiumSeatingCapacity;
+        public int StadiumExpansionCapacity;
+        public int StadiumNearbyStadium;
+        public byte StadiumCovered;
+        public byte StadiumUnderSoilHeating;
+    };
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TCities
+    {
+        public int ID;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] Name;
+        public char CityGenderName;
+        public int CityNation;
+        public double CityLatitude;
+        public double CityLongitude;
+        public char CityAttraction;
+        public long CityWeather;
+    };
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct TNation
     {
         // original data

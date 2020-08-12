@@ -28,6 +28,8 @@ namespace CM0102Patcher
         public List<TNames> second_names;
         public List<TNames> common_names;
         public Dictionary<int, string> staffNames;
+        public List<TCities> cities;
+        public List<TStadiums> stadiums;
 
         Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
 
@@ -87,6 +89,9 @@ namespace CM0102Patcher
                         staffNames[staffMember.ID] = GetTextFromBytes(second_names[staffMember.SecondName].Name) + ", " + GetTextFromBytes(first_names[staffMember.FirstName].Name);
                 }
             }
+
+            cities = MiscFunctions.ReadFile<TCities>(Path.Combine(dir, "city.dat"));
+            stadiums = MiscFunctions.ReadFile<TStadiums>(Path.Combine(dir, "stadium.dat"));
         }
         
         void UpdateIndex<T>(string fileName, List<T> data)

@@ -5,11 +5,31 @@ using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Runtime.Serialization.Formatters;
 
 namespace CM0102Patcher
 {
     public class CM2
     {
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        public struct CM2Manager
+        {
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)] public byte[] FirstName;              // 0
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] SecondName;             // 20
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] Nationality;            // 55
+            public byte YearsInGame;                                                                    // 90
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] Favoured;               // 91
+            public short Ability;                                                                       // 126
+            public short Reputation;                                                                    // 128
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] Formation;              // 130
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] Style;                  // 140
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] ManagingClub;           // 150
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] AppointedClub;          // 185
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] ManagingInternational;  // 195
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] AppointedInternational; // 230
+            public byte PlayerManager;                                                                  // 240
+        }
+
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct CM2Player
         {
@@ -98,73 +118,171 @@ namespace CM0102Patcher
 
         public void ReadData()
         {
-            var tmdata = MiscFunctions.ReadFile<CM2Team>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.DB1", 381);
-            var pldata1 = MiscFunctions.ReadFile<CM2Player>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA1.DB1", 632);
-
             HistoryLoader hl = new HistoryLoader();
             hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\2019\Championship Manager 01-02\Data\index.dat");
 
-            string[] teams = new string[] { "Manchester United",
-                                            "Arsenal",
-                                            "Aston Villa",
-                                            "Blackburn Rovers",
-                                            "Chelsea",
-                                            "Coventry City",
-                                            "Derby County",
-                                            "Everton",
-                                            "Leeds United",
-                                            "Leicester City",
-                                            "Liverpool",
-                                            "Middlesbrough",
-                                            "Newcastle United",
-                                            "Nottingham Forest",
-                                            "Sheffield Wednesday",
-                                            "Southampton",
-                                            "Sunderland",
-                                            "Tottenham Hotspur",
-                                            "West Ham United",
-                                            "Wimbledon",
-                                             };
+            /*
+            tmdata.Sort((x,y) => MiscFunctions.GetTextFromBytes(y.LongName).CompareTo(MiscFunctions.GetTextFromBytes(x.LongName)));
+            //var arse = tmdata.Find(x => MiscFunctions.GetTextFromBytes(x.LongName) == "Arsenal");
+            var arse = CreateCM2Team(hl, "Arsenal", "ED1");
+            arse.LongName = MiscFunctions.GetBytesFromText("Accrington Stanley", 35);
+            tmdata.Insert(100, arse);
+            MiscFunctions.SaveFile<CM2Team>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.DB1", tmdata, 381, true);
+            */
+            var tmdata = MiscFunctions.ReadFile<CM2Team>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.DB1", 381);
+            var pldata1 = MiscFunctions.ReadFile<CM2Player>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA1.DB1", 632);
+            var mgdata = MiscFunctions.ReadFile<CM2Manager>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\MGDATA.DB1", 182);
+            //var pldata2 = MiscFunctions.ReadFile<CM2Player>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA2.DB1", 632);
 
-            foreach (var team in teams)
+            var cm0102premTeams = ReadCM0102League(hl, "English Premier Division"); // 20
+            var cm0102firstDivTeams = ReadCM0102League(hl, "English First Division"); // 24
+            var cm0102secondDivTeams = ReadCM0102League(hl, "English Second Division"); // 24
+            var cm0102thirdDivTeams = ReadCM0102League(hl, "English Third Division"); // 24
+
+            var cm2premTeams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "EPR").Select(x => MiscFunctions.GetTextFromBytes(x.LongName)).ToList();         // 20
+            var cm2firstDivTeams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "ED1").Select(x => MiscFunctions.GetTextFromBytes(x.LongName)).ToList();     // 24
+            var cm2secondDivTeams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "ED2").Select(x => MiscFunctions.GetTextFromBytes(x.LongName)).ToList();    // 24
+            var cm2thirdDivTeams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "ED3").Select(x => MiscFunctions.GetTextFromBytes(x.LongName)).ToList();     // 24
+
+            var cm0102teams = new List<List<string>> { cm0102premTeams, cm0102firstDivTeams, cm0102secondDivTeams, cm0102thirdDivTeams };
+            var cm2divs = new List<string> { "EPR", "ED1", "ED2", "ED3" };
+
+            // Remove all player managers
+            for (int i = 0; i < mgdata.Count; i++)
             {
-                var newPlayers = ReadCM0102Data(hl, team);
+                var mgr = mgdata[i];
+                mgr.PlayerManager = 0;
+                mgdata[i] = mgr;
+            }
 
-                // Get Short Name
-                var shortTeamName = MiscFunctions.GetTextFromBytes(tmdata.Find(x => MiscFunctions.GetTextFromBytes(x.LongName) == team).ShortName);
+            // Remove all Scottish people :)
+            pldata1.RemoveAll(x => MiscFunctions.GetTextFromBytes(x.Nationality) == "Scotland");
 
-                // Remove data first
-                pldata1.RemoveAll(x => MiscFunctions.GetTextFromBytes(x.Team) == team || MiscFunctions.GetTextFromBytes(x.Team) == shortTeamName);
+            // Remove all free transfers
+            pldata1.RemoveAll(x => MiscFunctions.GetTextFromBytes(x.Team) == "Free Transfer" || MiscFunctions.GetTextFromBytes(x.Team) == "Schoolboy");
 
-                newPlayers = newPlayers.OrderByDescending(x => ConvertShortToNormalFormat(x.Reputation)).ToList();
-                foreach (var np in newPlayers)
+            // Remove all teams from English Leagues by blanking out their Division (and their players)
+            for (int i = 0; i < tmdata.Count; i++)
+            {
+                var team = tmdata[i];
+                if (MiscFunctions.GetTextFromBytes(team.Division) == "EPR" || MiscFunctions.GetTextFromBytes(team.Division) == "ED1" || MiscFunctions.GetTextFromBytes(team.Division) == "ED2" || MiscFunctions.GetTextFromBytes(team.Division) == "ED3")
                 {
-                    Console.WriteLine(MiscFunctions.GetTextFromBytes(np.FirstName) + " " + MiscFunctions.GetTextFromBytes(np.SecondName));
-                }
+                    team.Division = MiscFunctions.GetBytesFromText("ENL", 15);
+                    tmdata[i] = team;
 
-                for (int i = 0; i < Math.Min(30, newPlayers.Count); i++)
-                {
-                    var name = MiscFunctions.GetTextFromBytes(newPlayers[i].FirstName) + " " + MiscFunctions.GetTextFromBytes(newPlayers[i].SecondName);
-                    var rep = ConvertShortToNormalFormat(newPlayers[i].Reputation);
-                    pldata1.Add(newPlayers[i]);
+                    // Remove their players
+                    pldata1.RemoveAll(x => MiscFunctions.GetTextFromBytes(x.Team) == MiscFunctions.GetTextFromBytes(team.LongName) || MiscFunctions.GetTextFromBytes(x.Team) == MiscFunctions.GetTextFromBytes(team.ShortName));
                 }
             }
 
-            var deans = pldata1.Where(x => MiscFunctions.GetTextFromBytes(x.FirstName) == "Dean" && MiscFunctions.GetTextFromBytes(x.SecondName) == "Henderson").ToList();
+            // Remove the existing players + add the new
+            foreach (var divison in cm0102teams)
+            {
+                foreach (var team in divison)
+                {
+                    var newPlayers = ReadCM0102Data(hl, team);
+
+                    // Get CM2 Short Name
+                    var shortTeamName = MiscFunctions.GetTextFromBytes(tmdata.Find(x => MiscFunctions.GetTextFromBytes(x.LongName) == team).ShortName);
+
+                    if (string.IsNullOrEmpty(shortTeamName))
+                        shortTeamName = "DONTMATCH";
+
+                    // Some special mappings between team names where CM2 and CM0102 differ
+                    var extraCheck = TeamMapper(team);
+
+                    // Check if teams exist
+                    var check = pldata1.Count(x => MiscFunctions.GetTextFromBytes(x.Team) == team || MiscFunctions.GetTextFromBytes(x.Team) == shortTeamName || MiscFunctions.GetTextFromBytes(x.Team) == extraCheck);
+                    if (check == 0)
+                        Console.WriteLine(team);
+
+                    // Remove all their players too (if any exist)
+                    pldata1.RemoveAll(x => MiscFunctions.GetTextFromBytes(x.Team) == team || MiscFunctions.GetTextFromBytes(x.Team) == shortTeamName || MiscFunctions.GetTextFromBytes(x.Team) == extraCheck);
+
+                    // Get the original team name, let's try and keep that
+                    var tmDataIndex = tmdata.FindIndex(x => MiscFunctions.GetTextFromBytes(x.LongName) == team || MiscFunctions.GetTextFromBytes(x.ShortName) == shortTeamName || MiscFunctions.GetTextFromBytes(x.LongName) == extraCheck || MiscFunctions.GetTextFromBytes(x.ShortName) == extraCheck);
+
+                    // Get players ordered by reputation
+                    newPlayers = newPlayers.OrderByDescending(x => ConvertShortToNormalFormat(x.Reputation)).ToList();
+
+                    // Take first 30 of them
+                    for (int i = 0; i < Math.Min(30, newPlayers.Count); i++)
+                    {
+                        var newPlayer = newPlayers[i];
+
+                        // Make the player have the original Team name
+                        if (tmDataIndex != -1)
+                        {
+                            newPlayer.Team = MiscFunctions.GetBytesFromText(MiscFunctions.GetTextFromBytes(tmdata[tmDataIndex].LongName), 35);
+                        }
+
+                        pldata1.Add(newPlayer);
+                    }
+                }
+            }
+
+            // Correct Teams
+            for (int i = 0; i < cm2divs.Count; i++)
+            {
+                foreach (var team in cm0102teams[i])
+                {
+                    var extraCheck = TeamMapper(team);
+                    var index = tmdata.FindIndex(x => MiscFunctions.GetTextFromBytes(x.LongName) == team || MiscFunctions.GetTextFromBytes(x.LongName) == extraCheck || MiscFunctions.GetTextFromBytes(x.ShortName) == team || MiscFunctions.GetTextFromBytes(x.ShortName) == extraCheck);
+                    if (index == -1)
+                    {
+                        // Team doesn't exist - so add in
+                        var newTeam = CreateCM2Team(hl, team, cm2divs[i]);
+                        tmdata.Insert(100, newTeam);
+                    }
+                    else
+                    {
+                        var cm0102club = hl.club.Find(x => MiscFunctions.GetTextFromBytes(x.Name) == team);
+                        var temp = tmdata[index];
+                        temp.Division = MiscFunctions.GetBytesFromText(cm2divs[i], 15);
+                        temp.LastPosition = cm0102club.LastPosition;
+                        temp.LongName = tmdata[index].LongName;
+                        temp.ShortName = tmdata[index].ShortName;
+
+                        if (MiscFunctions.GetTextFromBytes(temp.Nation) == "EXTINCT")
+                        {
+                            temp.Nation = MiscFunctions.GetBytesFromText("England", 35);
+                        }
+
+                        tmdata[index] = temp;
+                    }
+                }
+            }
+
+            // We may have more than 52 in the ENL. If so, cut a few off
+            var enl_teams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "ENL").OrderByDescending(x => x.Following).ToList();
+            tmdata.RemoveAll(x => MiscFunctions.GetTextFromBytes(x.Division) == "ENL");
+            tmdata.AddRange(enl_teams.Take(52));
 
             MiscFunctions.SaveFile<CM2Player>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA1.DB1", pldata1, 632, true);
+            MiscFunctions.SaveFile<CM2Team>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.DB1", tmdata, 381, true);
+            MiscFunctions.SaveFile<CM2Manager>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\MGDATA.DB1", mgdata, 182, true);
 
-            using (var sw = new StreamWriter(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA1.csv"))
+
+            WritePlayerDataToCSV(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA1.csv", pldata1);
+            WriteTeamDataToCSV(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.csv", tmdata);
+        }
+
+        public void WritePlayerDataToCSV(string fileName, List<CM2Player> pldata)
+        {
+            using (var sw = new StreamWriter(fileName))
             {
                 WriteLine(sw, "FirstName", "SecondName", "Nationality", "NationalCaps", "NationalGoals", "Team", "Unavailable", "DataSet", "BirthDate",
                       "Age", "Goalkeeper", "Sweeper", "Defence", "Anchor", "Midfield", "Support", "Attack", "RightSided", "LeftSided", "CentralSided", "Ability", "Potential", "Reputation",
                       "Aggression", "BigOccasion", "Character", "Consistency", "Creativity", "Determination", "Dirtyness", "Dribbling", "Flair", "Heading", "Influence", "InjProne", "Intelligence", "Marking", "OffTheBall", "Pace", "Passing",
                       "Positioning", "SetPieces", "Shooting", "Stamina", "Strength", "Tackling", "Technique");
-                foreach (var p in pldata1)
+                foreach (var p in pldata)
                     WritePlayer(sw, p);
             }
+        }
 
-            using (var sw = new StreamWriter(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.csv"))
+        public void WriteTeamDataToCSV(string fileName, List<CM2Team> tmdata)
+        {
+            using (var sw = new StreamWriter(fileName))
             {
                 WriteLine(sw, "LongName", "ShortName", "Nation", "Region", "Developed", "XCoord", "YCoord", "EEC", "TCoef8893",
                           "City", "Stadium", "Capacity", "Seating", "Following", "Standing", "Blend", "Formation", "Style", "FirstHomeCol", "SecondHomeCol", "FirstAwayCol", "SecondAwayCol", "Division",
@@ -173,6 +291,85 @@ namespace CM0102Patcher
                     WriteTeam(sw, t);
             }
         }
+
+        public CM2Team CreateCM2Team(HistoryLoader hl, string team, string division)
+        {
+            CM2Team t = new CM2Team();
+
+            var cm0102club = hl.club.Find(x => MiscFunctions.GetTextFromBytes(x.Name) == team);
+            var cm0102stadium = hl.stadiums.Find(x => x.ID == cm0102club.Stadium);
+
+            t.LongName = MiscFunctions.GetBytesFromText(team, 35);
+            var shortName = MiscFunctions.GetTextFromBytes(cm0102club.ShortName);
+
+            if (!string.IsNullOrEmpty(shortName) && shortName != team)
+            { 
+                t.ShortName = MiscFunctions.GetBytesFromText(shortName, 35);
+            }
+
+            t.Nation = MiscFunctions.GetBytesFromText("England", 35);
+            t.Stadium = MiscFunctions.GetBytesFromText(MiscFunctions.GetTextFromBytes(cm0102stadium.Name), 35);
+            t.Capacity = ConvertLongToCM2Format(cm0102stadium.StadiumCapacity);
+            t.Seating = ConvertLongToCM2Format(cm0102stadium.StadiumSeatingCapacity);
+            t.Following = 10;
+            t.Standing = 7;
+            t.XCoord = 10;
+            t.YCoord = 10;
+            t.Style = MiscFunctions.GetBytesFromText("PASS", 10);
+            t.FirstHomeCol = MiscFunctions.GetBytesFromText("WHI", 15);
+            t.SecondHomeCol = MiscFunctions.GetBytesFromText("BLU", 15);
+            t.FirstAwayCol = MiscFunctions.GetBytesFromText("WHI", 15);
+            t.SecondAwayCol = MiscFunctions.GetBytesFromText("GRN", 15);
+            t.Division = MiscFunctions.GetBytesFromText(division, 15);
+            t.LastDivision = MiscFunctions.GetBytesFromText(division, 15);
+            t.LastPosition = cm0102club.LastPosition;
+            t.Cash = ConvertLongToCM2Format(cm0102club.Cash / 1000);
+            t.Wav = MiscFunctions.GetBytesFromText(/*"silent"*/"ROCHDAL1", 15);
+
+            return t;
+        }
+
+        public string TeamMapper(string team)
+        {
+            string extraCheck = team;
+            switch (team)
+            {
+                case "Brighton and Hove Albion":
+                    extraCheck = "Brighton";
+                    break;
+                case "Sheffield United":
+                    extraCheck = "Sheff U";
+                    break;
+                case "Cardiff City":
+                    extraCheck = "Cardiff C";
+                    break;
+                case "Hull City":
+                    extraCheck = "Hull C";
+                    break;
+                case "AFC Wimbledon":
+                    extraCheck = "Wimbledon";
+                    break;
+                case "Oxford United":
+                    extraCheck = "Oxford U";
+                    break;
+                case "Rochdale AFC":
+                    extraCheck = "Rochdale";
+                    break;
+                default:
+                    extraCheck = team.Replace(" FC", "");
+                    break;
+            }
+            return extraCheck;
+        }
+
+        public List<string> ReadCM0102League(HistoryLoader hl, string league)
+        {
+            var foundLeague = hl.club_comp.Find(x => MiscFunctions.GetTextFromBytes(x.Name) == league);
+            var alLClubs = hl.club.FindAll(x => x.Division == foundLeague.ID);
+            return alLClubs.Select(x => MiscFunctions.GetTextFromBytes(x.Name)).ToList();
+        }
+
+        int maxNameLength = 0;
 
         public List<CM2Player> ReadCM0102Data(HistoryLoader hl, string teamName)
         {
@@ -186,12 +383,41 @@ namespace CM0102Patcher
                 var firstName = MiscFunctions.GetTextFromBytes(hl.first_names[s.FirstName].Name);
                 var secondName = MiscFunctions.GetTextFromBytes(hl.second_names[s.SecondName].Name);
                 var commonName = MiscFunctions.GetTextFromBytes(hl.common_names[s.CommonName].Name);
+
+                // Remove accents
+                firstName = MiscFunctions.RemoveDiacritics(firstName);
+                secondName = MiscFunctions.RemoveDiacritics(secondName);
+                commonName = MiscFunctions.RemoveDiacritics(commonName);
+
+                maxNameLength = Math.Max(maxNameLength, firstName.Length);
+                maxNameLength = Math.Max(maxNameLength, secondName.Length);
+                maxNameLength = Math.Max(maxNameLength, commonName.Length);
+
+                // Have to cut to 20 letter (even though the max you get from CM0102 is 25)
+                // Any more and you get addname 1
+                firstName = firstName.Substring(0, Math.Min(20, firstName.Length));
+                secondName = secondName.Substring(0, Math.Min(20, secondName.Length));
+                commonName = commonName.Substring(0, Math.Min(20, commonName.Length));
+
+                if (s.Nation == -1)
+                    continue;
+
                 var nation = MiscFunctions.GetTextFromBytes(hl.nation[s.Nation].Name);
                 var team = teamName; //MiscFunctions.GetTextFromBytes(hl.club[s.ClubJob].ShortName);
-                var dob = TCMDate.ToDateTime(s.DateOfBirth).AddYears(-2);
-                var birthdate = dob.ToString("dd.MM.yy");
-                var age = 2001 - dob.Year;
-
+                DateTime dob;
+                string birthdate = "";
+                int age;
+                if (s.DateOfBirth.Year != 0)
+                {
+                    dob = TCMDate.ToDateTime(s.DateOfBirth).AddYears(-2);
+                    birthdate = dob.ToString("dd.MM.yy");
+                    age = 2001 - dob.Year;
+                }
+                else
+                {
+                    age = 2001 - s.YearOfBirth;
+                }
+                
                 var p = hl.players[s.Player];
 
                 var goalkeeper = ConvertPosition(p.Goalkeeper);;
@@ -206,7 +432,7 @@ namespace CM0102Patcher
                 var centralsided = ConvertSide(p.Central);
 
                 var ability = p.CurrentAbility;
-                var potential = p.PotentialAbility < 0 ? 0 : p.PotentialAbility;
+                var potential = ((short)p.PotentialAbility) < 0 ? 0 : p.PotentialAbility;
                 var reputation = p.CurrentReputation;
 
                 var Aggression = p.Aggression;
@@ -245,6 +471,52 @@ namespace CM0102Patcher
                     nation = "Senegal";
                 if (nation == "Benin")
                     nation = "Nigeria";
+
+                var nationsToBeMapped = new string[] {
+                    "Iran",
+                    "Curaçao",
+                    "Cuba",
+                    "Namibia",
+                    "Samoa",
+                    "Grenada",
+                    "The Philippines",
+                    "Curaçao",
+                    "Montserrat",
+                    "Surinam",
+                    "Curaçao",
+                    "Antigua & Barbuda",
+                    "Cape Verde Islands",
+                    "St Kitts & Nevis",
+                    "Oman",
+                    "Antigua & Barbuda",
+                    "The Congo",
+                    "St Kitts & Nevis",
+                    "The Congo",
+                    "Martinique",
+                    "Curaçao",
+                    "Sierra Leone",
+                    "Antigua & Barbuda",
+                    "Antigua & Barbuda",
+                    "Saint Lucia",
+                    "Guyana",
+                    "Indonesia",
+                    "Pakistan",
+                    "Sudan",
+                    "Grenada",
+                    "Grenada",
+                    "Grenada",
+                    "Antigua & Barbuda",
+                    "Guyana",
+                    "Montserrat",
+                    "Guinea-Bissau",
+                    "Guyana",
+                    "Antigua & Barbuda",
+                    "St Kitts & Nevis",
+                    "Gibraltar",
+                    "Seville"
+                };
+                if (nationsToBeMapped.Contains(nation))
+                    nation = "France";
 
                 var newPlayer = new CM2Player();
                 if (string.IsNullOrEmpty(commonName))

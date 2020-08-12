@@ -140,7 +140,13 @@ namespace CM0102Patcher
         public static string RemoveDiacritics(this string s)
         {
             string text = "";
-            
+
+            if (string.IsNullOrEmpty(s))
+                return text;
+
+            if (s[0] == 0xde)
+                s = "Th" + s.Substring(1);
+
             foreach (char c in s)
             {
                 int len = text.Length;
@@ -171,8 +177,6 @@ namespace CM0102Patcher
             for (int i = 0; i < names.Count; i++)
             {
                 var name = GetTextFromBytes(names[i].Name);
-                if (names[i].Name[0] == 0xde)
-                    name = "Th" + name.Substring(1);
                 name = name.RemoveDiacritics();
                 Array.Copy(ASCIIEncoding.ASCII.GetBytes(name), names[i].Name, name.Length);
             }
