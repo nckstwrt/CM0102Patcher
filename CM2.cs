@@ -116,6 +116,37 @@ namespace CM0102Patcher
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 15)] public byte[] Wav;
         }
 
+        public class CM2History
+        {
+            public string Name;
+            public string Nation;
+            public string BirthDate;
+            public List<CM2HistoryDetails> Details = new List<CM2HistoryDetails>();
+
+            public class CM2HistoryDetails
+            {
+                public byte Year;
+                public string Team;
+                public byte Apps;
+                public byte Goals;
+            }
+
+            public void AddDetail(int Year, string Team, int Apps, int Goals)
+            {
+                var detail = new CM2HistoryDetails();
+                detail.Year = (byte)(Year - 1900);
+                detail.Team = Team;
+                detail.Apps = (byte)Apps;
+                detail.Goals = (byte)Goals;
+                Details.Add(detail);
+            }
+
+            public void SetBirthDate(DateTime dt)
+            {
+                BirthDate = dt.ToString("d.M.yy");
+            }
+        }
+
         public void ReadData()
         {
             HistoryLoader hl = new HistoryLoader();
@@ -132,6 +163,9 @@ namespace CM0102Patcher
             var tmdata = MiscFunctions.ReadFile<CM2Team>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.DB1", 381);
             var pldata1 = MiscFunctions.ReadFile<CM2Player>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA1.DB1", 632);
             var mgdata = MiscFunctions.ReadFile<CM2Manager>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\MGDATA.DB1", 182);
+
+            var plhist = ReadCM2HistoryFile(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLHIST.BIN");
+            WriteCM2HistoryFile(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLHIST_New.BIN", plhist);
             //var pldata2 = MiscFunctions.ReadFile<CM2Player>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA2.DB1", 632);
 
             var cm0102premTeams = ReadCM0102League(hl, "English Premier Division"); // 20
@@ -156,7 +190,10 @@ namespace CM0102Patcher
             }
 
             // Remove all Scottish people :)
+            var scot_count = pldata1.Where(x => MiscFunctions.GetTextFromBytes(x.Nationality) == "Scotland").Count();
+            var scots = pldata1.Where(x => MiscFunctions.GetTextFromBytes(x.Nationality) == "Scotland").Take(500).ToList();
             pldata1.RemoveAll(x => MiscFunctions.GetTextFromBytes(x.Nationality) == "Scotland");
+            pldata1.AddRange(scots);
 
             // Remove all free transfers
             pldata1.RemoveAll(x => MiscFunctions.GetTextFromBytes(x.Team) == "Free Transfer" || MiscFunctions.GetTextFromBytes(x.Team) == "Schoolboy");
@@ -262,9 +299,89 @@ namespace CM0102Patcher
             MiscFunctions.SaveFile<CM2Team>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.DB1", tmdata, 381, true);
             MiscFunctions.SaveFile<CM2Manager>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\MGDATA.DB1", mgdata, 182, true);
 
-
             WritePlayerDataToCSV(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA1.csv", pldata1);
             WriteTeamDataToCSV(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.csv", tmdata);
+        }
+
+        public List<CM2History> ReadCM2HistoryFile(string fileName)
+        {
+            var histories = new List<CM2History>();
+            using (var f = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var br = new BinaryReader(f))
+            {
+                Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
+
+                var count = br.ReadInt16();
+
+                for (int i = 0; i < count; i++)
+                {
+                    var history = new CM2History();
+                    history.Name = MiscFunctions.GetTextFromBytes(br.ReadBytes(br.ReadByte()), true);
+                    history.Nation = MiscFunctions.GetTextFromBytes(br.ReadBytes(br.ReadByte()), true);
+                    history.BirthDate = MiscFunctions.GetTextFromBytes(br.ReadBytes(br.ReadByte()), true);
+
+                    string Team = "";
+                    while (true)
+                    {
+                        var Year = br.ReadByte();
+                        if (Year == 0xff)
+                            break;
+                        
+                        var details = new CM2History.CM2HistoryDetails();
+                        details.Year = Year;
+
+                        var length = br.ReadByte();
+                        if (length != 0)
+                            Team = MiscFunctions.GetTextFromBytes(br.ReadBytes(length), true);
+                        details.Team = Team;
+                        details.Apps = br.ReadByte();
+                        details.Goals = br.ReadByte();
+                        history.Details.Add(details);
+                    }
+                    histories.Add(history);
+                }
+            }
+            return histories;
+        }
+
+        void WriteCM2HistoryFile(string fileName, List<CM2History> histories)
+        {
+            using (var f = File.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+            using (var bw = new BinaryWriter(f))
+            {
+                Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
+
+                bw.Write((Int16)histories.Count);
+
+                foreach (var history in histories)
+                {
+                    bw.Write((byte)history.Name.Length);
+                    bw.Write(latin1.GetBytes(history.Name));
+                    bw.Write((byte)history.Nation.Length);
+                    bw.Write(latin1.GetBytes(history.Nation));
+                    bw.Write((byte)history.BirthDate.Length);
+                    bw.Write(latin1.GetBytes(history.BirthDate));
+
+                    var Team = "";
+                    foreach (var details in history.Details)
+                    {
+                        bw.Write((byte)details.Year);
+                        if (details.Team == Team)
+                        {
+                            bw.Write((byte)0x00);
+                        }
+                        else
+                        {
+                            bw.Write((byte)details.Team.Length);
+                            bw.Write(latin1.GetBytes(details.Team));
+                            Team = details.Team;
+                        }
+                        bw.Write((byte)details.Apps);
+                        bw.Write((byte)details.Goals);
+                    }
+                    bw.Write((byte)0xff);
+                }
+            }
         }
 
         public void WritePlayerDataToCSV(string fileName, List<CM2Player> pldata)
@@ -395,9 +512,10 @@ namespace CM0102Patcher
 
                 // Have to cut to 20 letter (even though the max you get from CM0102 is 25)
                 // Any more and you get addname 1
-                firstName = firstName.Substring(0, Math.Min(20, firstName.Length));
-                secondName = secondName.Substring(0, Math.Min(20, secondName.Length));
-                commonName = commonName.Substring(0, Math.Min(20, commonName.Length));
+                int maxNameSize = 20;
+                firstName = firstName.Substring(0, Math.Min(maxNameSize, firstName.Length));
+                secondName = secondName.Substring(0, Math.Min(maxNameSize, secondName.Length));
+                commonName = commonName.Substring(0, Math.Min(maxNameSize, commonName.Length));
 
                 if (s.Nation == -1)
                     continue;

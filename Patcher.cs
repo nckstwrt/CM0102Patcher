@@ -222,16 +222,26 @@ namespace CM0102Patcher
                     }
                 }
 
-                fin.Seek(0x5472ce, SeekOrigin.Begin);
-                speedHack = br.ReadInt16();
+                if (fin.Length > (0x5472ce + 2))
+                {
+                    fin.Seek(0x5472ce, SeekOrigin.Begin);
+                    speedHack = br.ReadInt16();
 
-                fin.Seek(0x5196C1, SeekOrigin.Begin);
-                if (br.ReadByte() == 0x90)
-                    currencyMultiplier = 1.0;
+                    fin.Seek(0x5196C1, SeekOrigin.Begin);
+                    if (br.ReadByte() == 0x90)
+                        currencyMultiplier = 1.0;
+                    else
+                    {
+                        fin.Seek(0x5196C1, SeekOrigin.Begin);
+                        currencyMultiplier = br.ReadDouble();
+                    }
+                }
                 else
                 {
-                    fin.Seek(0x5196C1, SeekOrigin.Begin);
-                    currencyMultiplier = br.ReadDouble();
+                    // Clearly a completly wrong exe
+                    speedHack = 10000;
+                    currencyMultiplier = 1.0;
+                    return appliedPatches;
                 }
             }
 

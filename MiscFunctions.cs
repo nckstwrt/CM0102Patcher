@@ -13,12 +13,12 @@ namespace CM0102Patcher
     {
         static Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
 
-        public static string GetTextFromBytes(byte[] bytes)
+        public static string GetTextFromBytes(byte[] bytes, bool useExactSize = false)
         {
             var ret = "";
             if (bytes != null)
             {
-                int length = Array.IndexOf(bytes, (byte)0);
+                int length = useExactSize ? bytes.Length : Array.IndexOf(bytes, (byte)0);
                 ret = latin1.GetString(bytes, 0, length);
             }
             return ret;
