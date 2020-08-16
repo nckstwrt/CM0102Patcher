@@ -171,6 +171,18 @@ namespace CM0102Patcher
             return text;
         }
 
+        public static string ReadString(this byte[] bytes)
+        {
+            return MiscFunctions.GetTextFromBytes(bytes);
+        }
+
+        public static bool StartsWithIgnoreBlank(this string s, string s2)
+        {
+            if (String.IsNullOrEmpty(s) || String.IsNullOrEmpty(s2))
+                return false;
+            return s.ToLower().StartsWith(s2.ToLower());
+        }
+
         public static void RemoveAccentsFromNameFile(string fileName)
         {
             var names = ReadFile<TNames>(fileName);

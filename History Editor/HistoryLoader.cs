@@ -49,6 +49,12 @@ namespace CM0102Patcher
             var dir = Path.GetDirectoryName(indexFile);
             
             index = MiscFunctions.ReadFile<TIndex>(indexFile, 8);
+
+            foreach (var idx in index)
+            {
+                Console.WriteLine("{3}: {0} {1} {2}", idx.Name.ReadString(), idx.Count, idx.FileType, idx.Offset);
+            }
+
             nation_comp = MiscFunctions.ReadFile<TComp>(Path.Combine(dir, "nation_comp.dat"));
             club_comp = MiscFunctions.ReadFile<TComp>(Path.Combine(dir, "club_comp.dat"));
             club = MiscFunctions.ReadFile<TClub>(Path.Combine(dir, "club.dat"));
@@ -144,6 +150,17 @@ namespace CM0102Patcher
             MiscFunctions.SaveFile<TCompHistory>(Path.Combine(dir, "club_comp_history.dat"), club_comp_history);
             MiscFunctions.SaveFile<TStaffCompHistory>(Path.Combine(dir, "staff_comp_history.dat"), staff_comp_history);
             MiscFunctions.SaveFile<TStaffHistory>(Path.Combine(dir, "staff_history.dat"), staff_history);
+        }
+
+        public void SaveStaff(string indexFile)
+        {
+            var dir = Path.GetDirectoryName(indexFile);
+            UpdateIndex("second_names.dat", second_names);
+            UpdateIndex("first_names.dat", first_names);
+            MiscFunctions.SaveFile<TIndex>(indexFile, index, 8);
+            MiscFunctions.SaveFile<TStaff>(Path.Combine(dir, "staff.dat"), staff, staffDetails.Offset);
+            MiscFunctions.SaveFile<TNames>(Path.Combine(dir, "second_names.dat"), second_names, 0, true);
+            MiscFunctions.SaveFile<TNames>(Path.Combine(dir, "first_names.dat"), first_names, 0, true);
         }
 
         public void SortClubNames()
