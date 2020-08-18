@@ -155,13 +155,6 @@ namespace CM0102Patcher
             public CM2History history = null;
         }
 
-        int FindTeamIndex(List<CM2Team> tmdata, string team)
-        {
-            var extraCheck = TeamMapper(team);
-
-            return tmdata.FindIndex(x => x.LongName.ReadString().StartsWithIgnoreBlank(team) || x.ShortName.ReadString().StartsWithIgnoreBlank(team) || x.LongName.ReadString().StartsWithIgnoreBlank(extraCheck) || x.ShortName.ReadString().StartsWithIgnoreBlank(extraCheck));
-        }
-
         public class CM0102Team
         {
             public string Name;
@@ -177,14 +170,6 @@ namespace CM0102Patcher
             HistoryLoader hl = new HistoryLoader();
             hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\2019\Championship Manager 01-02\Data\index.dat");
 
-            /*
-            tmdata.Sort((x,y) => MiscFunctions.GetTextFromBytes(y.LongName).CompareTo(MiscFunctions.GetTextFromBytes(x.LongName)));
-            //var arse = tmdata.Find(x => MiscFunctions.GetTextFromBytes(x.LongName) == "Arsenal");
-            var arse = CreateCM2Team(hl, "Arsenal", "ED1");
-            arse.LongName = MiscFunctions.GetBytesFromText("Accrington Stanley", 35);
-            tmdata.Insert(100, arse);
-            MiscFunctions.SaveFile<CM2Team>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.DB1", tmdata, 381, true);
-            */
             var tmdata = MiscFunctions.ReadFile<CM2Team>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.DB1", 381);
             var pldata1 = MiscFunctions.ReadFile<CM2Player>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA1.DB1", 632);
             var mgdata = MiscFunctions.ReadFile<CM2Manager>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\MGDATA.DB1", 182);
@@ -193,18 +178,29 @@ namespace CM0102Patcher
             //var plhist = ReadCM2HistoryFile(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLHIST.BIN");
             var plhist = new List<CM2History>();
             
+            // English
             var cm0102premTeams = ReadCM0102League(hl, "English Premier Division"); // 20
             var cm0102firstDivTeams = ReadCM0102League(hl, "English First Division"); // 24
             var cm0102secondDivTeams = ReadCM0102League(hl, "English Second Division"); // 24
             var cm0102thirdDivTeams = ReadCM0102League(hl, "English Third Division"); // 24
 
+            // Scottish
+            var cm0102ScotpremTeams = ReadCM0102League(hl, "Scottish Premier Division"); // 12
+            var cm0102ScotfirstDivTeams = ReadCM0102League(hl, "Scottish First Division"); // 10
+            var cm0102ScotsecondDivTeams = ReadCM0102League(hl, "Scottish Second Division"); // 10
+            var cm0102ScotthirdDivTeams = ReadCM0102League(hl, "Scottish Third Division"); // 19
+
             var cm2premTeams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "EPR").Select(x => MiscFunctions.GetTextFromBytes(x.LongName)).ToList();         // 20
             var cm2firstDivTeams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "ED1").Select(x => MiscFunctions.GetTextFromBytes(x.LongName)).ToList();     // 24
             var cm2secondDivTeams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "ED2").Select(x => MiscFunctions.GetTextFromBytes(x.LongName)).ToList();    // 24
             var cm2thirdDivTeams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "ED3").Select(x => MiscFunctions.GetTextFromBytes(x.LongName)).ToList();     // 24
+            var cm2ScotpremTeams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "SPR").Select(x => MiscFunctions.GetTextFromBytes(x.LongName)).ToList();         // 10
+            var cm2ScotfirstDivTeams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "SD1").Select(x => MiscFunctions.GetTextFromBytes(x.LongName)).ToList();     // 10
+            var cm2ScotsecondDivTeams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "SD2").Select(x => MiscFunctions.GetTextFromBytes(x.LongName)).ToList();    // 10
+            var cm2ScotthirdDivTeams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "SD3").Select(x => MiscFunctions.GetTextFromBytes(x.LongName)).ToList();     // 10
 
-            var cm0102teams = new List<List<string>> { cm0102premTeams, cm0102firstDivTeams, cm0102secondDivTeams, cm0102thirdDivTeams };
-            var cm2divs = new List<string> { "EPR", "ED1", "ED2", "ED3" };
+            var cm0102teams = new List<List<string>> { cm0102premTeams, cm0102firstDivTeams, cm0102secondDivTeams, cm0102thirdDivTeams, cm0102ScotpremTeams, cm0102ScotfirstDivTeams, cm0102ScotsecondDivTeams, cm0102ScotthirdDivTeams };
+            var cm2divs = new List<string> { "EPR", "ED1", "ED2", "ED3", "SPR", "SD1", "SD2", "SD3" };
 
             // Remove all player managers
             for (int i = 0; i < mgdata.Count; i++)
@@ -217,6 +213,7 @@ namespace CM0102Patcher
             // Add an Unknown Team
             tmdata.Insert(100, CreateUnknownTeam());
 
+            // Add in Foeign Players
             var cm0102clubs = hl.club.Select(x => new CM0102Team { Name = x.Name.ReadString().RemoveDiacritics().ToLower(), ShortName = x.ShortName.ReadString().RemoveDiacritics().ToLower(), ID = x.ID }).ToList();
             var pldata2new = new List<CM2Player>();
             var foreignPlayerTeams = pldata2.Select(x => x.Team.ReadString()).Distinct().OrderBy(x => x).ToList();
@@ -234,7 +231,6 @@ namespace CM0102Patcher
 
                     if (teamName == "paris st.germain fc")
                         extraCheck = "psg";
-
 
                     // Find how many players were in original DB
                     var playerCount = pldata2.Where(x => teamName.StartsWithIgnoreBlank(x.Team.ReadString()) || teamShortName.StartsWithIgnoreBlank(x.Team.ReadString())).Count();
@@ -274,9 +270,10 @@ namespace CM0102Patcher
             }
             pldata2 = pldata2new;
 
-            // Remove everyone :)
+            // Remove everyone domestic :)
             pldata1 = new List<CM2Player>();
 
+            /*
             // Remove all Scottish people :)
             var scot_count = pldata1.Where(x => MiscFunctions.GetTextFromBytes(x.Nationality) == "Scotland").Count();
             var scots = pldata1.Where(x => MiscFunctions.GetTextFromBytes(x.Nationality) == "Scotland").Take(500).ToList();
@@ -285,14 +282,17 @@ namespace CM0102Patcher
 
             // Remove all free transfers + Schoolboys
             pldata1.RemoveAll(x => MiscFunctions.GetTextFromBytes(x.Team) == "Free Transfer" || MiscFunctions.GetTextFromBytes(x.Team) == "Schoolboy");
-            
-            // Remove all teams from English Leagues by blanking out their Division (and their players)
+            */
+
+            // Remove all teams from English + Scottish Leagues by blanking out their Division (and their players)
             for (int i = 0; i < tmdata.Count; i++)
             {
                 var team = tmdata[i];
-                if (MiscFunctions.GetTextFromBytes(team.Division) == "EPR" || MiscFunctions.GetTextFromBytes(team.Division) == "ED1" || MiscFunctions.GetTextFromBytes(team.Division) == "ED2" || MiscFunctions.GetTextFromBytes(team.Division) == "ED3")
+                //if (MiscFunctions.GetTextFromBytes(team.Division) == "EPR" || MiscFunctions.GetTextFromBytes(team.Division) == "ED1" || MiscFunctions.GetTextFromBytes(team.Division) == "ED2" || MiscFunctions.GetTextFromBytes(team.Division) == "ED3")
+                if (cm2divs.Contains(team.Division.ReadString()))
                 {
-                    team.Division = MiscFunctions.GetBytesFromText("ENL", 15);
+
+                    team.Division = MiscFunctions.GetBytesFromText(team.Division.ReadString()[0] == 'E' ? "ENL" : "SNL", 15);
                     tmdata[i] = team;
 
                     // Remove their players
@@ -305,9 +305,6 @@ namespace CM0102Patcher
             {
                 foreach (var team in divison)
                 {
-                    if (team.Contains("Cambridge"))
-                        Console.WriteLine();
-
                     var newPlayers = ReadCM0102Data(hl, team, tmdata);
 
                     // Get CM2 Short Name
@@ -386,6 +383,7 @@ namespace CM0102Patcher
 
                         if (MiscFunctions.GetTextFromBytes(temp.Nation) == "EXTINCT")
                         {
+                            Console.WriteLine("Correcting EXINCT team to English: {0}", temp.LongName.ReadString());
                             temp.Nation = MiscFunctions.GetBytesFromText("England", 35);
                         }
 
@@ -394,10 +392,17 @@ namespace CM0102Patcher
                 }
             }
 
-            // We may have more than 52 in the ENL. If so, cut a few off
+            // We may have more than 52 in the ENL + 27 in the SNL. If so, cut a few off
             var enl_teams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "ENL").OrderByDescending(x => x.Following).ToList();
             tmdata.RemoveAll(x => MiscFunctions.GetTextFromBytes(x.Division) == "ENL");
             tmdata.AddRange(enl_teams.Take(52));
+            var snl_teams = tmdata.Where(x => MiscFunctions.GetTextFromBytes(x.Division) == "SNL").OrderByDescending(x => x.Following).ToList();
+            tmdata.RemoveAll(x => MiscFunctions.GetTextFromBytes(x.Division) == "SNL");
+            tmdata.AddRange(enl_teams.Take(27));
+
+            // Cut Hamilton + Aberdeen from SPR
+            pldata1.RemoveAll(x => x.Team.ReadString() == "Hamilton" || x.Team.ReadString() == "Aberdeen");
+            tmdata.RemoveAll(x => x.ShortName.ReadString() == "Hamilton" || x.ShortName.ReadString() == "Aberdeen");
 
             MiscFunctions.SaveFile<CM2Player>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA1.DB1", pldata1, 632, true);
             MiscFunctions.SaveFile<CM2Player>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA2.DB1", pldata2, 632, true);
@@ -413,6 +418,13 @@ namespace CM0102Patcher
             WritePlayerDataToCSV(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA1.csv", pldata1);
             WritePlayerDataToCSV(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA2.csv", pldata2);
             WriteTeamDataToCSV(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.csv", tmdata);
+        }
+
+        int FindTeamIndex(List<CM2Team> tmdata, string team)
+        {
+            var extraCheck = TeamMapper(team);
+
+            return tmdata.FindIndex(x => x.LongName.ReadString().StartsWithIgnoreBlank(team) || x.ShortName.ReadString().StartsWithIgnoreBlank(team) || x.LongName.ReadString().StartsWithIgnoreBlank(extraCheck) || x.ShortName.ReadString().StartsWithIgnoreBlank(extraCheck));
         }
 
         public void ApplyCorrectCount(string file, int position, int count)
@@ -546,7 +558,7 @@ namespace CM0102Patcher
                 t.ShortName = MiscFunctions.GetBytesFromText(shortName, 35);
             }
 
-            t.Nation = MiscFunctions.GetBytesFromText("England", 35);
+            t.Nation = MiscFunctions.GetBytesFromText(division[0] == 'E' ? "England" : "Scotland", 35);
             t.Stadium = MiscFunctions.GetBytesFromText(MiscFunctions.GetTextFromBytes(cm0102stadium.Name), 35);
             t.Capacity = ConvertLongToCM2Format(cm0102stadium.StadiumCapacity);
             t.Seating = ConvertLongToCM2Format(cm0102stadium.StadiumSeatingCapacity);
