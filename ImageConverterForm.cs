@@ -22,7 +22,7 @@ namespace CM0102Patcher
         private void buttonInputSelectFile_Click(object sender, EventArgs e)
         {
             var ofd = new OpenFileDialog();
-            ofd.Filter = "Image Files (*.rgn/*.jpg/*.bmp/*.png)|*.jpg;*.bmp;*.rgn;*.png|All files (*.*)|*.*";
+            ofd.Filter = "Image Files (*.rgn/*.jpg/*.bmp/*.png)|*.jpg;*.hsr;*.bmp;*.rgn;*.png|All files (*.*)|*.*";
             ofd.Title = "Select an input image file...";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -43,7 +43,7 @@ namespace CM0102Patcher
         private void buttonOutputSelectFile_Click(object sender, EventArgs e)
         {
             var ofd = new SaveFileDialog();
-            ofd.Filter = "RGN Files (*.rgn)|*.rgn|Image Files (*.jpg/*.bmp/*.png)|*.jpg;*.bmp;*.png|All files (*.*)|*.*";
+            ofd.Filter = "RGN Files (*.rgn)|*.rgn|Image Files (*.jpg/*.bmp/*.png)|*.hsr;*.jpg;*.bmp;*.png|All files (*.*)|*.*";
             ofd.Title = "Select an output image file...";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -87,6 +87,7 @@ namespace CM0102Patcher
                 FileAttributes attr = File.GetAttributes(textBoxInput.Text);
                 if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                 {
+                    inputFiles.AddRange(Directory.GetFiles(textBoxInput.Text, "*.hsr"));
                     inputFiles.AddRange(Directory.GetFiles(textBoxInput.Text, "*.rgn"));
                     inputFiles.AddRange(Directory.GetFiles(textBoxInput.Text, "*.jpg"));
                     inputFiles.AddRange(Directory.GetFiles(textBoxInput.Text, "*.bmp"));
@@ -156,9 +157,9 @@ namespace CM0102Patcher
                                 if (isDirectory)
                                     outputTo = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(picFile) + ".rgn");
 
-                                if (Path.GetExtension(picFile).ToLower() == ".rgn")
+                                if (Path.GetExtension(picFile).ToLower() == ".rgn" || Path.GetExtension(picFile).ToLower() == ".hsr")
                                 {
-                                    if (!isDirectory && Path.GetExtension(outputTo).ToLower() != ".rgn")
+                                    if (!isDirectory && Path.GetExtension(outputTo).ToLower() != ".rgn" && Path.GetExtension(outputTo).ToLower() != ".hsr")
                                         RGNConverter.RGN2BMP(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
                                     else
                                         RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);

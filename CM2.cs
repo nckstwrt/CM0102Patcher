@@ -420,6 +420,14 @@ namespace CM0102Patcher
             WriteTeamDataToCSV(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.csv", tmdata);
         }
 
+        /*
+        int FindManagerIndex(List<CM2Manager> mgdata, string team)
+        {
+            var extraCheck = TeamMapper(team);
+
+            //return mgdata.FindIndex(x => x.ReadString().StartsWithIgnoreBlank(team) || x.ShortName.ReadString().StartsWithIgnoreBlank(team) || x.LongName.ReadString().StartsWithIgnoreBlank(extraCheck) || x.ShortName.ReadString().StartsWithIgnoreBlank(extraCheck));
+        }*/
+
         int FindTeamIndex(List<CM2Team> tmdata, string team)
         {
             var extraCheck = TeamMapper(team);

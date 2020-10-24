@@ -87,7 +87,7 @@ namespace CM0102Patcher
             bool ret = false;
             try
             {
-                if (Path.GetExtension(inFile).ToLower() == ".rgn")
+                if (Path.GetExtension(inFile).ToLower() == ".rgn" || Path.GetExtension(inFile).ToLower() == ".hsr")
                 {
                     using (var stream = File.OpenRead(inFile))
                     using (var br = new BinaryReader(stream))
