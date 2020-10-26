@@ -1,4 +1,4 @@
-# CM0102Patcher v2.07
+# CM0102Patcher v2.08
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/gbLHa8g.png)
+![alt text](https://i.imgur.com/f9ao0Md.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
