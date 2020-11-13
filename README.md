@@ -1,4 +1,4 @@
-# CM0102Patcher v2.07
+# CM0102Patcher v2.08
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/gbLHa8g.png)
+![alt text](https://i.imgur.com/f9ao0Md.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,18 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.08:
+* Fix hidden attributes option to work with all CPUs and Emulation (Wine, Exadata, etc)
+* Fix Scoreboard patch alignment (in Misc Patches)
+* More patches for 3.9.65 (In Misc Patches)
+* fairedinkum's patches (AllowInstantSquadStatusBiddingReset, EPLFixtureFixes, SaturnPatchUpdateEuroBidHostsFor2019, SaturnPatchUpdateWCHostsFor2019)
+* Reorder Club Name Tool (To list teams in alphabetical order in the league tables before games any games are played - untested!)
+* First cut of "Super Keepers" patch
+* Option to replace Tactics with a different Tactics pack
+* Will change your player name to a pink colour if playing with restricting tactics and scouters (so screenshots prove you are playing with restrictions)
+* Addded AlwaysRegenToNewGoodCountry and PauseOnMinorInjury patches to Misc Patches
+* Image converter now supports .hsr as an extension (History Image Files)
 
 v2.07:
 * Enable "Show hidden attributes" works for Saturn/Tapani exe's too
