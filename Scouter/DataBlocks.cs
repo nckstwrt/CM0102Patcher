@@ -32,6 +32,7 @@ namespace CM0102Scout
         public int staffId;
         public int firstName;
         public int secondName;
+        public int commonName;
         public int playerId;
         public int value;
         public int determination;

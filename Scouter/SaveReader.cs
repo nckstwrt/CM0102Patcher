@@ -24,6 +24,7 @@ namespace CM0102Scout
         Encoding latin1 = Encoding.GetEncoding("ISO-8859-1");
         List<string> firstNames = new List<string>();
         List<string> secondNames = new List<string>();
+        List<string> commonNames = new List<string>();
         Dictionary<int, Staff> staffList = new Dictionary<int, Staff>();
         List<Player> players = new List<Player>();
         Dictionary<int, Nation> nations = new Dictionary<int, Nation>();
@@ -52,12 +53,29 @@ namespace CM0102Scout
                         byte[] newBlock = new byte[BlockSize];
                         br.Read(newBlock, 0, BlockSize);
                         FlstBlock.Add(newBlock);
-                        Console.WriteLine("Added: " + TBlock.GetName(newBlock));
+                        Console.WriteLine("Added: {0} (Offset: 0x{1} Size: {2})", TBlock.GetName(newBlock), TBlock.GetPosition(newBlock).ToString("X"), TBlock.GetSize(newBlock));
                     }
                 }
             }
 
             cfs = new CMCompressedFileStream(saveFilename, IsCompressed);
+
+            //DumpBlock("human_manager.dat", @"c:\downloads\human_manager3.dat");
+        }
+
+        void DumpBlock(string blockName, string outFile)
+        {
+            var block = FlstBlock.FirstOrDefault(x => TBlock.GetName(x) == blockName);
+            cfs.Seek(TBlock.GetPosition(block), SeekOrigin.Begin);
+
+            var data = new byte[TBlock.GetSize(block)];
+            cfs.Read(data, TBlock.GetSize(block));
+
+            using (var fs = File.Create(outFile))
+            using (var bw = new BinaryWriter(fs))
+            {
+                bw.Write(data);
+            }
         }
 
         public void LoadNames()
@@ -74,6 +92,13 @@ namespace CM0102Scout
             foreach (var secondNameBlock in secondNameBlocks)
             {
                 secondNames.Add(latin1.GetString(secondNameBlock, 0, 50).TrimEnd('\0'));
+            }
+
+            // Load Common Names
+            var commonNameBlocks = ReadBlocks("common_names.dat", NameSize);
+            foreach (var commonNameBlock in commonNameBlocks)
+            {
+                commonNames.Add(latin1.GetString(commonNameBlock, 0, 50).TrimEnd('\0'));
             }
 
             // Load Game Date
@@ -111,6 +136,7 @@ namespace CM0102Scout
                 staff.staffId = BitConverter.ToInt32(staffBlock, 0);
                 staff.firstName = BitConverter.ToInt32(staffBlock, 4);
                 staff.secondName = BitConverter.ToInt32(staffBlock, 8);
+                staff.commonName = BitConverter.ToInt32(staffBlock, 12);
                 staff.playerId = BitConverter.ToInt32(staffBlock, StaffSize - (1 + 4 + 4 + 4));
                 staff.value = BitConverter.ToInt32(staffBlock, StaffSize - (1 + 4 + 4 + 4 + 11 + 4));
                 staff.determination = staffBlock[StaffSize - (1 + 4 + 4 + 4 + 9)];
@@ -321,8 +347,12 @@ namespace CM0102Scout
                     if (nations.ContainsKey(staff.nationID))
                         nationality = nations[staff.nationID].nationality;
 
-                    //if (name == "Gianfranco Serioli")
-                        //Console.WriteLine();
+                    /*
+                    if (name == "Roy Keane")
+                    {
+                        Console.WriteLine();
+                        var xx =commonNames.FirstOrDefault(x => x.Contains("Fucker"));
+                    }*/
 
                     weighter.Reset(instrinsicsOn);
                     if (player.Goalkeeper >= 15)
