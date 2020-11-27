@@ -17,6 +17,7 @@ namespace CM0102Patcher
         string exeFile;
         List<ZipStorer.ZipFileEntry> patchFiles;
         List<ZipStorer.ZipFileEntry> txtFiles;
+        HashSet<string> SelectedPatches = new HashSet<string>();
 
         public MiscPatches(string exeFile)
         {
@@ -29,8 +30,22 @@ namespace CM0102Patcher
                 txtFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".txt") || x.FilenameInZip.Contains(".info"));
             }
 
+            RefreshWithFilter();
+        }
+
+        void RefreshWithFilter(string filter = null)
+        {
+            checkedListBoxPatches.Items.Clear();
+
             foreach (var patch in patchFiles)
-                checkedListBoxPatches.Items.Add(patch);
+            {
+                if (string.IsNullOrEmpty(filter) || patch.ToString().ToLower().Contains(filter.ToLower()))
+                {
+                    checkedListBoxPatches.Items.Add(patch);
+                    if (SelectedPatches.Contains(patch.ToString()))
+                        checkedListBoxPatches.SetItemChecked(checkedListBoxPatches.Items.Count - 1, true);
+                }
+            }
 
             Detect();
         }
@@ -107,31 +122,62 @@ namespace CM0102Patcher
 
         private void checkedListBoxPatches_SelectedValueChanged(object sender, EventArgs e)
         {
-            var patch = (ZipStorer.ZipFileEntry)checkedListBoxPatches.SelectedItem;
-            var txtFileName = patch.FilenameInZip.Replace(".patch", ".txt");
-            var infoFileName = patch.FilenameInZip.Replace(".patch", ".info");
-            if (txtFiles.Exists(x => x.FilenameInZip == txtFileName) || txtFiles.Exists(x => x.FilenameInZip == infoFileName))
+            if (checkedListBoxPatches.SelectedItem != null)
             {
-                var txtFile = txtFiles.First(x => (x.FilenameInZip == txtFileName || x.FilenameInZip == infoFileName));
-                using (var zs = MiscFunctions.OpenZip("MiscPatches.zip"))
+                var patch = (ZipStorer.ZipFileEntry)checkedListBoxPatches.SelectedItem;
+                var txtFileName = patch.FilenameInZip.Replace(".patch", ".txt");
+                var infoFileName = patch.FilenameInZip.Replace(".patch", ".info");
+                if (txtFiles.Exists(x => x.FilenameInZip == txtFileName) || txtFiles.Exists(x => x.FilenameInZip == infoFileName))
                 {
-                    using (var ms = new MemoryStream())
+                    var txtFile = txtFiles.First(x => (x.FilenameInZip == txtFileName || x.FilenameInZip == infoFileName));
+                    using (var zs = MiscFunctions.OpenZip("MiscPatches.zip"))
                     {
-                        zs.ExtractFile(txtFile, ms);
-                        ms.Seek(0, SeekOrigin.Begin);
-                        using (var tr = new StreamReader(ms))
+                        using (var ms = new MemoryStream())
                         {
-                            var text = tr.ReadToEnd();
-                            // Help support Unix files that don't have MS \r
-                            text = text.Replace("\r\n", "\n");
-                            text = text.Replace("\n", "\r\n");
-                            textBoxDescription.Text = text;
+                            zs.ExtractFile(txtFile, ms);
+                            ms.Seek(0, SeekOrigin.Begin);
+                            using (var tr = new StreamReader(ms))
+                            {
+                                var text = tr.ReadToEnd();
+                                // Help support Unix files that don't have MS \r
+                                text = text.Replace("\r\n", "\n");
+                                text = text.Replace("\n", "\r\n");
+                                textBoxDescription.Text = text;
+                            }
                         }
                     }
                 }
+                else
+                    textBoxDescription.Text = "No Description.";
             }
             else
                 textBoxDescription.Text = "No Description.";
         }
+
+        private void checkedListBoxPatches_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (sender != null)
+            {
+                if (e.NewValue == CheckState.Checked)
+                    SelectedPatches.Add(checkedListBoxPatches.Items[e.Index].ToString());
+                else
+                    SelectedPatches.Remove(checkedListBoxPatches.Items[e.Index].ToString());
+            }
+        }
+
+        private void textBoxFilter_TextChanged(object sender, EventArgs e)
+        {
+            RefreshWithFilter(textBoxFilter.Text);
+        }
+    }
+
+    public sealed class ExpandedCheckedListBox : CheckedListBox
+    {
+        public ExpandedCheckedListBox()
+        {
+            ItemHeight = 18;
+        }
+
+        public override int ItemHeight { get; set; }
     }
 }
