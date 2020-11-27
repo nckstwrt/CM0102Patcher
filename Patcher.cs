@@ -331,6 +331,22 @@ namespace CM0102Patcher
             }
         }
 
+        public void ApplyPatch(string fileName, string patchFile)
+        {
+            var patch = LoadPatchFile(patchFile);
+            using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                using (var bw = new BinaryWriter(file))
+                {
+                    foreach (var hexpatch in patch)
+                    {
+                        bw.Seek(hexpatch.offset, SeekOrigin.Begin);
+                        bw.Write(HexStringToBytes(hexpatch.hex));
+                    }
+                }
+            }
+        }
+
         public void ApplyPatch(Stream stream, IEnumerable<HexPatch> patch)
         {
             foreach (var hexpatch in patch)
