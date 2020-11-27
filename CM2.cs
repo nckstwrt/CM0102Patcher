@@ -164,11 +164,12 @@ namespace CM0102Patcher
 
         public void ReadData()
         {
+            var playerYearModifier = -5;
             var playerSize = Marshal.SizeOf(typeof(CM2Player));
             var teamSize = Marshal.SizeOf(typeof(CM2Team));
 
             HistoryLoader hl = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\2019\Championship Manager 01-02\Data\index.dat");
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\2020\Data\index.dat");
 
             var tmdata = MiscFunctions.ReadFile<CM2Team>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.DB1", 381);
             var pldata1 = MiscFunctions.ReadFile<CM2Player>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA1.DB1", 632);
@@ -247,7 +248,7 @@ namespace CM0102Patcher
                     {
                         var cm0102fullName = hl.club.Find(x => x.ID == cm0102clubs[cm0102TeamIdx].ID).Name.ReadString();
                         //Console.WriteLine("Loading Players From: {0}", cm0102fullName);
-                        var players = ReadCM0102Data(hl, cm0102fullName, tmdata).OrderByDescending(x => ConvertShortToNormalFormat(x.player.Reputation)).Take(playerCount).ToList();
+                        var players = ReadCM0102Data(hl, cm0102fullName, tmdata, playerYearModifier).OrderByDescending(x => ConvertShortToNormalFormat(x.player.Reputation)).Take(playerCount).ToList();
 
                         foreach (var p in players)
                         {
@@ -305,7 +306,7 @@ namespace CM0102Patcher
             {
                 foreach (var team in divison)
                 {
-                    var newPlayers = ReadCM0102Data(hl, team, tmdata);
+                    var newPlayers = ReadCM0102Data(hl, team, tmdata, playerYearModifier);
 
                     // Get CM2 Short Name
                     var shortTeamName = MiscFunctions.GetTextFromBytes(tmdata.Find(x => MiscFunctions.GetTextFromBytes(x.LongName) == team).ShortName);
