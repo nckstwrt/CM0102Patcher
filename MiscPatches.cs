@@ -26,7 +26,7 @@ namespace CM0102Patcher
             using (var zs = MiscFunctions.OpenZip("MiscPatches.zip"))
             {
                 patchFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".patch"));
-                txtFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".txt"));
+                txtFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".txt") || x.FilenameInZip.Contains(".info"));
             }
 
             foreach (var patch in patchFiles)
@@ -109,9 +109,10 @@ namespace CM0102Patcher
         {
             var patch = (ZipStorer.ZipFileEntry)checkedListBoxPatches.SelectedItem;
             var txtFileName = patch.FilenameInZip.Replace(".patch", ".txt");
-            if (txtFiles.Exists(x => x.FilenameInZip == txtFileName))
+            var infoFileName = patch.FilenameInZip.Replace(".patch", ".info");
+            if (txtFiles.Exists(x => x.FilenameInZip == txtFileName) || txtFiles.Exists(x => x.FilenameInZip == infoFileName))
             {
-                var txtFile = txtFiles.First(x => x.FilenameInZip == txtFileName);
+                var txtFile = txtFiles.First(x => (x.FilenameInZip == txtFileName || x.FilenameInZip == infoFileName));
                 using (var zs = MiscFunctions.OpenZip("MiscPatches.zip"))
                 {
                     using (var ms = new MemoryStream())
