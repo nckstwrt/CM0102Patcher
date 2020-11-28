@@ -80,6 +80,10 @@ namespace CM0102Scout
 
         public void LoadNames()
         {
+            firstNames.Clear();
+            secondNames.Clear();
+            commonNames.Clear();
+
             // Load First Names
             var firstNameBlocks = ReadBlocks("first_names.dat", NameSize);
             foreach (var firstNameBlock in firstNameBlocks)
@@ -339,6 +343,12 @@ namespace CM0102Scout
                     //if (player.ID == 0x0523)
                         //Console.WriteLine();
                     var name = firstNames[staff.firstName] + " " + secondNames[staff.secondName];
+
+                    if (staff.commonName > 0 && commonNames[staff.commonName] != "" && commonNames[staff.commonName][0] != 0)
+                        name = commonNames[staff.commonName];
+
+                    name = MiscFunctions.RemoveDiacritics(name);
+
                     var age = AgeCalc(staff.dob);
                     var club = "None";
                     if (clubs.ContainsKey(staff.clubID))
