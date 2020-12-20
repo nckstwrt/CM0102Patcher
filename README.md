@@ -1,4 +1,4 @@
-# CM0102Patcher v2.08
+# CM0102Patcher v2.09
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/f9ao0Md.png)
+![alt text](https://i.imgur.com/E6jN9n4.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,15 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.09:
+* Update to Date Patching to correct World Cup/Euro years when patching to 2020
+* Display more information on patches in Misc Patches (now reads the .info files too)
+* Misc Patches can now be searched easily with a text filter
+* Added support for changing a teams league in patch files (Example: CHANGECLUBDIVISION: "FC Crotone" "Italian Serie A")
+* Enable 7 Substitutes now increases the subs for the English League Cup
+* Added the following Misc Patches: DontRejectOffersV2 (Stops Chairman rejecting offers), AllowYoungAndOld (Allows very young or old staff/players), RetirePatchV3 (Ensures players do not retire until at least 34), FixSaturnFrenchJokerWindowPatch (A fix for Saturn's French Joker Window Patch), NoTransferFundCountryBiasV2 (Countries, like Germany, don't start off with signifcantly less access to funds), TapaniSpacePatch (Patch Tapani uses to add space for his other patches. Might be required by some patches), Remove4MonthLoanLimit (Update to work for Scotland too), EnsureCashDoesNotResetToZero (Patch to ensure your money does not reset to 0 once over 2 Billion (needs TapaniSpacePatch).
+* Also added to Misc Patches: 2020_Nov_Italy_Restructure.patch - using the new CHANGECLUBDIVISION option available in patches, this changes Serie A + B to 20 teams. Only use with the November 2020 data update.
 
 v2.08:
 * Fix hidden attributes option to work with all CPUs and Emulation (Wine, Exadata, etc)
