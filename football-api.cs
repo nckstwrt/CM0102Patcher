@@ -11,10 +11,200 @@ namespace CM0102Patcher
     public class football_api
     {
         public string key;
+        public string indexFile;
 
-        public football_api(string key)
+        public football_api(string key, string indexFile = null)
         {
             this.key = key;
+            this.indexFile = indexFile;
+        }
+
+        public void GetCM0102Leagues()
+        {
+            float bestSimilarity;
+            HistoryLoader hl = new HistoryLoader();
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\2020_ita\Data\index.dat");
+
+            var serie_a_clubs = GetCM0102League(hl, "Italian Serie A");
+            var api_serie_a_clubs = GetAPILeague("Italy", "Serie A", 2020);
+
+            List<TeamMatch> teamMatches;
+
+            teamMatches = MatchTeams(api_serie_a_clubs, serie_a_clubs);
+
+            // Teams Missing
+            var serie_a_team1 = teamMatches[0];
+            var serie_a_team2 = teamMatches[1];
+
+            Console.WriteLine("Serie A Team Missing From CM0102: {0} (1)", serie_a_team1.apiTeamName);
+            Console.WriteLine("Serie A Team Missing From CM0102: {0} (2)", serie_a_team2.apiTeamName);
+
+            // Get Serie B teams
+            var api_serie_b_clubs = GetAPILeague("Italy", "Serie B", 2020);
+            var serie_b_clubs = GetCM0102League(hl, "Italian Serie B");
+
+            var serie_b_club_to_go_to_seriea_1 = FindTeamFromName(serie_b_clubs, teamMatches[0].apiTeamName, out bestSimilarity);
+            var serie_b_club_to_go_to_seriea_2 = FindTeamFromName(serie_b_clubs, teamMatches[1].apiTeamName, out bestSimilarity);
+            Console.WriteLine("Found Serie B Team To Move To Serie A: {0} (1)", MiscFunctions.GetTextFromBytes(serie_b_club_to_go_to_seriea_1.ShortName));
+            Console.WriteLine("Found Serie B Team To Move To Serie A: {0} (2)", MiscFunctions.GetTextFromBytes(serie_b_club_to_go_to_seriea_2.ShortName));
+            //hl.UpdateClubsDivision(serie_b_club_to_go_to_seriea_1.ID, serie_a_clubs[0].Division);
+            //hl.UpdateClubsDivision(serie_b_club_to_go_to_seriea_2.ID, serie_a_clubs[0].Division);
+            serie_b_clubs = GetCM0102League(hl, "Italian Serie B"); // Re-get the Serie B clubs now we've moved 2 into Serie A
+
+            Console.WriteLine("CHANGECLUBDIVISION: \"{0}\" \"{1}\"", MiscFunctions.GetTextFromBytes(serie_b_club_to_go_to_seriea_1.Name), "Italian Serie A");
+            Console.WriteLine("CHANGECLUBDIVISION: \"{0}\" \"{1}\"", MiscFunctions.GetTextFromBytes(serie_b_club_to_go_to_seriea_2.Name), "Italian Serie A");
+
+            Console.WriteLine("Serie B");
+            teamMatches = MatchTeams(api_serie_b_clubs, serie_b_clubs);
+
+            // Teams Missing
+            var serie_b_team1 = teamMatches[0];
+            var serie_b_team2 = teamMatches[1];
+            Console.WriteLine("Serie B Team Missing From CM0102: {0} 0x{1:X} (1)", serie_b_team1.apiTeamName, serie_b_team1.cm0102ClubID);
+            Console.WriteLine("Serie B Team Missing From CM0102: {0} 0x{1:X} (2)", serie_b_team2.apiTeamName, serie_b_team2.cm0102ClubID);
+
+            // Get Serie C1/A Teams
+            var api_serie_c1a_clubs = GetAPILeague("Italy", "Serie C", 2020);
+            var serie_c1a_clubs = GetCM0102League(hl, "Italian Serie C1/A");
+
+            var serie_c1a_club_to_go_to_serieb_1 = FindTeamFromName(serie_c1a_clubs, serie_b_team1.apiTeamName, out bestSimilarity);
+            var serie_c1a_club_to_go_to_serieb_2 = FindTeamFromName(serie_c1a_clubs, serie_b_team2.apiTeamName, out bestSimilarity);
+            Console.WriteLine("Found Serie C1A Team To Move To Serie B: {0} (1)", MiscFunctions.GetTextFromBytes(serie_c1a_club_to_go_to_serieb_1.ShortName));
+            Console.WriteLine("Found Serie C1A Team To Move To Serie B: {0} (2)", MiscFunctions.GetTextFromBytes(serie_c1a_club_to_go_to_serieb_2.ShortName));
+            //hl.UpdateClubsDivision(serie_c1a_club_to_go_to_serieb_1.ID, serie_b_clubs[0].Division);
+            //hl.UpdateClubsDivision(serie_c1a_club_to_go_to_serieb_2.ID, serie_b_clubs[0].Division);
+            serie_c1a_clubs = GetCM0102League(hl, "Italian Serie C1/A"); // Re-get the Serie B clubs now we've moved 2 into Serie A
+
+            Console.WriteLine("CHANGECLUBDIVISION: \"{0}\" \"{1}\"", MiscFunctions.GetTextFromBytes(serie_c1a_club_to_go_to_serieb_1.Name), "Italian Serie B");
+            Console.WriteLine("CHANGECLUBDIVISION: \"{0}\" \"{1}\"", MiscFunctions.GetTextFromBytes(serie_c1a_club_to_go_to_serieb_2.Name), "Italian Serie B");
+
+            Console.WriteLine("Serie C");
+            teamMatches = MatchTeams(api_serie_c1a_clubs, serie_c1a_clubs);
+
+            // Grab 2 teams from Serie D and put them in C1A
+            var serie_d_clubs = GetCM0102League(hl, "Italian Serie D");
+            Console.WriteLine("CHANGECLUBDIVISION: \"{0}\" \"{1}\"", MiscFunctions.GetTextFromBytes(serie_d_clubs[0].Name), "Italian Serie C1/A");
+            Console.WriteLine("CHANGECLUBDIVISION: \"{0}\" \"{1}\"", MiscFunctions.GetTextFromBytes(serie_d_clubs[1].Name), "Italian Serie C1/A");
+
+            ////////////////////////////////////////////////////////////////////////////
+            // Load all CM0102 Teams and use them to match to the API
+            var serie_c1b_clubs = GetCM0102League(hl, "Italian Serie C1/B");
+            var serie_c2a_clubs = GetCM0102League(hl, "Italian Serie C2/A");
+            var serie_c2b_clubs = GetCM0102League(hl, "Italian Serie C2/B");
+            var serie_c2c_clubs = GetCM0102League(hl, "Italian Serie C2/C");
+            var allItalianClubs = new List<TClub>();
+            allItalianClubs.AddRange(serie_a_clubs);
+            allItalianClubs.AddRange(serie_b_clubs);
+            allItalianClubs.AddRange(serie_c1a_clubs);
+            allItalianClubs.AddRange(serie_c1b_clubs);
+            allItalianClubs.AddRange(serie_c2a_clubs);
+            allItalianClubs.AddRange(serie_c2b_clubs);
+            allItalianClubs.AddRange(serie_c2c_clubs);
+            allItalianClubs.AddRange(serie_d_clubs);
+
+            Console.WriteLine("SERIE A");
+            foreach (var club in api_serie_a_clubs.api.standings[0])
+            {
+                var cm0102_club = FindTeamFromName(allItalianClubs, club.teamName, out bestSimilarity);
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}", club.teamName, MiscFunctions.GetTextFromBytes(cm0102_club.Name), MiscFunctions.GetTextFromBytes(hl.club_comp.Find(x => x.ID == cm0102_club.Division).Name), bestSimilarity);
+            }
+            Console.WriteLine("SERIE B");
+            foreach (var club in api_serie_b_clubs.api.standings[0])
+            {
+                var cm0102_club = FindTeamFromName(allItalianClubs, club.teamName, out bestSimilarity);
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}", club.teamName, MiscFunctions.GetTextFromBytes(cm0102_club.Name), MiscFunctions.GetTextFromBytes(hl.club_comp.Find(x => x.ID == cm0102_club.Division).Name), bestSimilarity);
+            }
+            Console.WriteLine("SERIE C1/A");
+            foreach (var club in api_serie_c1a_clubs.api.standings[0])
+            {
+                var cm0102_club = FindTeamFromName(allItalianClubs, club.teamName, out bestSimilarity);
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}", club.teamName, MiscFunctions.GetTextFromBytes(cm0102_club.Name), MiscFunctions.GetTextFromBytes(hl.club_comp.Find(x => x.ID == cm0102_club.Division).Name), bestSimilarity);
+            }
+            Console.WriteLine("SERIE C1/B");
+            foreach (var club in api_serie_c1a_clubs.api.standings[1])
+            {
+                var cm0102_club = FindTeamFromName(allItalianClubs, club.teamName, out bestSimilarity);
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}", club.teamName, MiscFunctions.GetTextFromBytes(cm0102_club.Name), MiscFunctions.GetTextFromBytes(hl.club_comp.Find(x => x.ID == cm0102_club.Division).Name), bestSimilarity);
+            }
+            Console.WriteLine("SERIE C1/C");
+            foreach (var club in api_serie_c1a_clubs.api.standings[2])
+            {
+                var cm0102_club = FindTeamFromName(allItalianClubs, club.teamName, out bestSimilarity);
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}", club.teamName, MiscFunctions.GetTextFromBytes(cm0102_club.Name), MiscFunctions.GetTextFromBytes(hl.club_comp.Find(x => x.ID == cm0102_club.Division).Name), bestSimilarity);
+            }
+        }
+
+        List<TeamMatch> MatchTeams(api_standings api_teams, List<TClub> cm0102Teams)
+        {
+            List<TeamMatch> teamMatches = new List<TeamMatch>();
+            foreach (var club in api_teams.api.standings[0])
+            {
+                // Foreach API club compare it to the CM0102 team
+                float bestSimilarity = 0;
+                var club_id = 0;
+                foreach (var cm0102club in cm0102Teams)
+                {
+                    // Hack for Nuovo Cosenza
+                    club.teamName = club.teamName.Replace("Nuova ", "");
+
+                    float similarityShort = MiscFunctions.GetSimilarity(MiscFunctions.GetTextFromBytes(cm0102club.ShortName).ToLower(), club.teamName.ToLower());
+                    float similarityLong = MiscFunctions.GetSimilarity(MiscFunctions.GetTextFromBytes(cm0102club.Name).ToLower(), club.teamName.ToLower());
+
+                    float similarity = similarityLong > similarityShort ? similarityLong : similarityShort;
+
+                    if (similarity > bestSimilarity)
+                    {
+                        club_id = cm0102club.ID;
+                        bestSimilarity = similarity;
+                    }
+                }
+
+                var teamMatch = new TeamMatch();
+                teamMatch.apiClubID = club.team_id.Value;
+                teamMatch.cm0102ClubID = club_id;
+                teamMatch.similarity = bestSimilarity;
+                teamMatch.apiTeamName = club.teamName;
+                teamMatch.cm0102LongTeamName = MiscFunctions.GetTextFromBytes(cm0102Teams.Find(x => x.ID == club_id).Name);
+                teamMatches.Add(teamMatch);
+
+                Console.WriteLine("Matched {0} to {1} ({2})", club.teamName, MiscFunctions.GetTextFromBytes(cm0102Teams.First(x => x.ID == club_id).Name), bestSimilarity);
+            }
+
+            teamMatches.Sort((x, y) => x.similarity.CompareTo(y.similarity));
+            return teamMatches;
+        }
+
+        TClub FindTeamFromName(List<TClub> clubs, string clubName, out float bestSimilarity)
+        {
+            bestSimilarity = 0;
+            TClub ret = default;
+            foreach (var cm0102club in clubs)
+            {
+                float similarityShort = MiscFunctions.GetSimilarity(MiscFunctions.GetTextFromBytes(cm0102club.ShortName).ToLower(), clubName.ToLower());
+                float similarityLong = MiscFunctions.GetSimilarity(MiscFunctions.GetTextFromBytes(cm0102club.Name).ToLower(), clubName.ToLower());
+
+                float similarity = similarityLong > similarityShort ? similarityLong : similarityShort;
+
+                if (similarity > bestSimilarity)
+                {
+                    ret = cm0102club;
+                    bestSimilarity = similarity;
+                }
+            }
+            return ret;
+        }
+
+        List<TClub> GetCM0102League(HistoryLoader hl, string league_name)
+        {
+            var club_comp = hl.club_comp.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == league_name);
+            return hl.club.FindAll(x => x.Division == club_comp.ID);
+        }
+
+        api_standings GetAPILeague(string country, string league_name, int year)
+        {
+            var api_leagues = GetJSON<api_leagues>(@"C:\ChampMan\Notes\api-football-leagues.txt" /*"https://api-football-v1.p.rapidapi.com/v2/leagues"*/);
+            var api_standing = api_leagues.api.leagues.FindAll(x => x.country == country && (league_name == null ? true : (x.name == league_name)) && x.season == year);
+            return GetJSON<api_standings>("https://api-football-v1.p.rapidapi.com/v2/leagueTable/" + api_standing[0].league_id, string.Format(@"C:\ChampMan\Notes\api-football-league-serie-a-{0}.txt", api_standing[0].league_id));
         }
 
         public void GetLeagues()
@@ -172,5 +362,14 @@ namespace CM0102Patcher
         }
 
         public apiClass api;
+    }
+
+    public class TeamMatch
+    {
+        public int apiClubID;
+        public int cm0102ClubID;
+        public float similarity;
+        public string apiTeamName;
+        public string cm0102LongTeamName;
     }
 }

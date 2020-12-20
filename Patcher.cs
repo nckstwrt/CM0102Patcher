@@ -12,6 +12,14 @@ namespace CM0102Patcher
     {
         public class HexPatch
         {
+            public HexPatch(string command, string part1, string part2)
+            {
+                this.offset = -1;
+                this.command = command;
+                this.part1 = part1;
+                this.part2 = part2;
+            }
+
             public HexPatch(int offset, string hex)
             {
                 this.offset = offset;
@@ -20,6 +28,9 @@ namespace CM0102Patcher
 
             public int offset;
             public string hex;
+            public string command;
+            public string part1;
+            public string part2;
         }
 
         public Dictionary<string, List<HexPatch>> patches = new Dictionary<string, List<HexPatch>>
@@ -30,7 +41,7 @@ namespace CM0102Patcher
             { "disablecdremove", new List<HexPatch> { new HexPatch(4368779, "9090909090"), new HexPatch(4383744, "9090909090") } },
             { "disablesplashscreen", new List<HexPatch> { new HexPatch(1887548, "e97203000090") } },
             { "disableunprotectedcontracts", new List<HexPatch> { new HexPatch(1199314, "68d1770000") } },
-            { "sevensubs", new List<HexPatch> { new HexPatch(1503780, "c6404907c20800"), new HexPatch(1519120, "07"), new HexPatch(1526787, "c64649075ec3"), new HexPatch(1547764, "eb"), new HexPatch(1533953, "07"), new HexPatch(1540444, "07"), new HexPatch(1391244, "07"), new HexPatch(1819788, "07"), new HexPatch(4139590, "07"), new HexPatch(4155094, "eb"), /* French 7 Subs */ new HexPatch(0x1bc48c, "07"), /* FA Tropy */ new HexPatch(0x170C6B, "66C746490503"), /* Charity Shield */ new HexPatch(0x16d3f0, "06") } },
+            { "sevensubs", new List<HexPatch> { new HexPatch(1503780, "c6404907c20800"), new HexPatch(1519120, "07"), new HexPatch(1526787, "c64649075ec3"), new HexPatch(1547764, "eb"), new HexPatch(1533953, "07"), new HexPatch(1540444, "07"), new HexPatch(1391244, "07"), new HexPatch(1819788, "07"), new HexPatch(4139590, "07"), new HexPatch(4155094, "eb"), /* French 7 Subs */ new HexPatch(0x1bc48c, "07"), /* FA Tropy */ new HexPatch(0x170C6B, "66C746490503"), /* Charity Shield */ new HexPatch(0x16d3f0, "06"), new HexPatch(0x16C474, "c6404907c20800") } },
             { "showstarplayers",  new List<HexPatch> { new HexPatch(374828, "9090") } },
             { "hideprivatebids", new List<HexPatch> { new HexPatch(5051539, "e90a01000090") } },
             { "allowclosewindow", new List<HexPatch> { new HexPatch(2676552, "E9E7812B000000") } },
@@ -76,7 +87,7 @@ namespace CM0102Patcher
             { "disablecdremove", new List<HexPatch> { new HexPatch(0x0042A98B, "E800D9DBFF"), new HexPatch(0x0042E400, "E88B9EDBFF") } },
             { "disablesplashscreen", new List<HexPatch> { new HexPatch(0x001CCD3C, "0F8471030000") } },
             { "disableunprotectedcontracts", new List<HexPatch> { new HexPatch(0x00124CD2, "68D1070000") } },
-            { "sevensubs", new List<HexPatch> { new HexPatch(0x0016F224, "C2080090909090"), new HexPatch(0x00172E10, "05"), new HexPatch(0x00174C03, "5EC390909090"), new HexPatch(0x00179DF4, "75"), new HexPatch(0x00176801, "05"), new HexPatch(0x0017815C, "05"), new HexPatch(0x00153A8C, "04"), new HexPatch(0x001BC48C, "05"), new HexPatch(0x003F2A46, "05"), new HexPatch(0x003F66D6, "75"), new HexPatch(0x001BC48C, "05"), new HexPatch(0x00170C6B, "88464988464A"), new HexPatch(0x0016D3F0, "05") } },
+            { "sevensubs", new List<HexPatch> { new HexPatch(0x0016F224, "C2080090909090"), new HexPatch(0x00172E10, "05"), new HexPatch(0x00174C03, "5EC390909090"), new HexPatch(0x00179DF4, "75"), new HexPatch(0x00176801, "05"), new HexPatch(0x0017815C, "05"), new HexPatch(0x00153A8C, "04"), new HexPatch(0x001BC48C, "05"), new HexPatch(0x003F2A46, "05"), new HexPatch(0x003F66D6, "75"), new HexPatch(0x001BC48C, "05"), new HexPatch(0x00170C6B, "88464988464A"), new HexPatch(0x0016D3F0, "05"), new HexPatch(0x16C474, "c2080090909090") } },
             { "showstarplayers", new List<HexPatch> { new HexPatch(0x0005B82C, "7571") } },
             { "hideprivatebids", new List<HexPatch> { new HexPatch(0x004D1493, "0F8409010000") } },
             { "allowclosewindow", new List<HexPatch> { new HexPatch(0x0028D748, "8D8C2418010000") } },
@@ -293,17 +304,56 @@ namespace CM0102Patcher
                     }
                     if (string.IsNullOrEmpty(line) || line.StartsWith("/") || line.StartsWith("#"))
                         continue;
-                    var parts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (parts.Length != 3)
+                    //var parts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                    var parts = ParseTokens(line);
+                    if (parts.Count != 3)
                         continue;
                     parts[0] = parts[0].Replace(":", "");
-                    var offset = Convert.ToInt32(parts[0], 16);
-                    var from = Convert.ToByte(parts[1], 16);
-                    var to = Convert.ToByte(parts[2], 16);
-                    patchList.Add(new HexPatch(offset, string.Format("{0:x02}", to)));
+                    try
+                    {
+                        if (parts[0].ToUpper() == "CHANGECLUBDIVISION")
+                        {
+                            // Let's parse the line again
+                            patchList.Add(new HexPatch(parts[0].ToUpper(), parts[1], parts[2]));
+                        }
+                        else
+                        {
+                            var offset = Convert.ToInt32(parts[0], 16);
+                            var from = Convert.ToByte(parts[1], 16);
+                            var to = Convert.ToByte(parts[2], 16);
+                            patchList.Add(new HexPatch(offset, string.Format("{0:x02}", to)));
+                        }
+                    }
+                    catch { }
                 }
             }
             return patchList;
+        }
+
+        // Frickin' hate RegEx so doing this old skool
+        List<string> ParseTokens(string line)
+        {
+            List<string> ret = new List<string>();
+            string s = "";
+            bool inQuotes = false;
+            for (int i = 0; i < line.Length; i++)
+            {
+                if (line[i] == '"')
+                {
+                    inQuotes = !inQuotes;
+                    continue;
+                }
+                if (!inQuotes && (line[i] == ' ' || line[i] == '\t'))
+                {
+                    ret.Add(s);
+                    s = "";
+                }
+                else
+                    s += line[i];
+            }
+            if (s != "")
+                ret.Add(s);
+            return ret;
         }
 
         // 006DC000 in the file will equal 00DE7000 in memory = 70B000 Difference
@@ -316,6 +366,7 @@ namespace CM0102Patcher
             }
         }
 
+        // Main apply
         public void ApplyPatch(string fileName, IEnumerable<HexPatch> patch)
         {
             using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
@@ -324,13 +375,37 @@ namespace CM0102Patcher
                 {
                     foreach (var hexpatch in patch)
                     {
+                        if (hexpatch.offset == -1)
+                            continue;
                         bw.Seek(hexpatch.offset, SeekOrigin.Begin);
                         bw.Write(HexStringToBytes(hexpatch.hex));
                     }
                 }
             }
+
+            // Check for club changes
+            var clubDivisionChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGECLUBDIVISION")).ToList();
+            if (clubDivisionChanges.Count > 0)
+            {
+                HistoryLoader hl = new HistoryLoader();
+                var dir = Path.GetDirectoryName(fileName);
+                var dataDir = Path.Combine(dir, "Data");
+                var indexFile = Path.Combine(dataDir, "index.dat");
+                hl.Load(indexFile);
+                foreach (var clubDivisionChange in clubDivisionChanges)
+                {
+                    var clubName = clubDivisionChange.part1;
+                    var divisionName = clubDivisionChange.part2;
+                    var tClub = hl.club.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == clubName);
+                    var tDivision = hl.club_comp.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == divisionName);
+                    if (tClub.ID != 0 && tDivision.ID != 0)
+                        hl.UpdateClubsDivision(tClub.ID, tDivision.ID);
+                }
+                hl.Save(indexFile, true);
+            }
         }
 
+        // Not used
         public void ApplyPatch(string fileName, string patchFile)
         {
             var patch = LoadPatchFile(patchFile);
@@ -340,6 +415,8 @@ namespace CM0102Patcher
                 {
                     foreach (var hexpatch in patch)
                     {
+                        if (hexpatch.offset == -1)
+                            continue;
                         bw.Seek(hexpatch.offset, SeekOrigin.Begin);
                         bw.Write(HexStringToBytes(hexpatch.hex));
                     }
@@ -347,10 +424,13 @@ namespace CM0102Patcher
             }
         }
 
+        // Only used for internal patching
         public void ApplyPatch(Stream stream, IEnumerable<HexPatch> patch)
         {
             foreach (var hexpatch in patch)
             {
+                if (hexpatch.offset == -1)
+                    continue;
                 var bytes = HexStringToBytes(hexpatch.hex);
                 stream.Seek(hexpatch.offset, SeekOrigin.Begin);
                 stream.Write(bytes, 0, bytes.Length);

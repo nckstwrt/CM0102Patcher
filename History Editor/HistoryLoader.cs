@@ -108,6 +108,19 @@ namespace CM0102Patcher
             index[idx] = indexItem;
         }
 
+        public void UpdateClubsDivision(int clubId, int divisionId)
+        {
+            for (int i = 0; i < club.Count; i++)
+            {
+                if (club[i].ID == clubId)
+                {
+                    TClub temp = club[i];
+                    temp.Division = divisionId;
+                    club[i] = temp;
+                }
+            }
+        }
+
         public void Save(string indexFile, bool saveClubData = false, bool saveStaffData = false)
         {
             var dir = Path.GetDirectoryName(indexFile);
