@@ -132,6 +132,36 @@ namespace CM0102Patcher
                 var cm0102_club = FindTeamFromName(allItalianClubs, club.teamName, out bestSimilarity);
                 Console.WriteLine("{0}\t{1}\t{2}\t{3}", club.teamName, MiscFunctions.GetTextFromBytes(cm0102_club.Name), MiscFunctions.GetTextFromBytes(hl.club_comp.Find(x => x.ID == cm0102_club.Division).Name), bestSimilarity);
             }
+
+            ////////////////////////////////////////////////////////////////////////
+            /// Do Same for French Leagues
+            /// 
+            var allFrenchClubs = new List<TClub>();
+            allFrenchClubs.AddRange(GetCM0102League(hl, "French First Division"));
+            allFrenchClubs.AddRange(GetCM0102League(hl, "French Second Division"));
+            allFrenchClubs.AddRange(GetCM0102League(hl, "French National"));
+            allFrenchClubs.AddRange(GetCM0102League(hl, "French Lower Division"));
+            var api_ligue_1_clubs = GetAPILeague("France", "Ligue 1", 2020);
+            var api_ligue_2_clubs = GetAPILeague("France", "Ligue 2", 2020);
+            var api_ligue_national_clubs = GetAPILeague("France", "National", 2020);
+            Console.WriteLine("Ligue 1");
+            foreach (var club in api_ligue_1_clubs.api.standings[0])
+            {
+                var cm0102_club = FindTeamFromName(allFrenchClubs, club.teamName, out bestSimilarity);
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}", club.teamName, MiscFunctions.GetTextFromBytes(cm0102_club.Name), MiscFunctions.GetTextFromBytes(hl.club_comp.Find(x => x.ID == cm0102_club.Division).Name), bestSimilarity);
+            }
+            Console.WriteLine("Ligue 2");
+            foreach (var club in api_ligue_2_clubs.api.standings[0])
+            {
+                var cm0102_club = FindTeamFromName(allFrenchClubs, club.teamName, out bestSimilarity);
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}", club.teamName, MiscFunctions.GetTextFromBytes(cm0102_club.Name), MiscFunctions.GetTextFromBytes(hl.club_comp.Find(x => x.ID == cm0102_club.Division).Name), bestSimilarity);
+            }
+            Console.WriteLine("National");
+            foreach (var club in api_ligue_national_clubs.api.standings[0])
+            {
+                var cm0102_club = FindTeamFromName(allFrenchClubs, club.teamName, out bestSimilarity);
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}", club.teamName, MiscFunctions.GetTextFromBytes(cm0102_club.Name), MiscFunctions.GetTextFromBytes(hl.club_comp.Find(x => x.ID == cm0102_club.Division).Name), bestSimilarity);
+            }
         }
 
         List<TeamMatch> MatchTeams(api_standings api_teams, List<TClub> cm0102Teams)
