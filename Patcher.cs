@@ -344,7 +344,8 @@ namespace CM0102Patcher
                 }
                 if (!inQuotes && (line[i] == ' ' || line[i] == '\t'))
                 {
-                    ret.Add(s);
+                    if (s != "")
+                        ret.Add(s);
                     s = "";
                 }
                 else

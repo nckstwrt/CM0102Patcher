@@ -103,6 +103,72 @@ namespace CM0102Patcher
             PatchClubComp("South American Recopa", "Recopa Sudamericana", "Recopa", "Recopa Sudamericana");
             PatchClubComp("South American Super Cup", "Supercopa Libertadores", "Super Cup", "Supercopa Libertadores");
 
+            // America
+            PatchClubComp("American Major League", "Major League Soccer", "Major League", "Major League Soccer", "MLS");
+            PatchClubComp("American A-League", "American A-League",  "A-League", "NASL", "NSL");
+            PatchClubComp("American D3-Pro League", "American D3-Pro League", "D3-Pro League", "United Soccer League", "USL");
+            PatchClubComp("American MLS All-Stars", "MLS All-Stars", "MLS All - Stars", "MLS All-Stars", "MLS");
+            PatchClubComp("US Open Cup", "Lamar Hunt U.S. Open Cup", "Open Cup", "U.S. Open Cup");
+
+            // Argentina
+            PatchClubComp("Argentine Premier Division", "Argentine Superliga", "Premier Division", "Superliga", "SUP");
+            PatchClubComp("Argentine Second Division", "Argentine Primera B Nacional", "Second Division", "Primera B Nacional", "D2");
+            PatchClubComp("Argentine Third Division", "Argentine Third Division", "Third Division", "Torneo Federal A", "D3A");
+            PatchClubComp("Argentine Metropolitan Zone", "Argentine Metropolitan Zone", "Metropolitan Zone", "Primera B Metropolitana", "D3B");
+            PatchClubComp("Argentine Interior Zone", "Argentine Interior Zone", "Interior Zone", "Primera C", "D4");
+
+            // Australia
+            PatchClubComp("Australian National Soccer League", "Australian A-League", "National Soccer League", "A-League", "A-L");
+            PatchClubComp("New South Wales State League", "New South Wales State League", "NSW Winter League", "NPL Northern NSW", "NSW");
+            PatchClubComp("New South Wales Super League", "New South Wales Super League", "NSW Super League", "NPL NSW", "NSW");
+            PatchClubComp("Queensland Premier League", "Queensland Premier League", "Qld Premier League", "NPL Queensland", "QNS");
+            PatchClubComp("South Australian Premier League", "South Australian Premier League", "SA Premier League", "NPL South Australia", "STH");
+            PatchClubComp("South Australian State League", "South Australian State League", "SA State League", "NPL ACT", "ACT");
+            PatchClubComp("Victorian Premier League", "Victorian Premier League", "Vic Premier League", "NPL Victoria", "VIC");
+            PatchClubComp("Victorian State League", "Victorian State League", "Vic State League", "NPL Northern Australia", "NTH");
+            PatchClubComp("Western Australian Premier League", "Western Australian Premier League", "WA Premier League", "NPL Western Australia", "WST");
+            PatchClubComp("Western Australian State League", "Western Australian State League", "WA State League", "NPL Tasmania", "TAS");
+
+            // Austrian
+            PatchClubComp("Austrian Premier Division", "Austrian Premier Division", "Premier Division", "Bundesliga", "B");
+            PatchClubComp("Austrian First Division", "Austrian First Division", "First Division", "Erste Liga", "EL");
+            PatchClubComp("Austrian Lower Division", "Austrian Lower Division", "Lower Division", "Regionalliga", "Reg");
+
+            // Belgian
+            PatchClubComp("Belgian First Division", "Belgian First Division A", "First Division", "First Division A", "D1A");
+            PatchClubComp("Belgian Second Division", "Belgian First Division B", "Second Division", "First Division B", "D1B");
+            PatchClubComp("Belgian Third Division", "Belgian First Amateur Division", "Third Division", "First Amateur Division", "AMA");
+            PatchClubComp("Belgian Third Division A", "Belgian First Amateur Division A", "Third Division A", "First Amateur Division A", "FAA");
+            PatchClubComp("Belgian Third Division B", "Belgian First Amateur Division B", "Third Division B", "First Amateur Division B", "FAB");
+            PatchClubComp("Belgian Cup", "Coupe de Belgique", "Belgian Cup", "Coupe de Belgique");
+            PatchClubComp("Belgian Super Cup", "Supercoupe de Belgique", "Super Cup", "Supercoupe");
+            PatchClubComp("Belgian League Cup", "Belgian League Cup", "League Cup", "Coupe de la Ligue Pro");
+
+            // Brazil
+            PatchClubComp("Brazilian National First Division", "Brazilian Campeonato Série A", "National First Division", "Série A", "A");
+            PatchClubComp("Brazilian National Second Division", "Brazilian Campeonato Série B", "National Second Division", "Série B", "B");
+            PatchClubComp("Brazilian National Third Division", "Brazilian Campeonato Série C", "National Third Division", "Série C", "C");
+            PatchClubComp("Brazilian Bahia State Championship", "Brazilian Campeonato Baiano", "Bahia State C'ship", "Campeonato Baiano", "BA1");
+            PatchClubComp("Brazilian Central State Championship", "Brazilian Campeonato Central", "Central State C'ship", "Campeonato Central", "CE");
+            PatchClubComp("Brazilian Gaúcho State Championship", "Brazilian Campeonato Gaúcho", "Gaúcho State C'ship", "Campeonato Gaúcho", "RS");
+            PatchClubComp("Brazilian Goiás State Championship", "Brazilian Campeonato Goiano", "Goiás State C'ship", "Campeonato Goiano", "GO");
+            PatchClubComp("Brazilian Minas Gerais State Championship", "Brazilian Campeonato Mineiro", "Minas State C'ship", "Campeonato Mineiro", "MG");
+            PatchClubComp("Brazilian North State Championship", "Brazilian Campeonato Norte", "North State C'ship", "Campeonato Norte", "NO");
+            PatchClubComp("Brazilian Northeast State Championship", "Brazilian Campeonato Nordeste", "Northeast State C'ship", "Campeonato Nordeste", "NE");
+            PatchClubComp("Brazilian Paraná State Championship", "Brazilian Campeonato Paranaense", "Paraná State C'ship", "Campeonato Paranaense", "PR");
+            PatchClubComp("Brazilian Pernambuco State Championship", "Brazilian Campeonato Pernambucano", "Pernambuco State C'ship", "Campeonato Pernambucano", "PE");
+            PatchClubComp("Brazilian Rio de Janeiro State Championship", "Brazilian Campeonato Carioca", "Rio State C'ship", "Campeonato Carioca", "RJ");
+            PatchClubComp("Brazilian Santa Catarina State Championship", "Brazilian Campeonato Catarinense", "Sta Catarina State C'ship", "Campeonato Catarinense", "SC");
+            PatchClubComp("Brazilian São Paulo State Championship", "Brazilian Campeonato Paulista", "São Paulo State C'ship", "Campeonato Paulista", "SP");
+            PatchClubComp("Brazilian Cup", "Copa do Brasil", "Brazilian Cup", "Copa do Brasil");
+            PatchClubComp("Brazilian Champions Cup", "Brazilian Copa dos Campeões", "Brazilian Champions Cup", "Copa dos Campeões");
+            PatchClubComp("Brazilian Central Regional Cup", "Brazilian Central Regional Cup", "Central Cup", "Copa Central");
+            PatchClubComp("Brazilian North Regional Cup", "Brazilian North Regional Cup", "North Cup", "Copa Verde");
+            PatchClubComp("Brazilian Northeast Regional Cup", "Brazilian Northeast Regional Cup", "Northeast Cup", "Copa do Nordeste");
+            PatchClubComp("Brazilian Rio-São Paulo Tournement", "Brazilian Rio-São Paulo Tournement", "Rio-SP Tournement", "Torneio Rio-São Paulo");
+            PatchClubComp("Brazilian South-Minas Regional Cup", "Brazilian South-Minas Regional Cup", "South-Minas Cup", "Copa Sul-Minas");
+            PatchClubComp("Brazilian Taça Brazil", "Brazilian Taça Brazil", "Taça Brazil", "Taça Brasil");
+
             // English
             PatchClubComp("English Premier Division", "English Premier League", "Premier Division", "Premier League", "EPL");
             PatchClubComp("English First Division", "English Football League Championship", "First Division", "Championship", "FLC");
