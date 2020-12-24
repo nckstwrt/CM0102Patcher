@@ -169,6 +169,45 @@ namespace CM0102Patcher
             PatchClubComp("Brazilian South-Minas Regional Cup", "Brazilian South-Minas Regional Cup", "South-Minas Cup", "Copa Sul-Minas");
             PatchClubComp("Brazilian Taça Brazil", "Brazilian Taça Brazil", "Taça Brazil", "Taça Brasil");
 
+            // China
+            PatchClubComp("Chinese First Division A", "Chinese Super League", "First Division A", "Super League", "CSL");
+            PatchClubComp("Chinese First Division B", "Chinese League One", "First Division B", "League One", "CL1");
+            PatchClubComp("Chinese Second Division", "Chinese League Two", "Second Division", "League Two", "CL2");
+            PatchClubComp("Chinese Lower Division", "Chinese Lower Division", "Lower Division", "Lower Division", "CLD");
+
+            // Croatian
+            PatchClubComp("Croatian First Division", "Croatian 1. HNL", "First Division", "1. HNL", "1L");
+            PatchClubComp("Croatian Second Division", "Croatian 2. HNL", "Second Division", "2. HNL", "2L");
+            PatchClubComp("Croatian Second Division North", "Croatian 2. HNL North", "Second Division North", "2. HNL North", "2LN");
+            PatchClubComp("Croatian Second Division South", "Croatian 2. HNL South", "Second Division South", "2. HNL South", "2LS");
+            PatchClubComp("Croatian Third Division Central", "Croatian Third Division Central", "Croatian Third Division C", "3. HNL Central", "3LC");
+            PatchClubComp("Croatian Third Division East", "Croatian Third Division East", "Croatian Third Division E", "3. HNL East", "3LE");
+            PatchClubComp("Croatian Third Division North", "Croatian Third Division North", "Croatian Third Division N", "3. HNL North", "3LN");
+            PatchClubComp("Croatian Third Division South", "Croatian Third Division South", "Croatian Third Division S", "3. HNL South", "3LS");
+            PatchClubComp("Croatian Third Division West", "Croatian Third Division West", "Croatian Third Division W", "3. HNL West", "3LW");
+            PatchClubComp("Croatian Lower Division", "Croatian Lower Division", "Lower Division", "1. ZNL", "ZNL");
+            PatchClubComp("Croatian Cup", "Hrvatski Kup", "Croatian Cup", "Hrvatski Kup");
+            PatchClubComp("Croatian Super Cup", "Croatian Super Cup", "Super Cup", "Superkup");
+
+            // Czech
+            PatchClubComp("Czech First Division", "Czech First Division", "First Division", "First League", "CFL");
+            PatchClubComp("Czech Second Division", "Czech Second Division", "Second Division", "National League", "CNL");
+            PatchClubComp("Czech Third Division CFL", "Czech Third Division CFL", "Third Division CFL", "Bohemian League", "CBL");
+            PatchClubComp("Czech Third Division MSFL", "Czech Third Division MSFL", "Third Division MSFL", "Moravian-Silesian League", "CML");
+
+            // Danish
+            PatchClubComp("Danish Premier Division", "Danish Superliga", "Premier Division", "Superliga", "DSL");
+            PatchClubComp("Danish First Division", "Danish 1st Division", "First Division", "1st Division", "D1");
+            PatchClubComp("Danish Second Division", "Danish 2nd Division", "Second Division", "2nd Division", "D2");
+            PatchClubComp("Danish Kvalifikationsrækken", "Danish Kvalifikationsrækken", "Danish Kvalifikationsrækk", "Denmark Series", "D3");
+            PatchClubComp("Danish Cup", "DBU Pokalen", "Danish Cup", "DBU Pokalen");
+
+            // Dutch
+            PatchClubComp("Dutch Premier Division", "Dutch Eredivisie", "Premier Division", "Eredivisie", "ERE");
+            PatchClubComp("Dutch First Division", "Dutch Eerste Divisie", "First Division", "Eerste Divisie", "ED");
+            PatchClubComp("Dutch Cup", "KNVB Beker", "Dutch Cup", "KNVB Beker");
+            PatchClubComp("Dutch Super Cup", "Johan Cruijff Schaal", "Super Cup", "Johan Cruijff Schaal");
+
             // English
             PatchClubComp("English Premier Division", "English Premier League", "Premier Division", "Premier League", "EPL");
             PatchClubComp("English First Division", "English Football League Championship", "First Division", "Championship", "FLC");
