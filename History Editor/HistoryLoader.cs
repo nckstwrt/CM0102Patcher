@@ -121,6 +121,19 @@ namespace CM0102Patcher
             }
         }
 
+        public void UpdateClubsLastDivision(int clubId, int divisionId)
+        {
+            for (int i = 0; i < club.Count; i++)
+            {
+                if (club[i].ID == clubId)
+                {
+                    TClub temp = club[i];
+                    temp.LastDivision = divisionId;
+                    club[i] = temp;
+                }
+            }
+        }
+
         public void Save(string indexFile, bool saveClubData = false, bool saveStaffData = false)
         {
             var dir = Path.GetDirectoryName(indexFile);

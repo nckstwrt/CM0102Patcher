@@ -372,15 +372,25 @@ namespace CM0102Patcher
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct TComp
     {
+        /*0x0*/
         public int ID;
+        /*0x4*/
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)] public byte[] Name;
+        /*0x37*/
         public byte GenderName;
+        /*0x38*/
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] ShortName;
+        /*0x52*/
         public byte ShortGenderName;
+        /*0x53*/
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] public byte[] ThreeLetterName;
+        /*0x57*/
         public sbyte ClubCompScope;
+        /*0x58*/
         public sbyte ClubCompSelected;
+        /*0x59*/
         public int ClubCompContinent;
+        /*0x5D*/
         public int ClubCompNation;
         public int ClubCompForegroundColour;
         public int ClubCompBackgroundColour;

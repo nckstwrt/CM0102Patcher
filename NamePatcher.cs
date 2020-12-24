@@ -148,6 +148,40 @@ namespace CM0102Patcher
             PatchStaffAward("English Conference Manager of the Year", "English National League Manager of the Year");
             PatchStaffAward("English Players Conference Select", "English National League Team of the Year");
 
+            // Scotland
+            PatchClubComp("Scottish Premier Division", "Scottish Premiership", "Premier Division", "Premiership", "PRM");
+            PatchClubComp("Scottish First Division", "Scottish Championship", "First Division", "Championship", "C");
+            PatchClubComp("Scottish Second Division", "Scottish League One", "Second Division", "League One", "L1");
+            PatchClubComp("Scottish Third Division", "Scottish League Two", "Third Division", "League Two", "L2");
+
+            // Scotland Awards
+            PatchStaffAward("Scottish Player of the Year", "PFA Scotland Players' Player of the Year");
+            PatchStaffAward("Scottish Young Player of the Year", "PFA Scotland Young Player of the Year");
+            PatchStaffAward("Scottish Premier Division Team of the Week", "SPFL Premiership Team of the Week");
+            PatchStaffAward("Scottish Premier Division Manager of the Month", "SPFL Premiership Manager of the Month");
+            PatchStaffAward("Scottish Premier Division Player of the Month", "SPFL Premiership Player of the Month");
+            PatchStaffAward("Scottish Premier Division Young Player of Month", "SPFL Premiership Young Player of the Month");
+            PatchStaffAward("Scottish Premier Division Manager of the Year", "SPFL Premiership Manager of the Year");
+            PatchStaffAward("Scottish Premier Division Team of the Year", "SPFL Premiership Team of the Year");
+            PatchStaffAward("Scottish First Division Team of the Week", "SPFL Championship Team of the Week");
+            PatchStaffAward("Scottish First Division Manager of the Month", "SPFL Championship Manager of the Month");
+            PatchStaffAward("Scottish First Division Player of the Month", "SPFL Championship Player of the Month");
+            PatchStaffAward("Scottish First Division Young Player of Month", "SPFL Championship Young Player of the Month");
+            PatchStaffAward("Scottish First Division Manager of the Year", "SPFL Championship Manager of the Year");
+            PatchStaffAward("Scottish First Division Team of the Year", "SPFL Championship Team of the Year");
+            PatchStaffAward("Scottish Second Division Team of the Week", "SPFL League One Team of the Week");
+            PatchStaffAward("Scottish Second Division Manager of the Month", "SPFL League One Manager of the Month");
+            PatchStaffAward("Scottish Second Division Player of the Month", "SPFL League One Player of the Month");
+            PatchStaffAward("Scottish Second Division Young Player of Month", "SPFL League One Young Player of the Month");
+            PatchStaffAward("Scottish Second Division Manager of the Year", "SPFL League One Manager of the Year");
+            PatchStaffAward("Scottish Second Division Team of the Year", "SPFL League One Team of the Year");
+            PatchStaffAward("Scottish Third Division Team of the Week", "SPFL League Two Team of the Week");
+            PatchStaffAward("Scottish Third Division Manager of the Month", "SPFL League Two Manager of the Month");
+            PatchStaffAward("Scottish Third Division Player of the Month", "SPFL League Two Player of the Month");
+            PatchStaffAward("Scottish Third Division Young Player of Month", "SPFL League Two Young Player of the Month");
+            PatchStaffAward("Scottish Third Division Manager of the Year", "SPFL League Two Manager of the Year");
+            PatchStaffAward("Scottish Third Division Team of the Year", "SPFL League Two Team of the Year");
+
             // Spanish
             PatchClubComp("Spanish First Division", "Spanish La Liga", "First Division", "La Liga", "LL");
             PatchClubComp("Spanish Second Division", "Spanish Segunda División", "Second Division", "Segunda División", "SD");
@@ -171,6 +205,16 @@ namespace CM0102Patcher
             PatchClubComp("German Cup", "German DFB-Pokal", "German Cup", "DFB-Pokal");
             PatchClubComp("German League Cup", "German DFB-Ligapokal", "German League Cup", "DFB-Ligapokal");
 
+            // Germany Awards
+            PatchStaffAward("German First Division Team of the Week", "German Bundesliga Team of the Week");
+            PatchStaffAward("German First Division Player of the Month", "German Bundesliga Player of the Month");
+            PatchStaffAward("German First Division Manager of the Year", "German Bundesliga Manager of the Year");
+            PatchStaffAward("German First Division Top Goalscorer", "German Bundesliga Top Goalscorer");
+            PatchStaffAward("German Second Division Team of the Week", "German 2. Bundesliga Team of the Week");
+            PatchStaffAward("German Second Division Player of the Month", "German 2. Bundesliga Player of the Month");
+            PatchStaffAward("German Second Division Manager of the Year", "German 2. Bundesliga Manager of the Year");
+            PatchStaffAward("German Second Division Top Goalscorer", "German 2. Bundesliga Top Goalscorer");
+
             // Portugal
             PatchClubComp("Portuguese Premier League", "Portuguese Primeira Liga", "Premier League", "Primeira Liga", "PRM");
             PatchClubComp("Portuguese Second League", "Portuguese LigaPro", "Second League", "LigaPro", "LP");
@@ -188,6 +232,11 @@ namespace CM0102Patcher
             PatchClubComp("Italian Super Cup", "Supercoppa Italiana", "Super Cup", "Supercoppa");
             PatchClubComp("Italian C1 Super Cup", "Supercoppa di Lega Pro", "C1 Super Cup", "Supercoppa di Lega Pro");
 
+            // Italy Awards
+            PatchStaffAward("Italian Serie A Manager of the Year", "Italian Serie A Panchina d'Oro");
+            PatchStaffAward("Italian Serie A Top Goalscorer", "Italian Serie A Capocannoniere");
+            PatchStaffAward("Italian Serie B Manager of the Year", "Italian Serie B Panchina d'Argento");
+
             // Poland
             PatchClubComp("Polish First Division", "Polish Ekstraklasa", "First Division", "Ekstraklasa", "EKS");
             PatchClubComp("Polish Second Division", "Polish I Liga", "Second Division", "I Liga", "LI");
@@ -204,6 +253,26 @@ namespace CM0102Patcher
             PatchClubComp("French Cup", "Coupe de France", "French Cup", "Coupe de France");
             PatchClubComp("French League Cup", "Coupe de la Ligue", "League Cup", "Coupe de la Ligue");
             PatchClubComp("French Champions Trophy", "Trophée des Champions", "Champions Trophy", "Trophée des Champions");
+
+            // France Awards
+            PatchStaffAward("French First Division Team of the Week", "French Ligue 1 Team of the Week");
+            PatchStaffAward("French First Division Team of the Year", "French Ligue 1 Team of the Year");
+            PatchStaffAward("French Players First Division Player of the Year", "French Ligue 1 Players' Player of the Year");
+            PatchStaffAward("French First Division Player of the Year", "French Ligue 1 Player of the Year");
+            PatchStaffAward("French First Division Goalkeeper of the Year", "French Ligue 1 Goalkeeper of the Year");
+            PatchStaffAward("French Second Division Team of the Week", "French Ligue 2 Team of the Week");
+            PatchStaffAward("French Second Division Team of the Year", "French Ligue 2 Team of the Year");
+            PatchStaffAward("French Players Second Division Player of the Year", "French Ligue 2 Players' Player of the Year");
+            PatchStaffAward("French Second Division Player of the Year", "French Ligue 2 Player of the Year");
+            PatchStaffAward("French Second Division Goalkeeper of the Year", "French Ligue 2 Goalkeeper of the Year");
+            PatchStaffAward("French Players National Player of the Year", "French National Players' Player of the Year");
+
+            // World Player Awards
+            PatchStaffAward("FIFA World Player of the Year", "Ballon d'Or");
+            PatchStaffAward("World Footballer Of The Year", "Best FIFA Men's Player", true, true);
+            PatchStaffAward("European Footballer of the Year", "UEFA Men's Player of the Year");
+            PatchStaffAward("South American Footballer of the Year", "Rey del Fútbol de América");
+            PatchStaffAward("Oceania Player of the Year", "Oceania Footballer of the Year");
         }
 
         public void PatchWelshWithNorthernLeague()

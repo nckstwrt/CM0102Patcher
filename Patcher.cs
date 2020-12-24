@@ -158,7 +158,7 @@ namespace CM0102Patcher
                 bool matches = true;
                 foreach (var hexPatch in HexPatches)
                 {
-                    if (hexPatch.offset < fin.Length)
+                    if (hexPatch.offset < fin.Length && hexPatch.offset != -1)
                     {
                         fin.Seek(hexPatch.offset, SeekOrigin.Begin);
                         byte[] patchBytes = HexStringToBytes(hexPatch.hex);
@@ -201,7 +201,7 @@ namespace CM0102Patcher
                     bool matches = true;
                     foreach (var hexPatch in patch.Value)
                     {
-                        if (hexPatch.offset < fin.Length)
+                        if (hexPatch.offset < fin.Length && hexPatch.offset != -1)
                         {
                             fin.Seek(hexPatch.offset, SeekOrigin.Begin);
                             byte[] patchBytes = HexStringToBytes(hexPatch.hex);
@@ -311,9 +311,8 @@ namespace CM0102Patcher
                     parts[0] = parts[0].Replace(":", "");
                     try
                     {
-                        if (parts[0].ToUpper() == "CHANGECLUBDIVISION")
+                        if (parts[0].ToUpper() == "CHANGECLUBDIVISION" || parts[0].ToUpper() == "CHANGECLUBLASTDIVISION" || parts[0].ToUpper() == "EXPANDEXE" || parts[0].ToUpper() == "TAPANISPACEPATCH")
                         {
-                            // Let's parse the line again
                             patchList.Add(new HexPatch(parts[0].ToUpper(), parts[1], parts[2]));
                         }
                         else
@@ -357,6 +356,8 @@ namespace CM0102Patcher
         }
 
         // 006DC000 in the file will equal 00DE7000 in memory = 70B000 Difference
+        // DE7000 = Extra Attributes Patch
+        // DE7300 = Subs Control
         public void ExpandExe(string fileName)
         {
             ApplyPatch(fileName, patches["addextraspaceheader"]);
@@ -369,6 +370,14 @@ namespace CM0102Patcher
         // Main apply
         public void ApplyPatch(string fileName, IEnumerable<HexPatch> patch)
         {
+            // Check if we need to expand the exe
+            if (patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("EXPANDEXE")).Count() >= 1)
+                ExpandExe(fileName);
+
+            if (patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("TAPANISPACEPATCH")).Count() >= 1)
+                ApplyPatch(fileName, patches["tapanispacemaker"]);
+
+            // Apply patches
             using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
                 using (var bw = new BinaryWriter(file))
@@ -384,7 +393,7 @@ namespace CM0102Patcher
             }
 
             // Check for club changes
-            var clubDivisionChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGECLUBDIVISION")).ToList();
+            var clubDivisionChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("CHANGECLUBDIVISION") || x.command.ToUpper().StartsWith("CHANGECLUBLASTDIVISION"))).ToList();
             if (clubDivisionChanges.Count > 0)
             {
                 HistoryLoader hl = new HistoryLoader();
@@ -399,7 +408,12 @@ namespace CM0102Patcher
                     var tClub = hl.club.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == clubName);
                     var tDivision = hl.club_comp.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == divisionName);
                     if (tClub.ID != 0 && tDivision.ID != 0)
-                        hl.UpdateClubsDivision(tClub.ID, tDivision.ID);
+                    {
+                        if (clubDivisionChange.command.ToUpper().StartsWith("CHANGECLUBDIVISION"))
+                            hl.UpdateClubsDivision(tClub.ID, tDivision.ID);
+                        else
+                            hl.UpdateClubsLastDivision(tClub.ID, tDivision.ID);
+                    }
                 }
                 hl.Save(indexFile, true);
             }
