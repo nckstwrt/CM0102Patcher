@@ -253,6 +253,30 @@ namespace CM0102Patcher
             PatchStaffAward("English Conference Manager of the Year", "English National League Manager of the Year");
             PatchStaffAward("English Players Conference Select", "English National League Team of the Year");
 
+            // Finnish
+            PatchClubComp("Finnish Premier Division", "Finnish Veikkausliiga", "Premier Division", "Veikkausliiga", "FVK");
+            PatchClubComp("Finnish First Division", "Finnish Ykkönen", "First Division", "Ykkönen", "FY");
+            PatchClubComp("Finnish First Division North", "Finnish Ykkönen North", "First Division North", "Ykkönen North", "FYN");
+            PatchClubComp("Finnish First Division South", "Finnish Ykkönen South", "First Division South", "Ykkönen South", "FYS");
+            PatchClubComp("Finnish Second Division East", "Finnish Second Division East", "Second Division East", "Kakkonen East", "FKL");
+            PatchClubComp("Finnish Second Division North", "Finnish Second Division North", "Second Division North", "Kakkonen North", "FKN");
+            PatchClubComp("Finnish Second Division South", "Finnish Second Division South", "Second Division South", "Kakkonen South", "FKS");
+            PatchClubComp("Finnish Second Division West", "Finnish Second Division West", "Second Division West", "Kakkonen West", "FKW");
+            PatchClubComp("Finnish Lower Division", "Finnish Lower Division", "Lower Division", "Kolmonen", "FKL");
+            PatchClubComp("Finnish Cup", "Suomen Cup", "Finnish Cup", "Suomen Cup");
+
+            // Finnish Awards
+            PatchStaffAward("Finnish Premier Division Top Goalscorer", "Finnish Veikkausliiga Top Goalscorer");
+            PatchStaffAward("Finnish Premier Division Player of the Month", "Finnish Veikkausliiga Player of the Month");
+            PatchStaffAward("Finnish Premier Division Manager of the Month", "Finnish Veikkausliiga Manager of the Month");
+            PatchStaffAward("Finnish Premier Division Team of the Year", "Finnish Veikkausliiga Team of the Year");
+            PatchStaffAward("Finnish Premier Division Team of the Week", "Finnish Veikkausliiga Team of the Week");
+            PatchStaffAward("Finnish First Division Top Goalscorer", "Finnish Ykkönen Top Goalscorer");
+            PatchStaffAward("Finnish First Division Player of the Month", "Finnish Ykkönen Player of the Month");
+            PatchStaffAward("Finnish First Division Manager of the Month", "Finnish Ykkönen Manager of the Month");
+            PatchStaffAward("Finnish First Division Team of the Year", "Finnish Ykkönen Team of the Year");
+            PatchStaffAward("Finnish First Division Team of the Week", "Finnish Ykkönen Team of the Week");
+
             // Scotland
             PatchClubComp("Scottish Premier Division", "Scottish Premiership", "Premier Division", "Premiership", "PRM");
             PatchClubComp("Scottish First Division", "Scottish Championship", "First Division", "Championship", "C");
@@ -347,6 +371,22 @@ namespace CM0102Patcher
             PatchClubComp("Portuguese Cup", "Taça de Portugal", "Portuguese Cup", "Taça de Portugal");
             PatchClubComp("Portuguese Super Cup", "Supertaça Cândido de Oliveira", "Portuguese Super Cup", "Supertaça");
 
+            // Northern Irish (has to be above Ireland - else you'll get a clash)
+            PatchClubComp("Northern Irish League Premier Division", "NIFL Premiership", "Premier Division", "Premiership", "PRM");
+            PatchClubComp("Northern Irish League First Division", "NIFL Championship", "First Division", "Championship", "FLC");
+            PatchClubComp("Northern Irish League Lower Division", "Northern Irish League Lower Division", "Lower Division", "Intermediate League", "INT");
+            PatchClubComp("Northern Irish Cup", "Irish Football Association Challenge Cup", "Irish Cup", "Irish Cup");
+            PatchClubComp("Northern Irish League Cup", "NIFL Cup", "League Cup", "League Cup");
+            PatchClubComp("Northern Irish Charity Shield", "NIFL Charity Shield", "Charity Shield", "Charity Shield");
+
+            // Irish
+            PatchClubComp("Irish Premier Division", "League of Ireland Premier Division", "Premier Division", "Premier Division", "PRM");
+            PatchClubComp("Irish First Division", "League of Ireland First Division", "First Division", "First Division", "D1");
+            PatchClubComp("Irish Leinster Senior League Premier", "Irish Leinster Senior League Premier", "Leinster Senior Premier", "LSL Senior Division", "LSL");
+            PatchClubComp("Irish Leinster Senior League Division One", "Irish Leinster Senior League Division One", "Leinster Division One", "LSL Senior 1", "LD1");
+            PatchClubComp("Irish Senior Challenge Cup", "FAI Cup", "Senior Challenge Cup", "FAI Cup");
+            PatchClubComp("Irish League Cup", "League of Ireland Cup", "League Cup", "League of Ireland Cup");
+
             // Italy
             PatchClubComp("Italian Cup", "Coppa Italia", "Italian Cup", "Coppa Italia");
             PatchClubComp("Italian Serie C Cup", "Coppa Italia Lega Pro", "Serie C Cup", "Coppa Italia Lega Pro");
@@ -358,6 +398,27 @@ namespace CM0102Patcher
             PatchStaffAward("Italian Serie A Top Goalscorer", "Italian Serie A Capocannoniere");
             PatchStaffAward("Italian Serie B Manager of the Year", "Italian Serie B Panchina d'Argento");
 
+            // Japan
+            PatchClubComp("Japanese J-League 1", "Japanese J1 League", "J-League 1", "J1 League", "J1");
+            PatchClubComp("Japanese J-League 2", "Japanese J2 League", "J-League 2", "J2 League", "J2");
+            PatchClubComp("Japanese Administrative Division", "Japanese Administrative Division", "Japanese Administrative D", "J3 League", "J3");
+            PatchClubComp("Japanese University League", "Japanese University League", "Japanese University League", "Football League", "JFL");
+            PatchClubComp("Japanese U-18 Championship", "Japanese U-18 Championship", "Japanese U-18", "Regional League", "JRL");
+            PatchClubComp("Japanese Cup", "Japanese J.League Cup", "Japanese Cup", "J.League Cup");
+
+            // Norwegian
+            PatchClubComp("Norwegian Premier Division", "Norwegian Eliteserien", "Premier Division", "Eliteserien", "E");
+            PatchClubComp("Norwegian First Division", "Norwegian 1. Divisjon", "First Division", "1. Divisjon", "D1");
+            PatchClubComp("Norwegian Second Division Group 1", "Norwegian Second Division Group 1", "Second Division Group 1", "2. Divisjon Group 1", "2D");
+            PatchClubComp("Norwegian Second Division Group 2", "Norwegian Second Division Group 2", "Second Division Group 2", "2. Divisjon Group 2", "2D");
+            PatchClubComp("Norwegian Second Division Group 3", "Norwegian Second Division Group 3", "Second Division Group 3", "2. Divisjon Group 3", "2D");
+            PatchClubComp("Norwegian Second Division Group 4", "Norwegian Second Division Group 4", "Second Division Group 4", "2. Divisjon Group 4", "2D");
+            PatchClubComp("Norwegian Second Division Group 5", "Norwegian Second Division Group 5", "Second Division Group 5", "2. Divisjon Group 5", "2D");
+            PatchClubComp("Norwegian Second Division Group 6", "Norwegian Second Division Group 6", "Second Division Group 6", "2. Divisjon Group 6", "2D");
+            PatchClubComp("Norwegian Second Division Group 7", "Norwegian Second Division Group 7", "Second Division Group 7", "2. Divisjon Group 7", "2D");
+            PatchClubComp("Norwegian Second Division Group 8", "Norwegian Second Division Group 8", "Second Division Group 8", "2. Divisjon Group 8", "2D");
+            PatchClubComp("Norwegian Cup", "Norwegian Cupen", "Norwegian Cup", "Cupen");
+          
             // Poland
             PatchClubComp("Polish First Division", "Polish Ekstraklasa", "First Division", "Ekstraklasa", "EKS");
             PatchClubComp("Polish Second Division", "Polish I Liga", "Second Division", "I Liga", "LI");
@@ -556,28 +617,28 @@ namespace CM0102Patcher
             PatchEngLng(oldName, newName);
         }
 
-        public void PatchClubComp(string oldName, string newName, string oldShortName = null, string newShortName = null, string newAcronym = null)
+        public void PatchClubComp(string oldName, string newName, string oldShortName = null, string newShortName = null, string newAcronym = null, bool ignoreCase = false)
         {
-            PatchComp("club_comp.dat", oldName, newName, oldShortName, newShortName, newAcronym);
+            PatchComp("club_comp.dat", oldName, newName, oldShortName, newShortName, newAcronym, ignoreCase);
         }
 
-        public void PatchNationComp(string oldName, string newName, string oldShortName = null, string newShortName = null, string newAcronym = null)
+        public void PatchNationComp(string oldName, string newName, string oldShortName = null, string newShortName = null, string newAcronym = null, bool ignoreCase = false)
         {
-            PatchComp("nation_comp.dat", oldName, newName, oldShortName, newShortName, newAcronym);
+            PatchComp("nation_comp.dat", oldName, newName, oldShortName, newShortName, newAcronym, ignoreCase);
         }
 
-        public void PatchComp(string fileName, string oldName, string newName, string oldShortName, string newShortName, string newAcronym = null)
+        public void PatchComp(string fileName, string oldName, string newName, string oldShortName, string newShortName, string newAcronym = null, bool ignoreCase = false)
         {
             oldName = AddTerminator(oldName);
             newName = AddTerminator(newName);
             oldShortName = AddTerminator(oldShortName);
             newShortName = AddTerminator(newShortName);
 
-            int compChangePos = PatchComp(fileName, oldName, newName);
+            int compChangePos = PatchComp(fileName, oldName, newName, 0, 6135344, ignoreCase);
             if (compChangePos != -1)
             {
                 if (oldShortName != null && newShortName != null)
-                    PatchComp(fileName, oldShortName, newShortName, compChangePos + newName.Length, -1);
+                    PatchComp(fileName, oldShortName, newShortName, compChangePos + newName.Length, -1, ignoreCase);
                 if (newAcronym != null)
                     PatchCompAcronym(Path.Combine(dataDir, fileName), compChangePos, newAcronym);
                 PatchEngLng(oldName, newName, oldShortName, newShortName, newAcronym);
@@ -590,14 +651,14 @@ namespace CM0102Patcher
                 exeBytes = ByteWriter.LoadFile(exeFile);
         }
 
-        public int PatchComp(string fileName, string fromComp, string toComp, int clubCompStartPos = 0, int exeStartPos = 0x5d9e30)
+        public int PatchComp(string fileName, string fromComp, string toComp, int clubCompStartPos = 0, int exeStartPos = 0x5d9e30, bool ignoreCase = false)
         {
             var club_comp = Path.Combine(dataDir, fileName);
 
             fromComp = AddTerminator(fromComp);
             toComp = AddTerminator(toComp);
 
-            int compChangePos = ByteWriter.BinFileReplace(club_comp, fromComp, toComp, clubCompStartPos, clubCompStartPos != 0 ? 1 : 0);
+            int compChangePos = ByteWriter.BinFileReplace(club_comp, fromComp, toComp, clubCompStartPos, clubCompStartPos != 0 ? 1 : 0, ignoreCase);
 
             if (exeStartPos != -1)
                 PatchExeString(fromComp, toComp, exeStartPos);
