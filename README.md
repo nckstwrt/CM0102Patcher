@@ -1,4 +1,4 @@
-# CM0102Patcher v2.09
+# CM0102Patcher v2.10
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/E6jN9n4.png)
+![alt text](https://i.imgur.com/YS1LgaH.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,10 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.10:
+* More leagues and award names updated with "Updates Names + transfer windows" option
+* Misc Patched: 2020_Nov_ShefWeds_Minus_12_Points (for Nov 2020 Data Update, sets Sheffield Wednesday to start with -12 points), 9and5SubsForEverything (makes every competition have 9 subs with 5 you can use), hodgy's CombineApps patches, John Locke's JL_MakeAttributesShowAsStars patch and the 2020_Nov_France_Restructure patch (for restructuring the French leagues for the November 2020 update)
 
 v2.09:
 * Update to Date Patching to correct World Cup/Euro years when patching to 2020
