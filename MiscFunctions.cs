@@ -325,5 +325,16 @@ namespace CM0102Patcher
             else
                 return 1.0F - dis / maxLen;
         }
+
+        public static void WriteCSVLine(StreamWriter sw, params object[] fields)
+        {
+            for (int i = 0; i < fields.Length; i++)
+            {
+                sw.Write(fields[i].ToString());
+                if (i != fields.Length - 1)
+                    sw.Write(",");
+            }
+            sw.WriteLine();
+        }
     }
 }

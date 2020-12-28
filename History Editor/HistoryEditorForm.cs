@@ -577,6 +577,19 @@ namespace CM0102Patcher
         {
             try
             {
+                historyLoader.Load(textBoxIndexFile.Text);
+                ResetData();
+            }
+            catch (Exception ex)
+            {
+                ExceptionMsgBox.Show(ex);
+            }
+        }
+
+        private void ResetData()
+        {
+            try
+            {
                 lastSelectedNationComp = null;
                 lastSelectNationCompRows = null;
                 lastSelectedClubComp = null;
@@ -584,8 +597,6 @@ namespace CM0102Patcher
                 lastSelectedStaffComp = null;
                 lastSelectedStaffHistory = null;
                 staffItemsStore = null;
-
-                historyLoader.Load(textBoxIndexFile.Text);
 
                 listBoxNationComps.Items.Clear();
                 List<ListBoxItem> nationCompsItems = new List<ListBoxItem>();
@@ -739,6 +750,61 @@ namespace CM0102Patcher
                 historyLoader.Save(textBoxIndexFile.Text, true, true);
                 MessageBox.Show("Data Saved", "Club Reorderer", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void buttonRemoveDuplicates_Click(object sender, EventArgs e)
+        {
+            // Get rid of cr*p first
+            for (int i = historyLoader.club_comp_history.Count-1;  i >= 0 ; i--)
+            {
+                if (historyLoader.club_comp_history[i].Year <= 0 || historyLoader.club_comp_history[i].Winners <= 0)
+                    historyLoader.club_comp_history.RemoveAt(i);
+            }
+
+            // There must be a faster way of doing this - but my brain is feeling very slow today! :) (structs don't make this easy)
+            var dupes = historyLoader.club_comp_history.GroupBy(x => new { x.Comp, x.Year }).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+            foreach (var dupe in dupes)
+            {
+                bool first = true;
+                for (int i = historyLoader.club_comp_history.Count - 1; i >= 0; i--)
+                {
+                    if (historyLoader.club_comp_history[i].Comp == dupe.Comp && historyLoader.club_comp_history[i].Year == dupe.Year)
+                    {
+                        if (!first)
+                        {
+                            historyLoader.club_comp_history.RemoveAt(i);
+                        }
+                        else
+                            first = false;
+                    }
+                }
+            }
+
+            // Now do exactly the same but for international comps
+            for (int i = historyLoader.nation_comp_history.Count - 1; i >= 0; i--)
+            {
+                if (historyLoader.nation_comp_history[i].Year <= 0 || historyLoader.nation_comp_history[i].Winners <= 0)
+                    historyLoader.nation_comp_history.RemoveAt(i);
+            }
+            var international_dupes = historyLoader.nation_comp_history.GroupBy(x => new { x.Comp, x.Year }).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+            foreach (var dupe in international_dupes)
+            {
+                bool first = true;
+                for (int i = historyLoader.nation_comp_history.Count - 1; i >= 0; i--)
+                {
+                    if (historyLoader.nation_comp_history[i].Comp == dupe.Comp && historyLoader.nation_comp_history[i].Year == dupe.Year)
+                    {
+                        if (!first)
+                        {
+                            historyLoader.nation_comp_history.RemoveAt(i);
+                        }
+                        else
+                            first = false;
+                    }
+                }
+            }
+
+            ResetData();
         }
     }
 

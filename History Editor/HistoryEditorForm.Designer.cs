@@ -84,6 +84,7 @@
             this.buttonYearShifter = new System.Windows.Forms.Button();
             this.buttonOrderClubNames = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.buttonRemoveDuplicates = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPageNationComp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericNationUpDown)).BeginInit();
@@ -686,11 +687,22 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Order Club Names";
             // 
+            // buttonRemoveDuplicates
+            // 
+            this.buttonRemoveDuplicates.Location = new System.Drawing.Point(12, 334);
+            this.buttonRemoveDuplicates.Name = "buttonRemoveDuplicates";
+            this.buttonRemoveDuplicates.Size = new System.Drawing.Size(114, 23);
+            this.buttonRemoveDuplicates.TabIndex = 1;
+            this.buttonRemoveDuplicates.Text = "Remove Duplicates";
+            this.buttonRemoveDuplicates.UseVisualStyleBackColor = true;
+            this.buttonRemoveDuplicates.Click += new System.EventHandler(this.buttonRemoveDuplicates_Click);
+            // 
             // HistoryEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(778, 369);
+            this.Controls.Add(this.buttonRemoveDuplicates);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.buttonSave);
@@ -781,5 +793,6 @@
         private System.Windows.Forms.Button buttonYearShifter;
         private System.Windows.Forms.Button buttonOrderClubNames;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button buttonRemoveDuplicates;
     }
 }

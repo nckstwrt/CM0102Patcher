@@ -19,6 +19,29 @@ namespace CM0102Patcher
             this.indexFile = indexFile;
         }
 
+        public void DumpTeamsAndLeaguesToCSV()
+        {
+            HistoryLoader hl = new HistoryLoader();
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\2020_orig\Championship Manager 01-02\Data\index.dat");
+
+            using (var sw = new StreamWriter(@"c:\ChampMan\notes\Clubs.csv"))
+            {
+                MiscFunctions.WriteCSVLine(sw, "ID", "TeamName", "Division");
+                foreach (var club in hl.club)
+                {
+                    MiscFunctions.WriteCSVLine(sw, club.ID, MiscFunctions.GetTextFromBytes(club.Name), MiscFunctions.GetTextFromBytes(hl.club_comp.FirstOrDefault(x => x.ID == club.Division).Name));
+                }
+            }
+            using (var sw = new StreamWriter(@"c:\ChampMan\notes\ClubComps.csv"))
+            {
+                MiscFunctions.WriteCSVLine(sw, "ID", "CompName", "Nation");
+                foreach (var comp in hl.club_comp)
+                {
+                    MiscFunctions.WriteCSVLine(sw, comp.ID, MiscFunctions.GetTextFromBytes(comp.Name), MiscFunctions.GetTextFromBytes(hl.nation.FirstOrDefault(x => x.ID == comp.ClubCompNation).Name));
+                }
+            }
+        }
+
         public void GetCM0102Leagues()
         {
             float bestSimilarity;

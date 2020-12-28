@@ -531,7 +531,7 @@ namespace CM0102Patcher
         {
             using (var sw = new StreamWriter(fileName))
             {
-                WriteLine(sw, "FirstName", "SecondName", "Nationality", "NationalCaps", "NationalGoals", "Team", "Unavailable", "DataSet", "BirthDate",
+                MiscFunctions.WriteCSVLine(sw, "FirstName", "SecondName", "Nationality", "NationalCaps", "NationalGoals", "Team", "Unavailable", "DataSet", "BirthDate",
                       "Age", "Goalkeeper", "Sweeper", "Defence", "Anchor", "Midfield", "Support", "Attack", "RightSided", "LeftSided", "CentralSided", "Ability", "Potential", "Reputation",
                       "Aggression", "BigOccasion", "Character", "Consistency", "Creativity", "Determination", "Dirtyness", "Dribbling", "Flair", "Heading", "Influence", "InjProne", "Intelligence", "Marking", "OffTheBall", "Pace", "Passing",
                       "Positioning", "SetPieces", "Shooting", "Stamina", "Strength", "Tackling", "Technique");
@@ -544,7 +544,7 @@ namespace CM0102Patcher
         {
             using (var sw = new StreamWriter(fileName))
             {
-                WriteLine(sw, "LongName", "ShortName", "Nation", "Region", "Developed", "XCoord", "YCoord", "EEC", "TCoef8893",
+                MiscFunctions.WriteCSVLine(sw, "LongName", "ShortName", "Nation", "Region", "Developed", "XCoord", "YCoord", "EEC", "TCoef8893",
                           "City", "Stadium", "Capacity", "Seating", "Following", "Standing", "Blend", "Formation", "Style", "FirstHomeCol", "SecondHomeCol", "FirstAwayCol", "SecondAwayCol", "Division",
                           "LastDivision", "LastPosition", "Cash", "LeagueStandard", "TransferSystem", "Wav");
                 foreach (var t in tmdata)
@@ -1060,7 +1060,7 @@ namespace CM0102Patcher
 
         void WritePlayer(StreamWriter sw, CM2Player player)
         {
-            WriteLine(sw, MiscFunctions.GetTextFromBytes(player.FirstName), MiscFunctions.GetTextFromBytes(player.SecondName), MiscFunctions.GetTextFromBytes(player.Nationality), player.NationalCaps, player.NationalGoals, MiscFunctions.GetTextFromBytes(player.Team), player.Unavailable, player.DataSet, MiscFunctions.GetTextFromBytes(player.BirthDate),
+            MiscFunctions.WriteCSVLine(sw, MiscFunctions.GetTextFromBytes(player.FirstName), MiscFunctions.GetTextFromBytes(player.SecondName), MiscFunctions.GetTextFromBytes(player.Nationality), player.NationalCaps, player.NationalGoals, MiscFunctions.GetTextFromBytes(player.Team), player.Unavailable, player.DataSet, MiscFunctions.GetTextFromBytes(player.BirthDate),
                       player.Age, player.Goalkeeper, player.Sweeper, player.Defence, player.Anchor, player.Midfield, player.Support, player.Attack, player.RightSided, player.LeftSided, player.CentralSided, ConvertShortToNormalFormat(player.Ability), ConvertShortToNormalFormat(player.Potential), ConvertShortToNormalFormat(player.Reputation),
                       player.Aggression, player.BigOccasion, player.Character, player.Consistency, player.Creativity, player.Determination, player.Dirtyness, player.Dribbling, player.Flair, player.Heading, player.Influence, player.InjProne, player.Intelligence, player.Marking, player.OffTheBall, player.Pace, player.Passing,
                       player.Positioning, player.SetPieces, player.Shooting, player.Stamina, player.Strength, player.Tackling, player.Technique);
@@ -1068,22 +1068,13 @@ namespace CM0102Patcher
 
         void WriteTeam(StreamWriter sw, CM2Team team)
         {
-            WriteLine(sw, MiscFunctions.GetTextFromBytes(team.LongName), MiscFunctions.GetTextFromBytes(team.ShortName), MiscFunctions.GetTextFromBytes(team.Nation), MiscFunctions.GetTextFromBytes(team.Region), team.Developed, team.XCoord, team.YCoord, team.EEC, team.TCoef8893,
+            MiscFunctions.WriteCSVLine(sw, MiscFunctions.GetTextFromBytes(team.LongName), MiscFunctions.GetTextFromBytes(team.ShortName), MiscFunctions.GetTextFromBytes(team.Nation), MiscFunctions.GetTextFromBytes(team.Region), team.Developed, team.XCoord, team.YCoord, team.EEC, team.TCoef8893,
                 MiscFunctions.GetTextFromBytes(team.City), MiscFunctions.GetTextFromBytes(team.Stadium), ConvertLongToNormalFormat(team.Capacity), ConvertLongToNormalFormat(team.Seating), team.Following, team.Standing, team.Blend,
                 MiscFunctions.GetTextFromBytes(team.Formation), MiscFunctions.GetTextFromBytes(team.Style), MiscFunctions.GetTextFromBytes(team.FirstHomeCol), MiscFunctions.GetTextFromBytes(team.SecondHomeCol), MiscFunctions.GetTextFromBytes(team.FirstAwayCol), MiscFunctions.GetTextFromBytes(team.SecondAwayCol),
                 MiscFunctions.GetTextFromBytes(team.Division), MiscFunctions.GetTextFromBytes(team.LastDivision), team.LastPosition, ConvertLongToNormalFormat(team.Cash) * 1000, team.LeagueStandard, team.TransferSystem, MiscFunctions.GetTextFromBytes(team.Wav));
         }
 
-        void WriteLine(StreamWriter sw, params object[] fields)
-        {
-            for (int i = 0; i < fields.Length; i++)
-            {
-                sw.Write(fields[i].ToString());
-                if (i != fields.Length - 1)
-                    sw.Write(",");
-            }
-            sw.WriteLine();
-        }
+        
 
     }
 }
