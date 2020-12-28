@@ -320,6 +320,22 @@ namespace CM0102Patcher
             PatchStaffAward("German Second Division Manager of the Year", "German 2. Bundesliga Manager of the Year");
             PatchStaffAward("German Second Division Top Goalscorer", "German 2. Bundesliga Top Goalscorer");
 
+            // Greece
+            PatchClubComp("Greek National A Division", "Greek Super League", "National A Division", "Super League", "GSL");
+            PatchClubComp("Greek National B Division", "Greek Super League 2", "National B Division", "Super League 2", "GS2");
+            PatchClubComp("Greek Lower Division", "Greek Lower Division", "Lower Division", "Gamma Ethniki", "GE");
+            PatchClubComp("Greek Cup", "Kypello Elladas", "Greek Cup", "Kypello Elladas");
+
+            // Greece Awards
+            PatchStaffAward("Greek Premier Division Team of the Week", "Greek Superleague Team of the Week");
+            PatchStaffAward("Greek Premier Division Player of the Year", "Greek Superleague Player of the Year");
+            PatchStaffAward("Greek Premier Division Manager of the Year", "Greek Superleague Manager of the Year");
+            PatchStaffAward("Greek Premier Division Top Goalscorer", "Greek Superleague Top Goalscorer");
+            PatchStaffAward("Greek Second Division Team of the Week", "Greek Football League Team of the Week");
+            PatchStaffAward("Greek Second Division Player of the Year", "Greek Football League Player of the Year");
+            PatchStaffAward("Greek Second Division Manager of the Year", "Greek Football League Manager of the Year");
+            PatchStaffAward("Greek Second Division Top Goalscorer", "Greek Football League Top Goalscorer");
+
             // Portugal
             PatchClubComp("Portuguese Premier League", "Portuguese Primeira Liga", "Premier League", "Primeira Liga", "PRM");
             PatchClubComp("Portuguese Second League", "Portuguese LigaPro", "Second League", "LigaPro", "LP");
@@ -371,6 +387,24 @@ namespace CM0102Patcher
             PatchStaffAward("French Second Division Player of the Year", "French Ligue 2 Player of the Year");
             PatchStaffAward("French Second Division Goalkeeper of the Year", "French Ligue 2 Goalkeeper of the Year");
             PatchStaffAward("French Players National Player of the Year", "French National Players' Player of the Year");
+
+            // Turkey
+            PatchClubComp("Turkish Premier Division", "Turkish Süper Lig", "Premier Division", "Süper Lig", "TSL");
+            PatchClubComp("Turkish 2. Division Category A", "TFF 1. Lig", "2. Division Category A", "1. Lig", "1L");
+            PatchClubComp("Turkish 2. Division Category B", "TFF 2. Lig", "2. Division Category B", "2. Lig", "2L");
+            PatchClubComp("Turkish 2. Division Category B G1", "TFF 2. Lig G1", "2. Division Category B1", "2. Lig G1", "2L1");
+            PatchClubComp("Turkish 2. Division Category B G2", "TFF 2. Lig G2", "2. Division Category B2", "2. Lig G2", "2L2");
+            PatchClubComp("Turkish 2. Division Category B G3", "TFF 2. Lig G3", "2. Division Category B3", "2. Lig G3", "2L3");
+            PatchClubComp("Turkish 2. Division Category B G4", "TFF 2. Lig G4", "2. Division Category B4", "2. Lig G4", "2L4");
+            PatchClubComp("Turkish 2. Division Category B G5", "TFF 2. Lig G5", "2. Division Category B5", "2. Lig G5", "2L5");
+            PatchClubComp("Turkish Lower Division", "Turkish Lower Division", "Lower Division", "TFF 3. Lig", "3L");
+            PatchClubComp("Turkish FA Cup", "Türkiye Kupasi", "Turkish FA Cup", "Türkiye Kupasi");
+
+            // Turkey Awards
+            PatchStaffAward("Turkish Premier Division Team of the Week", "Turkish Süper Lig Team of the Week");
+            PatchStaffAward("Turkish Premier Division Team of the Year", "Turkish Süper Lig Team of the Year");
+            PatchStaffAward("Turkish First Division Team of the Week", "TFF 1. Lig Team of the Week");
+            PatchStaffAward("Turkish First Division Team of the Year", "TFF 1. Lig Team of the Year");
 
             // World Player Awards
             PatchStaffAward("FIFA World Player of the Year", "Ballon d'Or");
