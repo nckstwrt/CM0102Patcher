@@ -79,6 +79,12 @@
     </Compile>
     <Compile Include="MiscFunctions.cs" />
     <Compile Include="NamePatcher.cs" />
+    <Compile Include="NamePatcherProgressWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NamePatcherProgressWindow.Designer.cs">
+      <DependentUpon>NamePatcherProgressWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="NoCDPatch.cs" />
     <Compile Include="OffsetCalculator.cs">
       <SubType>Form</SubType>
@@ -178,6 +184,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ImageConverterForm.resx">
       <DependentUpon>ImageConverterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NamePatcherProgressWindow.resx">
+      <DependentUpon>NamePatcherProgressWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OffsetCalculator.resx">
       <DependentUpon>OffsetCalculator.cs</DependentUpon>

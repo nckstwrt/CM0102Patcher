@@ -28,6 +28,9 @@ namespace CM0102Patcher
 
         public void RunPatch()
         {
+            NamePatcherProgressWindow progress = new NamePatcherProgressWindow();
+            progress.Show();
+
             // Change game name :)
             YearChanger yearChanger = new YearChanger();
             var currentYear = yearChanger.GetCurrentExeYear(exeFile);
@@ -69,7 +72,9 @@ namespace CM0102Patcher
             var jumpBytes = new byte[5] { 0xe9, 0x00, 0x00, 0x00, 0x00 };
             BitConverter.GetBytes(((leagueSelectCodePos+ 0x70b000) - (0x26A076 + 0x400000)) - 5 + 3).ToArray().CopyTo(jumpBytes, 1); // - 5 for the length of the jmp, + 3 for prefix 00s
             ByteWriter.WriteToFile(exeFile, 0x26A076, jumpBytes);
-            
+
+            progress.SetProgressPercent(5);
+
             // Patch Holland
             PatchHolland();
 
@@ -102,6 +107,8 @@ namespace CM0102Patcher
             PatchClubComp("South American CONMEBOL Cup", "Copa CONMEBOL", "CONMEBOL Cup", "Copa CONMEBOL");
             PatchClubComp("South American Recopa", "Recopa Sudamericana", "Recopa", "Recopa Sudamericana");
             PatchClubComp("South American Super Cup", "Supercopa Libertadores", "Super Cup", "Supercopa Libertadores");
+
+            progress.SetProgressPercent(10);
 
             // America
             PatchClubComp("American Major League", "Major League Soccer", "Major League", "Major League Soccer", "MLS");
@@ -143,6 +150,8 @@ namespace CM0102Patcher
             PatchClubComp("Belgian Cup", "Coupe de Belgique", "Belgian Cup", "Coupe de Belgique");
             PatchClubComp("Belgian Super Cup", "Supercoupe de Belgique", "Super Cup", "Supercoupe");
             PatchClubComp("Belgian League Cup", "Belgian League Cup", "League Cup", "Coupe de la Ligue Pro");
+
+            progress.SetProgressPercent(20);
 
             // Brazil
             PatchClubComp("Brazilian National First Division", "Brazilian Campeonato Série A", "National First Division", "Série A", "A");
@@ -208,6 +217,8 @@ namespace CM0102Patcher
             PatchClubComp("Dutch Cup", "KNVB Beker", "Dutch Cup", "KNVB Beker");
             PatchClubComp("Dutch Super Cup", "Johan Cruijff Schaal", "Super Cup", "Johan Cruijff Schaal");
 
+            progress.SetProgressPercent(30);
+
             // English
             PatchClubComp("English Premier Division", "English Premier League", "Premier Division", "Premier League", "EPL");
             PatchClubComp("English First Division", "English Football League Championship", "First Division", "Championship", "FLC");
@@ -253,6 +264,8 @@ namespace CM0102Patcher
             PatchStaffAward("English Conference Manager of the Year", "English National League Manager of the Year");
             PatchStaffAward("English Players Conference Select", "English National League Team of the Year");
 
+            progress.SetProgressPercent(40);
+
             // Finnish
             PatchClubComp("Finnish Premier Division", "Finnish Veikkausliiga", "Premier Division", "Veikkausliiga", "FVK");
             PatchClubComp("Finnish First Division", "Finnish Ykkönen", "First Division", "Ykkönen", "FY");
@@ -276,6 +289,8 @@ namespace CM0102Patcher
             PatchStaffAward("Finnish First Division Manager of the Month", "Finnish Ykkönen Manager of the Month");
             PatchStaffAward("Finnish First Division Team of the Year", "Finnish Ykkönen Team of the Year");
             PatchStaffAward("Finnish First Division Team of the Week", "Finnish Ykkönen Team of the Week");
+
+            progress.SetProgressPercent(50);
 
             // Scotland
             PatchClubComp("Scottish Premier Division", "Scottish Premiership", "Premier Division", "Premiership", "PRM");
@@ -334,6 +349,8 @@ namespace CM0102Patcher
             PatchClubComp("German Cup", "German DFB-Pokal", "German Cup", "DFB-Pokal");
             PatchClubComp("German League Cup", "German DFB-Ligapokal", "German League Cup", "DFB-Ligapokal");
 
+            progress.SetProgressPercent(60);
+
             // Germany Awards
             PatchStaffAward("German First Division Team of the Week", "German Bundesliga Team of the Week");
             PatchStaffAward("German First Division Player of the Month", "German Bundesliga Player of the Month");
@@ -371,6 +388,8 @@ namespace CM0102Patcher
             PatchClubComp("Portuguese Cup", "Taça de Portugal", "Portuguese Cup", "Taça de Portugal");
             PatchClubComp("Portuguese Super Cup", "Supertaça Cândido de Oliveira", "Portuguese Super Cup", "Supertaça");
 
+            progress.SetProgressPercent(70);
+
             // Northern Irish (has to be above Ireland - else you'll get a clash)
             PatchClubComp("Northern Irish League Premier Division", "NIFL Premiership", "Premier Division", "Premiership", "PRM");
             PatchClubComp("Northern Irish League First Division", "NIFL Championship", "First Division", "Championship", "FLC");
@@ -397,6 +416,8 @@ namespace CM0102Patcher
             PatchStaffAward("Italian Serie A Manager of the Year", "Italian Serie A Panchina d'Oro");
             PatchStaffAward("Italian Serie A Top Goalscorer", "Italian Serie A Capocannoniere");
             PatchStaffAward("Italian Serie B Manager of the Year", "Italian Serie B Panchina d'Argento");
+
+            progress.SetProgressPercent(80);
 
             // Japan
             PatchClubComp("Japanese J-League 1", "Japanese J1 League", "J-League 1", "J1 League", "J1");
@@ -426,7 +447,9 @@ namespace CM0102Patcher
             PatchClubComp("Polish FA Cup", "Puchar Polski", "Polish FA Cup", "Puchar Polski");
             PatchClubComp("Polish League Cup", "Puchar Ekstraklasa", "League Cup", "Puchar Ekstraklasa");
             PatchClubComp("Polish Super Cup", "SuperPuchar Polski", "Super Cup", "SuperPuchar");
-            
+
+            progress.SetProgressPercent(90);
+
             // France
             PatchClubComp("French First Division", "French Ligue 1", "First Division", "Ligue 1", "L1");
             PatchClubComp("French Second Division", "French Ligue 2", "Second Division", "Ligue 2", "L2");
@@ -467,12 +490,16 @@ namespace CM0102Patcher
             PatchStaffAward("Turkish First Division Team of the Week", "TFF 1. Lig Team of the Week");
             PatchStaffAward("Turkish First Division Team of the Year", "TFF 1. Lig Team of the Year");
 
+            progress.SetProgressPercent(100);
+
             // World Player Awards
             PatchStaffAward("FIFA World Player of the Year", "Ballon d'Or");
             PatchStaffAward("World Footballer Of The Year", "Best FIFA Men's Player", true, true);
             PatchStaffAward("European Footballer of the Year", "UEFA Men's Player of the Year");
             PatchStaffAward("South American Footballer of the Year", "Rey del Fútbol de América");
             PatchStaffAward("Oceania Player of the Year", "Oceania Footballer of the Year");
+
+            progress.CloseForm();
         }
 
         public void PatchWelshWithNorthernLeague()
