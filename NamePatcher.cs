@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Security.Policy;
 using System.Text;
+using System.Windows.Forms;
 
 namespace CM0102Patcher
 {
@@ -30,6 +31,7 @@ namespace CM0102Patcher
         {
             NamePatcherProgressWindow progress = new NamePatcherProgressWindow();
             progress.Show();
+            Application.DoEvents();
 
             // Change game name :)
             YearChanger yearChanger = new YearChanger();
@@ -656,6 +658,8 @@ namespace CM0102Patcher
 
         public void PatchComp(string fileName, string oldName, string newName, string oldShortName, string newShortName, string newAcronym = null, bool ignoreCase = false)
         {
+            Application.DoEvents();
+
             oldName = AddTerminator(oldName);
             newName = AddTerminator(newName);
             oldShortName = AddTerminator(oldShortName);
