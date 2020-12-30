@@ -19,6 +19,19 @@ namespace CM0102Patcher
 
         int freePos = (0x6DC000 + 0x200000) - 0x20000; // last 128kb can be used for renaming
 
+        public void FindFreePos()
+        {
+            using (var fs = File.Open(exeFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                fs.Seek(freePos, SeekOrigin.Begin);
+                using (var br = new BinaryReader(fs))
+                {
+                    while (br.ReadInt32() != 0);
+                    freePos = (int)(fs.Position - 4);
+                }
+            }
+        }
+
         public NamePatcher(string exeFile, string dataDir)
         {
             this.exeFile = exeFile;
@@ -637,6 +650,7 @@ namespace CM0102Patcher
 
         public void PatchStaffAward(string oldName, string newName, bool patchExe = true, bool ignoreCase = false)
         {
+            Application.DoEvents();
             var staff_comp = Path.Combine(dataDir, "staff_comp.dat");
             oldName = AddTerminator(oldName);
             newName = AddTerminator(newName);
@@ -689,7 +703,7 @@ namespace CM0102Patcher
             fromComp = AddTerminator(fromComp);
             toComp = AddTerminator(toComp);
 
-            int compChangePos = ByteWriter.BinFileReplace(club_comp, fromComp, toComp, clubCompStartPos, clubCompStartPos != 0 ? 1 : 0, ignoreCase);
+            int compChangePos = ByteWriter.BinFileReplace(club_comp, fromComp, toComp, clubCompStartPos, /*clubCompStartPos != 0 ? 1 : 0*/1, ignoreCase);
 
             if (exeStartPos != -1)
                 PatchExeString(fromComp, toComp, exeStartPos);
@@ -717,6 +731,15 @@ namespace CM0102Patcher
 
             // Find the PUSH Statement in the EXE to this string
             var positions = ByteWriter.SearchBytesForAll(exeBytes, searchBytes, 0);
+
+            // Double-check this isn't a patched
+            if (positions.Count == 0)
+            {
+                searchBytes = new byte[5] { 0x68, 0x00, 0x00, 0x00, 0x00 };
+                BitConverter.GetBytes(pos + 0x70B000).ToArray().CopyTo(searchBytes, 1);
+                positions = ByteWriter.SearchBytesForAll(exeBytes, searchBytes, 0);
+            }
+
             foreach (var position in positions)
             {
                 // Get the next free position of text and convert to a PUSH

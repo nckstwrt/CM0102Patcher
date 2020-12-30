@@ -12,12 +12,15 @@ namespace CM0102Patcher
     {
         public class HexPatch
         {
-            public HexPatch(string command, string part1, string part2)
+            public HexPatch(string command, string part1, string part2, string part3 = null, string part4 = null, string part5 = null)
             {
                 this.offset = -1;
                 this.command = command;
                 this.part1 = part1;
                 this.part2 = part2;
+                this.part3 = part3;
+                this.part4 = part4;
+                this.part5 = part5;
             }
 
             public HexPatch(int offset, string hex)
@@ -31,6 +34,9 @@ namespace CM0102Patcher
             public string command;
             public string part1;
             public string part2;
+            public string part3;
+            public string part4;
+            public string part5;
         }
 
         public Dictionary<string, List<HexPatch>> patches = new Dictionary<string, List<HexPatch>>
@@ -304,16 +310,20 @@ namespace CM0102Patcher
                     }
                     if (string.IsNullOrEmpty(line) || line.StartsWith("/") || line.StartsWith("#"))
                         continue;
-                    //var parts = line.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                     var parts = ParseTokens(line);
-                    if (parts.Count != 3)
+                    if (parts.Count < 3)
                         continue;
                     parts[0] = parts[0].Replace(":", "");
                     try
                     {
-                        if (parts[0].ToUpper() == "CHANGECLUBDIVISION" || parts[0].ToUpper() == "CHANGECLUBLASTDIVISION" || parts[0].ToUpper() == "EXPANDEXE" || parts[0].ToUpper() == "TAPANISPACEPATCH")
+                        if (parts[0].ToUpper() == "CHANGECLUBDIVISION" || 
+                            parts[0].ToUpper() == "CHANGECLUBLASTDIVISION" || 
+                            parts[0].ToUpper() == "EXPANDEXE" || 
+                            parts[0].ToUpper() == "TAPANISPACEPATCH" ||
+                            parts[0].ToUpper() == "PATCHCLUBCOMP"
+                           )
                         {
-                            patchList.Add(new HexPatch(parts[0].ToUpper(), parts[1], parts[2]));
+                            patchList.Add(new HexPatch(parts[0].ToUpper(), parts[1], parts[2], (parts.Count > 3) ? parts[3] : null, (parts.Count > 4) ? parts[4] : null, (parts.Count > 5) ? parts[5] : null));
                         }
                         else
                         {
@@ -393,7 +403,7 @@ namespace CM0102Patcher
                 }
             }
 
-            // Check for club changes
+            // Check for club division changes
             var clubDivisionChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("CHANGECLUBDIVISION") || x.command.ToUpper().StartsWith("CHANGECLUBLASTDIVISION"))).ToList();
             if (clubDivisionChanges.Count > 0)
             {
@@ -417,6 +427,20 @@ namespace CM0102Patcher
                     }
                 }
                 hl.Save(indexFile, true);
+            }
+
+            // Patch Club Names
+            var clubNameChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("PATCHCLUBCOMP"))).ToList();
+            if (clubNameChanges.Count > 0)
+            {
+                var dir = Path.GetDirectoryName(fileName);
+                var dataDir = Path.Combine(dir, "Data");
+                NamePatcher np = new NamePatcher(fileName, dataDir);
+                np.FindFreePos();
+                foreach (var clubNameChange in clubNameChanges)
+                {
+                    np.PatchClubComp(clubNameChange.part1, clubNameChange.part2, clubNameChange.part3, clubNameChange.part4, clubNameChange.part5);
+                }
             }
         }
 
