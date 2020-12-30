@@ -30,6 +30,7 @@ namespace CM0102Scout
         Dictionary<int, Nation> nations = new Dictionary<int, Nation>();
         Dictionary<int, Club> clubs = new Dictionary<int, Club>();
         Dictionary<int, Contract> contracts = new Dictionary<int, Contract>();
+        byte[] transfers = null;
         DateTime gameDate;
 
         public bool IsCompressed;
@@ -60,16 +61,40 @@ namespace CM0102Scout
 
             cfs = new CMCompressedFileStream(saveFilename, IsCompressed);
 
-            //DumpBlock("human_manager.dat", @"c:\downloads\human_manager3.dat");
+            //DumpBlock("index.dat", @"c:\downloads\index.dat");
+            //DumpBlock("transfer.dat", @"c:\downloads\transfer_dutch.dat");
+            //DumpBlock("Preferences.dat", @"c:\downloads\Preferences.dat");
+            //DumpBlock("general.dat", @"c:\downloads\general.dat");
+            //DumpBlock("off.dat", @"c:\downloads\off.dat");
         }
 
-        void DumpBlock(string blockName, string outFile)
+        
+        byte [] ReadBlock(string blockName)
         {
             var block = FlstBlock.FirstOrDefault(x => TBlock.GetName(x) == blockName);
             cfs.Seek(TBlock.GetPosition(block), SeekOrigin.Begin);
 
-            var data = new byte[TBlock.GetSize(block)];
-            cfs.Read(data, TBlock.GetSize(block));
+            int dataSize = TBlock.GetSize(block);
+            var data = new byte[dataSize];
+
+            int dataPtr = 0;
+            var miniBuffer = new byte[32000];
+            while (true)
+            {
+                var toRead = Math.Min(miniBuffer.Length, (dataSize - dataPtr));
+
+                if (toRead == 0)
+                    break;
+                cfs.Read(miniBuffer, toRead);
+                Array.Copy(miniBuffer, 0, data, dataPtr, toRead);
+                dataPtr += toRead;
+            }
+            return data;
+        }
+
+        void DumpBlock(string blockName, string outFile)
+        {
+            var data = ReadBlock(blockName);
 
             using (var fs = File.Create(outFile))
             using (var bw = new BinaryWriter(fs))
@@ -184,6 +209,9 @@ namespace CM0102Scout
                 clubs[club.clubID] = club;
             }
 
+            // Load National Clubs
+            var nationClubBlocks = ReadBlocks("nat_club.dat", ClubSize);
+
             // Load Players
             var playerBlocks = ReadBlocks("player.dat", PlayerSize);
             var fields = typeof(Player).GetFields();
@@ -233,6 +261,146 @@ namespace CM0102Scout
                     contracts[contract.ID] = contract;
                 Marshal.FreeHGlobal(ptrObj);
             }
+
+            // Load Transfers
+            var transferDat = ReadBlock("transfer.dat");
+            var msTransfers = new MemoryStream(transferDat);
+            var totalNumberOfClubs = clubBlocks.Count + nationClubBlocks.Count;
+            var totalStaff = staffBlocks.Count;
+            msTransfers.Seek(0, SeekOrigin.Begin);
+            transfers = ReadTransfers(msTransfers, totalNumberOfClubs, totalStaff);
+        }
+
+        byte [] ReadTransfers(MemoryStream ms, int totalNumberOfClubs, int totalStaff)
+        {
+            byte[] ret = null;
+            try
+            {
+                using (var br = new BinaryReader(ms))
+                {
+                    var v2plus4 = br.ReadInt32();
+                    var v2plus8 = br.ReadInt32();
+                    var v9 = v2plus8;
+
+                    if (v9 > 0)
+                    {
+                        for (int i = 0; i < v9; i++)
+                        {
+                            // Read 0x41
+                            // Read 0x2
+                            // Read that many 4s
+                            // Read 0x2
+                            br.ReadBytes(0x41);
+                            var fours = br.ReadInt16();
+                            br.ReadBytes(4 * fours);
+                            br.ReadInt16();
+                        }
+                    }
+                    var location = ms.Position; // 37d7 0x3 0x2
+                    var v2_plus16 = br.ReadInt32();
+                    var v2_plus20 = br.ReadInt32();
+                    var v21 = v2_plus20;
+                    if (v21 > 0)
+                    {
+                        for (int i = 0; i < v21; i++)
+                        {
+                            // Read 0x41
+                            // Read 0x2
+                            // Read that many 4s
+                            // Read 0x2
+                            br.ReadBytes(0x41);
+                            var fours = br.ReadInt16();
+                            br.ReadBytes(4 * fours);
+                            br.ReadInt16();
+                        }
+                    }
+                    location = ms.Position;
+                    for (int k = 0; k < 50; k++)
+                    {
+                        for (int j = 0; j < 3; j++)
+                        {
+                            // Keep reading 2 bytes until you get something that isn't 0
+                            var twobytes = br.ReadInt16();
+                            if (twobytes != 0)
+                            {
+                                for (int i = 0; i < twobytes; i++)
+                                    br.ReadInt32();
+                            }
+                        }
+                    }
+                    location = ms.Position;
+                    var v2_plus2124 = br.ReadByte();
+                    var v2_plus2125_1 = br.ReadInt32(); // current day
+                    var v2_plus2125_2 = br.ReadInt32(); // current day
+                    var v2_plus2133 = br.ReadByte();
+                    // Shortlist Manager Load
+                    // 4, then 8, then 16 * 4, then 4, 
+                    var s1 = br.ReadInt32();   // 0083AA01 |.E8 2A820F00 CALL 00932C30; \cm0102.00932C30
+                    for (int i = 0; i < s1; i++)
+                    {
+                        var s2_1 = br.ReadInt32(); // Read 8 Bytes at 0083AABD |.E8 6E810F00                   CALL 00932C30; \cm0102.00932C30
+                        var s2_2 = br.ReadInt32();
+                    }
+                    location = ms.Position;
+                    List<int> sizes = new List<int>();
+                    for (int i = 0; i < 16; i++)
+                    {
+                        sizes.Add(br.ReadInt32());
+                    }
+                    var s4 = br.ReadInt32();   // 0083ACBB |.E8 707F0F00                   CALL 00932C30; \cm0102.00932C30
+                    location = ms.Position;
+
+                    int edi = 6;
+                    while (true)
+                    {
+                        for (int i = 0; i < 16; i++)
+                        {
+                            var bytes = br.ReadBytes(0x0c * sizes[i]);
+                        }
+                        edi += 0x10;
+                        if (edi >= 0x26)
+                            break;
+                    }
+                    location = ms.Position;
+
+                    // 0083ADCB |.E8 607E0F00                   CALL 00932C30; \cm0102.00932C30   - EAX == AD1 (2798) * 9 ---- 0083ADBB |.A1 5C23AE00 MOV EAX,DWORD PTR DS:[0AE235C]   <---- Number of Clubs + Nation Clubs
+                    int clubs = totalNumberOfClubs;
+                    var club_data = br.ReadBytes(clubs * 9);
+                    location = ms.Position;
+
+                    for (int i = 0; i < clubs; i++)
+                    {
+                        var d = br.ReadBytes(0x25 * 0x28);
+                    }
+
+                    var e = br.ReadInt32(); // 008BC829 |.E8 02640700                   CALL 00932C30; \cm0102.00932C30
+                    var ESIplus86A = br.ReadInt32(); // 008BC8BA |.E8 71630700                   CALL 00932C30; \cm0102.00932C30  -> this is then put in 008BC999 |.  8B96 6A080000 MOV EDX,DWORD PTR DS:[ESI+86A]
+
+                    for (int i = 0; i < ESIplus86A; i++)
+                    {
+                        br.ReadBytes(0x25);
+                    }
+
+                    var ESIplus928 = br.ReadInt32(); // 008BC9FF |.E8 2C620700 CALL 00932C30; \cm0102.00932C30
+
+                    for (int i = 0; i < ESIplus928; i++)
+                    {
+                        br.ReadBytes(0xc);
+                    }
+
+                    location = ms.Position;
+                    // Then number of staff * 8 is the data we want
+                    var temp = new byte[totalStaff * 8];
+                    for (int i = 0; i < totalStaff; i++)
+                    {
+                        var transferBytes = br.ReadBytes(8);
+                        Array.Copy(transferBytes, 0, temp, i * 8, 8);
+                    }
+                    ret = temp;
+                }
+            }
+            catch { }
+            return ret;
         }
 
         public Staff FindPlayer(string firstName, string secondName)
@@ -446,6 +614,12 @@ namespace CM0102Scout
                     int contractAgesMonths = 0;
                     if (contracts.ContainsKey(staff.staffId))
                     {
+                        /*
+                        if (name == "Williams Velasquez")
+                            Console.WriteLine();
+                        if (name == "Alejandro Balde")
+                            Console.WriteLine();
+                        */
                         var contract = contracts[staff.staffId];
                         if ((contract.SquadStatus & 240) == 0)
                             squadStatus = "Uncertain";
@@ -469,10 +643,22 @@ namespace CM0102Scout
                         DateTime startDate = YearChanger.FromCMDate(contract.DateStarted.Day, contract.DateStarted.Year, contract.DateStarted.LeapYear);
                         contractAgesMonths = (int)Math.Round((gameDate - startDate).TotalDays / 30);
 
-                        if (contract.TransferArrangedFor == -1 && contract.LeavingOnBosman == 0)
-                            leavingClub = "No";
+                        if (transfers == null)
+                        {
+                            if (contract.TransferArrangedFor == -1 && contract.LeavingOnBosman == 0)
+                                leavingClub = "No";
+                            else
+                                leavingClub = "Yes";
+                        }
                         else
-                            leavingClub = "Yes";
+                        {
+                            leavingClub = "No";
+                            var transferByte = transfers[8 * staff.staffId];
+                            if (transferByte != 0x10 && transferByte != 0x0 && transferByte != 0x40 && transferByte != 0x1)
+                            {
+                                leavingClub = "Yes";
+                            }
+                        }
                     }
 
                     dataTable.Rows.Add(name, age, club, nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, staff.value,
