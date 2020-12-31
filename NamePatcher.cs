@@ -21,6 +21,8 @@ namespace CM0102Patcher
 
         public void FindFreePos()
         {
+            // Ensure the file is expanded first
+            patcher.ExpandExe(exeFile);
             using (var fs = File.Open(exeFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 fs.Seek(freePos, SeekOrigin.Begin);
