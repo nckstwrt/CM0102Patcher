@@ -620,6 +620,7 @@ namespace CM0102Patcher
                         {
                             patcher.ExpandExe(labelFilename.Text);
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["chinapatch"]);
+                            namePatcher.FindFreePos();
                             namePatcher.PatchStaffAward("South Korean Best 11 Of The Year", "Chinese Super League Best XI", true, true);
                             namePatcher.PatchStaffAward("South Korean Most Assisted Player Of The Year", "Chinese Super League Top Assistor", true, true);
                             namePatcher.PatchStaffAward("South Korean Top Goal Scorer Of The Year", "Chinese Super League Top Scorer", true, true);

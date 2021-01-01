@@ -16,7 +16,6 @@ namespace CM0102Patcher
         Patcher patcher;
         byte[] exeBytes;
 
-
         int freePos = (0x6DC000 + 0x200000) - 0x20000; // last 128kb can be used for renaming
 
         public void FindFreePos()
@@ -61,6 +60,7 @@ namespace CM0102Patcher
 
             // Expand the EXE
             patcher.ExpandExe(exeFile);
+            FindFreePos();
 
             // Make better error messages to help me debug
             ByteWriter.WriteToFile(exeFile, 0x20d7e2, patcher.HexStringToBytes("641fde"));
@@ -522,6 +522,8 @@ namespace CM0102Patcher
         public void PatchWelshWithNorthernLeague()
         {
             patcher.ExpandExe(exeFile);
+            FindFreePos();
+
             PatchClubComp("English Northern Premier League Premier Division", "English National League North", "Northern Premier", "National League North", "NLN");
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatch"]);
             ByteWriter.WriteToFile(exeFile, 0x6d56b8, "English National League North" + "\0");
@@ -540,6 +542,7 @@ namespace CM0102Patcher
         public void PatchWelshWithSouthernLeague()
         {
             patcher.ExpandExe(exeFile);
+            FindFreePos();
 
             // Apply the standard north patch first
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatch"]);
@@ -571,6 +574,7 @@ namespace CM0102Patcher
         public void PatchWelshWithSouthernPremierCentral()
         {
             patcher.ExpandExe(exeFile);
+            FindFreePos();
 
             // Apply the standard north patch first
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatch"]);
