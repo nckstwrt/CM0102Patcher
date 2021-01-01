@@ -383,9 +383,9 @@
             this.checkBoxFixSuperKeepers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxFixSuperKeepers.Location = new System.Drawing.Point(7, 380);
             this.checkBoxFixSuperKeepers.Name = "checkBoxFixSuperKeepers";
-            this.checkBoxFixSuperKeepers.Size = new System.Drawing.Size(191, 20);
+            this.checkBoxFixSuperKeepers.Size = new System.Drawing.Size(208, 20);
             this.checkBoxFixSuperKeepers.TabIndex = 42;
-            this.checkBoxFixSuperKeepers.Text = "Fix \"super keepers\" (BETA)";
+            this.checkBoxFixSuperKeepers.Text = "Fix \"super keepers\" (BETA v2)";
             this.toolTips.SetToolTip(this.checkBoxFixSuperKeepers, "\"Super keepers\" is a common issues where occassionally in some games you can\'t sc" +
         "ore as every shot you have on goal is saved. This should reduce the problem.");
             this.checkBoxFixSuperKeepers.UseVisualStyleBackColor = true;
