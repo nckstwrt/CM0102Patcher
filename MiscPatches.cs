@@ -158,10 +158,15 @@ namespace CM0102Patcher
         {
             if (sender != null)
             {
-                if (e.NewValue == CheckState.Checked)
-                    SelectedPatches.Add(checkedListBoxPatches.Items[e.Index].ToString());
+                if (e.CurrentValue == CheckState.Indeterminate)
+                    e.NewValue = CheckState.Indeterminate;
                 else
-                    SelectedPatches.Remove(checkedListBoxPatches.Items[e.Index].ToString());
+                {
+                    if (e.NewValue == CheckState.Checked)
+                        SelectedPatches.Add(checkedListBoxPatches.Items[e.Index].ToString());
+                    else
+                        SelectedPatches.Remove(checkedListBoxPatches.Items[e.Index].ToString());
+                }
             }
         }
 
