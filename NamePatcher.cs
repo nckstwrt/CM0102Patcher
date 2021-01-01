@@ -27,8 +27,17 @@ namespace CM0102Patcher
                 fs.Seek(freePos, SeekOrigin.Begin);
                 using (var br = new BinaryReader(fs))
                 {
-                    while (br.ReadInt32() != 0);
-                    freePos = (int)(fs.Position - 4);
+                    while (true)
+                    {
+                        var testBytes = br.ReadBytes(5);
+                        if (testBytes[0] == 0 && testBytes[1] == 0 && testBytes[2] == 0 && testBytes[3] == 0 && testBytes[4] == 0)
+                        {
+                            fs.Position += 1;
+                            break;
+                        }
+                        fs.Position -= 4;
+                    }
+                    freePos = (int)(fs.Position);
                 }
             }
         }
