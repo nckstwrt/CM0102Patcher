@@ -207,7 +207,9 @@ namespace CM0102Patcher
                     bool matches = true;
                     foreach (var hexPatch in patch.Value)
                     {
-                        if (hexPatch.offset < fin.Length && hexPatch.offset != -1)
+                        if (hexPatch.offset == -1)
+                            continue;
+                        if (hexPatch.offset < fin.Length)
                         {
                             fin.Seek(hexPatch.offset, SeekOrigin.Begin);
                             byte[] patchBytes = HexStringToBytes(hexPatch.hex);
