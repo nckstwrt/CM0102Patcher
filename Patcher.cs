@@ -324,7 +324,8 @@ namespace CM0102Patcher
                             parts[0].ToUpper() == "CHANGECLUBLASTDIVISION" || 
                             parts[0].ToUpper() == "EXPANDEXE" || 
                             parts[0].ToUpper() == "TAPANISPACEPATCH" ||
-                            parts[0].ToUpper() == "PATCHCLUBCOMP"
+                            parts[0].ToUpper() == "PATCHCLUBCOMP" ||
+                            parts[0].ToUpper() == "RENAMECLUB"
                            )
                         {
                             patchList.Add(new HexPatch(parts[0].ToUpper(), parts[1], parts[2], (parts.Count > 3) ? parts[3] : null, (parts.Count > 4) ? parts[4] : null, (parts.Count > 5) ? parts[5] : null));
@@ -433,18 +434,42 @@ namespace CM0102Patcher
                 hl.Save(indexFile, true);
             }
 
-            // Patch Club Names
-            var clubNameChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("PATCHCLUBCOMP"))).ToList();
-            if (clubNameChanges.Count > 0)
+            // Patch Club Competition Names
+            var clubCompNameChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("PATCHCLUBCOMP"))).ToList();
+            if (clubCompNameChanges.Count > 0)
             {
                 var dir = Path.GetDirectoryName(fileName);
                 var dataDir = Path.Combine(dir, "Data");
                 NamePatcher np = new NamePatcher(fileName, dataDir);
                 np.FindFreePos();
-                foreach (var clubNameChange in clubNameChanges)
+                foreach (var clubNameChange in clubCompNameChanges)
                 {
                     np.PatchClubComp(clubNameChange.part1, clubNameChange.part2, clubNameChange.part3, clubNameChange.part4, clubNameChange.part5);
                 }
+            }
+
+            // Rename Clubs
+            // e.g.
+            // RENAMECLUB "Original Club Full Name" "New Club Full Name" ["New Club Short Name"]
+            var clubReNameChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("RENAMECLUB"))).ToList();
+            if (clubReNameChanges.Count > 0)
+            {
+                var dir = Path.GetDirectoryName(fileName);
+                var dataDir = Path.Combine(dir, "Data");
+                var clubs = MiscFunctions.ReadFile<TClub>(Path.Combine(dataDir, "club.dat"));
+                foreach (var clubReNameChange in clubReNameChanges)
+                {
+                    var idx = clubs.FindIndex(x => MiscFunctions.GetTextFromBytes(x.Name) == clubReNameChange.part1);
+                    if (idx != -1)
+                    {
+                        var tempClub = clubs[idx];
+                        tempClub.Name = MiscFunctions.GetBytesFromText(clubReNameChange.part2, 51);
+                        if (!string.IsNullOrEmpty(clubReNameChange.part3))
+                            tempClub.ShortName = MiscFunctions.GetBytesFromText(clubReNameChange.part3, 26);
+                        clubs[idx] = tempClub;
+                    }
+                }
+                MiscFunctions.SaveFile<TClub>(Path.Combine(dataDir, "club.dat"), clubs);
             }
         }
 
