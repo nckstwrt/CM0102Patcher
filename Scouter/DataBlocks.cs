@@ -39,6 +39,7 @@ namespace CM0102Scout
         public DateTime dob;
         public short yearOfBirth;
         public int nationID;
+        public int second_nationID;
         public int clubID;
     }
 
@@ -178,7 +179,7 @@ namespace CM0102Scout
                 else
                     Result = "M";
             }
-            if (((AttackingMidfielder > 14) && (DefensiveMidfielder <= 14) && ((Attacker <= 14) || ((Attacker > 14) && (Midfielder > 14)))) || ((WingBack > 14) && (DefensiveMidfielder <= 14) && ((Attacker <= 14) || ((Attacker > 14) && (Midfielder > 14)))))
+            if (((AttackingMidfielder > 14) && (DefensiveMidfielder <= 14) && ((Attacker <= 14) || ((Attacker > 14) && (Midfielder > 14)))) || (/*(WingBack > 14) && (DefensiveMidfielder <= 14) &&*/ ((Attacker <= 14) || ((Attacker > 14) && (Midfielder > 14)))))
             {
                 if (Result != "")
                     Result = Result + "/AM";

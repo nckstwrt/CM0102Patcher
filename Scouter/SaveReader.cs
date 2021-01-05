@@ -172,6 +172,7 @@ namespace CM0102Scout
                 staff.dob = CMDate(staffBlock, 16);
                 staff.yearOfBirth = (short)(2001 - BitConverter.ToInt16(staffBlock, 24));
                 staff.nationID = BitConverter.ToInt32(staffBlock, 24 + 2);
+                staff.second_nationID = BitConverter.ToInt32(staffBlock, 24 + 2 + 4);
                 staff.clubID = BitConverter.ToInt32(staffBlock, StaffSize - (1 + 4 + 4 + 4 + 11 + 4 + +4 + 8 + 8 + 1 + 4));
                 staffList[staff.playerId] = staff;
             }
@@ -425,6 +426,7 @@ namespace CM0102Scout
             dataTable.Columns.Add("Age", typeof(int));
             dataTable.Columns.Add("Club", typeof(string));
             dataTable.Columns.Add("Nationality", typeof(string));
+            dataTable.Columns.Add("2nd Nationality", typeof(string));
             dataTable.Columns.Add("Position", typeof(string));
             dataTable.Columns.Add("CA", typeof(int));
             dataTable.Columns.Add("PA", typeof(int));
@@ -524,6 +526,9 @@ namespace CM0102Scout
                     var nationality = "Unknown";
                     if (nations.ContainsKey(staff.nationID))
                         nationality = nations[staff.nationID].nationality;
+                    var second_nationality = "";
+                    if (nations.ContainsKey(staff.second_nationID))
+                        second_nationality = nations[staff.second_nationID].nationality;
 
                     /*
                     if (name == "Roy Keane")
@@ -661,7 +666,7 @@ namespace CM0102Scout
                         }
                     }
 
-                    dataTable.Rows.Add(name, age, club, nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, staff.value,
+                    dataTable.Rows.Add(name, age, club, nationality, second_nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, staff.value,
                         player.Acceleration,
                         player.Aggression,
                         player.Agility,

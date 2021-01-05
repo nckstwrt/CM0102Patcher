@@ -66,6 +66,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.numericUpDownAbilityMin = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBoxNationality = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
             this.textBoxClub = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -109,8 +111,8 @@
             this.comboBoxFilter1 = new System.Windows.Forms.ComboBox();
             this.buttonReset = new System.Windows.Forms.Button();
             this.buttonApply = new System.Windows.Forms.Button();
-            this.textBoxNationality = new System.Windows.Forms.TextBox();
-            this.label21 = new System.Windows.Forms.Label();
+            this.textBoxSecondNationality = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -548,6 +550,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.textBoxSecondNationality);
+            this.groupBox1.Controls.Add(this.label22);
             this.groupBox1.Controls.Add(this.textBoxNationality);
             this.groupBox1.Controls.Add(this.label21);
             this.groupBox1.Controls.Add(this.textBoxClub);
@@ -565,17 +569,33 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General";
             // 
+            // textBoxNationality
+            // 
+            this.textBoxNationality.Location = new System.Drawing.Point(80, 101);
+            this.textBoxNationality.Name = "textBoxNationality";
+            this.textBoxNationality.Size = new System.Drawing.Size(97, 20);
+            this.textBoxNationality.TabIndex = 9;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(2, 104);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(59, 13);
+            this.label21.TabIndex = 8;
+            this.label21.Text = "Nationality:";
+            // 
             // textBoxClub
             // 
-            this.textBoxClub.Location = new System.Drawing.Point(63, 75);
+            this.textBoxClub.Location = new System.Drawing.Point(80, 75);
             this.textBoxClub.Name = "textBoxClub";
-            this.textBoxClub.Size = new System.Drawing.Size(114, 20);
+            this.textBoxClub.Size = new System.Drawing.Size(97, 20);
             this.textBoxClub.TabIndex = 7;
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(4, 77);
+            this.label20.Location = new System.Drawing.Point(2, 77);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(31, 13);
             this.label20.TabIndex = 6;
@@ -600,7 +620,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(4, 48);
+            this.label2.Location = new System.Drawing.Point(2, 48);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(29, 13);
             this.label2.TabIndex = 3;
@@ -615,15 +635,15 @@
             // 
             // textBoxName
             // 
-            this.textBoxName.Location = new System.Drawing.Point(63, 19);
+            this.textBoxName.Location = new System.Drawing.Point(80, 19);
             this.textBoxName.Name = "textBoxName";
-            this.textBoxName.Size = new System.Drawing.Size(114, 20);
+            this.textBoxName.Size = new System.Drawing.Size(97, 20);
             this.textBoxName.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 21);
+            this.label1.Location = new System.Drawing.Point(2, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 0;
@@ -1027,21 +1047,21 @@
             this.buttonApply.UseVisualStyleBackColor = true;
             this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
             // 
-            // textBoxNationality
+            // textBoxSecondNationality
             // 
-            this.textBoxNationality.Location = new System.Drawing.Point(63, 101);
-            this.textBoxNationality.Name = "textBoxNationality";
-            this.textBoxNationality.Size = new System.Drawing.Size(114, 20);
-            this.textBoxNationality.TabIndex = 9;
+            this.textBoxSecondNationality.Location = new System.Drawing.Point(80, 127);
+            this.textBoxSecondNationality.Name = "textBoxSecondNationality";
+            this.textBoxSecondNationality.Size = new System.Drawing.Size(97, 20);
+            this.textBoxSecondNationality.TabIndex = 11;
             // 
-            // label21
+            // label22
             // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(4, 104);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(59, 13);
-            this.label21.TabIndex = 8;
-            this.label21.Text = "Nationality:";
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(2, 130);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(80, 13);
+            this.label22.TabIndex = 10;
+            this.label22.Text = "2nd Nationality:";
             // 
             // PlayerSearch
             // 
@@ -1182,5 +1202,7 @@
         private System.Windows.Forms.CheckBox checkBoxNotAlreadyLeaving;
         private System.Windows.Forms.TextBox textBoxNationality;
         private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox textBoxSecondNationality;
+        private System.Windows.Forms.Label label22;
     }
 }

@@ -77,6 +77,10 @@ namespace CM0102Patcher.Scouter
             {
                 RowFilter += string.Format("AND [{0}] LIKE '%{1}%' ", "Nationality", textBoxNationality.Text);
             }
+            if (!string.IsNullOrEmpty(textBoxSecondNationality.Text))
+            {
+                RowFilter += string.Format("AND [{0}] LIKE '%{1}%' ", "2nd Nationality", textBoxSecondNationality.Text);
+            }
             if (numericUpDownAbilityMin.Value != 0)
             {
                 RowFilter += string.Format("AND [{0}] >= {1} ", "CA", numericUpDownAbilityMin.Value);
