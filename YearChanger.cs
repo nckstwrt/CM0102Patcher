@@ -160,6 +160,10 @@ namespace CM0102Patcher
                     }
                 }
 
+                // Fix Yugoslavia not to be a Euro host (set to be Poland - like the Tapani patch does)
+                bw.Seek(0x1F9DAD, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x30, 0xf4 });
+
                 // 1993 - Special World Cup / Euro Set Up + Extras
                 if (year == 1993)
                 {
