@@ -120,6 +120,26 @@ namespace CM0102Patcher
             }
         }
 
+        public static void ApplyMiscPatch(string exeFile, string patchPath)
+        {
+            using (var zs = MiscFunctions.OpenZip("MiscPatches.zip"))
+            {
+                var patchLst = zs.ReadCentralDir().Where(x => x.FilenameInZip.ToLower() == patchPath.ToLower()).ToList();
+                if (patchLst.Count == 1)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        zs.ExtractFile(patchLst[0], ms);
+                        ms.Seek(0, SeekOrigin.Begin);
+
+                        Patcher patcher = new Patcher();
+                        var hexPatch = patcher.LoadPatchFile(ms);
+                        patcher.ApplyPatch(exeFile, hexPatch);
+                    }
+                }
+            }
+        }
+
         private void checkedListBoxPatches_SelectedValueChanged(object sender, EventArgs e)
         {
             if (checkedListBoxPatches.SelectedItem != null)

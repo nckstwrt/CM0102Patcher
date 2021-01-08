@@ -315,8 +315,6 @@ namespace CM0102Patcher
                     if (string.IsNullOrEmpty(line) || line.StartsWith("/") || line.StartsWith("#"))
                         continue;
                     var parts = ParseTokens(line);
-                    if (parts.Count < 3)
-                        continue;
                     parts[0] = parts[0].Replace(":", "");
                     try
                     {
@@ -325,10 +323,11 @@ namespace CM0102Patcher
                             parts[0].ToUpper() == "EXPANDEXE" || 
                             parts[0].ToUpper() == "TAPANISPACEPATCH" ||
                             parts[0].ToUpper() == "PATCHCLUBCOMP" ||
-                            parts[0].ToUpper() == "RENAMECLUB"
+                            parts[0].ToUpper() == "RENAMECLUB" ||
+                            parts[0].ToUpper() == "APPLYMISCPATCH"
                            )
                         {
-                            patchList.Add(new HexPatch(parts[0].ToUpper(), parts[1], parts[2], (parts.Count > 3) ? parts[3] : null, (parts.Count > 4) ? parts[4] : null, (parts.Count > 5) ? parts[5] : null));
+                            patchList.Add(new HexPatch(parts[0].ToUpper(), (parts.Count > 1) ? parts[1] : null, (parts.Count > 2) ? parts[2] : null, (parts.Count > 3) ? parts[3] : null, (parts.Count > 4) ? parts[4] : null, (parts.Count > 5) ? parts[5] : null));
                         }
                         else
                         {
@@ -401,9 +400,17 @@ namespace CM0102Patcher
                     foreach (var hexpatch in patch)
                     {
                         if (hexpatch.offset == -1)
-                            continue;
-                        bw.Seek(hexpatch.offset, SeekOrigin.Begin);
-                        bw.Write(HexStringToBytes(hexpatch.hex));
+                        {
+                            if (hexpatch.command.ToUpper().StartsWith("APPLYMISCPATCH"))
+                            {
+                                MiscPatches.ApplyMiscPatch(fileName, hexpatch.part1);
+                            }
+                        }
+                        else
+                        {
+                            bw.Seek(hexpatch.offset, SeekOrigin.Begin);
+                            bw.Write(HexStringToBytes(hexpatch.hex));
+                        }
                     }
                 }
             }
