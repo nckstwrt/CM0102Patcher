@@ -1,4 +1,4 @@
-# CM0102Patcher v2.12
+# CM0102Patcher v2.13
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/lbIL1HP.png)
+![alt text](https://i.imgur.com/8bhA3s1.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,12 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.13:
+* Very minor update to fix small problems with the "All Tested 2020 + Saturn Patches"
+* Remove Saturn's v8 "Russian new game start date" patch as that was causing issues
+* Removed some "personal choice" patches being selected automatically by "All Tested 2020 + Saturn Patches"
+* Fixed issue with German Super Cup being applied
 
 v2.12:
 * Patches can now run other Misc Patches. Misc Patch added "All Tested 2020 + Saturn Patches" which runs all the patches fairedinkum and I have been running and testing from Saturn's patches and others
