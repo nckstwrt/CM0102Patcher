@@ -1,4 +1,4 @@
-# CM0102Patcher v2.11
+# CM0102Patcher v2.12
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -12,7 +12,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
-![alt text](https://i.imgur.com/QtmWs5O.png)
+![alt text](https://i.imgur.com/lbIL1HP.png)
 
 An unfinished scouter, based on CM Scout, but allows you to view and sort by the "intrinsic" skills value (can load compressed and uncompressed saves)
 
@@ -35,6 +35,14 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.12:
+* Patches can now run other Misc Patches. Misc Patch added "All Tested 2020 + Saturn Patches" which runs all the patches fairedinkum and I have been running and testing from Saturn's patches and others
+* These including having the Copa America and Euros start in 2021 (as they do now because of COVID)
+* Hosts updated for International Tournaments (Euros, World Cup, Olympics, etc)
+* Version 2 of the beta of a toned down superkeepers patch
+* Fixes to the Scouter for recognising Wingbacks and showing second nationality
+* Some bug fixes around Name Patching and Misc Patches
 
 v2.11:
 * Added a 2020 folder to Misc Patches with the most relevant current patches (French + Italy Restructure, etc)
