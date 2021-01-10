@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MiscPatches));
-            this.checkedListBoxPatches = new ExpandedCheckedListBox();
+            this.checkedListBoxPatches = new CM0102Patcher.ExpandedCheckedListBox();
             this.buttonApply = new System.Windows.Forms.Button();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.textBoxFilter = new System.Windows.Forms.TextBox();
@@ -43,7 +43,7 @@
             this.checkedListBoxPatches.FormattingEnabled = true;
             this.checkedListBoxPatches.Location = new System.Drawing.Point(9, 13);
             this.checkedListBoxPatches.Name = "checkedListBoxPatches";
-            this.checkedListBoxPatches.Size = new System.Drawing.Size(572, 259);
+            this.checkedListBoxPatches.Size = new System.Drawing.Size(572, 256);
             this.checkedListBoxPatches.TabIndex = 0;
             this.checkedListBoxPatches.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBoxPatches_ItemCheck);
             this.checkedListBoxPatches.SelectedValueChanged += new System.EventHandler(this.checkedListBoxPatches_SelectedValueChanged);
@@ -96,8 +96,9 @@
             this.Controls.Add(this.textBoxDescription);
             this.Controls.Add(this.buttonApply);
             this.Controls.Add(this.checkedListBoxPatches);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "MiscPatches";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Misc Patches";

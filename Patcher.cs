@@ -340,6 +340,14 @@ namespace CM0102Patcher
                     catch { }
                 }
             }
+#if DEBUG
+            // Dupe Finder
+            var dupes = patchList.Where(x => x.offset != -1).GroupBy(x => x.offset).Where(x => x.Count() > 1).Select(y => y.Key).ToList();
+            if (dupes.Count > 0)
+            {
+                Console.WriteLine("DUPE!");
+            }
+#endif
             return patchList;
         }
 

@@ -28,6 +28,13 @@ namespace CM0102Patcher
             {
                 patchFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".patch"));
                 txtFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".txt") || x.FilenameInZip.Contains(".info"));
+#if DEBUG
+                // For easy creation of patches
+                foreach (var patch in patchFiles)
+                {
+                    Console.WriteLine("APPLYMISCPATCH: \"{0}\"", patch.FilenameInZip);
+                }
+#endif
             }
 
             RefreshWithFilter();
@@ -117,6 +124,7 @@ namespace CM0102Patcher
                 }
 
                 MessageBox.Show("Patches Applied!", "Patches Applied", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                textBoxFilter_TextChanged(null, null);
             }
         }
 

@@ -133,6 +133,10 @@ namespace CM0102Patcher
                 // Asia is at 0x511CB7
             }
 
+            // Fix Yugoslavia not to be a Euro host (set to be Poland - like the Tapani patch does)
+            bw.Seek(0x1F9DAD, SeekOrigin.Begin);
+            bw.Write(new byte[] { 0x30, 0xf4 });
+
             // Special 5 - For going back in time (fixes Euros - might be a better generic fix for euros for the future too (unlike Special 3))
             if (year < 2001)
             {
@@ -159,10 +163,6 @@ namespace CM0102Patcher
                         break;
                     }
                 }
-
-                // Fix Yugoslavia not to be a Euro host (set to be Poland - like the Tapani patch does)
-                bw.Seek(0x1F9DAD, SeekOrigin.Begin);
-                bw.Write(new byte[] { 0x30, 0xf4 });
 
                 // 1993 - Special World Cup / Euro Set Up + Extras
                 if (year == 1993)
