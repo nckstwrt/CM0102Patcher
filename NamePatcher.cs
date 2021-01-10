@@ -16,6 +16,7 @@ namespace CM0102Patcher
         Patcher patcher;
         byte[] exeBytes;
 
+        const int initalFreePos = (0x6DC000 + 0x200000) - 0x20000;
         int freePos = (0x6DC000 + 0x200000) - 0x20000; // last 128kb can be used for renaming
 
         public void FindFreePos()
@@ -720,7 +721,7 @@ namespace CM0102Patcher
 
             int compChangePos = ByteWriter.BinFileReplace(club_comp, fromComp, toComp, clubCompStartPos, /*clubCompStartPos != 0 ? 1 : 0*/1, ignoreCase);
 
-            if (exeStartPos != -1)
+            if (exeStartPos != -1 && compChangePos != -1)
                 PatchExeString(fromComp, toComp, exeStartPos);
 
             return compChangePos;
@@ -742,18 +743,13 @@ namespace CM0102Patcher
 
             // Convert the position of the current string, to a PUSH statement in the exe
             var searchBytes = new byte[5] { 0x68, 0x00, 0x00, 0x00, 0x00 };
-            BitConverter.GetBytes(pos + 0x400000).ToArray().CopyTo(searchBytes, 1);
+            if (pos >= initalFreePos)
+                BitConverter.GetBytes(pos + 0x70B000).ToArray().CopyTo(searchBytes, 1);
+            else
+                BitConverter.GetBytes(pos + 0x400000).ToArray().CopyTo(searchBytes, 1);
 
             // Find the PUSH Statement in the EXE to this string
             var positions = ByteWriter.SearchBytesForAll(exeBytes, searchBytes, 0);
-
-            // Double-check this isn't a patched
-            if (positions.Count == 0)
-            {
-                searchBytes = new byte[5] { 0x68, 0x00, 0x00, 0x00, 0x00 };
-                BitConverter.GetBytes(pos + 0x70B000).ToArray().CopyTo(searchBytes, 1);
-                positions = ByteWriter.SearchBytesForAll(exeBytes, searchBytes, 0);
-            }
 
             foreach (var position in positions)
             {
