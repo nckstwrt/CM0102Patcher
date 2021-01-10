@@ -25,18 +25,15 @@ namespace CM0102Patcher
             patcher.ExpandExe(exeFile);
             using (var fs = File.Open(exeFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                fs.Seek(freePos, SeekOrigin.Begin);
+                fs.Seek(initalFreePos, SeekOrigin.Begin);
                 using (var br = new BinaryReader(fs))
                 {
                     while (true)
                     {
                         var testBytes = br.ReadBytes(5);
-                        if (testBytes[0] == 0 && testBytes[1] == 0 && testBytes[2] == 0 && testBytes[3] == 0 && testBytes[4] == 0)
-                        {
-                            fs.Position += 1;
-                            break;
-                        }
                         fs.Position -= 4;
+                        if (testBytes[0] == 0 && testBytes[1] == 0 && testBytes[2] == 0 && testBytes[3] == 0 && testBytes[4] == 0)
+                            break;
                     }
                     freePos = (int)(fs.Position);
                 }
