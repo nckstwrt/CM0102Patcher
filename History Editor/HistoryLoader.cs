@@ -12,6 +12,7 @@ namespace CM0102Patcher
         public List<TIndex> index;
         public TIndex staffDetails;
         public TIndex playerDetails;
+        public TIndex preferenceDetails;
         public List<TComp> nation_comp;
         public List<TComp> club_comp;
         public List<TStaffComp> staff_comp;
@@ -22,6 +23,7 @@ namespace CM0102Patcher
         public List<TCompHistory> club_comp_history;
         public List<TStaffCompHistory> staff_comp_history;
         public List<TStaff> staff;
+        public List<TPreferences> preferences;
         public List<TStaffHistory> staff_history;
         public List<TPlayer> players;
         public List<TNames> first_names;
@@ -79,6 +81,9 @@ namespace CM0102Patcher
             staff_history = MiscFunctions.ReadFile<TStaffHistory>(Path.Combine(dir, "staff_history.dat"));
 
             players = MiscFunctions.ReadFile<TPlayer>(Path.Combine(dir, "staff.dat"), playerDetails.Offset, playerDetails.Count);
+
+            preferenceDetails = index.Find(x => GetTextFromBytes(x.Name) == "staff.dat" && x.FileType == 22);
+            preferences = MiscFunctions.ReadFile<TPreferences>(Path.Combine(dir, "staff.dat"), preferenceDetails.Offset, preferenceDetails.Count);
 
             first_names = MiscFunctions.ReadFile<TNames>(Path.Combine(dir, "first_names.dat"));
             second_names = MiscFunctions.ReadFile<TNames>(Path.Combine(dir, "second_names.dat"));
@@ -165,6 +170,7 @@ namespace CM0102Patcher
             if (saveStaffData)
             {
                 MiscFunctions.SaveFile<TStaff>(Path.Combine(dir, "staff.dat"), staff, staffDetails.Offset);
+                MiscFunctions.SaveFile<TPreferences>(Path.Combine(dir, "staff.dat"), preferences, preferenceDetails.Offset);
             }
 
             /*
@@ -176,17 +182,6 @@ namespace CM0102Patcher
             MiscFunctions.SaveFile<TCompHistory>(Path.Combine(dir, "club_comp_history.dat"), club_comp_history);
             MiscFunctions.SaveFile<TStaffCompHistory>(Path.Combine(dir, "staff_comp_history.dat"), staff_comp_history);
             MiscFunctions.SaveFile<TStaffHistory>(Path.Combine(dir, "staff_history.dat"), staff_history);
-        }
-
-        public void SaveStaff(string indexFile)
-        {
-            var dir = Path.GetDirectoryName(indexFile);
-            UpdateIndex("second_names.dat", second_names);
-            UpdateIndex("first_names.dat", first_names);
-            MiscFunctions.SaveFile<TIndex>(indexFile, index, 8);
-            MiscFunctions.SaveFile<TStaff>(Path.Combine(dir, "staff.dat"), staff, staffDetails.Offset);
-            MiscFunctions.SaveFile<TNames>(Path.Combine(dir, "second_names.dat"), second_names, 0, true);
-            MiscFunctions.SaveFile<TNames>(Path.Combine(dir, "first_names.dat"), first_names, 0, true);
         }
 
         public void SortClubNames()
@@ -209,8 +204,29 @@ namespace CM0102Patcher
             {
                 var temp = staff[i];
                 if (temp.ClubJob >= 0)
+                {
                     temp.ClubJob = clubMap[temp.ClubJob];
+                }
                 staff[i] = temp;
+            }
+
+            // Update Staff Preferences
+            for (int i = 0; i < preferences.Count; i++)
+            {
+                var temp = preferences[i];
+                if (temp.StaffDislikedClubs1 >= 0)
+                    temp.StaffDislikedClubs1 = clubMap[temp.StaffDislikedClubs1];
+                if (temp.StaffDislikedClubs2 >= 0)
+                    temp.StaffDislikedClubs2 = clubMap[temp.StaffDislikedClubs2];
+                if (temp.StaffDislikedClubs3 >= 0)
+                    temp.StaffDislikedClubs3 = clubMap[temp.StaffDislikedClubs3];
+                if (temp.StaffFavouriteClubs1 >= 0)
+                    temp.StaffFavouriteClubs1 = clubMap[temp.StaffFavouriteClubs1];
+                if (temp.StaffFavouriteClubs2 >= 0)
+                    temp.StaffFavouriteClubs2 = clubMap[temp.StaffFavouriteClubs2];
+                if (temp.StaffFavouriteClubs3 >= 0)
+                    temp.StaffFavouriteClubs3 = clubMap[temp.StaffFavouriteClubs3];
+                preferences[i] = temp;
             }
 
             // Update Club Comp History

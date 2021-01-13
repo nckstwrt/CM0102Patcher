@@ -141,6 +141,24 @@ namespace CM0102Patcher
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct TPreferences
+    {
+        public int StaffPreferencesID;
+        public int StaffFavouriteClubs1;
+        public int StaffFavouriteClubs2;
+        public int StaffFavouriteClubs3;
+        public int StaffDislikedClubs1;
+        public int StaffDislikedClubs2;
+        public int StaffDislikedClubs3;
+        public int StaffFavouriteStaff1;
+        public int StaffFavouriteStaff2;
+        public int StaffFavouriteStaff3;
+        public int StaffDislikedStaff1;
+        public int StaffDislikedStaff2;
+        public int StaffDislikedStaff3;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct TPlayer
     {
         /*0*/
