@@ -345,7 +345,11 @@ namespace CM0102Patcher
             var dupes = patchList.Where(x => x.offset != -1).GroupBy(x => x.offset).Where(x => x.Count() > 1).Select(y => y.Key).ToList();
             if (dupes.Count > 0)
             {
-                Console.WriteLine("DUPE!");
+                foreach (var dupe in dupes)
+                {
+                    Console.WriteLine("{0:X}", dupe);
+                }
+                Console.WriteLine("DUPES! {0}", dupes.Count);
             }
 #endif
             return patchList;
