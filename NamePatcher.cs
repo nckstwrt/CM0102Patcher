@@ -145,7 +145,7 @@ namespace CM0102Patcher
             PatchClubComp("Argentine Premier Division", "Argentine Superliga", "Premier Division", "Superliga", "SUP");
             PatchClubComp("Argentine Second Division", "Argentine Primera B Nacional", "Second Division", "Primera B Nacional", "D2");
             PatchClubComp("Argentine Third Division", "Argentine Third Division", "Third Division", "Torneo Federal A", "D3A");
-            PatchClubComp("Argentine Metropolitan Zone", "Argentine Metropolitan Zone", "Metropolitan Zone", "Primera B Metropolitana", "D3B");
+            PatchClubComp("Argentine Metropolitan Zone", "Copa Argentina", "Metropolitan Zone", "Copa Argentina", "CA");
             PatchClubComp("Argentine Interior Zone", "Argentine Interior Zone", "Interior Zone", "Primera C", "D4");
 
             // Australia
