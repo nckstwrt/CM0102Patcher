@@ -324,7 +324,8 @@ namespace CM0102Patcher
                             parts[0].ToUpper() == "TAPANISPACEPATCH" ||
                             parts[0].ToUpper() == "PATCHCLUBCOMP" ||
                             parts[0].ToUpper() == "RENAMECLUB" ||
-                            parts[0].ToUpper() == "APPLYMISCPATCH"
+                            parts[0].ToUpper() == "APPLYMISCPATCH" ||
+                            parts[0].ToUpper() == "APPLYEXTERNALPATCH"
                            )
                         {
                             patchList.Add(new HexPatch(parts[0].ToUpper(), (parts.Count > 1) ? parts[1] : null, (parts.Count > 2) ? parts[2] : null, (parts.Count > 3) ? parts[3] : null, (parts.Count > 4) ? parts[4] : null, (parts.Count > 5) ? parts[5] : null));
@@ -416,6 +417,11 @@ namespace CM0102Patcher
                             if (hexpatch.command.ToUpper().StartsWith("APPLYMISCPATCH"))
                             {
                                 MiscPatches.ApplyMiscPatch(fileName, hexpatch.part1);
+                            }
+                            if (hexpatch.command.ToUpper().StartsWith("APPLYEXTERNALPATCH"))
+                            {
+                                Patcher patcher = new Patcher();
+                                patcher.ApplyPatch(fileName, hexpatch.part1);
                             }
                         }
                         else
