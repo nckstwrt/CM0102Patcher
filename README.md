@@ -1,4 +1,4 @@
-# CM0102Patcher v2.13
+# CM0102Patcher v2.14
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/8bhA3s1.png)
+![alt text](https://i.imgur.com/wWAcrcm.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,15 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.14:
+* "All Tested 2020 + Saturn Patches" misc patch updated. Compatibility updates and  patches to protect against any crashes
+* Updated Portugal + Italy's transfer windows (Thanks Milo + Deminio666)
+* Fixed Re-ordering of clubs in History Loader (Staff "Favourite Clubs" was being broken)
+* Crash protection Misc Patches ("protect_against_virtual_staff_195_error" and "Possible Argentinian Aug 1st Points Issue" added)
+* Fixed Scouter "AM" issue
+* FrenchSubsIncrease patch added to 2020 patches (included in "All Tested 2020 + Saturn Patches" patch)
+* Includes Faire's updated Euro hostings
 
 v2.13:
 * Very minor update to fix small problems with the "All Tested 2020 + Saturn Patches"
