@@ -202,6 +202,44 @@ namespace CM0102Patcher
         {
             RefreshWithFilter(textBoxFilter.Text);
         }
+
+        private void buttonCopyToClipboard_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(exeFile))
+            {
+                Patcher p = new Patcher();
+                short speedHack;
+                double currencyMultiplier;
+                List<string> detectedPatches = p.DetectPatches(exeFile, out speedHack, out currencyMultiplier);
+                YearChanger yearChanger = new YearChanger();
+                var detectedYear = yearChanger.GetCurrentExeYear(exeFile);
+                string patchString = "";
+                foreach (var patch in detectedPatches)
+                {
+                    patchString += "# Detected Patch: " + patch + "\r\n";
+                }
+                patchString += string.Format("# Speed Hack: {0}\r\n", speedHack);
+                patchString += string.Format("# Currency Multiplier: {0}\r\n", currencyMultiplier);
+                patchString += string.Format("# Year: {0}\r\n", detectedYear);
+                patchString += "\r\n";
+                for (int i = 0; i < checkedListBoxPatches.Items.Count; i++)
+                {
+                    if (checkedListBoxPatches.GetItemChecked(i))
+                    {
+                        var patch = (ZipStorer.ZipFileEntry)checkedListBoxPatches.Items[i];
+                        patchString += string.Format("APPLYMISCPATCH: \"{0}\"\r\n", patch.FilenameInZip);
+                    }
+                }
+
+                Clipboard.SetText(patchString);
+
+                if (patchString.Length > 1500)
+                    patchString = patchString.Substring(0, 1500) + "...\r\nTrimmed here to stop the message box being huge :)\r\n";
+                MessageBox.Show(patchString + "\r\n\r\nThe full version of this message has been copied to your clipboard for copy and pasting!", "Patch List", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+                MessageBox.Show("Please select a cm0102.exe file in the previous screen first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     public sealed class ExpandedCheckedListBox : CheckedListBox

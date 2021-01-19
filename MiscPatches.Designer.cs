@@ -34,6 +34,7 @@
             this.textBoxDescription = new System.Windows.Forms.TextBox();
             this.textBoxFilter = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.buttonCopyToClipboard = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // checkedListBoxPatches
@@ -61,12 +62,12 @@
             // textBoxDescription
             // 
             this.textBoxDescription.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.textBoxDescription.Location = new System.Drawing.Point(598, 12);
+            this.textBoxDescription.Location = new System.Drawing.Point(598, 13);
             this.textBoxDescription.Multiline = true;
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.ReadOnly = true;
             this.textBoxDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxDescription.Size = new System.Drawing.Size(199, 261);
+            this.textBoxDescription.Size = new System.Drawing.Size(199, 256);
             this.textBoxDescription.TabIndex = 2;
             // 
             // textBoxFilter
@@ -86,11 +87,22 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "Search Filter:";
             // 
+            // buttonCopyToClipboard
+            // 
+            this.buttonCopyToClipboard.Location = new System.Drawing.Point(654, 279);
+            this.buttonCopyToClipboard.Name = "buttonCopyToClipboard";
+            this.buttonCopyToClipboard.Size = new System.Drawing.Size(143, 23);
+            this.buttonCopyToClipboard.TabIndex = 5;
+            this.buttonCopyToClipboard.Text = "Copy patches to clipboard";
+            this.buttonCopyToClipboard.UseVisualStyleBackColor = true;
+            this.buttonCopyToClipboard.Click += new System.EventHandler(this.buttonCopyToClipboard_Click);
+            // 
             // MiscPatches
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(809, 311);
+            this.Controls.Add(this.buttonCopyToClipboard);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxFilter);
             this.Controls.Add(this.textBoxDescription);
@@ -114,5 +126,6 @@
         private System.Windows.Forms.TextBox textBoxDescription;
         private System.Windows.Forms.TextBox textBoxFilter;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button buttonCopyToClipboard;
     }
 }
