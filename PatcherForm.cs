@@ -102,6 +102,16 @@ namespace CM0102Patcher
             }
         }
 
+        private void CheckForOriginalCode(string exeFile, CheckBox checkbox, string reversalPatch)
+        {
+            var patcher = new Patcher();
+            if (checkbox.Checked == false && !patcher.DetectPatch(exeFile, patcher.ReversePatches[reversalPatch]))
+            {
+                checkbox.Checked = true;
+                checkbox.Enabled = false;
+            }
+        }
+
         private void TapaniDetection()
         {
             try
@@ -168,22 +178,20 @@ namespace CM0102Patcher
                     checkBoxCDRemoval.Checked = appliedPatches.Contains("disablecdremove");
                     checkBoxDisableSplashScreen.Checked = appliedPatches.Contains("disablesplashscreen");
                     checkBox7Subs.Checked = appliedPatches.Contains("sevensubs");
+                    checkBoxNewRegenCode.Checked = isTapani || appliedPatches.Contains("tapaninewregencode"); // Tapani implements it in a different way
+                    checkBoxSwapSKoreaForChina.Checked = isTapani || appliedPatches.Contains("chinapatch"); // Tapani implements it in a different way (Is Saturn really)
 
-                    // If 7 Subs Patch isn't detected - but the normal code isn't there - don't let people patch it
-                    if (checkBox7Subs.Checked == false && !patcher.DetectPatch(exeFile, patcher.ReversePatches["sevensubs"]))
-                    {
-                        checkBox7Subs.Checked = true;
-                        checkBox7Subs.Enabled = false;
-                    }
+                    // For some, if patch isn't detected - but the normal code isn't there - don't let people patch it
+                    CheckForOriginalCode(exeFile, checkBox7Subs, "sevensubs");
+                    CheckForOriginalCode(exeFile, checkBoxNewRegenCode, "tapaninewregencode");
+                    CheckForOriginalCode(exeFile, checkBoxSwapSKoreaForChina, "chinapatch");
 
                     checkBoxAllowCloseWindow.Checked = appliedPatches.Contains("allowclosewindow");
                     checkBoxShowStarPlayers.Checked = appliedPatches.Contains("showstarplayers");
                     checkBoxRegenFixes.Checked = isTapani || appliedPatches.Contains("regenfixes"); // Tapani implements it in a different way
                     checkBoxJobsAbroadBoost.Checked = isTapani || appliedPatches.Contains("jobsabroadboost"); // Tapani implements it in a different way
                     checkBoxRemove3NonEULimit.Checked = appliedPatches.Contains("remove3playerlimit");
-                    checkBoxNewRegenCode.Checked = isTapani || appliedPatches.Contains("tapaninewregencode"); // Tapani implements it in a different way
                     checkBoxManageAnyTeam.Checked = appliedPatches.Contains("manageanyteam");
-                    checkBoxSwapSKoreaForChina.Checked = isTapani || appliedPatches.Contains("chinapatch"); // Tapani implements it in a different way (Is Saturn really)
                     checkBoxUpdateNames.Checked = isTapani || appliedPatches.Contains("transferwindowpatchdetect"); // Tapani implements it in a different way
                     checkBoxPositionInTacticsView.Checked = appliedPatches.Contains("positionintacticsview");
                     checkBoxMakeYourPotential200.Checked = isTapani || appliedPatches.Contains("makeyourpotential200"); // Tapani implements it in a different way
@@ -581,13 +589,16 @@ namespace CM0102Patcher
                         else
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["remove3playerlimit"]);
 
-                        if (checkBoxNewRegenCode.Checked)
+                        if (checkBoxNewRegenCode.Enabled)
                         {
-                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapaninewregencode"]);
-                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
+                            if (checkBoxNewRegenCode.Checked)
+                            {
+                                patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapaninewregencode"]);
+                                patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
+                            }
+                            else
+                                patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["tapaninewregencode"]);
                         }
-                        else
-                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["tapaninewregencode"]);
 
                         if (checkBoxMakeYourPotential200.Checked)
                         {
