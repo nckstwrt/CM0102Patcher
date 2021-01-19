@@ -776,6 +776,7 @@ namespace CM0102Patcher
         {
             Tools tools = new Tools(labelFilename.Text);
             tools.ShowDialog();
+            TapaniDetection();
         }
 
         private void ResetControls(Control controlContainer)
