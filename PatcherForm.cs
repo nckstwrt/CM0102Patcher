@@ -168,6 +168,14 @@ namespace CM0102Patcher
                     checkBoxCDRemoval.Checked = appliedPatches.Contains("disablecdremove");
                     checkBoxDisableSplashScreen.Checked = appliedPatches.Contains("disablesplashscreen");
                     checkBox7Subs.Checked = appliedPatches.Contains("sevensubs");
+
+                    // If 7 Subs Patch isn't detected - but the normal code isn't there - don't let people patch it
+                    if (checkBox7Subs.Checked == false && !patcher.DetectPatch(exeFile, patcher.ReversePatches["sevensubs"]))
+                    {
+                        checkBox7Subs.Checked = true;
+                        checkBox7Subs.Enabled = false;
+                    }
+
                     checkBoxAllowCloseWindow.Checked = appliedPatches.Contains("allowclosewindow");
                     checkBoxShowStarPlayers.Checked = appliedPatches.Contains("showstarplayers");
                     checkBoxRegenFixes.Checked = isTapani || appliedPatches.Contains("regenfixes"); // Tapani implements it in a different way
@@ -530,10 +538,13 @@ namespace CM0102Patcher
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["idlesensitivitytransferscreen"]);
                         }
 
-                        if (checkBox7Subs.Checked)
-                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["sevensubs"]);
-                        else
-                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["sevensubs"]);
+                        if (checkBox7Subs.Enabled)
+                        {
+                            if (checkBox7Subs.Checked)
+                                patcher.ApplyPatch(labelFilename.Text, patcher.patches["sevensubs"]);
+                            else
+                                patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["sevensubs"]);
+                        }
 
                         if (checkBoxShowStarPlayers.Checked)
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["showstarplayers"]);
