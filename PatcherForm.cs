@@ -222,7 +222,7 @@ namespace CM0102Patcher
                     checkBoxForceLoadAllPlayers.Checked = appliedPatches.Contains("forceloadallplayers");
                     checkBoxMakeExecutablePortable.Checked = (appliedPatches.Contains("changeregistrylocation") && appliedPatches.Contains("memorycheckfix") && appliedPatches.Contains("removemutexcheck"));
                     checkBoxRestrictTactics.Checked = appliedPatches.Contains("restricttactics");
-                    checkBoxShowHiddenAttributes.Checked = appliedPatches.Contains("addadditionalcolumns");
+                    checkBoxShowHiddenAttributes.Checked = appliedPatches.Contains("addadditionalcolumns") || appliedPatches.Contains("addadditionalcolumns_italy");
                     checkBoxFixSuperKeepers.Checked = appliedPatches.Contains("fixsuperkeepers");
 
                     SetComboBox(comboBoxGameSpeed, speedHack);
