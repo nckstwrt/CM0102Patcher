@@ -160,6 +160,7 @@ namespace CM0102Patcher
             public string Name;
             public string ShortName;
             public int ID;
+            public int Manager;
         }
 
         public void ReadData()
@@ -169,7 +170,7 @@ namespace CM0102Patcher
             var teamSize = Marshal.SizeOf(typeof(CM2Team));
 
             HistoryLoader hl = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\2020\Data\index.dat");
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\2020_orig\Championship Manager 01-02\Data\index.dat");
 
             var tmdata = MiscFunctions.ReadFile<CM2Team>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\TMDATA.DB1", 381);
             var pldata1 = MiscFunctions.ReadFile<CM2Player>(@"C:\ChampMan\CM2\CM2_9697\Data\CM2\PLDATA1.DB1", 632);
@@ -215,7 +216,7 @@ namespace CM0102Patcher
             tmdata.Insert(100, CreateUnknownTeam());
 
             // Add in Foeign Players
-            var cm0102clubs = hl.club.Select(x => new CM0102Team { Name = x.Name.ReadString().RemoveDiacritics().ToLower(), ShortName = x.ShortName.ReadString().RemoveDiacritics().ToLower(), ID = x.ID }).ToList();
+            var cm0102clubs = hl.club.Select(x => new CM0102Team { Name = x.Name.ReadString().RemoveDiacritics().ToLower(), ShortName = x.ShortName.ReadString().RemoveDiacritics().ToLower(), ID = x.ID, Manager = x.Manager }).ToList();
             var pldata2new = new List<CM2Player>();
             var foreignPlayerTeams = pldata2.Select(x => x.Team.ReadString()).Distinct().OrderBy(x => x).ToList();
             foreach (var foreignTeam in foreignPlayerTeams)
@@ -246,6 +247,23 @@ namespace CM0102Patcher
                     }
                     else
                     {
+                        // MANAGER HANDLING --- START
+                        int cm2MgrIdx = mgdata.FindIndex(x => x.ManagingClub.ReadString() != "" && (tmdata[teamIdx].LongName.ReadString().StartsWith(x.ManagingClub.ReadString()) || tmdata[teamIdx].ShortName.ReadString().StartsWith(x.ManagingClub.ReadString())));
+                        if (cm2MgrIdx != -1)
+                        {
+                            var cm0102mgr = hl.staff.FindIndex(x => x.ID == cm0102clubs[cm0102TeamIdx].Manager);
+                            if (cm0102mgr != -1)
+                            {
+                                var mgr = mgdata[cm2MgrIdx];
+                                mgr.FirstName = MiscFunctions.GetBytesFromText(MiscFunctions.GetTextFromBytes(hl.first_names[hl.staff[cm0102mgr].FirstName].Name), 20);
+                                mgr.SecondName = MiscFunctions.GetBytesFromText(MiscFunctions.GetTextFromBytes(hl.second_names[hl.staff[cm0102mgr].SecondName].Name), 35);
+                                mgdata[cm2MgrIdx] = mgr;
+                            }
+                        }
+                        else
+                            Console.WriteLine("CANT FIND CM2 Manager: " + tmdata[teamIdx].LongName.ReadString());
+                        // MANAGER HANDLING --- END
+
                         var cm0102fullName = hl.club.Find(x => x.ID == cm0102clubs[cm0102TeamIdx].ID).Name.ReadString();
                         //Console.WriteLine("Loading Players From: {0}", cm0102fullName);
                         var players = ReadCM0102Data(hl, cm0102fullName, tmdata, playerYearModifier).OrderByDescending(x => ConvertShortToNormalFormat(x.player.Reputation)).Take(playerCount).ToList();
@@ -389,6 +407,23 @@ namespace CM0102Patcher
                         }
 
                         tmdata[index] = temp;
+
+                        // MANAGER HANDLING --- START
+                        var cm2MgrIdx = mgdata.FindIndex(x => x.ManagingClub.ReadString() != "" && (tmdata[index].LongName.ReadString().StartsWith(x.ManagingClub.ReadString()) || tmdata[index].ShortName.ReadString().StartsWith(x.ManagingClub.ReadString())));
+                        if (cm2MgrIdx != -1)
+                        {
+                            var cm0102mgr = hl.staff.FindIndex(x => x.ID == cm0102club.Manager);
+                            if (cm0102mgr != -1)
+                            {
+                                var mgr = mgdata[cm2MgrIdx];
+                                mgr.FirstName = MiscFunctions.GetBytesFromText(MiscFunctions.GetTextFromBytes(hl.first_names[hl.staff[cm0102mgr].FirstName].Name), 20);
+                                mgr.SecondName = MiscFunctions.GetBytesFromText(MiscFunctions.GetTextFromBytes(hl.second_names[hl.staff[cm0102mgr].SecondName].Name), 35);
+                                mgdata[cm2MgrIdx] = mgr;
+                            }
+                        }
+                        else
+                            Console.WriteLine("CANT FIND CM2 Manager (2): " + tmdata[index].LongName.ReadString());
+                        // MANAGER HANDLING --- END
                     }
                 }
             }
