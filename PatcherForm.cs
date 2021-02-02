@@ -180,13 +180,14 @@ namespace CM0102Patcher
                     checkBox7Subs.Checked = appliedPatches.Contains("sevensubs");
                     checkBoxNewRegenCode.Checked = isTapani || appliedPatches.Contains("tapaninewregencode"); // Tapani implements it in a different way
                     checkBoxSwapSKoreaForChina.Checked = isTapani || appliedPatches.Contains("chinapatch"); // Tapani implements it in a different way (Is Saturn really)
+                    checkBoxAllowCloseWindow.Checked = appliedPatches.Contains("allowclosewindow");
 
                     // For some, if patch isn't detected - but the normal code isn't there - don't let people patch it
                     CheckForOriginalCode(exeFile, checkBox7Subs, "sevensubs");
                     CheckForOriginalCode(exeFile, checkBoxNewRegenCode, "tapaninewregencode");
                     CheckForOriginalCode(exeFile, checkBoxSwapSKoreaForChina, "chinapatch");
+                    CheckForOriginalCode(exeFile, checkBoxAllowCloseWindow, "allowclosewindow");
 
-                    checkBoxAllowCloseWindow.Checked = appliedPatches.Contains("allowclosewindow");
                     checkBoxShowStarPlayers.Checked = appliedPatches.Contains("showstarplayers");
                     checkBoxRegenFixes.Checked = isTapani || appliedPatches.Contains("regenfixes"); // Tapani implements it in a different way
                     checkBoxJobsAbroadBoost.Checked = isTapani || appliedPatches.Contains("jobsabroadboost"); // Tapani implements it in a different way
