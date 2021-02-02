@@ -565,10 +565,13 @@ namespace CM0102Patcher
                         else
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["disablesplashscreen"]);
 
-                        if (checkBoxAllowCloseWindow.Checked)
-                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["allowclosewindow"]);
-                        else
-                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["allowclosewindow"]);
+                        if (checkBoxAllowCloseWindow.Enabled)
+                        {
+                            if (checkBoxAllowCloseWindow.Checked)
+                                patcher.ApplyPatch(labelFilename.Text, patcher.patches["allowclosewindow"]);
+                            else
+                                patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["allowclosewindow"]);
+                        }
 
                         if (checkBoxRegenFixes.Checked)
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["regenfixes"]);
