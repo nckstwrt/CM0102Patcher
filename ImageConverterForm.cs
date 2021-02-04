@@ -157,9 +157,9 @@ namespace CM0102Patcher
                                 if (isDirectory)
                                     outputTo = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(picFile) + ".rgn");
 
-                                if (Path.GetExtension(picFile).ToLower() == ".rgn" || Path.GetExtension(picFile).ToLower() == ".hsr")
+                                if (Path.GetExtension(picFile).ToLower() == ".rgn" || Path.GetExtension(picFile).ToLower() == ".hsr" || Path.GetExtension(picFile).ToLower() == ".mbr")
                                 {
-                                    if (!isDirectory && Path.GetExtension(outputTo).ToLower() != ".rgn" && Path.GetExtension(outputTo).ToLower() != ".hsr")
+                                    if (!isDirectory && Path.GetExtension(outputTo).ToLower() != ".rgn" && Path.GetExtension(outputTo).ToLower() != ".hsr" && Path.GetExtension(outputTo).ToLower() != ".mbr")
                                         RGNConverter.RGN2BMP(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
                                     else
                                         RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
