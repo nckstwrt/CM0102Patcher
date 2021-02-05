@@ -199,6 +199,19 @@ namespace CM0102Patcher
                 club[i] = tempClub;
             }
 
+            // Update Rival Clubs
+            for (int i = 0; i < club.Count; i++)
+            {
+                var tempClub = club[i];
+                if (tempClub.Rival1 >= 0)
+                    tempClub.Rival1 = clubMap[tempClub.Rival1];
+                if (tempClub.Rival2 >= 0)
+                    tempClub.Rival2 = clubMap[tempClub.Rival2]; 
+                if (tempClub.Rival3 >= 0)
+                    tempClub.Rival3 = clubMap[tempClub.Rival3]; 
+                club[i] = tempClub;
+            }
+
             // Update Staff
             for (int i = 0; i < staff.Count; i++)
             {
