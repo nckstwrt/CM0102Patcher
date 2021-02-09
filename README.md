@@ -1,4 +1,4 @@
-# CM0102Patcher v2.15
+# CM0102Patcher v2.16
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/adEJuiD.png)
+![alt text](https://i.imgur.com/g6226Gk.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,16 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.16:
+* Added Misc Patch "Android11Patch" - For support CM0102 on Android 11
+* Added Misc Patch "No Complaining About Training New Positions"
+* Sort Club Names in History Editor now updates Club Rivalries too
+* Moves Champions League to 22nd May for "All Tested 2020 + Saturn Patches"
+* Extra crash protection for "All Tested 2020 + Saturn Patches"
+* Add Scottish Playoffs + Relegation from Saturn to "All Tested 2020 + Saturn Patches"
+* Add Taça de Portugal restructure to "All Tested 2020 + Saturn Patches"
+* Fix GiveMoreOptionsInOfferDropDown so 10m shows properly
 
 v2.15:
 * Bug fixes to do with the 2020 patches
