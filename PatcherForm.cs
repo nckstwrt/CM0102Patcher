@@ -223,6 +223,10 @@ namespace CM0102Patcher
                     checkBoxForceLoadAllPlayers.Checked = appliedPatches.Contains("forceloadallplayers");
                     checkBoxMakeExecutablePortable.Checked = (appliedPatches.Contains("changeregistrylocation") && appliedPatches.Contains("memorycheckfix") && appliedPatches.Contains("removemutexcheck"));
                     checkBoxRestrictTactics.Checked = appliedPatches.Contains("restricttactics");
+                    if (checkBoxRestrictTactics.Checked)
+                        checkBoxRestrictTactics.Enabled = false;
+
+                    // Don't let 
                     checkBoxShowHiddenAttributes.Checked = appliedPatches.Contains("addadditionalcolumns") || appliedPatches.Contains("addadditionalcolumns_italy");
                     checkBoxFixSuperKeepers.Checked = appliedPatches.Contains("fixsuperkeepers");
 
@@ -490,17 +494,20 @@ namespace CM0102Patcher
                     else
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["forceloadallplayers"]);
 
-                    if (checkBoxRestrictTactics.Checked)
+                    if (checkBoxRestrictTactics.Enabled)
                     {
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["restricttactics"]);
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["changegeneraldat"]);
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["changenamecolour"]);
-                    }
-                    else
-                    {
-                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["restricttactics"]);
-                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["changegeneraldat"]);
-                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["changenamecolour"]);
+                        if (checkBoxRestrictTactics.Checked)
+                        {
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["restricttactics"]);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["changegeneraldat"]);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["changenamecolour"]);
+                        }
+                        else
+                        {
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["restricttactics"]);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["changegeneraldat"]);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["changenamecolour"]);
+                        }
                     }
 
                     if (checkBoxMakeExecutablePortable.Checked)
