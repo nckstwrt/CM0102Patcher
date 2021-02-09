@@ -37,7 +37,7 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ## Updates
 
 v2.16:
-* Added Misc Patch "Android11Patch" - For support CM0102 on Android 11
+* Added Misc Patch "Android11Patch" - For supporting CM0102 on Android 11
 * Added Misc Patch "No Complaining About Training New Positions"
 * Sort Club Names in History Editor now updates Club Rivalries too
 * Moves Champions League to 22nd May for "All Tested 2020 + Saturn Patches"
