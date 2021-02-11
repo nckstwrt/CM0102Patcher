@@ -184,6 +184,22 @@ namespace CM0102Patcher
             MiscFunctions.SaveFile<TStaffHistory>(Path.Combine(dir, "staff_history.dat"), staff_history);
         }
 
+        public void OutputTeamsAndDivisions()
+        {
+            Console.WriteLine("**** Teams ****");
+            foreach (var c in club)
+            {
+                var teamName = MiscFunctions.GetTextFromBytes(c.Name);
+                Console.WriteLine("\"{0}\"", teamName);
+            }
+            Console.WriteLine("**** Divisions ****");
+            foreach (var c in club_comp)
+            {
+                var divisionName = MiscFunctions.GetTextFromBytes(c.Name);
+                Console.WriteLine("\"{0}\"", divisionName);
+            }
+        }
+
         public void SortClubNames()
         {
             // Sort
