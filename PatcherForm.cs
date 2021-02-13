@@ -145,7 +145,6 @@ namespace CM0102Patcher
                 checkBoxJobsAbroadBoost.Enabled = !isTapani;
                 checkBoxRemove3NonEULimit.Enabled = !isTapani;
                 checkBoxReplaceWelshPremier.Enabled = !isTapani;
-                comboBoxReplacementLeagues.Enabled = !isTapani;
                 checkBoxNewRegenCode.Enabled = !isTapani;
                 checkBoxManageAnyTeam.Enabled = !isTapani;
                 checkBoxUpdateNames.Enabled = !isTapani;
@@ -153,6 +152,11 @@ namespace CM0102Patcher
                 checkBoxPositionInTacticsView.Enabled = !isTapani;
                 checkBoxMakeYourPotential200.Enabled = !isTapani;
                 checkBoxChangeStartYear_CheckedChanged(null, null);
+                
+                // Reset options that might have been locked from a previous exe load
+                checkBoxRestrictTactics.Enabled = true;
+                comboBoxReplacementLeagues.Enabled = false;
+                comboBoxReplacementLeagues.SelectedIndex = -1;
 
                 if (isTapani && !shownTapaniWarning)
                 {
