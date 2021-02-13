@@ -204,7 +204,28 @@ namespace CM0102Patcher
                         checkBoxSwapSKoreaForChina.Enabled = false;
                     if (appliedPatches.Contains("englishleaguenorthpatch") || appliedPatches.Contains("englishleaguesouthawards") || appliedPatches.Contains("englishleaguenorthawards"))
                     {
+                        string patchedLeague;
+                        using (var fin = File.Open(exeFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        using (var br = new BinaryReader(fin))
+                        {
+                            fin.Seek(0x6d56b8, SeekOrigin.Begin);
+                            patchedLeague = MiscFunctions.GetTextFromBytes(br.ReadBytes(30));
+                        }
                         comboBoxReplacementLeagues.SelectedIndex = -1;
+
+                        switch (patchedLeague)
+                        {
+                            case "English National League North":
+                                comboBoxReplacementLeagues.SelectedIndex = 0;
+                                break;
+                            case "English National League South":
+                                comboBoxReplacementLeagues.SelectedIndex = 1;
+                                break;
+                            case "English Southern Premier Central":
+                                comboBoxReplacementLeagues.SelectedIndex = 2;
+                                break;
+                        }
+
                         comboBoxReplacementLeagues.Enabled = false;
                         checkBoxReplaceWelshPremier.Enabled = false;
                     }
