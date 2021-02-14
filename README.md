@@ -1,4 +1,4 @@
-# CM0102Patcher v2.16
+# CM0102Patcher v2.17
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/g6226Gk.png)
+![alt text](https://i.imgur.com/OjeM9Cp.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,11 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.17:
+* UnCap20s Misc Patch Fixed (Player Search now works correctly)
+* 2020 Patch now has fixes for Golden Goal rules, Stuttgart and Qatar World Cup host
+* Protection Patches updated (to workaround some crashes in cm0102)
 
 v2.16:
 * Added Misc Patch "Android11Patch" - For supporting CM0102 on Android 11
