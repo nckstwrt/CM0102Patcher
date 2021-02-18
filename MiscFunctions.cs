@@ -326,6 +326,27 @@ namespace CM0102Patcher
                 return 1.0F - dis / maxLen;
         }
 
+        // Compares the strings based on the shortest string
+        public static bool StringCompare(string a, string b)
+        {
+            if (a.Length == 0 || b.Length == 0)
+                return false;
+
+            if (a.Length < b.Length)
+                return a == b.Substring(0, a.Length);
+            else
+                return b == a.Substring(0, b.Length);
+        }
+
+        public static bool StringCompare(string a, string b, string c)
+        {
+            bool ret = StringCompare(a, b);
+            if (ret)
+                return true;
+            else
+                return StringCompare(a, c);
+        }
+
         public static void WriteCSVLine(StreamWriter sw, params object[] fields)
         {
             for (int i = 0; i < fields.Length; i++)

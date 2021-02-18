@@ -1046,17 +1046,17 @@ namespace CM0102Patcher
             return 0;
         }
 
-        short ConvertShortToCM2Format(short val)
+        public static short ConvertShortToCM2Format(short val)
         {
             return  (short)(((val % 128) << 8) | (val / 128));
         }
 
-        short ConvertShortToNormalFormat(short val)
+        public static short ConvertShortToNormalFormat(short val)
         {
             return (short)(((val & 0xff) << 7) + (val >> 8));
         }
 
-        int ConvertLongToCM2Format(int val)
+        public static int ConvertLongToCM2Format(int val)
         {
             var v3 = val / 16384;
             val -= v3 * 16384;
@@ -1066,7 +1066,7 @@ namespace CM0102Patcher
             return (v3 << 8) | (v2 << 16) | (val << 24);
         }
 
-        int ConvertLongToNormalFormat(int val)
+        public static int ConvertLongToNormalFormat(int val)
         {
             return (int)((((val & 0xff00) >> 8) * 16384) + (((val & 0xff0000) >> 16) * 128) + ((val & 0xff000000) >> 24));
         }
