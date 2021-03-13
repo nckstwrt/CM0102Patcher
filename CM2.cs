@@ -471,17 +471,20 @@ namespace CM0102Patcher
             return tmdata.FindIndex(x => x.LongName.ReadString().StartsWithIgnoreBlank(team) || x.ShortName.ReadString().StartsWithIgnoreBlank(team) || x.LongName.ReadString().StartsWithIgnoreBlank(extraCheck) || x.ShortName.ReadString().StartsWithIgnoreBlank(extraCheck));
         }
 
-        public void ApplyCorrectCount(string file, int position, int count)
+        public static void ApplyCorrectCount(string file, int position, int count, bool cm9798mode = false)
         {
             using (var f = File.Open(file, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             using (var bw = new BinaryWriter(f))
             {
                 bw.Seek(position, SeekOrigin.Begin);
-                bw.Write(ConvertShortToCM2Format((short)count));
+                if (cm9798mode)
+                    bw.Write(ConvertLongToCM2Format(count));
+                else
+                    bw.Write(ConvertShortToCM2Format((short)count));
             }
         }
 
-        public List<CM2History> ReadCM2HistoryFile(string fileName)
+        public static List<CM2History> ReadCM2HistoryFile(string fileName, bool mode9798 = false)
         {
             var histories = new List<CM2History>();
             using (var f = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -497,6 +500,9 @@ namespace CM0102Patcher
                     history.Name = MiscFunctions.GetTextFromBytes(br.ReadBytes(br.ReadByte()), true);
                     history.Nation = MiscFunctions.GetTextFromBytes(br.ReadBytes(br.ReadByte()), true);
                     history.BirthDate = MiscFunctions.GetTextFromBytes(br.ReadBytes(br.ReadByte()), true);
+                    
+                    if (mode9798)
+                        br.ReadInt16();
 
                     string Team = "";
                     while (true)
@@ -522,7 +528,7 @@ namespace CM0102Patcher
             return histories;
         }
 
-        void WriteCM2HistoryFile(string fileName, List<CM2History> histories)
+        public static void WriteCM2HistoryFile(string fileName, List<CM2History> histories, bool mode9798 = false)
         {
             using (var f = File.Open(fileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
             using (var bw = new BinaryWriter(f))
@@ -539,6 +545,9 @@ namespace CM0102Patcher
                     bw.Write(latin1.GetBytes(history.Nation));
                     bw.Write((byte)history.BirthDate.Length);
                     bw.Write(latin1.GetBytes(history.BirthDate));
+
+                    if (mode9798)
+                        bw.Write((short)0);
 
                     var Team = "";
                     foreach (var details in history.Details)
@@ -652,7 +661,7 @@ namespace CM0102Patcher
             return t;
         }
 
-        public string TeamMapper(string team)
+        public static string TeamMapper(string team)
         {
             string extraCheck = team;
             switch (team)
@@ -709,11 +718,15 @@ namespace CM0102Patcher
             return extraCheck;
         }
 
-        public List<string> ReadCM0102League(HistoryLoader hl, string league)
+        public static List<string> ReadCM0102League(HistoryLoader hl, string league, List<TClub> clubs = null)
         {
             var foundLeague = hl.club_comp.Find(x => MiscFunctions.GetTextFromBytes(x.Name) == league);
-            var alLClubs = hl.club.FindAll(x => x.Division == foundLeague.ID);
-            return alLClubs.Select(x => MiscFunctions.GetTextFromBytes(x.Name)).ToList();
+            var allClubs = hl.club.FindAll(x => x.Division == foundLeague.ID);
+            if (clubs != null)
+            {
+                clubs.AddRange(allClubs);
+            }
+            return allClubs.Select(x => MiscFunctions.GetTextFromBytes(x.Name)).ToList();
         }
 
         int maxNameLength = 0;
@@ -1030,7 +1043,7 @@ namespace CM0102Patcher
             return players;
         }
 
-        public int ConvertPosition(int pos)
+        public static int ConvertPosition(int pos)
         {
             if (pos >= 15)
                 return 2;
@@ -1039,7 +1052,7 @@ namespace CM0102Patcher
             return 0;
         }
 
-        public int ConvertSide(int pos)
+        public static int ConvertSide(int pos)
         {
             if (pos >= 15)
                 return 2;

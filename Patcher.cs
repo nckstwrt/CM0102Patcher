@@ -385,7 +385,7 @@ namespace CM0102Patcher
         }
 
         // 006DC000 in the file will equal 00DE7000 in memory = 70B000 Difference
-        // DE7000 = Extra Attributes Patch
+        // DE7000 = Extra Attributes Patch (with text at DE8000)
         // DE7300 = Subs Control (9+5 but not England)
         // DE7350 = World Cup NULL Pointer crash (from Fairedinkum notes)
         public void ExpandExe(string fileName)

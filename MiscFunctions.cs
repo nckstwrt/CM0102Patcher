@@ -340,7 +340,7 @@ namespace CM0102Patcher
 
         public static bool StringCompare(string a, string b, string c)
         {
-            bool ret = StringCompare(a, b);
+            bool ret = (b != null) ? StringCompare(a, b) : true;
             if (ret)
                 return true;
             else
