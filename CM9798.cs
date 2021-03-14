@@ -294,12 +294,45 @@ namespace CM0102Patcher
             var cm2SerieBTeams = tmdata.Where(x => x.Division == "ISB").Select(x => x.LongName).ToList();       // 20
             var cm2SerieCTeams = tmdata.Where(x => x.Division == "ISC").Select(x => x.LongName).ToList();       // 48
 
+            // Spanish CM0102
+            var cm0102SpainFirstTeams = CM2.ReadCM0102League(hl, "Spanish First Division", cm0102clubs);        // 20
+            var cm0102SpainSecondTeams = CM2.ReadCM0102League(hl, "Spanish Second Division", cm0102clubs);      // 22
+
+            // Spanish CM9798 Teams
+            var cm2SpainFirstTeams = tmdata.Where(x => x.Division == "SP1").Select(x => x.LongName).ToList();        // 20
+            var cm2SpainSecondTeams = tmdata.Where(x => x.Division == "SP2").Select(x => x.LongName).ToList();       // 22
+            var cm2SpainNationalTeams = tmdata.Where(x => x.Division == "SPN").Select(x => x.LongName).ToList();     // 66
+
+            // French CM0102
+            var cm0102FrenchFirstTeams = CM2.ReadCM0102League(hl, "French First Division", cm0102clubs);        // 18
+            var cm0102FrenchSecondTeams = CM2.ReadCM0102League(hl, "French Second Division", cm0102clubs);      // 20
+
+            // French CM9798 Teams
+            var cm2FranceFirstTeams = tmdata.Where(x => x.Division == "FD1").Select(x => x.LongName).ToList();        // 18
+            var cm2FranceSecondTeams = tmdata.Where(x => x.Division == "FD2").Select(x => x.LongName).ToList();       // 22
+            var cm2FranceNationalTeams = tmdata.Where(x => x.Division == "FNL").Select(x => x.LongName).ToList();     // 26
+
+            // German CM0102
+            var cm0102GermanFirstTeams = CM2.ReadCM0102League(hl, "German First Division", cm0102clubs);        // 18
+            var cm0102GermanSecondTeams = CM2.ReadCM0102League(hl, "German Second Division", cm0102clubs);      // 18
+
+            // German CM9798 Teams
+            var cm2GermanFirstTeams = tmdata.Where(x => x.Division == "GD1").Select(x => x.LongName).ToList();        // 18
+            var cm2GermanSecondTeams = tmdata.Where(x => x.Division == "GD2").Select(x => x.LongName).ToList();       // 18
+            var cm2GermanNationalTeams = tmdata.Where(x => x.Division == "GNL").Select(x => x.LongName).ToList();     // 56
+
             var EnglishLeagues = tmdata.Where(x => x.Nation == "England").Select(x => x.Division).Distinct().ToList();
             var ItalianLeagues = tmdata.Where(x => x.Nation == "Italy").Select(x => x.Division).Distinct().ToList();
+            var SpanishLeagues = tmdata.Where(x => x.Nation == "Spain").Select(x => x.Division).Distinct().ToList();
+            var FranceLeagues = tmdata.Where(x => x.Nation == "France").Select(x => x.Division).Distinct().ToList();
+            var GermanLeagues = tmdata.Where(x => x.Nation == "Germany").Select(x => x.Division).Distinct().ToList();
 
-            // Remove Divison from CM2 English Teams
-            RemoveTeamsFromDivision(tmdata, "ENL", "EPR", "ED1", "ED2", "ED3");
-            RemoveTeamsFromDivision(tmdata, "ISC", "ISA", "ISB", "ISC");
+            // Remove Divison from CM9798 Teams
+            RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "ENL", "EPR", "ED1", "ED2", "ED3");
+            RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "ISC", "ISA", "ISB", "ISC");
+            RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "SPN", "SP1", "SP2", "SPN");
+            RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "FNL", "FD1", "FD2", "FNL");
+            RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "GNL", "GD1", "GD2", "GNL");
 
             var newID = pldata.Max(x => x.UniqueID) + 1;
             var newTeamID = tmdata.Max(x => x.UniqueID) + 1;
@@ -367,6 +400,25 @@ namespace CM0102Patcher
             DivisionTeamCutOff(tmdata, "ISC", 48);
             cm2SerieCTeams = GetCM9798TeamNamesByDivision(tmdata, "ISC");        // 48
 
+            // Count Spanish Teams
+            cm2SpainFirstTeams = GetCM9798TeamNamesByDivision(tmdata, "SP1");        // 18
+            cm2SpainSecondTeams = GetCM9798TeamNamesByDivision(tmdata, "SP2");       // 20
+            DivisionTeamCutOff(tmdata, "SPN", 66);
+            cm2SpainNationalTeams = GetCM9798TeamNamesByDivision(tmdata, "SPN");     // 66
+
+            // Count French Teams
+            cm2FranceFirstTeams = GetCM9798TeamNamesByDivision(tmdata, "FD1");        // 18
+            AddTeamsToLeague(tmdata, "FD2", "FNL", 2);
+            cm2FranceSecondTeams = GetCM9798TeamNamesByDivision(tmdata, "FD2");       // 22
+            DivisionTeamCutOff(tmdata, "FNL", 26);
+            cm2FranceNationalTeams = GetCM9798TeamNamesByDivision(tmdata, "FNL");     // 26
+
+            // Count German Teams
+            cm2GermanFirstTeams = GetCM9798TeamNamesByDivision(tmdata, "GD1");        // 18
+            cm2GermanSecondTeams = GetCM9798TeamNamesByDivision(tmdata, "GD2");       // 18
+            DivisionTeamCutOff(tmdata, "GNL", 56);
+            cm2GermanNationalTeams = GetCM9798TeamNamesByDivision(tmdata, "GNL");     // 56
+
             MiscFunctions.SaveFile<CM9798Team>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\TMDATA.DB1", tmdata, TeamDataStartPos);
             MiscFunctions.SaveFile<CM9798Player>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\PLAYERS.DB1", pldata, PlayerDataStartPos);
             MiscFunctions.SaveFile<CM9798Manager>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\MGDATA.DB1", mgdata, ManagerDataStartPos);
@@ -385,9 +437,16 @@ namespace CM0102Patcher
             return tmdata.Where(x => x.Division == division).Select(x => x.LongName).ToList();
         }
 
+        static void AddTeamsToLeague(List<CM9798Team> tmdata, string destinationDivision, string sourceDestination, int numberOfTeams)
+        {
+            var cm2Teams = tmdata.Where(x => x.Division == sourceDestination).OrderByDescending(x => x.Reputation).Take(numberOfTeams).ToList();
+            foreach (var cm2team in cm2Teams)
+                cm2team.Division = destinationDivision;
+        }
+
         static void DivisionTeamCutOff(List<CM9798Team> tmdata, string division, int teams)
         {
-            var cm2Teams = tmdata.Where(x => x.Division == division).ToList();     // Should be 52
+            var cm2Teams = tmdata.Where(x => x.Division == division).OrderByDescending(x => x.Reputation).ToList();
             for (int i = 0; i < cm2Teams.Count; i++)
             {
                 if (i >= teams)
@@ -395,7 +454,7 @@ namespace CM0102Patcher
             }
         }
 
-        static void RemoveTeamsFromDivision(List<CM9798Team> tmdata, string defaultDivision, params string [] divisions)
+        static void RemoveTeamsAndPlayersFromDivision(List<CM9798Team> tmdata, List<CM9798Player> pldata, string defaultDivision, params string [] divisions)
         {
             foreach (var cm2team in tmdata.Where(x => divisions.Contains(x.Division)))
             {
@@ -403,6 +462,8 @@ namespace CM0102Patcher
                 cm2team.LastDivision = defaultDivision;
                 cm2team.LastPosition = 14;
                 cm2team.Essential = 0;
+
+                pldata.RemoveAll(x => MiscFunctions.StringCompare(x.Team, cm2team.ShortName, cm2team.LongName));
             }
         }
 
@@ -442,6 +503,49 @@ namespace CM0102Patcher
                 case "Italian Serie C2/B":
                 case "Italian Serie C2/C":
                     ret = "ISC";
+                    break;
+
+                // Spain
+                case "Spanish First Division":
+                    ret = "SP1";
+                    break;
+                case "Spanish Second Division":
+                    ret = "SP2";
+                    break;
+                case "Spanish Second Division B":
+                case "Spanish Second Division B1":
+                case "Spanish Second Division B2":
+                case "Spanish Second Division B3":
+                case "Spanish Second Division B4":
+                case "Spanish Lower Division":
+                    ret = "SPN";
+                    break;
+
+                // France
+                case "French First Division":
+                    ret = "FD1";
+                    break;
+                case "French Second Division":
+                    ret = "FD2";
+                    break;
+                case "French National":
+                case "French CFA":
+                    ret = "FNL";
+                    break;
+
+                // German
+                case "German First Division":
+                    ret = "GD1";
+                    break;
+                case "German Second Division":
+                    ret = "GD2";
+                    break;
+                case "German Regional":
+                case "German Regional Division East":
+                case "German Regional Division North":
+                case "German Regional Division South":
+                case "German Regional Division West/Southwest":
+                    ret = "GNL";
                     break;
 
                 default:
@@ -573,10 +677,13 @@ namespace CM0102Patcher
                 nation = "Gambia";
             if (nation == "Pays Basque")
                 nation = "France";
+            if (nation == "French Guiana")
+                nation = "France";
 
             var nationsToBeMapped = new string[] {
                     "Curaçao",
                     "Cuba",
+                    "Réunion",
                     "Namibia",
                     "Samoa",
                     "The Philippines",
@@ -587,18 +694,14 @@ namespace CM0102Patcher
                     "Cape Verde Islands",
                     "St Kitts & Nevis",
                     "Oman",
-                    "St Kitts & Nevis",
                     "Martinique",
-                    "Curaçao",
                     "Sierra Leone",
                     "Saint Lucia",
-                    "Guyana",
                     "Indonesia",
                     "Pakistan",
                     "Sudan",
                     "Grenada",
                     "Guyana",
-                    "Montserrat",
                     "Guinea-Bissau",
                     "St Kitts & Nevis",
                     "Gibraltar",
