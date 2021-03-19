@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -9,7 +10,7 @@ namespace CM0102Patcher
     public class CM9798
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public class CM9798Player
+        public class CM9798Player  // 215 bytes
         {
             public int _UniqueID;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)] public byte[] _FirstName;
@@ -129,7 +130,7 @@ namespace CM0102Patcher
             /* 21 */ [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] DUTShortName;
             /* 22 */ [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] DUTDescription;
             /* 23 */ [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] _Nation;
-            /* 24 */ [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] Region;
+            /* 24 */ [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] _Region;
             /* 25 */ public byte Developed;
             /* 26 */ public byte XCoord;
             /* 27 */ public byte YCoord;
@@ -181,6 +182,11 @@ namespace CM0102Patcher
             {
                 get { return MiscFunctions.GetTextFromBytes(_Nation); }
                 set { _Nation = MiscFunctions.GetBytesFromText(value, 35); }
+            }
+            public string Region
+            {
+                get { return MiscFunctions.GetTextFromBytes(_Region); }
+                set { _Region = MiscFunctions.GetBytesFromText(value, 35); }
             }
             public string Division
             {
@@ -258,81 +264,147 @@ namespace CM0102Patcher
                 clubMap[c.ID] = c;
             }
 
-            var s = CM2.ConvertShortToCM2Format(3604);
-            var s2 = CM2.ConvertLongToCM2Format(3604);
-            var s3 = CM2.ConvertLongToNormalFormat(337379584);
+            var s = CM2.ConvertShortToCM2Format(12696);
+            var s2 = CM2.ConvertLongToCM2Format(1146892696);
+            var s3 = CM2.ConvertLongToNormalFormat(1146892696);
             var s4 = CM2.ConvertShortToNormalFormat(12696);
+            var s5 = CM2.ConvertShortToNormalFormat(17500);
 
             // CM2 Load
+            int CM9798PlayerSize = Marshal.SizeOf(typeof(CM9798Player));
             var tmdata = MiscFunctions.ReadFile<CM9798Team>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\ORIG\TMDATA.DB1", TeamDataStartPos);
             var pldata = MiscFunctions.ReadFile<CM9798Player>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\ORIG\PLAYERS.DB1", PlayerDataStartPos);
             var mgdata = MiscFunctions.ReadFile<CM9798Manager>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\ORIG\MGDATA.DB1", ManagerDataStartPos);
             var plhist = new List<CM2.CM2History>();
 
-            // English CM0102 Teams
+            //WriteTeamDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM2\ORIG\TMDATA.CSV", tmdata);
+            //WritePlayerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM2\ORIG\PLAYERS.CSV", pldata);
+
+            var pldataTest = MiscFunctions.ReadFile<CM9798Player>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\PLAYERS.DB1", PlayerDataStartPos);
+            var maxidxxx = pldata.Max(x => x.UniqueID);
+
+            // Remove all Player Managers
+            foreach (var manager in mgdata.Where(x => x.PlayerManager == 1))
+                manager.PlayerManager = 0;
+
             List<TClub> cm0102clubs = new List<TClub>();
-            var cm0102premTeams = CM2.ReadCM0102League(hl, "English Premier Division", cm0102clubs); // 20
-            var cm0102firstDivTeams = CM2.ReadCM0102League(hl, "English First Division", cm0102clubs); // 24
-            var cm0102secondDivTeams = CM2.ReadCM0102League(hl, "English Second Division", cm0102clubs); // 24
-            var cm0102thirdDivTeams = CM2.ReadCM0102League(hl, "English Third Division", cm0102clubs); // 24
 
-            // English CM9798 Teams
-            var cm2premTeams = tmdata.Where(x => x.Division == "EPR").Select(x => x.LongName).ToList();         // 20
-            var cm2firstDivTeams = tmdata.Where(x => x.Division == "ED1").Select(x => x.LongName).ToList();     // 24
-            var cm2secondDivTeams = tmdata.Where(x => x.Division == "ED2").Select(x => x.LongName).ToList();    // 24
-            var cm2thirdDivTeams = tmdata.Where(x => x.Division == "ED3").Select(x => x.LongName).ToList();     // 24
-            var cm2fourthDivTeams = tmdata.Where(x => x.Division == "ENL").Select(x => x.LongName).ToList();     // 52
+            bool UpdateEnglishLeagues = true;
+            bool UpdateItalianLeagues = true;
+            bool UpdateSpanishLeagues = true;
+            bool UpdateFrenchLeagues = true;
+            bool UpdateGermanLeagues = true;
+            bool UpdateScottishLeagues = true;
 
-            // Italian CM0102 Teams
-            var cm0102SerieATeams = CM2.ReadCM0102League(hl, "Italian Serie A", cm0102clubs); // 18
-            var cm0102SerieBTeams = CM2.ReadCM0102League(hl, "Italian Serie B", cm0102clubs); // 20
-            var cm0102SerieC1ATeams = CM2.ReadCM0102League(hl, "Italian Serie C1/A", cm0102clubs); // 18
-            var cm0102SerieC1BTeams = CM2.ReadCM0102League(hl, "Italian Serie C1/B", cm0102clubs); // 18
+            List<string> cm2premTeams, cm2firstDivTeams, cm2secondDivTeams, cm2thirdDivTeams, cm2fourthDivTeams;
+            List<string> cm2SerieATeams, cm2SerieBTeams, cm2SerieCTeams;
+            List<string> cm2SpainFirstTeams, cm2SpainSecondTeams, cm2SpainNationalTeams;
+            List<string> cm2FranceFirstTeams, cm2FranceSecondTeams, cm2FranceNationalTeams;
+            List<string> cm2GermanFirstTeams, cm2GermanSecondTeams, cm2GermanNationalTeams;
+            List<string> cm2ScotlandPremierTeams, cm2ScotlandFirstTeams, cm2ScotlandSecondTeams, cm2ScotlandThirdTeams, cm2ScotlandNationalTeams;
 
-            // Italian CM9798 Teams
-            var cm2SerieATeams = tmdata.Where(x => x.Division == "ISA").Select(x => x.LongName).ToList();       // 18
-            var cm2SerieBTeams = tmdata.Where(x => x.Division == "ISB").Select(x => x.LongName).ToList();       // 20
-            var cm2SerieCTeams = tmdata.Where(x => x.Division == "ISC").Select(x => x.LongName).ToList();       // 48
+            if (UpdateEnglishLeagues)
+            {
+                // English CM0102 Teams
+                var cm0102premTeams = CM2.ReadCM0102League(hl, "English Premier Division", cm0102clubs); // 20
+                var cm0102firstDivTeams = CM2.ReadCM0102League(hl, "English First Division", cm0102clubs); // 24
+                var cm0102secondDivTeams = CM2.ReadCM0102League(hl, "English Second Division", cm0102clubs); // 24
+                var cm0102thirdDivTeams = CM2.ReadCM0102League(hl, "English Third Division", cm0102clubs); // 24
 
-            // Spanish CM0102
-            var cm0102SpainFirstTeams = CM2.ReadCM0102League(hl, "Spanish First Division", cm0102clubs);        // 20
-            var cm0102SpainSecondTeams = CM2.ReadCM0102League(hl, "Spanish Second Division", cm0102clubs);      // 22
+                // English CM9798 Teams
+                cm2premTeams = tmdata.Where(x => x.Division == "EPR").Select(x => x.LongName).ToList();         // 20
+                cm2firstDivTeams = tmdata.Where(x => x.Division == "ED1").Select(x => x.LongName).ToList();     // 24
+                cm2secondDivTeams = tmdata.Where(x => x.Division == "ED2").Select(x => x.LongName).ToList();    // 24
+                cm2thirdDivTeams = tmdata.Where(x => x.Division == "ED3").Select(x => x.LongName).ToList();     // 24
+                cm2fourthDivTeams = tmdata.Where(x => x.Division == "ENL").Select(x => x.LongName).ToList();    // 52
+            }
 
-            // Spanish CM9798 Teams
-            var cm2SpainFirstTeams = tmdata.Where(x => x.Division == "SP1").Select(x => x.LongName).ToList();        // 20
-            var cm2SpainSecondTeams = tmdata.Where(x => x.Division == "SP2").Select(x => x.LongName).ToList();       // 22
-            var cm2SpainNationalTeams = tmdata.Where(x => x.Division == "SPN").Select(x => x.LongName).ToList();     // 66
+            if (UpdateItalianLeagues)
+            {
+                // Italian CM0102 Teams
+                var cm0102SerieATeams = CM2.ReadCM0102League(hl, "Italian Serie A", cm0102clubs); // 18
+                var cm0102SerieBTeams = CM2.ReadCM0102League(hl, "Italian Serie B", cm0102clubs); // 20
+                var cm0102SerieC1ATeams = CM2.ReadCM0102League(hl, "Italian Serie C1/A", cm0102clubs); // 18
+                var cm0102SerieC1BTeams = CM2.ReadCM0102League(hl, "Italian Serie C1/B", cm0102clubs); // 18
 
-            // French CM0102
-            var cm0102FrenchFirstTeams = CM2.ReadCM0102League(hl, "French First Division", cm0102clubs);        // 18
-            var cm0102FrenchSecondTeams = CM2.ReadCM0102League(hl, "French Second Division", cm0102clubs);      // 20
+                // Italian CM9798 Teams
+                cm2SerieATeams = tmdata.Where(x => x.Division == "ISA").Select(x => x.LongName).ToList();       // 18
+                cm2SerieBTeams = tmdata.Where(x => x.Division == "ISB").Select(x => x.LongName).ToList();       // 20
+                cm2SerieCTeams = tmdata.Where(x => x.Division == "ISC").Select(x => x.LongName).ToList();       // 48
+            }
 
-            // French CM9798 Teams
-            var cm2FranceFirstTeams = tmdata.Where(x => x.Division == "FD1").Select(x => x.LongName).ToList();        // 18
-            var cm2FranceSecondTeams = tmdata.Where(x => x.Division == "FD2").Select(x => x.LongName).ToList();       // 22
-            var cm2FranceNationalTeams = tmdata.Where(x => x.Division == "FNL").Select(x => x.LongName).ToList();     // 26
+            if (UpdateSpanishLeagues)
+            {
+                // Spanish CM0102
+                var cm0102SpainFirstTeams = CM2.ReadCM0102League(hl, "Spanish First Division", cm0102clubs);        // 20
+                var cm0102SpainSecondTeams = CM2.ReadCM0102League(hl, "Spanish Second Division", cm0102clubs);      // 22
 
-            // German CM0102
-            var cm0102GermanFirstTeams = CM2.ReadCM0102League(hl, "German First Division", cm0102clubs);        // 18
-            var cm0102GermanSecondTeams = CM2.ReadCM0102League(hl, "German Second Division", cm0102clubs);      // 18
+                // Spanish CM9798 Teams
+                cm2SpainFirstTeams = tmdata.Where(x => x.Division == "SP1").Select(x => x.LongName).ToList();        // 20
+                cm2SpainSecondTeams = tmdata.Where(x => x.Division == "SP2").Select(x => x.LongName).ToList();       // 22
+                cm2SpainNationalTeams = tmdata.Where(x => x.Division == "SPN").Select(x => x.LongName).ToList();     // 66
+            }
 
-            // German CM9798 Teams
-            var cm2GermanFirstTeams = tmdata.Where(x => x.Division == "GD1").Select(x => x.LongName).ToList();        // 18
-            var cm2GermanSecondTeams = tmdata.Where(x => x.Division == "GD2").Select(x => x.LongName).ToList();       // 18
-            var cm2GermanNationalTeams = tmdata.Where(x => x.Division == "GNL").Select(x => x.LongName).ToList();     // 56
+            if (UpdateFrenchLeagues)
+            {
+                // French CM0102
+                var cm0102FrenchFirstTeams = CM2.ReadCM0102League(hl, "French First Division", cm0102clubs);        // 18
+                var cm0102FrenchSecondTeams = CM2.ReadCM0102League(hl, "French Second Division", cm0102clubs);      // 20
+
+                // French CM9798 Teams
+                cm2FranceFirstTeams = tmdata.Where(x => x.Division == "FD1").Select(x => x.LongName).ToList();        // 18
+                cm2FranceSecondTeams = tmdata.Where(x => x.Division == "FD2").Select(x => x.LongName).ToList();       // 22
+                cm2FranceNationalTeams = tmdata.Where(x => x.Division == "FNL").Select(x => x.LongName).ToList();     // 26
+            }
+
+            if (UpdateGermanLeagues)
+            {
+                // German CM0102
+                var cm0102GermanFirstTeams = CM2.ReadCM0102League(hl, "German First Division", cm0102clubs);        // 18
+                var cm0102GermanSecondTeams = CM2.ReadCM0102League(hl, "German Second Division", cm0102clubs);      // 18
+
+                // German CM9798 Teams
+                cm2GermanFirstTeams = tmdata.Where(x => x.Division == "GD1").Select(x => x.LongName).ToList();        // 18
+                cm2GermanSecondTeams = tmdata.Where(x => x.Division == "GD2").Select(x => x.LongName).ToList();       // 18
+                cm2GermanNationalTeams = tmdata.Where(x => x.Division == "GNL").Select(x => x.LongName).ToList();     // 56
+            }
+
+            if (UpdateScottishLeagues)
+            {
+                // Scotland CM0102
+                var cm0102ScotlandPremierTeams = CM2.ReadCM0102League(hl, "Scottish Premier Division", cm0102clubs);      // 12
+                var cm0102ScotlandFirstTeams = CM2.ReadCM0102League(hl, "Scottish First Division", cm0102clubs);          // 10
+                var cm0102ScotlandSecondTeams = CM2.ReadCM0102League(hl, "Scottish Second Division", cm0102clubs);        // 10
+                var cm0102ScotlandThirdTeams = CM2.ReadCM0102League(hl, "Scottish Third Division", cm0102clubs);          // 10
+
+                // Scotland CM9798 Teams
+                cm2ScotlandPremierTeams = tmdata.Where(x => x.Division == "SPR").Select(x => x.LongName).ToList();    // 10
+                cm2ScotlandFirstTeams = tmdata.Where(x => x.Division == "SD1").Select(x => x.LongName).ToList();      // 10
+                cm2ScotlandSecondTeams = tmdata.Where(x => x.Division == "SD2").Select(x => x.LongName).ToList();     // 10
+                cm2ScotlandThirdTeams = tmdata.Where(x => x.Division == "SD3").Select(x => x.LongName).ToList();      // 10
+                cm2ScotlandNationalTeams = tmdata.Where(x => x.Division == "SNL").Select(x => x.LongName).ToList();   // 27
+            }
 
             var EnglishLeagues = tmdata.Where(x => x.Nation == "England").Select(x => x.Division).Distinct().ToList();
             var ItalianLeagues = tmdata.Where(x => x.Nation == "Italy").Select(x => x.Division).Distinct().ToList();
             var SpanishLeagues = tmdata.Where(x => x.Nation == "Spain").Select(x => x.Division).Distinct().ToList();
             var FranceLeagues = tmdata.Where(x => x.Nation == "France").Select(x => x.Division).Distinct().ToList();
             var GermanLeagues = tmdata.Where(x => x.Nation == "Germany").Select(x => x.Division).Distinct().ToList();
+            var ScotlandLeagues = tmdata.Where(x => x.Nation == "Scotland").Select(x => x.Division).Distinct().ToList();
 
             // Remove Divison from CM9798 Teams
-            RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "ENL", "EPR", "ED1", "ED2", "ED3");
-            RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "ISC", "ISA", "ISB", "ISC");
-            RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "SPN", "SP1", "SP2", "SPN");
-            RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "FNL", "FD1", "FD2", "FNL");
-            RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "GNL", "GD1", "GD2", "GNL");
+            if (UpdateEnglishLeagues)
+                RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "ENL", "EPR", "ED1", "ED2", "ED3");
+            if (UpdateItalianLeagues)
+                RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "ISC", "ISA", "ISB", "ISC");
+            if (UpdateSpanishLeagues)
+                RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "SPN", "SP1", "SP2", "SPN");
+            if (UpdateFrenchLeagues)
+                RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "FNL", "FD1", "FD2", "FNL");
+            if (UpdateGermanLeagues)
+                RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "GNL", "GD1", "GD2", "GNL");
+            if (UpdateScottishLeagues)
+                RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "SNL", "SPR", "SD1", "SD2", "SD3");
 
             var newID = pldata.Max(x => x.UniqueID) + 1;
             var newTeamID = tmdata.Max(x => x.UniqueID) + 1;
@@ -344,6 +416,7 @@ namespace CM0102Patcher
 
                 if (cm2team == null)
                 {
+                    Console.WriteLine("CREATING UNKNOWN TEAM: {0} in DIVISION: {1}", MiscFunctions.GetTextFromBytes(cm0102team.Name), DivisionMapper(hl, cm0102team));
                     cm2team = CreateUnknownTeam(newTeamID++, MiscFunctions.GetTextFromBytes(cm0102team.Name), MiscFunctions.GetTextFromBytes(cm0102team.ShortName), (byte)(cm0102team.Reputation/500), MiscFunctions.GetTextFromBytes(hl.nation[cm0102team.Nation].Name));
                     tmdata.Add(cm2team);
                 }
@@ -354,8 +427,12 @@ namespace CM0102Patcher
                     // Set Division
                     cm2team.Division = DivisionMapper(hl, cm0102team);
                     cm2team.LastDivision = DivisionMapper(hl, cm0102team, true);
-                    cm2team.LastPosition = cm0102team.LastPosition;
+                    cm2team.LastPosition = (cm2team.Division.Contains("3") || cm2team.Division.EndsWith("C")) ? (byte)0 : (byte)cm0102team.LastPosition;        // Weird oddity where Barrow in Division 3 is in the Champions League
                     
+                    // Don't make a team non-essential if it was essential in the original game
+                    if (cm2team.Essential != 1)
+                        cm2team.Essential = (cm2team.Division.Contains("3") || cm2team.Division.EndsWith("C")) ? (byte)0 : (byte)1; // Don't make Division 3 teams essential
+
                     // Hack to ensure Newport and other clubs go into Division 3. Else you'll get team "Free Transfer"
                     if (cm2team.Division == "ED3")
                         cm2team.Nation = "England";
@@ -386,41 +463,74 @@ namespace CM0102Patcher
                     Console.WriteLine("COULD NOT FIND TEAM: {0}", MiscFunctions.GetTextFromBytes(cm0102team.Name));
             }
 
-            // Count English Teams
-            cm2premTeams = GetCM9798TeamNamesByDivision(tmdata, "EPR");          // 20
-            cm2firstDivTeams = GetCM9798TeamNamesByDivision(tmdata, "ED1");      // 24
-            cm2secondDivTeams = GetCM9798TeamNamesByDivision(tmdata, "ED2");     // 24
-            cm2thirdDivTeams = GetCM9798TeamNamesByDivision(tmdata, "ED3");      // 24
-            DivisionTeamCutOff(tmdata, "ENL", 52);
-            cm2fourthDivTeams = GetCM9798TeamNamesByDivision(tmdata, "ENL");     // Should be 52
+            if (UpdateEnglishLeagues)
+            {
+                // Count English Teams
+                cm2premTeams = GetCM9798TeamNamesByDivision(tmdata, "EPR");          // 20
+                cm2firstDivTeams = GetCM9798TeamNamesByDivision(tmdata, "ED1");      // 24
+                cm2secondDivTeams = GetCM9798TeamNamesByDivision(tmdata, "ED2");     // 24
+                cm2thirdDivTeams = GetCM9798TeamNamesByDivision(tmdata, "ED3");      // 24
+                DivisionTeamCutOff(tmdata, "ENL", 52);
+                cm2fourthDivTeams = GetCM9798TeamNamesByDivision(tmdata, "ENL");     // Should be 52
+            }
 
-            // Count Italian Teams
-            cm2SerieATeams = GetCM9798TeamNamesByDivision(tmdata, "ISA");        // 18
-            cm2SerieBTeams = GetCM9798TeamNamesByDivision(tmdata, "ISB");        // 20
-            DivisionTeamCutOff(tmdata, "ISC", 48);
-            cm2SerieCTeams = GetCM9798TeamNamesByDivision(tmdata, "ISC");        // 48
+            if (UpdateItalianLeagues)
+            {
+                // Count Italian Teams
+                cm2SerieATeams = GetCM9798TeamNamesByDivision(tmdata, "ISA");        // 18
+                cm2SerieBTeams = GetCM9798TeamNamesByDivision(tmdata, "ISB");        // 20
+                DivisionTeamCutOff(tmdata, "ISC", 48);
+                cm2SerieCTeams = GetCM9798TeamNamesByDivision(tmdata, "ISC");        // 48
+            }
 
-            // Count Spanish Teams
-            cm2SpainFirstTeams = GetCM9798TeamNamesByDivision(tmdata, "SP1");        // 18
-            cm2SpainSecondTeams = GetCM9798TeamNamesByDivision(tmdata, "SP2");       // 20
-            DivisionTeamCutOff(tmdata, "SPN", 66);
-            cm2SpainNationalTeams = GetCM9798TeamNamesByDivision(tmdata, "SPN");     // 66
+            if (UpdateSpanishLeagues)
+            {
+                // Count Spanish Teams
+                cm2SpainFirstTeams = GetCM9798TeamNamesByDivision(tmdata, "SP1");        // 18
+                cm2SpainSecondTeams = GetCM9798TeamNamesByDivision(tmdata, "SP2");       // 20
+                DivisionTeamCutOff(tmdata, "SPN", 66);
+                cm2SpainNationalTeams = GetCM9798TeamNamesByDivision(tmdata, "SPN");     // 66
+            }
 
-            // Count French Teams
-            cm2FranceFirstTeams = GetCM9798TeamNamesByDivision(tmdata, "FD1");        // 18
-            AddTeamsToLeague(tmdata, "FD2", "FNL", 2);
-            cm2FranceSecondTeams = GetCM9798TeamNamesByDivision(tmdata, "FD2");       // 22
-            DivisionTeamCutOff(tmdata, "FNL", 26);
-            cm2FranceNationalTeams = GetCM9798TeamNamesByDivision(tmdata, "FNL");     // 26
+            if (UpdateFrenchLeagues)
+            {
+                // Count French Teams
+                cm2FranceFirstTeams = GetCM9798TeamNamesByDivision(tmdata, "FD1");        // 18
+                AddTeamsToLeague(tmdata, "FD2", "FNL", 2);
+                cm2FranceSecondTeams = GetCM9798TeamNamesByDivision(tmdata, "FD2");       // 22
+                DivisionTeamCutOff(tmdata, "FNL", 26);
+                cm2FranceNationalTeams = GetCM9798TeamNamesByDivision(tmdata, "FNL");     // 26
+            }
 
-            // Count German Teams
-            cm2GermanFirstTeams = GetCM9798TeamNamesByDivision(tmdata, "GD1");        // 18
-            cm2GermanSecondTeams = GetCM9798TeamNamesByDivision(tmdata, "GD2");       // 18
-            DivisionTeamCutOff(tmdata, "GNL", 56);
-            cm2GermanNationalTeams = GetCM9798TeamNamesByDivision(tmdata, "GNL");     // 56
+            if (UpdateGermanLeagues)
+            {
+                // Count German Teams
+                cm2GermanFirstTeams = GetCM9798TeamNamesByDivision(tmdata, "GD1");        // 18
+                cm2GermanSecondTeams = GetCM9798TeamNamesByDivision(tmdata, "GD2");       // 18
+                DivisionTeamCutOff(tmdata, "GNL", 56);
+                cm2GermanNationalTeams = GetCM9798TeamNamesByDivision(tmdata, "GNL");     // 56
+            }
+
+            if (UpdateScottishLeagues)
+            {
+                // Count Scottish Teams
+                DivisionTeamCutOff(tmdata, "SPR", 10, "SNL");
+                cm2ScotlandPremierTeams = GetCM9798TeamNamesByDivision(tmdata, "SPR");          // 12 (should be 10)
+                cm2ScotlandFirstTeams = GetCM9798TeamNamesByDivision(tmdata, "SD1");      // 10
+                cm2ScotlandSecondTeams = GetCM9798TeamNamesByDivision(tmdata, "SD2");     // 10
+                cm2ScotlandThirdTeams = GetCM9798TeamNamesByDivision(tmdata, "SD3");      // 10
+                DivisionTeamCutOff(tmdata, "SNL", 27);
+                cm2ScotlandNationalTeams = GetCM9798TeamNamesByDivision(tmdata, "SNL");     // Should be 27
+                CheckLeaguesTeamsHavePlayers(tmdata, pldata, "SPR", "SD1", "SD2", "SD3", "SNL");
+            }
+
+            // This is needed at least for the EPR as if you load the Scottish league without the English league, you can have errors where the European Cups will try and find the 2nd place team
+            // In the EPR and not find it
+            ListDivisionAndFixLastPositions(tmdata, "EPR");
+            ListDivisionAndFixLastPositions(tmdata, "SPR");
 
             MiscFunctions.SaveFile<CM9798Team>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\TMDATA.DB1", tmdata, TeamDataStartPos);
-            MiscFunctions.SaveFile<CM9798Player>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\PLAYERS.DB1", pldata, PlayerDataStartPos);
+            MiscFunctions.SaveFile<CM9798Player>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\PLAYERS.DB1", pldata, PlayerDataStartPos, true);
             MiscFunctions.SaveFile<CM9798Manager>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\MGDATA.DB1", mgdata, ManagerDataStartPos);
 
             CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\Fresh\Data\CM2\TMDATA.DB1", TeamDataStartPos-8, tmdata.Count, true);
@@ -429,7 +539,40 @@ namespace CM0102Patcher
             CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\Fresh\Data\CM2\MGDATA.DB1", ManagerDataStartPos-8, mgdata.Count, true);
             CM2.WriteCM2HistoryFile(@"C:\ChampMan\cm9798\Fresh\Data\CM2\PLHIST98.BIN", plhist, true);
 
-            Console.WriteLine();
+            WriteTeamDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM2\TMDATA.CSV", tmdata);
+            WritePlayerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM2\PLAYERS.CSV", pldata);
+
+            Console.WriteLine("Player Count: {0}", pldata.Count);
+            Console.WriteLine("Team Count: {0}", tmdata.Count);
+       }
+
+        static void ListDivisionAndFixLastPositions(List<CM9798Team> tmdata, string division)
+        {
+            Console.WriteLine(division);
+            Console.WriteLine("----------------");
+            var cm2teams = tmdata.Where(x => x.Division == division).OrderBy(x => x.LastPosition).ToList();
+            byte pos = 1;
+            foreach (var cm2team in cm2teams)
+            {
+                Console.WriteLine("{0}. {1} (Last Division: {2})", cm2team.LastPosition, cm2team.LongName, cm2team.LastDivision);
+                cm2team.LastPosition = pos++;
+            }
+        }
+
+        static void CheckLeaguesTeamsHavePlayers(List<CM9798Team> tmdata, List<CM9798Player> pldata, params string[] divisions)
+        {
+            foreach (var division in divisions)
+            {
+                var cm2teams = tmdata.Where(x => x.Division == division).ToList();
+                foreach (var cm2team in cm2teams)
+                {
+                    var players = pldata.Where(x => MiscFunctions.StringCompare(x.Team, cm2team.ShortName, cm2team.LongName)).ToList();
+                    if (players.Count() == 0)
+                        Console.WriteLine("************* NO PLAYERS IN TEAM {0} IN DIVISION {1} *************", cm2team.LongName, division);
+                    if (players.Count() > 32)
+                        Console.WriteLine("************* TOO MANY PLAYERS IN TEAM {0} IN DIVISION {1} *************", cm2team.LongName, division);
+                }
+            }
         }
 
         static List<string> GetCM9798TeamNamesByDivision(List<CM9798Team> tmdata, string division)
@@ -444,25 +587,30 @@ namespace CM0102Patcher
                 cm2team.Division = destinationDivision;
         }
 
-        static void DivisionTeamCutOff(List<CM9798Team> tmdata, string division, int teams)
+        static void DivisionTeamCutOff(List<CM9798Team> tmdata, string division, int teams, string replacementDivision = "")
         {
             var cm2Teams = tmdata.Where(x => x.Division == division).OrderByDescending(x => x.Reputation).ToList();
             for (int i = 0; i < cm2Teams.Count; i++)
             {
                 if (i >= teams)
-                    cm2Teams[i].Division = "";
+                {
+                    cm2Teams[i].Division = replacementDivision;
+                    Console.WriteLine("Cutting team {0} from division {1} (replacing with: {2})", cm2Teams[i].LongName, division, replacementDivision);
+                }
             }
         }
 
         static void RemoveTeamsAndPlayersFromDivision(List<CM9798Team> tmdata, List<CM9798Player> pldata, string defaultDivision, params string [] divisions)
         {
-            foreach (var cm2team in tmdata.Where(x => divisions.Contains(x.Division)))
+            foreach (var cm2team in tmdata.Where(x => divisions.Contains(x.Division) || x.Division == defaultDivision))
             {
-                cm2team.Division = defaultDivision;
-                cm2team.LastDivision = defaultDivision;
-                cm2team.LastPosition = 14;
-                cm2team.Essential = 0;
-
+                if (cm2team.Division != defaultDivision /*&& defaultDivision != null*/)
+                {
+                    cm2team.Division = defaultDivision;
+                    cm2team.LastDivision = defaultDivision;
+                    cm2team.LastPosition = 0;
+                }
+                //if (defaultDivision != null)
                 pldata.RemoveAll(x => MiscFunctions.StringCompare(x.Team, cm2team.ShortName, cm2team.LongName));
             }
         }
@@ -548,6 +696,23 @@ namespace CM0102Patcher
                     ret = "GNL";
                     break;
 
+                // Scotland
+                case "Scottish Premier Division":
+                    ret = "SPR";
+                    break;
+                case "Scottish First Division":
+                    ret = "SD1";
+                    break;
+                case "Scottish Second Division":
+                    ret = "SD2";
+                    break;
+                case "Scottish Third Division":
+                    ret = "SD3";
+                    break;
+                case "Scottish Conference":
+                    ret = "SNL";
+                    break;
+
                 default:
                     Console.WriteLine("********* COULD NOT MAP DIVISION!! ({0})*********", cm0102division);
                     break;
@@ -566,12 +731,16 @@ namespace CM0102Patcher
 
             // Make sure you do not match against a blank
             if (string.IsNullOrEmpty(cm0102ShortTeamName))
-                cm0102ShortTeamName = "DONTMATCH"; 
+                cm0102ShortTeamName = "DONTMATCH";
+
+            // Hack for "St. " vs "St."
+            if (cm0102ShortTeamName.StartsWith("St."))
+                cm0102ShortTeamName = cm0102ShortTeamName.Replace(" ", "");
 
             // Some special mappings between team names where CM2 and CM0102 differ
             var extraCheck = CM2.TeamMapper(cm0102TeamName);
 
-            var returnTeam = tmdata.FirstOrDefault(x => x.LongName == cm0102TeamName || x.LongName == cm0102ShortTeamName || x.ShortName == cm0102ShortTeamName || x.LongName == extraCheck || x.ShortName == extraCheck);
+            var returnTeam = tmdata.FirstOrDefault(x => x.Nation != "EXTINCT" && (x.LongName == cm0102TeamName || x.LongName == cm0102ShortTeamName || x.ShortName == cm0102ShortTeamName || x.LongName == extraCheck || x.ShortName == extraCheck));
             return returnTeam;
         }
 
@@ -584,9 +753,11 @@ namespace CM0102Patcher
             var commonName = MiscFunctions.GetTextFromBytes(hl.common_names[s.CommonName].Name);
 
             // Remove accents
-            // firstName = MiscFunctions.RemoveDiacritics(firstName);
-            // secondName = MiscFunctions.RemoveDiacritics(secondName);
-            // commonName = MiscFunctions.RemoveDiacritics(commonName);
+            /*
+            firstName = MiscFunctions.RemoveDiacritics(firstName);
+            secondName = MiscFunctions.RemoveDiacritics(secondName);
+            commonName = MiscFunctions.RemoveDiacritics(commonName);
+            */
 
             // Have to cut to 20 letter (even though the max you get from CM0102 is 25)
             // Any more and you get addname 1 (maybe)
@@ -598,6 +769,8 @@ namespace CM0102Patcher
             //    continue;
 
             var nation = MiscFunctions.GetTextFromBytes(hl.nation[s.Nation].Name);
+            //nation = MiscFunctions.RemoveDiacritics(nation);
+
             var team = setTeamTo;
             DateTime dob;
             string birthdate = "";
@@ -627,7 +800,7 @@ namespace CM0102Patcher
             var centralsided = CM2.ConvertSide(p.Central);
 
             var ability = p.CurrentAbility;
-            var potential = ((short)p.PotentialAbility) < 0 ? 0 : p.PotentialAbility;
+            var potential = ((short)p.PotentialAbility) < 0 ? -1 : p.PotentialAbility;
             var reputation = p.CurrentReputation;
 
             var Aggression = p.Aggression;
@@ -873,11 +1046,12 @@ namespace CM0102Patcher
             t.Capacity = CM2.ConvertLongToCM2Format(50000);
             t.Seating = CM2.ConvertLongToCM2Format(50000);
             t.Following = 10;
-            t.Blend = 18; // was 12
-            t.Essential = 1;
-            t.Reputation = 18;// Reputation;
+            t.Blend = 12; 
+            t.Essential = 0;
+            t.Reputation = Reputation;
             t.XCoord = 10;
             t.YCoord = 10;
+            t.City = MiscFunctions.GetBytesFromText(teamShortName, 35);
             t.Style = MiscFunctions.GetBytesFromText("PASS", 10);
             t.HomeTextCol = MiscFunctions.GetBytesFromText("WHI", 15);
             t.HomeBackCol = MiscFunctions.GetBytesFromText("BLU", 15);
@@ -890,6 +1064,47 @@ namespace CM0102Patcher
             t.Cash = CM2.ConvertLongToCM2Format(100);
 
             return t;
+        }
+
+        static void WritePlayerDataToCSV(string fileName, List<CM9798Player> pldata)
+        {
+            using (var sw = new StreamWriter(fileName))
+            {
+                MiscFunctions.WriteCSVLine(sw, "FirstName", "SecondName", "Nationality", "NationalCaps", "NationalGoals", "Team", "BirthDate",
+                      "Age", "Goalkeeper", "Sweeper", "Defence", "Anchor", "Midfield", "Support", "Attack", "RightSided", "LeftSided", "CentralSided", "Ability", "Potential", "Reputation",
+                      "Adaptability", "Aggression", "BigOccasion", "Character", "Consistency", "Creativity", "Determination", "Dirtyness", "Dribbling", "Flair", "Heading", "Influence", "InjProne", "Marking", "OffTheBall", "Pace", "Passing",
+                      "Positioning", "SetPieces", "Shooting", "Stamina", "Strength", "Tackling", "Technique");
+                foreach (var p in pldata)
+                    WritePlayer(sw, p);
+            }
+        }
+
+        static void WriteTeamDataToCSV(string fileName, List<CM9798Team> tmdata)
+        {
+            using (var sw = new StreamWriter(fileName))
+            {
+                MiscFunctions.WriteCSVLine(sw, "LongName", "ShortName", "Nation", "Region", "Developed", "XCoord", "YCoord", "EEC", "TCoef8893",
+                          "City", "Stadium", "Capacity", "Seating", "Following", "Reputation", "Blend", "Formation", "Style", "HomeTextCol", "HomeBackCol", "AwayTextCol", "AwayBackCol", "Division",
+                          "LastDivision", "LastPosition", "Cash", "LeagueStandard", "Under21", "BTeam", "Essential", "TransferRecord");
+                foreach (var t in tmdata)
+                    WriteTeam(sw, t);
+            }
+        }
+
+        static void WritePlayer(StreamWriter sw, CM9798Player player)
+        {
+            MiscFunctions.WriteCSVLine(sw, player.FirstName, player.SecondName, player.Nationality, player.NationalCaps, player.NationalGoals, player.Team, player.BirthDate,
+                      player.Age, player.Goalkeeper, player.Sweeper, player.Defence, player.Anchor, player.Midfield, player.Support, player.Attack, player.RightSided, player.LeftSided, player.CentralSided, CM2.ConvertShortToNormalFormat(player.Ability), CM2.ConvertShortToNormalFormat(player.Potential), CM2.ConvertShortToNormalFormat(player.Reputation),
+                      player.Adaptability, player.Aggression, player.BigOccasion, player.Character, player.Consistency, player.Creativity, player.Determination, player.Dirtyness, player.Dribbling, player.Flair, player.Heading, player.Influence, player.InjProne, player.Marking, player.OffTheBall, player.Pace, player.Passing,
+                      player.Positioning, player.SetPieces, player.Shooting, player.Stamina, player.Strength, player.Tackling, player.Technique);
+        }
+
+        static void WriteTeam(StreamWriter sw, CM9798Team team)
+        {
+            MiscFunctions.WriteCSVLine(sw, team.LongName, team.ShortName, team.Nation, team.Region, team.Developed, team.XCoord, team.YCoord, team.EEC, team.TCoef8893,
+                team.City, team.Stadium, CM2.ConvertLongToNormalFormat(team.Capacity), CM2.ConvertLongToNormalFormat(team.Seating), team.Following, team.Reputation, team.Blend,
+                team.Formation, team.Style, team.HomeTextCol, team.HomeBackCol, team.AwayTextCol, team.AwayBackCol,
+                team.Division, team.LastDivision, team.LastPosition, CM2.ConvertLongToNormalFormat(team.Cash) * 1000, team.LeagueStandard, team.Under21, team.BTeam, team.Essential, CM2.ConvertLongToNormalFormat(team.TransferRecord));
         }
     }
 }

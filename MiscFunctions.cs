@@ -211,7 +211,9 @@ namespace CM0102Patcher
                     var bytes = br.ReadBytes(objSize);
                     if (count != 0 && counter == count)
                         break;
-                    if (bytes == null || bytes.Length != objSize)
+                    if (bytes == null || bytes.Length == 0)
+                        break;
+                    if (bytes.Length != objSize)
                         break;
                     var ptrObj = Marshal.AllocHGlobal(objSize);
                     Marshal.Copy(bytes, 0, ptrObj, objSize);
@@ -351,7 +353,10 @@ namespace CM0102Patcher
         {
             for (int i = 0; i < fields.Length; i++)
             {
-                sw.Write(fields[i].ToString());
+                if (fields[i].GetType() == typeof(byte[]))
+                    sw.Write(GetTextFromBytes((byte[])fields[i]));
+                else
+                    sw.Write(fields[i].ToString());
                 if (i != fields.Length - 1)
                     sw.Write(",");
             }
