@@ -19,6 +19,8 @@ namespace CM0102Patcher
             if (bytes != null)
             {
                 int length = useExactSize ? bytes.Length : Array.IndexOf(bytes, (byte)0);
+                if (length == -1)
+                    length = bytes.Length;
                 ret = latin1.GetString(bytes, 0, length);
             }
             return ret;
@@ -27,7 +29,10 @@ namespace CM0102Patcher
         public static byte[] GetBytesFromText(string text, int byteArraySize)
         {
             var bytes = new byte[byteArraySize];
-            Array.Copy(latin1.GetBytes(text), bytes, text.Length);
+            var len = text.Length;
+            if (len > byteArraySize)
+                len = byteArraySize;
+            Array.Copy(latin1.GetBytes(text), bytes, len);
             return bytes;
         }
 
@@ -329,24 +334,29 @@ namespace CM0102Patcher
         }
 
         // Compares the strings based on the shortest string
-        public static bool StringCompare(string a, string b)
+        public static bool StringCompare(string a, string b, bool preciseCompare = false)
         {
             if (a.Length == 0 || b.Length == 0)
                 return false;
 
-            if (a.Length < b.Length)
-                return a == b.Substring(0, a.Length);
+            if (preciseCompare)
+                return a == b;
             else
-                return b == a.Substring(0, b.Length);
+            {
+                if (a.Length < b.Length)
+                    return a == b.Substring(0, a.Length);
+                else
+                    return b == a.Substring(0, b.Length);
+            }
         }
 
-        public static bool StringCompare(string a, string b, string c)
+        public static bool StringCompare(string a, string b, string c, bool preciseCompare = false)
         {
-            bool ret = (b != null) ? StringCompare(a, b) : true;
+            bool ret = (b != null) ? StringCompare(a, b, preciseCompare) : true;
             if (ret)
                 return true;
             else
-                return StringCompare(a, c);
+                return StringCompare(a, c, preciseCompare);
         }
 
         public static void WriteCSVLine(StreamWriter sw, params object[] fields)
