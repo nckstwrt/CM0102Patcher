@@ -22,7 +22,7 @@ namespace CM0102Patcher
         private void buttonInputSelectFile_Click(object sender, EventArgs e)
         {
             var ofd = new OpenFileDialog();
-            ofd.Filter = "Image Files (*.rgn/*.jpg/*.bmp/*.png)|*.jpg;*.hsr;*.bmp;*.rgn;*.png|All files (*.*)|*.*";
+            ofd.Filter = "Image Files (*.rgn;*.jpg;*.bmp;*.png;*.pcx)|*.jpg;*.hsr;*.bmp;*.rgn;*.png;*.pcx|All files (*.*)|*.*";
             ofd.Title = "Select an input image file...";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -43,7 +43,7 @@ namespace CM0102Patcher
         private void buttonOutputSelectFile_Click(object sender, EventArgs e)
         {
             var ofd = new SaveFileDialog();
-            ofd.Filter = "RGN Files (*.rgn)|*.rgn|Image Files (*.jpg/*.bmp/*.png)|*.hsr;*.jpg;*.bmp;*.png|All files (*.*)|*.*";
+            ofd.Filter = "RGN Files (*.rgn)|*.rgn|Image Files (*.jpg/*.bmp/*.png/*.hsr/*.pcx)|*.jpg;*.bmp;*.png;*.hsr;*.pcx|All files (*.*)|*.*";
             ofd.Title = "Select an output image file...";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -92,6 +92,7 @@ namespace CM0102Patcher
                     inputFiles.AddRange(Directory.GetFiles(textBoxInput.Text, "*.jpg"));
                     inputFiles.AddRange(Directory.GetFiles(textBoxInput.Text, "*.bmp"));
                     inputFiles.AddRange(Directory.GetFiles(textBoxInput.Text, "*.png"));
+                    inputFiles.AddRange(Directory.GetFiles(textBoxInput.Text, "*.pcx"));
                 }
                 else
                     inputFiles.Add(textBoxInput.Text);
@@ -157,16 +158,22 @@ namespace CM0102Patcher
                                 if (isDirectory)
                                     outputTo = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(picFile) + ".rgn");
 
+                                // Check in file is a CM0102 type file
                                 if (Path.GetExtension(picFile).ToLower() == ".rgn" || Path.GetExtension(picFile).ToLower() == ".hsr" || Path.GetExtension(picFile).ToLower() == ".mbr")
                                 {
+                                    // Check whether we are outputting to a cm0102 file
                                     if (!isDirectory && Path.GetExtension(outputTo).ToLower() != ".rgn" && Path.GetExtension(outputTo).ToLower() != ".hsr" && Path.GetExtension(outputTo).ToLower() != ".mbr")
-                                        RGNConverter.RGN2BMP(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
+                                        RGNConverter.RGN2BMP(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);     // Output CM0102 RGN file to a Bitmap type
                                     else
-                                        RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
+                                        RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);     // Output CM0102 RGN file to another CM0102 RGN file
                                 }
                                 else
                                 {
-                                    RGNConverter.BMP2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
+                                    if (Path.GetExtension(picFile).ToLower() == ".rgn" || Path.GetExtension(picFile).ToLower() == ".hsr" || Path.GetExtension(picFile).ToLower() == ".mbr")
+                                        RGNConverter.BMP2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
+                                    else
+                                        RGNConverter.BMP2BMP(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
+
                                 }
                             }
                         }

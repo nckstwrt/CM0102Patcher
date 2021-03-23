@@ -169,6 +169,7 @@
     <Compile Include="Tools.Designer.cs">
       <DependentUpon>Tools.cs</DependentUpon>
     </Compile>
+    <Compile Include="WuColorQuantizer.cs" />
     <Compile Include="YearChanger.cs" />
     <Compile Include="History Editor\YearShifterForm.cs">
       <SubType>Form</SubType>

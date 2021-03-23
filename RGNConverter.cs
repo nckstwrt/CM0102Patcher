@@ -8,6 +8,8 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using JeremyAnsel.ColorQuant;
 
 namespace CM0102Patcher
 {
@@ -98,10 +100,23 @@ namespace CM0102Patcher
                 }
                 else
                 {
-                    using (var bmp = Bitmap.FromFile(inFile))
+                    if (Path.GetExtension(inFile).ToLower() == ".pcx")
                     {
-                        Width = bmp.Width;
-                        Height = bmp.Height;
+                        using (var fin = File.Open(inFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        using (var br = new BinaryReader(fin))
+                        {
+                            fin.Seek(0, SeekOrigin.Begin);
+                            Width = (br.ReadInt16() + 1);
+                            Height = (br.ReadInt16() + 1);
+                        }
+                    }
+                    else
+                    {
+                        using (var bmp = Bitmap.FromFile(inFile))
+                        {
+                            Width = bmp.Width;
+                            Height = bmp.Height;
+                        }
                     }
                 }
                 ret = true;
@@ -123,17 +138,161 @@ namespace CM0102Patcher
             }
         }
 
+        public static void BMP2BMP(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
+        {
+            Bitmap bmp = null;
+            if (Path.GetExtension(inFile).ToLower() == ".pcx")
+            {
+                using (var fin = File.Open(inFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                using (var br = new BinaryReader(fin))
+                {
+                    // Read header
+                    int objSize = Marshal.SizeOf(typeof(PCXHeader));
+                    var bytes = br.ReadBytes(objSize);
+                    var ptrObj = Marshal.AllocHGlobal(objSize);
+                    Marshal.Copy(bytes, 0, ptrObj, objSize);
+                    var pcxHeader = (PCXHeader)Marshal.PtrToStructure(ptrObj, typeof(PCXHeader));
+                    Marshal.FreeHGlobal(ptrObj);
+
+                    // Create Bitmap
+                    bmp = new Bitmap(pcxHeader.xMax + 1, pcxHeader.yMax + 1, PixelFormat.Format24bppRgb);
+
+                    // Get pixels
+                    RLEReaderWriter.Init();
+                    var imageArray = new byte[pcxHeader.bytesPerLine * bmp.Height];
+                    for (int i = 0; i < imageArray.Length; i++)
+                        imageArray[i] = RLEReaderWriter.ReadRLEByte(fin);
+
+                    // Check for Palette Marker
+                    br.ReadByte();
+
+                    // Read 256 Colour Palette
+                    var palette = br.ReadBytes(768);
+
+                    // Create a 24 bit Image Array
+                    var fullImageArray = new byte[bmp.Width * bmp.Height * 3];
+                    for (int i = 0; i < (bmp.Width * bmp.Height); i++)
+                    {
+                        fullImageArray[(i * 3) + 0] = palette[(imageArray[i] * 3) + 2];
+                        fullImageArray[(i * 3) + 1] = palette[(imageArray[i] * 3) + 1];
+                        fullImageArray[(i * 3) + 2] = palette[(imageArray[i] * 3) + 0];
+                    }
+
+                    // Lock Bits and assign colours
+                    var bits = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+                    if (bmp.Width * 3 != bits.Stride)
+                        fullImageArray = WuColorQuantizer.ImageArrayToArray(fullImageArray, bmp.Height, bmp.Width * 3, bits.Stride);
+
+                    Marshal.Copy(fullImageArray, 0, bits.Scan0, fullImageArray.Length);
+
+                    bmp.UnlockBits(bits);
+                }
+            }
+            else
+                bmp = new Bitmap(inFile);
+            BMP2BMP(bmp, outFile, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
+            bmp.Dispose();
+        }
+
+        public static void BMP2BMP(Bitmap bmp, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
+        {
+            // Resize BMP if need be
+            if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0)
+                bmp = ResizeImage(bmp, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
+
+            if (Path.GetExtension(outFile).ToLower() == ".pcx")
+            {
+                PCXHeader pcxHeader = new PCXHeader();
+                using (var fout = File.Open(outFile, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
+                using (var bw = new BinaryWriter(fout))
+                {
+                    pcxHeader.SetDimensions(bmp.Width, bmp.Height);
+
+                    // Write Header
+                    int objSize = Marshal.SizeOf(typeof(PCXHeader));
+                    byte[] arr = new byte[objSize];
+                    IntPtr ptr = Marshal.AllocHGlobal(objSize);
+                    Marshal.StructureToPtr(pcxHeader, ptr, true);
+                    Marshal.Copy(ptr, arr, 0, objSize);
+                    Marshal.FreeHGlobal(ptr);
+                    bw.Write(arr);
+
+                    // Quantize
+                    var reduceColorsTo = 64;
+                    int bmpStride;
+                    var bmpArray = WuColorQuantizer.BitmapToArray(bmp, PixelFormat.Format32bppArgb, false, out bmpStride);
+                    var wubytes = new WuColorQuantizer().Quantize(bmpArray, reduceColorsTo);
+
+                    // Copy 32 bit palette to 256 colours 24 bit palettte (768)
+                    byte[] newPalette = new byte[768];
+                    for (int i = 0; i < reduceColorsTo; i++)
+                    {
+                        newPalette[(i * 3) + 2] = wubytes.Palette[(i * 4) + 2];
+                        newPalette[(i * 3) + 1] = wubytes.Palette[(i * 4) + 1];
+                        newPalette[(i * 3) + 0] = wubytes.Palette[(i * 4) + 0];
+                    }
+
+                    // Write Image Data
+                    RLEReaderWriter.Init();
+                    for (int i = 0; i < wubytes.Bytes.Length; i++)
+                    {
+                        RLEReaderWriter.WriteRLEByte(fout, wubytes.Bytes[i]);
+                        RLEReaderWriter.FlushRLEBytes(fout);
+                    }
+                    RLEReaderWriter.FlushRLEBytes(fout);
+
+                    // Write Palette Marker
+                    bw.Write((byte)0x0C);
+
+                    // Write Palette
+                    for (int i = 0; i < 256; i++)
+                    {
+                        bw.Write(newPalette[(i * 3) + 2]);
+                        bw.Write(newPalette[(i * 3) + 1]);
+                        bw.Write(newPalette[(i * 3) + 0]);
+                    }
+                }
+            }
+            else
+            {
+                // Convert extension to ImageFormat
+                ImageFormat imgFormat;
+                switch (Path.GetExtension(outFile).ToLower())
+                {
+                    case ".jpg":
+                    case ".jpeg":
+                        imgFormat = ImageFormat.Jpeg;
+                        break;
+                    case ".png":
+                        imgFormat = ImageFormat.Png;
+                        break;
+                    case ".gif":
+                        imgFormat = ImageFormat.Gif;
+                        break;
+                    default:
+                    case ".bmp":
+                        imgFormat = ImageFormat.Bmp;
+                        break;
+                }
+
+                bmp.Save(outFile, imgFormat);
+            }
+
+            // If we created a new BMP dispose of it
+            if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0)
+                bmp.Dispose();
+        }
+
         public static void RGN2BMP(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
         {
             using (var bmp = RGN2BMP(inFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom, brightness))
             {
-
+                // If file doesn't exist and is a actually a directory, not a directory
                 if (!File.Exists(outFile) && Directory.Exists(outFile))
                 {
                     outFile = Path.Combine(outFile, Path.GetFileNameWithoutExtension(inFile) + ".bmp");
                 }
-
-                bmp.Save(outFile, ImageFormat.Bmp);
+                BMP2BMP(bmp, outFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom, brightness);
             }
         }
 
@@ -193,7 +352,7 @@ namespace CM0102Patcher
         {
             // Resize BMP if need be
             if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0)
-                bmp = ResizeImage(bmp, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom);
+                bmp = ResizeImage(bmp, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
 
             using (var stream = File.Create(outFile))
             using (var rgnFile = new BinaryWriter(stream))
@@ -236,6 +395,103 @@ namespace CM0102Patcher
             // If we created a new BMP dispose of it
             if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0)
                 bmp.Dispose();
+        }
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public class PCXHeader
+    {
+        public byte id = 10;
+        public byte version = 5;
+        public byte encoding = 1;
+        public byte bitsPerPixel = 8;
+        public ushort xMin = 0;
+        public ushort yMin = 0;
+        public ushort xMax = 640 - 1;
+        public ushort yMax = 480 - 1;
+        public ushort hDpi = 150;
+        public ushort vDpi = 150;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 48)] public byte[] colorMap = new byte[48];
+        public byte reserved = 0;
+        public byte nPlanes = 1;
+        public ushort bytesPerLine = 640;
+        public ushort paletteInfo = 1;
+        public ushort horizScreenResolution = 0;
+        public ushort vertScreenResolution = 0;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 54)] public byte[] filler = new byte[58];
+
+        public void SetDimensions(int width, int height)
+        {
+            xMax = (ushort)(width - 1);
+            yMax = (ushort)(height - 1);
+            bytesPerLine = (ushort)width;
+        }
+    }
+
+    public class RLEReaderWriter
+    {
+        static private byte m_lastValue;
+        static private uint m_count = 0;
+
+        public static void Init()
+        {
+            m_count = 0;
+        }
+
+        public static void WriteRLEByte(Stream fout, byte value)
+        {
+            if (m_count == 0 || m_count == 63 || value != m_lastValue)
+            {
+                FlushRLEBytes(fout);
+
+                m_lastValue = value;
+                m_count = 1;
+            }
+            else
+            {
+                m_count++;
+            }
+        }
+
+        public static void FlushRLEBytes(Stream fout)
+        {
+            if (m_count == 0)
+                return;
+
+            if ((m_count > 1) || ((m_count == 1) && ((m_lastValue & 0xC0) == 0xC0)))
+            {
+                fout.WriteByte((byte)(0xC0 | m_count));
+                fout.WriteByte(m_lastValue);
+                m_count = 0;
+            }
+            else
+            {
+                fout.WriteByte(m_lastValue);
+                m_count = 0;
+            }
+        }
+
+
+        public static byte ReadRLEByte(Stream fin)
+        {
+            if (m_count > 0)
+            {
+                m_count--;
+                return m_lastValue;
+            }
+
+            byte code = (byte)fin.ReadByte();
+
+            if ((code & 0xC0) == 0xC0)
+            {
+                m_count = (uint)(code & (0xC0 ^ 0xff));
+                m_lastValue = (byte)fin.ReadByte();
+
+                m_count--;
+                return m_lastValue;
+            }
+
+            return code;
         }
     }
 }
