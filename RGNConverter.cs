@@ -15,12 +15,36 @@ namespace CM0102Patcher
 {
     public class RGNConverter
     {
-        public static Bitmap ResizeImage(Image image, int width, int height, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
+        public static Bitmap ResizeImage(Image image, int width, int height, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0, bool autoCrop = false)
         {
             if (width <= 0 || height <= 0)
             {
                 width = image.Width;
                 height = image.Height;
+            }
+
+            if (autoCrop)
+            {
+                var srcWidth = ((double)image.Width);
+                var srcHeight = ((double)image.Height);
+                var dstWidth = ((double)width);
+                var dstHeight = ((double)height);
+
+                var srcAR = srcWidth / srcHeight;
+                var dstAR = dstWidth / dstHeight;
+
+                if ((dstAR - srcAR) > 0)
+                {
+                    // Crop Height of Src
+                    var newSrcHeight = (1.0 / dstAR) * srcWidth;
+                    cropTop = cropBottom = (int)(((srcHeight - newSrcHeight) / 2.0) + 0.5);
+                }
+                else
+                {
+                    // Crop Width of Src
+                    var newSrcWidth = (dstAR) * srcHeight;
+                    cropRight = cropLeft = (int)(((srcWidth - newSrcWidth) / 2.0) + 0.5);
+                }
             }
 
             var destRect = new Rectangle(0, 0, width, height);
@@ -130,15 +154,15 @@ namespace CM0102Patcher
             return ret;
         }
 
-        public static void RGN2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
+        public static void RGN2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0, bool autoCrop = false, CMImageFormat imageFormat = CMImageFormat.RGN)
         {
-            using (var bmp = RGN2BMP(inFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom, brightness))
+            using (var bmp = RGN2BMP(inFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom, brightness, autoCrop, imageFormat))
             {
                 BMP2RGN(bmp, outFile);
             }
         }
 
-        public static void BMP2BMP(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
+        public static void BMP2BMP(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0, bool autoCrop = false, CMImageFormat imageFormat = CMImageFormat.RGN)
         {
             Bitmap bmp = null;
             if (Path.GetExtension(inFile).ToLower() == ".pcx")
@@ -190,17 +214,17 @@ namespace CM0102Patcher
             }
             else
                 bmp = new Bitmap(inFile);
-            BMP2BMP(bmp, outFile, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
+            BMP2BMP(bmp, outFile, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness, autoCrop, imageFormat);
             bmp.Dispose();
         }
 
-        public static void BMP2BMP(Bitmap bmp, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
+        public static void BMP2BMP(Bitmap bmp, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0, bool autoCrop = false, CMImageFormat imageFormat = CMImageFormat.RGN)
         {
             // Resize BMP if need be
-            if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0)
-                bmp = ResizeImage(bmp, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
+            if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0 || autoCrop)
+                bmp = ResizeImage(bmp, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness, autoCrop);
 
-            if (Path.GetExtension(outFile).ToLower() == ".pcx")
+            if (Path.GetExtension(outFile).ToLower() == ".pcx" || imageFormat == CMImageFormat.PCX)
             {
                 PCXHeader pcxHeader = new PCXHeader();
                 using (var fout = File.Open(outFile, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
@@ -256,47 +280,45 @@ namespace CM0102Patcher
             else
             {
                 // Convert extension to ImageFormat
-                ImageFormat imgFormat;
-                switch (Path.GetExtension(outFile).ToLower())
+                ImageFormat saveImgFormat;
+                switch (imageFormat)
                 {
-                    case ".jpg":
-                    case ".jpeg":
-                        imgFormat = ImageFormat.Jpeg;
-                        break;
-                    case ".png":
-                        imgFormat = ImageFormat.Png;
-                        break;
-                    case ".gif":
-                        imgFormat = ImageFormat.Gif;
-                        break;
                     default:
-                    case ".bmp":
-                        imgFormat = ImageFormat.Bmp;
+                    case CMImageFormat.JPG:
+                        saveImgFormat = ImageFormat.Jpeg;
+                        break;
+                    case CMImageFormat.BMP:
+                        saveImgFormat = ImageFormat.Bmp;
+                        break;
+                    case CMImageFormat.GIF:
+                        saveImgFormat = ImageFormat.Gif;
+                        break;
+                    case CMImageFormat.PNG:
+                        saveImgFormat = ImageFormat.Png;
                         break;
                 }
-
-                bmp.Save(outFile, imgFormat);
+                bmp.Save(outFile, saveImgFormat);
             }
 
             // If we created a new BMP dispose of it
-            if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0)
+            if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0 || autoCrop)
                 bmp.Dispose();
         }
 
-        public static void RGN2BMP(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
+        public static void RGN2BMP(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0, bool autoCrop = false, CMImageFormat imageFormat = CMImageFormat.RGN)
         {
-            using (var bmp = RGN2BMP(inFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom, brightness))
+            using (var bmp = RGN2BMP(inFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom, brightness, autoCrop, imageFormat))
             {
-                // If file doesn't exist and is a actually a directory, not a directory
+                // If file doesn't exist and is a actually a directory
                 if (!File.Exists(outFile) && Directory.Exists(outFile))
                 {
                     outFile = Path.Combine(outFile, Path.GetFileNameWithoutExtension(inFile) + ".bmp");
                 }
-                BMP2BMP(bmp, outFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom, brightness);
+                BMP2BMP(bmp, outFile, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom, brightness, autoCrop, imageFormat);
             }
         }
 
-        public static Bitmap RGN2BMP(string inFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
+        public static Bitmap RGN2BMP(string inFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int CropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0, bool autoCrop = false, CMImageFormat imageFormat = CMImageFormat.RGN)
         {
             using (var stream = File.OpenRead(inFile))
             using (var br = new BinaryReader(stream))
@@ -327,32 +349,32 @@ namespace CM0102Patcher
                 }
                 System.Runtime.InteropServices.Marshal.Copy(bytes, 0, bmpBits.Scan0, bytes.Length);
                 bmp.UnlockBits(bmpBits);
-                if (newWidth == -1 && newHeight == -1 && cropLeft == 0 && CropTop == 0 && cropRight == 0 && cropBottom == 0 && brightness == 0)
+                if (newWidth == -1 && newHeight == -1 && cropLeft == 0 && CropTop == 0 && cropRight == 0 && cropBottom == 0 && brightness == 0 && !autoCrop)
                 {
                     return bmp;
                 }
                 else
                 {
-                    var newBMP = ResizeImage(bmp, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom, brightness);
+                    var newBMP = ResizeImage(bmp, newWidth, newHeight, cropLeft, CropTop, cropRight, cropBottom, brightness, autoCrop);
                     bmp.Dispose();
                     return newBMP;
                 }
             }
         }
 
-        public static void BMP2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
+        public static void BMP2RGN(string inFile, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0, bool autoCrop = false, CMImageFormat imageFormat = CMImageFormat.RGN)
         {
             using (var bmp = new Bitmap(inFile))
             {
-                BMP2RGN(bmp, outFile, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
+                BMP2RGN(bmp, outFile, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness, autoCrop, imageFormat);
             }
         }
 
-        public static void BMP2RGN(Bitmap bmp, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0)
+        public static void BMP2RGN(Bitmap bmp, string outFile, int newWidth = -1, int newHeight = -1, int cropLeft = 0, int cropTop = 0, int cropRight = 0, int cropBottom = 0, float brightness = 0, bool autoCrop = false, CMImageFormat imageFormat = CMImageFormat.RGN)
         {
             // Resize BMP if need be
-            if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0)
-                bmp = ResizeImage(bmp, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
+            if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0 || autoCrop)
+                bmp = ResizeImage(bmp, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness, autoCrop);
 
             using (var stream = File.Create(outFile))
             using (var rgnFile = new BinaryWriter(stream))
@@ -393,7 +415,7 @@ namespace CM0102Patcher
             }
 
             // If we created a new BMP dispose of it
-            if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0)
+            if ((newWidth != -1 && newHeight != -1) || cropLeft != 0 || cropTop != 0 || cropRight != 0 || cropBottom != 0 || brightness != 0 || autoCrop)
                 bmp.Dispose();
         }
     }
@@ -493,5 +515,15 @@ namespace CM0102Patcher
 
             return code;
         }
+    }
+
+    public enum CMImageFormat
+    {
+        RGN,
+        BMP,
+        GIF,
+        PCX,
+        JPG,
+        PNG
     }
 }

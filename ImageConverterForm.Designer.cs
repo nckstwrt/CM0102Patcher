@@ -44,11 +44,17 @@
             this.textBoxResizeImageWidth = new System.Windows.Forms.TextBox();
             this.checkBoxResizeImagesTo = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.radioButtonPCX = new System.Windows.Forms.RadioButton();
+            this.radioButtonBMP = new System.Windows.Forms.RadioButton();
+            this.radioButtonJPG = new System.Windows.Forms.RadioButton();
+            this.label8 = new System.Windows.Forms.Label();
+            this.radioButtonRGN = new System.Windows.Forms.RadioButton();
             this.buttonOutputSelectFolder = new System.Windows.Forms.Button();
             this.buttonOutputSelectFile = new System.Windows.Forms.Button();
             this.textBoxOutput = new System.Windows.Forms.TextBox();
             this.buttonConvert = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.checkBoxAutoCrop = new System.Windows.Forms.CheckBox();
             this.textBoxRight = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -61,6 +67,7 @@
             this.numericBrightness = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.radioButtonPNG = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -80,8 +87,7 @@
             this.groupBox1.Size = new System.Drawing.Size(482, 56);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Input Images (RGN/PNG/JPG/BMP)";
-            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            this.groupBox1.Text = "Input Images (RGN/PNG/JPG/BMP/PCX)";
             // 
             // buttonInputSelectFolder
             // 
@@ -109,7 +115,6 @@
             this.textBoxInput.Name = "textBoxInput";
             this.textBoxInput.Size = new System.Drawing.Size(261, 20);
             this.textBoxInput.TabIndex = 0;
-            this.textBoxInput.TextChanged += new System.EventHandler(this.textBoxInput_TextChanged);
             // 
             // groupBox2
             // 
@@ -166,7 +171,7 @@
             this.groupBox3.Controls.Add(this.textBoxResizeImageHeight);
             this.groupBox3.Controls.Add(this.textBoxResizeImageWidth);
             this.groupBox3.Controls.Add(this.checkBoxResizeImagesTo);
-            this.groupBox3.Location = new System.Drawing.Point(12, 186);
+            this.groupBox3.Location = new System.Drawing.Point(12, 212);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(351, 49);
             this.groupBox3.TabIndex = 3;
@@ -211,15 +216,72 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.radioButtonPNG);
+            this.groupBox4.Controls.Add(this.radioButtonPCX);
+            this.groupBox4.Controls.Add(this.radioButtonBMP);
+            this.groupBox4.Controls.Add(this.radioButtonJPG);
+            this.groupBox4.Controls.Add(this.label8);
+            this.groupBox4.Controls.Add(this.radioButtonRGN);
             this.groupBox4.Controls.Add(this.buttonOutputSelectFolder);
             this.groupBox4.Controls.Add(this.buttonOutputSelectFile);
             this.groupBox4.Controls.Add(this.textBoxOutput);
-            this.groupBox4.Location = new System.Drawing.Point(11, 241);
+            this.groupBox4.Location = new System.Drawing.Point(11, 267);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(482, 56);
+            this.groupBox4.Size = new System.Drawing.Size(482, 76);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Output RGN File(s)";
+            // 
+            // radioButtonPCX
+            // 
+            this.radioButtonPCX.AutoSize = true;
+            this.radioButtonPCX.Location = new System.Drawing.Point(294, 47);
+            this.radioButtonPCX.Name = "radioButtonPCX";
+            this.radioButtonPCX.Size = new System.Drawing.Size(46, 17);
+            this.radioButtonPCX.TabIndex = 7;
+            this.radioButtonPCX.Text = "PCX";
+            this.radioButtonPCX.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonBMP
+            // 
+            this.radioButtonBMP.AutoSize = true;
+            this.radioButtonBMP.Location = new System.Drawing.Point(191, 47);
+            this.radioButtonBMP.Name = "radioButtonBMP";
+            this.radioButtonBMP.Size = new System.Drawing.Size(48, 17);
+            this.radioButtonBMP.TabIndex = 6;
+            this.radioButtonBMP.Text = "BMP";
+            this.radioButtonBMP.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonJPG
+            // 
+            this.radioButtonJPG.AutoSize = true;
+            this.radioButtonJPG.Location = new System.Drawing.Point(142, 47);
+            this.radioButtonJPG.Name = "radioButtonJPG";
+            this.radioButtonJPG.Size = new System.Drawing.Size(45, 17);
+            this.radioButtonJPG.TabIndex = 5;
+            this.radioButtonJPG.Text = "JPG";
+            this.radioButtonJPG.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(7, 48);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(77, 13);
+            this.label8.TabIndex = 4;
+            this.label8.Text = "Output Format:";
+            // 
+            // radioButtonRGN
+            // 
+            this.radioButtonRGN.AutoSize = true;
+            this.radioButtonRGN.Checked = true;
+            this.radioButtonRGN.Location = new System.Drawing.Point(90, 47);
+            this.radioButtonRGN.Name = "radioButtonRGN";
+            this.radioButtonRGN.Size = new System.Drawing.Size(49, 17);
+            this.radioButtonRGN.TabIndex = 3;
+            this.radioButtonRGN.TabStop = true;
+            this.radioButtonRGN.Text = "RGN";
+            this.radioButtonRGN.UseVisualStyleBackColor = true;
             // 
             // buttonOutputSelectFolder
             // 
@@ -250,7 +312,7 @@
             // 
             // buttonConvert
             // 
-            this.buttonConvert.Location = new System.Drawing.Point(204, 303);
+            this.buttonConvert.Location = new System.Drawing.Point(204, 354);
             this.buttonConvert.Name = "buttonConvert";
             this.buttonConvert.Size = new System.Drawing.Size(95, 23);
             this.buttonConvert.TabIndex = 3;
@@ -260,6 +322,7 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.checkBoxAutoCrop);
             this.groupBox5.Controls.Add(this.textBoxRight);
             this.groupBox5.Controls.Add(this.label5);
             this.groupBox5.Controls.Add(this.label6);
@@ -271,10 +334,22 @@
             this.groupBox5.Controls.Add(this.checkBoxCrop);
             this.groupBox5.Location = new System.Drawing.Point(12, 131);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(481, 49);
+            this.groupBox5.Size = new System.Drawing.Size(481, 75);
             this.groupBox5.TabIndex = 4;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Crop Images";
+            // 
+            // checkBoxAutoCrop
+            // 
+            this.checkBoxAutoCrop.AutoSize = true;
+            this.checkBoxAutoCrop.Enabled = false;
+            this.checkBoxAutoCrop.Location = new System.Drawing.Point(181, 47);
+            this.checkBoxAutoCrop.Name = "checkBoxAutoCrop";
+            this.checkBoxAutoCrop.Size = new System.Drawing.Size(73, 17);
+            this.checkBoxAutoCrop.TabIndex = 9;
+            this.checkBoxAutoCrop.Text = "Auto Crop";
+            this.checkBoxAutoCrop.UseVisualStyleBackColor = true;
+            this.checkBoxAutoCrop.CheckedChanged += new System.EventHandler(this.checkBoxAutoCrop_CheckedChanged);
             // 
             // textBoxRight
             // 
@@ -396,18 +471,28 @@
             // 
             this.groupBox6.Controls.Add(this.numericBrightness);
             this.groupBox6.Controls.Add(this.label7);
-            this.groupBox6.Location = new System.Drawing.Point(370, 186);
+            this.groupBox6.Location = new System.Drawing.Point(370, 212);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(123, 49);
             this.groupBox6.TabIndex = 18;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Brightness (-1 to +1)";
             // 
+            // radioButtonPNG
+            // 
+            this.radioButtonPNG.AutoSize = true;
+            this.radioButtonPNG.Location = new System.Drawing.Point(241, 47);
+            this.radioButtonPNG.Name = "radioButtonPNG";
+            this.radioButtonPNG.Size = new System.Drawing.Size(48, 17);
+            this.radioButtonPNG.TabIndex = 8;
+            this.radioButtonPNG.Text = "PNG";
+            this.radioButtonPNG.UseVisualStyleBackColor = true;
+            // 
             // ImageConverterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(505, 336);
+            this.ClientSize = new System.Drawing.Size(505, 387);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.buttonConvert);
@@ -471,5 +556,12 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown numericBrightness;
         private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.RadioButton radioButtonPCX;
+        private System.Windows.Forms.RadioButton radioButtonBMP;
+        private System.Windows.Forms.RadioButton radioButtonJPG;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.RadioButton radioButtonRGN;
+        private System.Windows.Forms.CheckBox checkBoxAutoCrop;
+        private System.Windows.Forms.RadioButton radioButtonPNG;
     }
 }

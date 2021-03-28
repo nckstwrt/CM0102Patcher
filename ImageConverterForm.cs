@@ -73,7 +73,8 @@ namespace CM0102Patcher
 
         private void checkBoxCrop_CheckedChanged(object sender, EventArgs e)
         {
-            textBoxLeft.Enabled = textBoxTop.Enabled = textBoxRight.Enabled = textBoxBottom.Enabled = checkBoxCrop.Checked;
+            checkBoxAutoCrop.Checked = false;
+            checkBoxAutoCrop.Enabled = textBoxLeft.Enabled = textBoxTop.Enabled = textBoxRight.Enabled = textBoxBottom.Enabled = checkBoxCrop.Checked;
         }
 
         private void buttonConvert_Click(object sender, EventArgs e)
@@ -155,25 +156,51 @@ namespace CM0102Patcher
                                 }
 
                                 var outputTo = outputPath;
-                                if (isDirectory)
-                                    outputTo = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(picFile) + ".rgn");
 
-                                // Check in file is a CM0102 type file
+                                // If directory we need set the appropriate extension
+                                if (isDirectory)
+                                {
+                                    var extension = ".rgn";
+                                    switch (GetSelectedOutputFormat())
+                                    {
+                                        case CMImageFormat.BMP:
+                                            extension = ".bmp";
+                                            break;
+                                        case CMImageFormat.GIF:
+                                            extension = ".gif";
+                                            break;
+                                        case CMImageFormat.JPG:
+                                            extension = ".jpg";
+                                            break;
+                                        case CMImageFormat.PCX:
+                                            extension = ".pcx";
+                                            break;
+                                        case CMImageFormat.PNG:
+                                            extension = ".png";
+                                            break;
+                                        case CMImageFormat.RGN:
+                                            extension = ".rgn";
+                                            break;
+                                    }
+                                    outputTo = Path.Combine(outputPath, Path.GetFileNameWithoutExtension(picFile) + extension);
+                                }
+
+                                // Check the input file is a CM0102 type file
                                 if (Path.GetExtension(picFile).ToLower() == ".rgn" || Path.GetExtension(picFile).ToLower() == ".hsr" || Path.GetExtension(picFile).ToLower() == ".mbr")
                                 {
-                                    // Check whether we are outputting to a cm0102 file
-                                    if (!isDirectory && Path.GetExtension(outputTo).ToLower() != ".rgn" && Path.GetExtension(outputTo).ToLower() != ".hsr" && Path.GetExtension(outputTo).ToLower() != ".mbr")
-                                        RGNConverter.RGN2BMP(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);     // Output CM0102 RGN file to a Bitmap type
+                                    // Check whether we are outputting to a cm0102 file and if we aren't then output to BMP
+                                    if (GetSelectedOutputFormat() == CMImageFormat.RGN)
+                                        RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness, checkBoxAutoCrop.Checked, GetSelectedOutputFormat());     // Output CM0102 RGN file to another CM0102 RGN file
                                     else
-                                        RGNConverter.RGN2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);     // Output CM0102 RGN file to another CM0102 RGN file
+                                        RGNConverter.RGN2BMP(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness, checkBoxAutoCrop.Checked, GetSelectedOutputFormat());     // Output CM0102 RGN file to a Bitmap type
                                 }
                                 else
                                 {
-                                    if (Path.GetExtension(picFile).ToLower() == ".rgn" || Path.GetExtension(picFile).ToLower() == ".hsr" || Path.GetExtension(picFile).ToLower() == ".mbr")
-                                        RGNConverter.BMP2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
+                                    // Outputting a Bitmap to a RGN or Bitmap
+                                    if (GetSelectedOutputFormat() == CMImageFormat.RGN)
+                                        RGNConverter.BMP2RGN(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness, checkBoxAutoCrop.Checked, GetSelectedOutputFormat());
                                     else
-                                        RGNConverter.BMP2BMP(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness);
-
+                                        RGNConverter.BMP2BMP(picFile, outputTo, newWidth, newHeight, cropLeft, cropTop, cropRight, cropBottom, brightness, checkBoxAutoCrop.Checked, GetSelectedOutputFormat());
                                 }
                             }
                         }
@@ -193,14 +220,29 @@ namespace CM0102Patcher
             }
         }
 
-        private void textBoxInput_TextChanged(object sender, EventArgs e)
+        private CMImageFormat GetSelectedOutputFormat()
         {
-
+            if (radioButtonRGN.Checked)
+                return CMImageFormat.RGN;
+            if (radioButtonBMP.Checked)
+                return CMImageFormat.BMP;
+            if (radioButtonPNG.Checked)
+                return CMImageFormat.PNG;
+            if (radioButtonJPG.Checked)
+                return CMImageFormat.JPG;
+            if (radioButtonBMP.Checked)
+                return CMImageFormat.BMP;
+            if (radioButtonPCX.Checked)
+                return CMImageFormat.PCX;
+            return CMImageFormat.RGN;
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
+        private void checkBoxAutoCrop_CheckedChanged(object sender, EventArgs e)
         {
-
+            textBoxLeft.Enabled = !checkBoxAutoCrop.Checked;
+            textBoxRight.Enabled = !checkBoxAutoCrop.Checked;
+            textBoxTop.Enabled = !checkBoxAutoCrop.Checked;
+            textBoxBottom.Enabled = !checkBoxAutoCrop.Checked;
         }
     }
 }
