@@ -43,11 +43,48 @@ namespace CM0102Patcher
         private void buttonOutputSelectFile_Click(object sender, EventArgs e)
         {
             var ofd = new SaveFileDialog();
-            ofd.Filter = "RGN Files (*.rgn)|*.rgn|Image Files (*.jpg/*.bmp/*.png/*.hsr/*.pcx)|*.jpg;*.bmp;*.png;*.hsr;*.pcx|All files (*.*)|*.*";
+            var formats = new string[] { "RGN", "JPG", "BMP", "PNG", "HSR", "PCX" };
+            var Filter = "";
+            foreach (var format in formats)
+                Filter += string.Format("{0} Files (*.{1})|*.{1}|", format, format.ToLower());
+            Filter += "All files (*.*)|*.*";
+            ofd.Filter = Filter;
+
+            if (radioButtonRGN.Checked)
+                ofd.FilterIndex = 1;
+            if (radioButtonJPG.Checked)
+                ofd.FilterIndex = 2;
+            if (radioButtonBMP.Checked)
+                ofd.FilterIndex = 3;
+            if (radioButtonPNG.Checked)
+                ofd.FilterIndex = 4;
+            if (radioButtonPCX.Checked)
+                ofd.FilterIndex = 6;
+
             ofd.Title = "Select an output image file...";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 textBoxOutput.Text = ofd.FileName;
+
+                switch (Path.GetExtension(ofd.FileName).ToLower())
+                {
+                    case ".hsr":
+                    case ".rgn":
+                        radioButtonRGN.Checked = true;
+                        break;
+                    case ".jpg":
+                        radioButtonJPG.Checked = true;
+                        break;
+                    case ".bmp":
+                        radioButtonBMP.Checked = true;
+                        break;
+                    case ".png":
+                        radioButtonPNG.Checked = true;
+                        break;
+                    case ".pcx":
+                        radioButtonPCX.Checked = true;
+                        break;
+                }
             }
         }
 

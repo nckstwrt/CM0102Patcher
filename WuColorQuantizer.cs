@@ -535,10 +535,122 @@ namespace JeremyAnsel.ColorQuant
             this.Bytes = new byte[size];
         }
 
+        public Bitmap ToBitmap(int width, int height)
+        {
+            var bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    var col = Bytes[(y * width) + x];
+                    var r = Palette[(col * 4) + 2];
+                    var g = Palette[(col * 4) + 1];
+                    var b = Palette[(col * 4) + 0];
+                    bmp.SetPixel(x, y, Color.FromArgb(r,g,b));
+                }
+            }
+            return bmp;
+            //var ptr = bmp.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            //WuColorQuantizer.ImageArrayToArray(Bytes, height, width)
+        }
+
+        public byte[] DitherBitmap(Bitmap orig, Bitmap bmp)
+        {
+            int orig_stride, bmp_stride;
+            var orig_array = WuColorQuantizer.BitmapToArray(orig, PixelFormat.Format24bppRgb, true, out orig_stride);
+            var bmp_array = WuColorQuantizer.BitmapToArray(bmp, PixelFormat.Format24bppRgb, true, out bmp_stride);
+
+            for (int y = 0; y < bmp.Height; y++)
+            {
+                for (int x = 0; x < bmp.Width; x++)
+                {
+                    byte old_r = orig_array[((y * orig_stride) + (x*3)) + 2];
+                    byte old_g = orig_array[((y * orig_stride) + (x * 3)) + 1];
+                    byte old_b = orig_array[((y * orig_stride) + (x * 3)) + 0];
+                    byte new_r = bmp_array[((y * bmp_stride) + (x * 3)) + 2];
+                    byte new_g = bmp_array[((y * bmp_stride) + (x * 3)) + 1];
+                    byte new_b = bmp_array[((y * bmp_stride) + (x * 3)) + 0];
+
+                    double r_error = old_r - new_r;
+                    double g_error = old_g - new_g;
+                    double b_error = old_b - new_b;
+
+                    // Red first
+                    if (x != bmp.Width - 1 && y != bmp.Height - 1)
+                    {
+                        bmp_array[(((y) * bmp_stride) + ((x + 1) * 3)) + 2] = Clamp((((double)bmp_array[((y * bmp_stride) + ((x + 1) * 3)) + 2]) + (r_error * (7.0 / 16.0))));
+                        bmp_array[(((y + 1) * bmp_stride) + ((x - 1) * 3)) + 2] = Clamp((((double)bmp_array[(((y + 1) * bmp_stride) + ((x - 1) * 3)) + 2]) + (r_error * (3.0 / 16.0))));
+                        bmp_array[(((y + 1) * bmp_stride) + ((x) * 3)) + 2] = Clamp((((double)bmp_array[(((y + 1) * bmp_stride) + ((x) * 3)) + 2]) + (r_error * (5.0 / 16.0))));
+                        bmp_array[(((y + 1) * bmp_stride) + ((x + 1) * 3)) + 2] = Clamp((((double)bmp_array[(((y + 1) * bmp_stride) + ((x + 1) * 3)) + 2]) + (r_error * (1.0 / 16.0))));
+
+                        // Green
+                        bmp_array[(((y) * bmp_stride) + ((x + 1) * 3)) + 1] = Clamp((((double)bmp_array[((y * bmp_stride) + ((x + 1) * 3)) + 1]) + (g_error * (7.0 / 16.0))));
+                        bmp_array[(((y + 1) * bmp_stride) + ((x - 1) * 3)) + 1] = Clamp((((double)bmp_array[(((y + 1) * bmp_stride) + ((x - 1) * 3)) + 1]) + (g_error * (3.0 / 16.0))));
+                        bmp_array[(((y + 1) * bmp_stride) + ((x) * 3)) + 1] = Clamp((((double)bmp_array[(((y + 1) * bmp_stride) + ((x) * 3)) + 1]) + (g_error * (5.0 / 16.0))));
+                        bmp_array[(((y + 1) * bmp_stride) + ((x + 1) * 3)) + 1] = Clamp((((double)bmp_array[(((y + 1) * bmp_stride) + ((x + 1) * 3)) + 1]) + (g_error * (1.0 / 16.0))));
+
+                        // Blue
+                        bmp_array[(((y) * bmp_stride) + ((x + 1) * 3)) + 0] = Clamp((((double)bmp_array[((y * bmp_stride) + ((x + 1) * 3)) + 0]) + (b_error * (7.0 / 16.0))));
+                        bmp_array[(((y + 1) * bmp_stride) + ((x - 1) * 3)) + 0] = Clamp((((double)bmp_array[(((y + 1) * bmp_stride) + ((x - 1) * 3)) + 0]) + (b_error * (3.0 / 16.0))));
+                        bmp_array[(((y + 1) * bmp_stride) + ((x) * 3)) + 0] = Clamp((((double)bmp_array[(((y + 1) * bmp_stride) + ((x) * 3)) + 0]) + (b_error * (5.0 / 16.0))));
+                        bmp_array[(((y + 1) * bmp_stride) + ((x + 1) * 3)) + 0] = Clamp((((double)bmp_array[(((y + 1) * bmp_stride) + ((x + 1) * 3)) + 0]) + (b_error * (1.0 / 16.0))));
+                    }
+                    /*
+                    pixel[x + 1][y] := pixel[x + 1][y] + quant_error × 7 / 16
+                    pixel[x - 1][y + 1] := pixel[x - 1][y + 1] + quant_error × 3 / 16
+                    pixel[x][y + 1] := pixel[x][y + 1] + quant_error × 5 / 16
+                    pixel[x + 1][y + 1] := pixel[x + 1][y + 1] + quant_error × 1 / 16
+                    */
+                }
+            }
+
+            // Match each colour to a colour in the palette
+            var dithered_array = new byte[bmp.Height * bmp.Width];
+            for (int y = 0; y < bmp.Height; y++)
+            {
+                for (int x = 0; x < bmp.Width; x++)
+                {
+                    byte r = bmp_array[(((y) * bmp_stride) + ((x) * 3)) + 2];
+                    byte g = bmp_array[(((y) * bmp_stride) + ((x) * 3)) + 1];
+                    byte b = bmp_array[(((y) * bmp_stride) + ((x) * 3)) + 0];
+                    dithered_array[(y * bmp.Width) + x] = MapToPalette(r, g, b);
+                }
+            }
+
+            var ptr = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+            Marshal.Copy(bmp_array, 0, ptr.Scan0, bmp_array.Length);
+            bmp.UnlockBits(ptr);
+
+            Bytes = dithered_array;
+
+            return dithered_array;
+        }
+
+        byte MapToPalette(byte r, byte g, byte b)
+        {
+            int bestErr = -1;
+            byte best = 0;
+            for (int i = 0; i < Palette.Length; i+=4)
+            {
+                int err = Math.Abs(((int)r) - ((int)Palette[i + 2])) + Math.Abs(((int)g) - ((int)Palette[i + 1])) + Math.Abs(((int)b) - ((int)Palette[i + 0]));
+                if (bestErr == -1 || err < bestErr)
+                {
+                    best = (byte)(i / 4);
+                    bestErr = err;
+                }
+            }
+            return best;
+        }
+
+        byte Clamp(double d)
+        {
+            return (byte)(Math.Max(0, Math.Min(255, d)) + 0.5);
+        }
+
         [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Reviewed")]
         public byte[] Palette { get; private set; }
 
         [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Reviewed")]
-        public byte[] Bytes { get; private set; }
+        public byte[] Bytes;// { get; private set; }
     }
 }

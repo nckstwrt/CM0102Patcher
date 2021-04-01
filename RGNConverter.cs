@@ -241,11 +241,51 @@ namespace CM0102Patcher
                     Marshal.FreeHGlobal(ptr);
                     bw.Write(arr);
 
+                    var pnn = new PnnQuant.PnnQuantizer();
+                    using (var newImage = pnn.QuantizeImage(bmp, PixelFormat.Format8bppIndexed, 64, false))
+                    {
+
+                        var bits = newImage.LockBits(new Rectangle(0, 0, newImage.Width, newImage.Height), ImageLockMode.ReadOnly, PixelFormat.Format8bppIndexed);
+                        int stride = bits.Stride;
+                        var bits_array = new byte[stride * newImage.Height];
+                        Marshal.Copy(bits.Scan0, bits_array, 0, bits_array.Length);
+                        newImage.UnlockBits(bits);
+
+                        // Write Image Data
+                        RLEReaderWriter.Init();
+                        for (int y = 0; y < newImage.Height; y++)
+                        {
+                            for (int x = 0; x < newImage.Width; x++)
+                            {
+                                RLEReaderWriter.WriteRLEByte(fout, bits_array[(y*bits.Stride) + x]);
+                                RLEReaderWriter.FlushRLEBytes(fout);
+                            }
+                        }
+                        RLEReaderWriter.FlushRLEBytes(fout);
+
+                        // Write Palette Marker
+                        bw.Write((byte)0x0C);
+
+                        // Write Palette
+                        var palette = newImage.Palette;
+                        for (int i = 0; i < 256; i++)
+                        {
+                            var col = palette.Entries[i];
+
+                            bw.Write(col.R);
+                            bw.Write(col.G);
+                            bw.Write(col.B);
+                        }
+                    }
+
+                    /*
                     // Quantize
                     var reduceColorsTo = 64;
                     int bmpStride;
                     var bmpArray = WuColorQuantizer.BitmapToArray(bmp, PixelFormat.Format32bppArgb, false, out bmpStride);
                     var wubytes = new WuColorQuantizer().Quantize(bmpArray, reduceColorsTo);
+                    
+                    var newbmp = wubytes.ToBitmap(bmp.Width, bmp.Height);
 
                     // Copy 32 bit palette to 256 colours 24 bit palettte (768)
                     byte[] newPalette = new byte[768];
@@ -274,7 +314,7 @@ namespace CM0102Patcher
                         bw.Write(newPalette[(i * 3) + 2]);
                         bw.Write(newPalette[(i * 3) + 1]);
                         bw.Write(newPalette[(i * 3) + 0]);
-                    }
+                    }*/
                 }
             }
             else

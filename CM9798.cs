@@ -1459,5 +1459,173 @@ namespace CM0102Patcher
                 }
             }
         }
+
+        static public void TacticsViewer()
+        {
+            // 1st is ultra defensive
+            var Formations = new string[]
+            {
+                "Ultra Defensive",
+                "5-3-2 Defensive",
+                "Sweeper Defensive",
+                "4-4-2 Defensive",
+                "4-5-1 Defensive",
+                "Counter Attack",
+                "5-3-2 Formation",
+                "3-5-2 Sweeper",
+                "3-5-2 Formation",
+                "3-1-3-3 Formation",
+                "4-2-2 Formation",
+                "Christmas Tree",
+                "Diamond Formation",
+                "4-3-3 Formation",
+                "5-3-2 Attacking",
+                "4-4-2 Attacking",
+                "4-3-3 Attacking",
+                "4-2-4 Attacking",
+                "All Out Attack"
+            };
+
+            using (var fs = File.Open(@"C:\ChampMan\cm9798\Fresh\Data\CM2\test.exe", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                var grid = new byte[(5 * 6) + 1];
+                var grid2 = new byte[(5 * 6) + 1];
+
+                fs.Seek(0x153EE4, SeekOrigin.Begin);
+
+                for (int formation = 0; formation < Formations.Length; formation++)
+                {
+                    Array.Clear(grid, 0, grid.Length);
+                    Array.Clear(grid2, 0, grid2.Length);
+
+                    for (int i = 0; i < 11; i++)
+                    {
+                        var pos = fs.ReadByte();
+
+                        //Console.Write("{0:X2} ({0}): ", pos);
+
+                        grid[pos] = (byte)(i + 1);
+
+                        if (pos == 0)
+                        {
+                            //   Console.WriteLine("Goal Keeper");
+                            continue;
+                        }
+                        /*
+                        switch ((pos-1) / 5)
+                        {
+                            case 0:
+                                Console.Write("SW ");
+                                break;
+                            case 1:
+                                Console.Write("DF ");
+                                break;
+                            case 2:
+                                Console.Write("DM ");
+                                break;
+                            case 3:
+                                Console.Write("MF ");
+                                break;
+                            case 4:
+                                Console.Write("AM ");
+                                break;
+                            case 5:
+                                Console.Write("ST ");
+                                break;
+                        }
+                        var place = pos % 5;
+                        switch (place)
+                        {
+                            case 1:
+                                Console.WriteLine("Far Left");
+                                break;
+                            case 2:
+                                Console.WriteLine("Left");
+                                break;
+                            case 3:
+                                Console.WriteLine("Centre");
+                                break;
+                            case 4:
+                                Console.WriteLine("Right");
+                                break;
+                            case 0:
+                                Console.WriteLine("Far Right");
+                                break;
+                        }*/
+                    }
+                    Console.WriteLine("***************************");
+                    Console.WriteLine(Formations[formation]);
+
+                    // Read Subs1
+                    var subs = new byte[5];
+                    fs.Read(subs, 0, 5);
+
+                    // Grid 2
+                    for (int i = 0; i < 11; i++)
+                    {
+                        var pos = fs.ReadByte();
+
+                        grid2[pos] = (byte)(i + 1);
+                    }
+
+                    // Read Subs2
+                    var subs2 = new byte[5];
+                    fs.Read(subs2, 0, 5);
+
+                    // Output Grid
+                    for (int i = 5 * 6; i >= 0; i--)
+                    {
+                        if (grid[i] == 0)
+                            Console.Write("   ");
+                        else
+                        {
+                            if (i == 0)
+                                Console.Write("      ");
+                            Console.Write("{0:00} ", grid[i]);
+                        }
+                        if ((i - 1) % 5 == 0)
+                            Console.WriteLine();
+
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine("---");
+
+                    // Output Grid2
+                    for (int i = 5 * 6; i >= 0; i--)
+                    {
+                        if (grid2[i] == 0)
+                            Console.Write("   ");
+                        else
+                        {
+                            if (i == 0)
+                                Console.Write("      ");
+                            Console.Write("{0:00} ", grid2[i]);
+                        }
+                        if ((i - 1) % 5 == 0)
+                            Console.WriteLine();
+
+                    }
+                    Console.WriteLine();
+                }
+
+                /*
+                    (L, CL, C, CR, R)  (maybe other way around??)
+
+                    ST: 1A, 1B, 1C, 1D, 1E
+
+                    AM: 15, 16, 17, 18, 19
+
+                    MF: 10, 11, 12, 13, 14
+
+                    DM: 0B, 0C, 0D, 0E, 0F
+
+                    DF: 06, 07, 08, 09, 0A
+
+                    SW: 01, 02, 03, 04, 05
+            
+                    GKL         00
+                */
+            }
+        }
     }
 }

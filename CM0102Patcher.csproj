@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -100,6 +101,7 @@
     <Compile Include="PatcherForm.Designer.cs">
       <DependentUpon>PatcherForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PnnQuantizer.cs" />
     <Compile Include="PresetNameForm.cs">
       <SubType>Form</SubType>
     </Compile>

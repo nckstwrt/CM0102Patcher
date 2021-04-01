@@ -372,5 +372,17 @@ namespace CM0102Patcher
             }
             sw.WriteLine();
         }
+
+        public static T Clamp<T>(T val, T min, T max) where T : IComparable<T>
+        {
+            if (val.CompareTo(min) < 0) return min;
+            else if (val.CompareTo(max) > 0) return max;
+            else return val;
+        }
+
+        public static double Cbrt(double x)
+        {
+            return Math.Pow(x, (1.0 / 3.0));
+        }
     }
 }
