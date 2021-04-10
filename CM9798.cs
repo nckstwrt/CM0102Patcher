@@ -244,10 +244,12 @@ namespace CM0102Patcher
             public string FirstName
             {
                 get { return MiscFunctions.GetTextFromBytes(_FirstName); }
+                set { _FirstName = MiscFunctions.GetBytesFromText(value, 20); }
             }
             public string SecondName
             {
                 get { return MiscFunctions.GetTextFromBytes(_SecondName); }
+                set { _SecondName = MiscFunctions.GetBytesFromText(value, 35); }
             }
             public string Team
             {
@@ -300,6 +302,12 @@ namespace CM0102Patcher
             // Remove all Player Managers
             foreach (var manager in mgdata.Where(x => x.PlayerManager == 1))
                 manager.PlayerManager = 0;
+
+            // Remove All Players
+            pldata.Clear();
+
+            // List of Managers we do touch
+            List<CM9798Manager> convertedManagers = new List<CM9798Manager>();
 
             List<TClub> cm0102clubs = new List<TClub>();
 
@@ -471,7 +479,7 @@ namespace CM0102Patcher
             if (UpdateBelgiumLeagues)
                 RemoveTeamsAndPlayersFromDivision(tmdata, pldata, "BNL", "BD1", "BD2", "BNL");
 
-            var newID = pldata.Max(x => x.UniqueID) + 1;
+            var newID = pldata.Count > 0 ? pldata.Max(x => x.UniqueID) + 1 : 0;
             var newTeamID = tmdata.Max(x => x.UniqueID) + 1;
 
             foreach (var cm0102team in cm0102clubs)
@@ -489,6 +497,22 @@ namespace CM0102Patcher
 
                 if (cm2team != null)
                 {
+                    // MANAGER HANDLING --- START
+                    var cm9798mgr = mgdata.FirstOrDefault(x => MiscFunctions.StringCompare(x.Team, cm2team.ShortName, cm2team.LongName));
+                    if (cm9798mgr != null)
+                    {
+                        var cm0102mgr = hl.staff.FindIndex(x => x.ID == cm0102team.Manager);
+                        if (cm0102mgr != -1)
+                        {
+                            cm9798mgr.FirstName = MiscFunctions.GetTextFromBytes(hl.first_names[hl.staff[cm0102mgr].FirstName].Name);
+                            cm9798mgr.SecondName = MiscFunctions.GetTextFromBytes(hl.second_names[hl.staff[cm0102mgr].SecondName].Name);
+
+                            convertedManagers.Add(cm9798mgr);
+                        }
+                    }
+                    else
+                        Console.WriteLine("CANT FIND CM9798 Manager: " + cm2team.LongName);
+                    // MANAGER HANDLING --- END
 
                     Console.WriteLine("{0} - Was {1} now {2}", cm2team.LongName, cm2team.Division, DivisionMapper(hl, cm0102team));
                     // Set Division
@@ -505,7 +529,8 @@ namespace CM0102Patcher
                         cm2team.Nation = "England";
 
                     // Delete all the players from the CM2 Team (Don't use a fuzzy search with U23 or U19 or U21 teams as could delete all the players in the main team!
-                    if (cm2team.LongName.Contains("U23") || cm2team.LongName.Contains("U19") || cm2team.LongName.Contains("U21") || cm2team.LongName.EndsWith(" B"))
+                    // Hacks for Dundee United vs United and Club Brugge vs Club Brugge II
+                    if (cm2team.LongName.Contains("U23") || cm2team.LongName.Contains("U19") || cm2team.LongName.Contains("U21") || cm2team.LongName.EndsWith(" B") || cm2team.LongName.StartsWith("Dundee") || cm2team.LongName.StartsWith("Club Brugge"))
                         pldata.RemoveAll(x => x.Team == cm2team.LongName);
                     else
                         pldata.RemoveAll(x => MiscFunctions.StringCompare(x.Team, cm2team.ShortName, cm2team.LongName));
@@ -574,6 +599,17 @@ namespace CM0102Patcher
 
             if (UpdateItalianLeagues)
             {
+                /*
+                CHANGECLUBDIVISION: "FC Crotone" "Italian Serie A"
+                CHANGECLUBDIVISION: "Spezia Calcio" "Italian Serie A"
+                CHANGECLUBDIVISION: "LR Vicenza Virtus" "Italian Serie B"
+                CHANGECLUBDIVISION: "AC Reggiana 1919" "Italian Serie B"
+                */
+                tmdata.Find(x => x.LongName == "FC Crotone").Division = "ISA";
+                tmdata.Find(x => x.LongName == "Spezia Calcio").Division = "ISA";
+                tmdata.Find(x => x.LongName == "Vicenza").Division = "ISB";
+                tmdata.Find(x => x.LongName == "Reggiana").Division = "ISB";
+
                 // Count Italian Teams
                 cm2SerieATeams = GetCM9798TeamNamesByDivision(tmdata, "ISA");        // 18
                 cm2SerieBTeams = GetCM9798TeamNamesByDivision(tmdata, "ISB");        // 20
@@ -663,6 +699,8 @@ namespace CM0102Patcher
             ListDivisionAndFixLastPositions(tmdata, "HD1", true);
             ListDivisionAndFixLastPositions(tmdata, "PD1", true);
             ListDivisionAndFixLastPositions(tmdata, "BD1", true);
+
+            mgdata = convertedManagers;
 
             MiscFunctions.SaveFile<CM9798Team>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\TMDATA.DB1", tmdata, TeamDataStartPos);
             MiscFunctions.SaveFile<CM9798Player>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\PLAYERS.DB1", pldata, PlayerDataStartPos, true);

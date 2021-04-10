@@ -699,6 +699,9 @@ namespace CM0102Patcher
                 case "Dundee United":
                     extraCheck = "Dundee U";
                     break;
+                case "Dundee United FC":
+                    extraCheck = "Dundee Uniteds";
+                    break;
                 case "Cambridge United":
                     extraCheck = "Cambridge U";
                     break;
