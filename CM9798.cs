@@ -297,8 +297,6 @@ namespace CM0102Patcher
             //WriteTeamDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM2\ORIG\TMDATA.CSV", tmdata);
             //WritePlayerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM2\ORIG\PLAYERS.CSV", pldata);
 
-            var pldataTest = MiscFunctions.ReadFile<CM9798Player>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\PLAYERS.DB1", PlayerDataStartPos);
-
             // Remove all Player Managers
             foreach (var manager in mgdata.Where(x => x.PlayerManager == 1))
                 manager.PlayerManager = 0;
@@ -700,6 +698,35 @@ namespace CM0102Patcher
             ListDivisionAndFixLastPositions(tmdata, "PD1", true);
             ListDivisionAndFixLastPositions(tmdata, "BD1", true);
 
+            // Add more players that did not belong to the leagues we added
+            var cm0102bestPlayers = hl.staff.Where(x => x.Player != -1).OrderByDescending(x => hl.players[x.Player].CurrentReputation).ToList();
+            foreach (var cm0102bestPlayer in cm0102bestPlayers)
+            {
+                if (cm0102clubs.FindIndex(x => x.ID == cm0102bestPlayer.ClubJob) == -1)
+                {
+                    // Add player as we won't have added him previously
+                    CM9798Team cm2team;
+
+                    if (cm0102bestPlayer.ClubJob >= 0)
+                        cm2team = GetTeamFromCM0102Team(tmdata, hl.club[cm0102bestPlayer.ClubJob], 1);
+                    else
+                        cm2team = tmdata.Find(x => x.LongName == "Free Transfer");
+
+                    if (cm2team != null)
+                    {
+                        var newPlayer = CM0102PlayerTo9798(newID++, ref newTeamID, hl, cm0102bestPlayer.ID, string.IsNullOrEmpty(cm2team.ShortName) ? cm2team.LongName : cm2team.ShortName, staffHistoryMap, clubMap, plhist, tmdata);
+                        if (newPlayer != null)
+                        {
+                            Console.WriteLine("Adding addtional player: {0} {1} at club {2} ({3})", newPlayer.FirstName, newPlayer.SecondName, cm2team.LongName, CM2.ConvertShortToNormalFormat(newPlayer.Reputation));
+                            pldata.Add(newPlayer);
+                        }
+                    }
+                }
+
+                if (pldata.Count > 25000)
+                    break;
+            }
+
             mgdata = convertedManagers;
 
             MiscFunctions.SaveFile<CM9798Team>(@"C:\ChampMan\cm9798\Fresh\Data\CM2\TMDATA.DB1", tmdata, TeamDataStartPos);
@@ -1090,6 +1117,22 @@ namespace CM0102Patcher
                 nation = "France";
             if (nation == "Trinidad & Tobago")
                 nation = "Venezuela";
+            if (nation == "Eritrea")
+                nation = "Ethiopia";
+            if (nation == "Palestine")
+                nation = "Israel";
+            if (nation == "Belarus")
+                nation = "Bielorussia";
+            if (nation == "eSwatini")
+                nation = "Swaziland";
+            if (nation == "Chinese Taipei")
+                nation = "China";
+            if (nation == "Cambodia")
+                nation = "Kampuchea";
+            if (nation == "Guam" || nation == "US Virgin Islands")
+                nation = "United States";
+            if (nation == "Timor")
+                nation = "Australia";
 
             var nationsToBeMapped = new string[] {
                     "Curaçao",
@@ -1117,10 +1160,14 @@ namespace CM0102Patcher
                     "St Kitts & Nevis",
                     "Gibraltar",
                     "Seville",
-                    "Comoros"
+                    "Comoros",
+                    "New Caledonia"
                 };
             if (nationsToBeMapped.Contains(nation))
                 nation = "France";
+
+            if (tmdata.FirstOrDefault(x => x.LongName.ToLower() == nation.ToLower() || x.ShortName.ToLower() == nation.ToLower()) == null)
+                Console.WriteLine("********** NATION NOT KNOWN FOR PLAYER: {0} {1} - {2}", firstName, secondName, nation);
 
             var newPlayer = new CM9798Player();
             newPlayer.UniqueID = newPlayerID;
