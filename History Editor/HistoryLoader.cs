@@ -12,6 +12,7 @@ namespace CM0102Patcher
         public List<TIndex> index;
         public TIndex staffDetails;
         public TIndex playerDetails;
+        public TIndex nonPlayerDetails;
         public TIndex preferenceDetails;
         public List<TComp> nation_comp;
         public List<TComp> club_comp;
@@ -26,6 +27,7 @@ namespace CM0102Patcher
         public List<TPreferences> preferences;
         public List<TStaffHistory> staff_history;
         public List<TPlayer> players;
+        public List<TNonPlayer> nonPlayers;
         public List<TNames> first_names;
         public List<TNames> second_names;
         public List<TNames> common_names;
@@ -76,11 +78,13 @@ namespace CM0102Patcher
             }
 
             playerDetails = index.Find(x => GetTextFromBytes(x.Name) == "staff.dat" && x.FileType == 10);
+            nonPlayerDetails = index.Find(x => GetTextFromBytes(x.Name) == "staff.dat" && x.FileType == 9);
 
             staff = MiscFunctions.ReadFile<TStaff>(Path.Combine(dir, "staff.dat"), staffDetails.Offset, staffDetails.Count);
             staff_history = MiscFunctions.ReadFile<TStaffHistory>(Path.Combine(dir, "staff_history.dat"));
 
             players = MiscFunctions.ReadFile<TPlayer>(Path.Combine(dir, "staff.dat"), playerDetails.Offset, playerDetails.Count);
+            nonPlayers = MiscFunctions.ReadFile<TNonPlayer>(Path.Combine(dir, "staff.dat"), nonPlayerDetails.Offset, nonPlayerDetails.Count); 
 
             preferenceDetails = index.Find(x => GetTextFromBytes(x.Name) == "staff.dat" && x.FileType == 22);
             preferences = MiscFunctions.ReadFile<TPreferences>(Path.Combine(dir, "staff.dat"), preferenceDetails.Offset, preferenceDetails.Count);

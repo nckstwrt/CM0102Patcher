@@ -221,18 +221,18 @@ namespace CM0102Patcher
             public int _UniqueID;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)] public byte[] _FirstName;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] _SecondName;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] Nationality;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] _Nationality;
             public byte YearsInGame;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] Favoured;
-            public short MotivatingAbility;
-            public short Judgement;
-            public short Reputation;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] Formation;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] Style;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] _Favoured;
+            public short _MotivatingAbility;
+            public short _Judgement;
+            public short _Reputation;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] _Formation;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] _Style;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] CurrentClub;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] DateJoined;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] NationalJob;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] DateStarted;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] _DateJoined;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] _NationalJob;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] _DateStarted;
             public byte PlayerManager;
             public byte BoardConfidence;
 
@@ -251,9 +251,63 @@ namespace CM0102Patcher
                 get { return MiscFunctions.GetTextFromBytes(_SecondName); }
                 set { _SecondName = MiscFunctions.GetBytesFromText(value, 35); }
             }
+            public string Nationality
+            {
+                get { return MiscFunctions.GetTextFromBytes(_Nationality); }
+                set { _Nationality = MiscFunctions.GetBytesFromText(value, 35); }
+            }
+            public string Favoured
+            {
+                get { return MiscFunctions.GetTextFromBytes(_Favoured); }
+                set { _Favoured = MiscFunctions.GetBytesFromText(value, 35); }
+            }
+
+            public short MotivatingAbility
+            {
+                get { return CM2.ConvertShortToNormalFormat(_MotivatingAbility); }
+                set { _MotivatingAbility = CM2.ConvertShortToCM2Format(value); }
+            }
+
+            public short Judgement
+            {
+                get { return CM2.ConvertShortToNormalFormat(_Judgement); }
+                set { _Judgement = CM2.ConvertShortToCM2Format(value); }
+            }
+
+            public short Reputation
+            {
+                get { return CM2.ConvertShortToNormalFormat(_Reputation); }
+                set { _Reputation = CM2.ConvertShortToCM2Format(value); }
+            }
+
+            public string Formation
+            {
+                get { return MiscFunctions.GetTextFromBytes(_Formation); }
+                set { _Formation = MiscFunctions.GetBytesFromText(value, 10); }
+            }
+            public string Style
+            {
+                get { return MiscFunctions.GetTextFromBytes(_Style); }
+                set { _Style = MiscFunctions.GetBytesFromText(value, 10); }
+            }
             public string Team
             {
                 get { return MiscFunctions.GetTextFromBytes(CurrentClub); }
+            }
+            public string DateJoined
+            {
+                get { return MiscFunctions.GetTextFromBytes(_DateJoined); }
+                set { _DateJoined = MiscFunctions.GetBytesFromText(value, 10); }
+            }
+            public string NationalJob
+            {
+                get { return MiscFunctions.GetTextFromBytes(_NationalJob); }
+                set { _NationalJob = MiscFunctions.GetBytesFromText(value, 35); }
+            }
+            public string DateStarted
+            {
+                get { return MiscFunctions.GetTextFromBytes(_DateStarted); }
+                set { _DateStarted = MiscFunctions.GetBytesFromText(value, 10); }
             }
         }
 
@@ -296,6 +350,7 @@ namespace CM0102Patcher
 
             //WriteTeamDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\TMDATA.CSV", tmdata);
             //WritePlayerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\PLAYERS.CSV", pldata);
+            //WriteManagerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\MGDATA.CSV", mgdata);
 
             // Remove all Player Managers
             foreach (var manager in mgdata.Where(x => x.PlayerManager == 1))
@@ -489,7 +544,8 @@ namespace CM0102Patcher
                 if (cm2team == null)
                 {
                     Console.WriteLine("CREATING UNKNOWN TEAM: {0} in DIVISION: {1}", MiscFunctions.GetTextFromBytes(cm0102team.Name), DivisionMapper(hl, cm0102team));
-                    cm2team = CreateUnknownTeam(newTeamID++, MiscFunctions.GetTextFromBytes(cm0102team.Name), MiscFunctions.GetTextFromBytes(cm0102team.ShortName), (byte)(cm0102team.Reputation/500), MiscFunctions.GetTextFromBytes(hl.nation[cm0102team.Nation].Name));
+                    //cm2team = CreateUnknownTeam(newTeamID++, MiscFunctions.GetTextFromBytes(cm0102team.Name), MiscFunctions.GetTextFromBytes(cm0102team.ShortName), (byte)(cm0102team.Reputation/500), MiscFunctions.GetTextFromBytes(hl.nation[cm0102team.Nation].Name));
+                    cm2team = CreateUnknownTeam2(newTeamID++, hl, cm0102team);
                     tmdata.Add(cm2team);
                 }
 
@@ -536,9 +592,6 @@ namespace CM0102Patcher
                     // Find all the CM0102 Players of that team
                     var cm0102players = hl.staff.Where(x => x.ClubJob == cm0102team.ID && x.Player != -1).OrderByDescending(x => hl.players[x.Player].CurrentReputation).ToList();
 
-                    if (cm2team.LongName == "AS Cannes")
-                        Console.WriteLine("ASCANNES*****");
-
                     int plCount = 0;
                     foreach (var cm0102player in cm0102players)
                     {
@@ -568,7 +621,8 @@ namespace CM0102Patcher
 
             var QatarNationId = hl.nation.Find(x => MiscFunctions.GetTextFromBytes(x.Name) == "Qatar").ID;
             var QatariPlayers = hl.staff.Where(x => x.Nation == QatarNationId && x.Player >= 0).OrderByDescending(x => hl.players[x.Player].CurrentReputation).ToList();
-            for (int i = 0; i < 35; i++)
+            var QatariPlayerCount = 0;
+            for (int i = 0; i < QatariPlayers.Count; i++)
             {
                 var s = QatariPlayers[i];
                 var p = hl.players[s.Player];
@@ -579,12 +633,17 @@ namespace CM0102Patcher
                     CM9798Team cm2team = tmdata.FirstOrDefault(x => x.LongName == MiscFunctions.GetTextFromBytes(hl.club[s.ClubJob].Name));
                     if (cm2team == null)
                     {
-                        cm2team = CreateUnknownTeam(newTeamID++, MiscFunctions.GetTextFromBytes(hl.club[s.ClubJob].Name), MiscFunctions.GetTextFromBytes(hl.club[s.ClubJob].ShortName), (byte)(hl.club[s.ClubJob].Reputation/500), "Qatar");
-                        tmdata.Add(cm2team);
+                        //cm2team = CreateUnknownTeam(newTeamID++, MiscFunctions.GetTextFromBytes(hl.club[s.ClubJob].Name), MiscFunctions.GetTextFromBytes(hl.club[s.ClubJob].ShortName), (byte)(hl.club[s.ClubJob].Reputation/500), "Qatar");
+                        //tmdata.Add(cm2team);
+                        continue;
                     }
                     teamName = cm2team.LongName;
                 }
                 pldata.Add(CM0102PlayerTo9798(newID++, ref newTeamID, hl, s.ID, teamName, staffHistoryMap, clubMap, plhist, tmdata));
+                
+                QatariPlayerCount++;
+                if (QatariPlayerCount > 35)
+                    break;
             }
 
             if (UpdateEnglishLeagues)
@@ -749,6 +808,7 @@ namespace CM0102Patcher
 
             WriteTeamDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\TMDATA.CSV", tmdata);
             WritePlayerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLAYERS.CSV", pldata);
+            WriteManagerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\MGDATA.CSV", mgdata);
 
             Console.WriteLine("Player Count: {0}", pldata.Count);
             Console.WriteLine("Team Count: {0}", tmdata.Count);
@@ -1009,10 +1069,14 @@ namespace CM0102Patcher
             if (cm0102ShortTeamName.StartsWith("St."))
                 cm0102ShortTeamName = cm0102ShortTeamName.Replace(" ", "");
 
+            // Hack for LB Chateauroux
+            if (cm0102TeamName.StartsWith("LB "))
+                cm0102TeamName = MiscFunctions.GetTextFromBytes(cm0102club.Name).Replace("LB ", "");    // Keep the Diacritics
+
             // Some special mappings between team names where CM2 and CM0102 differ
             var extraCheck = CM2.TeamMapper(cm0102TeamName);
 
-            var returnTeam = tmdata.FirstOrDefault(x => x.Nation != "EXTINCT" && (x.LongName.ToLower() == cm0102TeamName.ToLower() || x.LongName.ToLower() == cm0102ShortTeamName.ToLower() || x.ShortName.ToLower() == cm0102ShortTeamName.ToLower() || x.LongName.ToLower() == extraCheck.ToLower() || x.ShortName.ToLower() == extraCheck.ToLower()));
+            var returnTeam = tmdata.FirstOrDefault(x => x.Nation != "EXTINCT" && (x.LongName.ToLower() == cm0102TeamName.ToLower() || x.LongName.ToLower() == cm0102ShortTeamName.ToLower() ||x.ShortName.ToLower() == cm0102ShortTeamName.ToLower() || x.LongName.ToLower() == extraCheck.ToLower() || x.ShortName.ToLower() == extraCheck.ToLower()));
             return returnTeam;
         }
 
@@ -1144,6 +1208,8 @@ namespace CM0102Patcher
                 nation = "United States";
             if (nation == "Timor")
                 nation = "Australia";
+            if (nation == "South Sudan")
+                nation = "Sudan";
 
             var nationsToBeMapped = new string[] {
                     "Curaçao",
@@ -1330,6 +1396,75 @@ namespace CM0102Patcher
             return newPlayer;
         }
 
+        public static CM9798Manager CreateManager(HistoryLoader hl, TClub club)
+        {
+            CM9798Manager cm2mgr = null;
+
+            if (club.Manager >= 0)
+            {
+                var mgrIdx = hl.staff.FindIndex(x => x.ID == club.Manager);
+                if (mgrIdx != -1)
+                {
+                    var cm0102mgr = hl.staff[mgrIdx];
+                    if (cm0102mgr.NonPlayer >= 0)
+                    {
+                        var nonPlayerIdx = hl.nonPlayers.FindIndex(x => x.ID == cm0102mgr.NonPlayer);
+                        if (nonPlayerIdx != -1)
+                        {
+                            var cm0102NonPlayer = hl.nonPlayers[nonPlayerIdx];
+                            cm2mgr = new CM9798Manager();
+                        }
+                    }
+                }
+            }
+
+            return cm2mgr;
+        }
+
+        public static CM9798Team CreateUnknownTeam2(int uniqueID, HistoryLoader hl, TClub cm0102Team)
+        {
+            CM9798Team t = new CM9798Team();
+            var teamName = MiscFunctions.GetTextFromBytes(cm0102Team.Name);
+            var teamShortName = MiscFunctions.GetTextFromBytes(cm0102Team.ShortName);
+            var stadiumName = teamShortName + " Stadium";
+            int capacity = 50000;
+            int seating = 50000;
+            if (cm0102Team.Stadium >= 0)
+            {
+                var stadium = hl.stadiums[cm0102Team.Stadium];
+                stadiumName = MiscFunctions.GetTextFromBytes(stadium.Name);
+                capacity = stadium.StadiumCapacity;
+                seating = stadium.StadiumSeatingCapacity;
+            }
+
+            t.UniqueID = uniqueID;
+            t.LongName = teamName;
+            t.ShortName = teamShortName;
+            t.Nation = MiscFunctions.GetTextFromBytes(hl.nation[cm0102Team.Nation].Name);
+            t.Stadium = stadiumName;
+            t.Capacity = capacity;
+            t.Seating = seating;
+            t.Following = 10;
+            t.Blend = 12;
+            t.Essential = 0;
+            t.Reputation = (byte)(cm0102Team.Reputation/500);
+            t.XCoord = 10;
+            t.YCoord = 10;
+            t.City = MiscFunctions.GetBytesFromText(teamShortName, 35);
+            t.Style = MiscFunctions.GetBytesFromText("PASS", 10);
+            t.HomeTextCol = MiscFunctions.GetBytesFromText("WHI", 15);
+            t.HomeBackCol = MiscFunctions.GetBytesFromText("BLU", 15);
+            t.AwayTextCol = MiscFunctions.GetBytesFromText("WHI", 15);
+            t.AwayBackCol = MiscFunctions.GetBytesFromText("GRN", 15);
+            t.Formation = MiscFunctions.GetBytesFromText("442N", 10);
+            t.Division = "";
+            t.LastDivision = "";
+            t.LastPosition = 12;
+            t.Cash = CM2.ConvertLongToCM2Format(cm0102Team.Cash/1000);
+
+            return t;
+        }
+        
         public static CM9798Team CreateUnknownTeam(int uniqueID, string teamName = "Unknown", string teamShortName = "Unknown", byte Reputation = 7, string Nation = "Finland")
         {
             CM9798Team t = new CM9798Team();
@@ -1375,6 +1510,18 @@ namespace CM0102Patcher
             }
         }
 
+        static void WriteManagerDataToCSV(string fileName, List<CM9798Manager> mgdata)
+        {
+
+            using (var sw = new StreamWriter(fileName))
+            {
+                MiscFunctions.WriteCSVLine(sw, "UniqueID", "FirstName", "SecondName", "Nationality", "YearsInGame", "Favoured", "MotivatingAbility",
+                      "Judgement", "Reputation", "Formation", "Style", "CurrentClub", "DateJoined", "NationalJob", "DateStarted", "PlayerManager", "BoardConfidence");
+                foreach (var m in mgdata)
+                    WriteManager(sw, m);
+            }
+        }
+
         static void WriteTeamDataToCSV(string fileName, List<CM9798Team> tmdata)
         {
             using (var sw = new StreamWriter(fileName))
@@ -1393,6 +1540,12 @@ namespace CM0102Patcher
                       player.Age, player.Goalkeeper, player.Sweeper, player.Defence, player.Anchor, player.Midfield, player.Support, player.Attack, player.RightSided, player.LeftSided, player.CentralSided, CM2.ConvertShortToNormalFormat(player.Ability), CM2.ConvertShortToNormalFormat(player.Potential), CM2.ConvertShortToNormalFormat(player.Reputation),
                       player.Adaptability, player.Aggression, player.BigOccasion, player.Character, player.Consistency, player.Creativity, player.Determination, player.Dirtyness, player.Dribbling, player.Flair, player.Heading, player.Influence, player.InjProne, player.Marking, player.OffTheBall, player.Pace, player.Passing,
                       player.Positioning, player.SetPieces, player.Shooting, player.Stamina, player.Strength, player.Tackling, player.Technique);
+        }
+
+        static void WriteManager(StreamWriter sw, CM9798Manager mgr)
+        {
+            MiscFunctions.WriteCSVLine(sw, mgr.UniqueID, mgr.FirstName, mgr.SecondName, mgr.Nationality, mgr.YearsInGame, mgr.Favoured, mgr.MotivatingAbility, 
+                mgr.Judgement, mgr.Reputation, mgr.Formation, mgr.Style, mgr.Team, mgr.DateJoined, mgr.NationalJob, mgr.DateStarted, mgr.PlayerManager, mgr.BoardConfidence);
         }
 
         static void WriteTeam(StreamWriter sw, CM9798Team team)
@@ -1648,8 +1801,8 @@ namespace CM0102Patcher
                                 Console.WriteLine("Far Right");
                                 break;
                         }*/
-                    }
-                    Console.WriteLine("***************************");
+    }
+    Console.WriteLine("***************************");
                     Console.WriteLine(Formations[formation]);
 
                     // Read Subs1
