@@ -792,7 +792,12 @@ namespace CM0102Patcher
                                 if (file.FilenameInZip.StartsWith(selectedPack) && !file.FilenameInZip.EndsWith("/"))
                                 {
                                     var fileName = file.FilenameInZip.Substring(file.FilenameInZip.IndexOf('/')+1);
-                                    zs.ExtractFile(file, Path.Combine(dataDir, fileName));
+                                    var outputFile = Path.Combine(dataDir, fileName);
+
+                                    // Make sure the file is writeable (File in 2020/1 April Update had Read Only files ?!
+                                    File.SetAttributes(outputFile, FileAttributes.Normal);
+
+                                    zs.ExtractFile(file, outputFile);
                                 }
                             }
                         }
