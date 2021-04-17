@@ -320,7 +320,7 @@ namespace CM0102Patcher
             // CM0102 Load
             HistoryLoader hl = new HistoryLoader();
             hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\2020_orig\Championship Manager 01-02\Data\index.dat");
-            
+
             // To speed things up, make a ID -> StaffHistoryMap + Club ID -> ClubMap
             Dictionary<int, List<TStaffHistory>> staffHistoryMap = new Dictionary<int, List<TStaffHistory>>();
             foreach (var h in hl.staff_history)

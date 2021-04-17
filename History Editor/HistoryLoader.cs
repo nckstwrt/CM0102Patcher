@@ -204,6 +204,26 @@ namespace CM0102Patcher
             }
         }
 
+        public int FindStaffIndex(string firstName, string secondName)
+        {
+            int ret = -1;
+            var firstNameList = first_names.FindAll(x => MiscFunctions.GetTextFromBytes(x.Name) == firstName);
+            var secondNameList = second_names.FindAll(x => MiscFunctions.GetTextFromBytes(x.Name) == secondName);
+            // Need to try every combination as there are duplicates names
+            foreach (var firstIdx in firstNameList)
+            {
+                foreach (var secondIdx in secondNameList)
+                {
+                    ret = staff.FindIndex(x => x.FirstName == firstIdx.ID && x.SecondName == secondIdx.ID);
+                    if (ret != -1)
+                        break;
+                }
+                if (ret != -1)
+                    break;
+            }
+            return ret;
+        }
+
         public void SortClubNames()
         {
             // Sort
