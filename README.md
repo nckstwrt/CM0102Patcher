@@ -1,4 +1,4 @@
-# CM0102Patcher v2.17
+# CM0102Patcher v2.18
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/OjeM9Cp.png)
+![alt text](https://i.imgur.com/298qzh9.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -24,7 +24,7 @@ Also there is a little officials.dat patcher for patching up referees as per rec
 
 The RGN Image Converter:
 
-![alt text](https://i.imgur.com/8vuKuwq.png)
+![alt text](https://i.imgur.com/10X4RvP.png)
 
 Competition History Editor:
 
@@ -36,6 +36,13 @@ Also allows you to add a fourth column to the attributes screen to show a player
 
 ## Updates
 
+v2.18:
+* Sheffield Weds patch updated to work with April release (and changed to -6 points)
+* Fix for Restrict Tactics patch when applying to 2004 patched exe
+* Image Converter supports auto-crop and highest quality 64 colour conversion PCX files (for CM9798)
+* Added Remove Mexico From Copa Libertadores and No MLS Foreign Restrictions patches
+* Fix for Limerick renaming to Treaty United
+* 
 v2.17:
 * UnCap20s Misc Patch Fixed (Player Search now works correctly)
 * 2020 Patch now has fixes for Golden Goal rules, Stuttgart and Qatar World Cup host
