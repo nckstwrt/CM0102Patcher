@@ -698,7 +698,23 @@ namespace CM0102Patcher
         public static DateTime FromCMDate(short day, short year, int leapYear)
         {
             //31 + 28 == Feb 28th
-            return new DateTime(year, 1, 1).AddDays(day - 1);
+            DateTime dt = new DateTime(1900, 1, 1);
+            try
+            {
+                if (day >= 1 && day < 32 && year > 0 && year < 4000)
+                {
+                    dt = new DateTime(year, 1, 1).AddDays(day - 1);
+                }
+                else
+                {
+                    //Console.WriteLine("BAD DATE in FromCMDate");
+                }
+            }
+            catch
+            {
+                Console.WriteLine("REAL BAD DATE in FromCMDate");
+            }
+            return dt;
         }
 
         public static void ToCMDate(DateTime dt, out short day, out short year, out int leapYear)
