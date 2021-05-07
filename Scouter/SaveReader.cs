@@ -530,6 +530,13 @@ namespace CM0102Scout
                     if (nations.ContainsKey(staff.second_nationID))
                         second_nationality = nations[staff.second_nationID].nationality;
 
+                    // Original CM3 has weird ages and flair
+                    if (age > 3300)
+                    {
+                        age -= 3378;
+                        player.Flair = 0;
+                    }
+
                     /*
                     if (name == "Roy Keane")
                     {
@@ -760,7 +767,9 @@ namespace CM0102Scout
             for (int j = 0; j < blockCount; j++)
             {
                 var blockBytes = new byte[blockSize];
-                cfs.Read(blockBytes, blockSize);
+                int read = cfs.Read(blockBytes, blockSize);
+                if (read == 0)
+                    break;
                 blocks.Add(blockBytes);
             }
 

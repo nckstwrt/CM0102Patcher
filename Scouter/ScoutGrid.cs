@@ -289,9 +289,12 @@ namespace CM0102Patcher.Scouter
             int rowsCount = dt.Rows.Count;
             for (int i = 0; i < colsCount; i++)
             {
-                sb.Append(dt.Columns[i].Name);
-                if (i != colsCount - 1)
-                    sb.Append("\t");
+                if (dt.Columns[i].Visible)
+                {
+                    sb.Append(dt.Columns[i].Name);
+                    if (i != colsCount - 1)
+                        sb.Append("\t");
+                }
             }
             sb.Append("\r\n");
 
@@ -299,11 +302,14 @@ namespace CM0102Patcher.Scouter
             {
                 for (int j = 0; j < colsCount; j++)
                 {
-                    var s = (dt.Rows[i].Cells[j].Value == null) ? "" : dt.Rows[i].Cells[j].Value.ToString();
-                    s = s.Replace("\0", ""); // Occassional oddities in data cause this
-                    sb.Append(s);
-                    if (j != colsCount - 1)
-                        sb.Append("\t");
+                    if (dt.Columns[j].Visible)
+                    {
+                        var s = (dt.Rows[i].Cells[j].Value == null) ? "" : dt.Rows[i].Cells[j].Value.ToString();
+                        s = s.Replace("\0", ""); // Occassional oddities in data cause this
+                        sb.Append(s);
+                        if (j != colsCount - 1)
+                            sb.Append("\t");
+                    }
                 }
                 sb.Append("\r\n");
             }

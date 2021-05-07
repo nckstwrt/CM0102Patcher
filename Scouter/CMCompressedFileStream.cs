@@ -76,6 +76,11 @@ namespace CM0102Scout
                 FboBufEmpty = false;
                 FintBufPos = 0;
                 FintReadPos = (int)FfilStream.BaseStream.Position;
+                if (FintReadPos == (int)FfilStream.BaseStream.Length)
+                {
+                    // Something went drastically wrong here
+                    return 0;
+                }
                 FintPos = FintReadPos + FfilStream.Read(Fbuffer, 0, BUFFER_SIZE);
             }
 
