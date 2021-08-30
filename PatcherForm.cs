@@ -999,6 +999,52 @@ namespace CM0102Patcher
                     NoCDPatch.SPBBGenericCrack(labelFilename.Text);
                     MessageBox.Show("Generic Crack 2 Applied", "Secret", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                if (e.KeyChar == (char)11 && SecretMode) // K
+                {
+                    var patcher = new Patcher();
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
+                    patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanieurofix"]);
+                    MessageBox.Show("Applied Euro Fix");
+                }
+                if (e.KeyChar == (char)12 && SecretMode) // L
+                {
+                    var fileBytes = ByteWriter.LoadFile(labelFilename.Text);
+                    var offsets1 = ByteWriter.SearchBytesForAll(fileBytes, new byte[] { 0x68, 0xCE, 0x07, 0x00, 0x00 }, 0x57FA60 - 0x400000, false);
+                    var offsets2 = ByteWriter.SearchBytesForAll(fileBytes, new byte[] { 0x68, 0xCF, 0x07, 0x00, 0x00 }, 0x57FA60 - 0x400000, false);
+
+                    short offset1ToChangeTo = (short)(numericGameStartYear.Value - 2);
+                    short offset2ToChangeTo = (short)(numericGameStartYear.Value - 1);
+
+                    using (var file = File.Open(labelFilename.Text, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                    {
+                        using (var bw = new BinaryWriter(file))
+                        {
+                            foreach (var offset in offsets1)
+                            {
+                                if (offset < (0x582EED - 0x400000))
+                                {
+                                    file.Seek(offset + 1, SeekOrigin.Begin);
+                                    bw.Write(offset1ToChangeTo);
+                                }
+                            }
+                            foreach (var offset in offsets2)
+                            {
+                                if (offset < (0x582EED - 0x400000))
+                                {
+                                    file.Seek(offset + 1, SeekOrigin.Begin);
+                                    bw.Write(offset2ToChangeTo);
+                                }
+                            }
+
+                            file.Seek((0x582F4A - 0x400000) + 2, SeekOrigin.Begin);
+                            bw.Write(offset1ToChangeTo);
+                            file.Seek((0x582F54 - 0x400000) + 2, SeekOrigin.Begin);
+                            bw.Write(offset2ToChangeTo);
+                        }
+                    }
+
+                    MessageBox.Show(string.Format("Moved Euro Quals to: {0} and {1}", offset1ToChangeTo, offset2ToChangeTo));
+                }
                 if (e.KeyChar == (char)31 && SecretMode) // -
                 {
                     yearExeSyncDecrement = 1;

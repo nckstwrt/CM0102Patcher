@@ -48,7 +48,7 @@ namespace CM0102Patcher
             return ret;
         }
 
-        public void Load(string indexFile)
+        public void Load(string indexFile, bool overrideOldVersionError = false)
         {
             var dir = Path.GetDirectoryName(indexFile);
             
@@ -72,7 +72,7 @@ namespace CM0102Patcher
 
             staffDetails = index.Find(x => GetTextFromBytes(x.Name) == "staff.dat" && x.FileType == 6);
 
-            if (staffDetails.Version == 1)
+            if (staffDetails.Version == 1 && overrideOldVersionError == false)
             {
                 throw new Exception("This is a very old version of the data!\r\n\r\nLoad in the Champ Man Editor and then save it to update it before history editing!\r\n\r\n");
             }
