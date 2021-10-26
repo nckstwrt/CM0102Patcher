@@ -13,10 +13,12 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
+            //CM9798.Test();
             /*
             CM2 cm2 = new CM2();
             cm2.ReadData();
             */
+            //CM9798.SavedPlayerCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLDATA1.S16");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new PatcherForm());

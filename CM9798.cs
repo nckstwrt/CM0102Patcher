@@ -317,9 +317,12 @@ namespace CM0102Patcher
 
         public static void Test()
         {
+            //var pldata_new = MiscFunctions.ReadFile<CM9798Player>(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLAYERS.DB1", PlayerDataStartPos);
+            //WritePlayerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLAYERS_NEW.CSV", pldata_new);
+
             // CM0102 Load
             HistoryLoader hl = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\2020_orig\Championship Manager 01-02\Data\index.dat");
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2021\Data\index.dat");
 
             // To speed things up, make a ID -> StaffHistoryMap + Club ID -> ClubMap
             Dictionary<int, List<TStaffHistory>> staffHistoryMap = new Dictionary<int, List<TStaffHistory>>();
@@ -1204,7 +1207,7 @@ namespace CM0102Patcher
                 nation = "China";
             if (nation == "Cambodia")
                 nation = "Kampuchea";
-            if (nation == "Guam" || nation == "US Virgin Islands")
+            if (nation == "Guam" || nation == "US Virgin Islands" || nation == "Northern Mariana Islands")
                 nation = "United States";
             if (nation == "Timor")
                 nation = "Australia";
@@ -1554,6 +1557,35 @@ namespace CM0102Patcher
                 team.City, team.Stadium, team.Capacity, team.Seating, team.Following, team.Reputation, team.Blend,
                 team.Formation, team.Style, team.HomeTextCol, team.HomeBackCol, team.AwayTextCol, team.AwayBackCol,
                 team.Division, team.LastDivision, team.LastPosition, CM2.ConvertLongToNormalFormat(team.Cash) * 1000, team.LeagueStandard, team.Under21, team.BTeam, team.Essential, CM2.ConvertLongToNormalFormat(team.TransferRecord));
+        }
+
+        public static void SavedPlayerCount(string PLDATA1_S16)
+        {
+            int count = 0;
+            using (var f = File.Open(PLDATA1_S16, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            using (var br = new BinaryReader(f))
+            {
+                var playerCount = br.ReadInt16();
+                while (true)
+                {
+                    if (f.Position >= f.Length)
+                        break;
+                    var firstNameLen = br.ReadInt16();
+                    var firstName = MiscFunctions.GetTextFromBytes(br.ReadBytes(firstNameLen));
+                    var secondNameLen = br.ReadInt16();
+                    string secondName = "";
+                    if (secondNameLen > 0 && secondNameLen <= 35)
+                        secondName = MiscFunctions.GetTextFromBytes(br.ReadBytes(secondNameLen));
+                    else
+                    {
+                        secondNameLen = 22;
+                    }
+
+                    Console.WriteLine("{0} {1}", firstName, secondName);
+                    f.Seek(360, SeekOrigin.Current);
+                    count++;
+                }
+            }
         }
 
         static public void ASMParser(string inFile, string outFile)
