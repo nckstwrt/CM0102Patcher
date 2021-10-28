@@ -53,6 +53,7 @@
             this.checkBoxIdleSensitivity = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxApplyYearSpecificPatches = new System.Windows.Forms.CheckBox();
             this.checkBoxFixSuperKeepers = new System.Windows.Forms.CheckBox();
             this.comboBoxReplaceAITactics = new System.Windows.Forms.ComboBox();
             this.checkBoxReplaceAITactics = new System.Windows.Forms.CheckBox();
@@ -167,6 +168,8 @@
             0,
             0,
             0});
+            this.numericGameStartYear.ValueChanged += new System.EventHandler(this.numericGameStartYear_ValueChanged);
+            this.numericGameStartYear.KeyUp += new System.Windows.Forms.KeyEventHandler(this.numericGameStartYear_KeyUp);
             // 
             // buttonApply
             // 
@@ -348,6 +351,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBoxApplyYearSpecificPatches);
             this.groupBox3.Controls.Add(this.checkBoxFixSuperKeepers);
             this.groupBox3.Controls.Add(this.comboBoxReplaceAITactics);
             this.groupBox3.Controls.Add(this.checkBoxReplaceAITactics);
@@ -375,6 +379,22 @@
             this.groupBox3.Size = new System.Drawing.Size(447, 407);
             this.groupBox3.TabIndex = 22;
             this.groupBox3.TabStop = false;
+            // 
+            // checkBoxApplyYearSpecificPatches
+            // 
+            this.checkBoxApplyYearSpecificPatches.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxApplyYearSpecificPatches.AutoSize = true;
+            this.checkBoxApplyYearSpecificPatches.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxApplyYearSpecificPatches.Location = new System.Drawing.Point(219, 381);
+            this.checkBoxApplyYearSpecificPatches.Name = "checkBoxApplyYearSpecificPatches";
+            this.checkBoxApplyYearSpecificPatches.Size = new System.Drawing.Size(224, 20);
+            this.checkBoxApplyYearSpecificPatches.TabIndex = 43;
+            this.checkBoxApplyYearSpecificPatches.Text = "Apply year specific Misc Patches";
+            this.toolTips.SetToolTip(this.checkBoxApplyYearSpecificPatches, "This will automatically apply year specific patches, from the Misc Patches sectio" +
+        "ns");
+            this.checkBoxApplyYearSpecificPatches.UseVisualStyleBackColor = true;
+            this.checkBoxApplyYearSpecificPatches.Visible = false;
+            this.checkBoxApplyYearSpecificPatches.Click += new System.EventHandler(this.checkBoxApplyYearSpecificPatches_Click);
             // 
             // checkBoxFixSuperKeepers
             // 
@@ -633,6 +653,7 @@
         " UEFA Champions League\r\netc\r\n\r\nTransfer windows will also be updated\r\n\r\nCURRENTL" +
         "Y UNFINISHED!!!");
             this.checkBoxUpdateNames.UseVisualStyleBackColor = true;
+            this.checkBoxUpdateNames.Click += new System.EventHandler(this.checkBoxUpdateNames_Click);
             // 
             // checkBoxRemoveCDChecks
             // 
@@ -720,7 +741,7 @@
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.Name = "PatcherForm";
-            this.Text = "Nick\'s CM0102Patcher v2.18";
+            this.Text = "Nick\'s CM0102Patcher v2.19";
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PatcherForm_KeyPress);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericGameStartYear)).EndInit();
@@ -782,6 +803,7 @@
         private System.Windows.Forms.CheckBox checkBoxFixSuperKeepers;
         private System.Windows.Forms.ComboBox comboBoxReplaceAITactics;
         private System.Windows.Forms.CheckBox checkBoxReplaceAITactics;
+        private System.Windows.Forms.CheckBox checkBoxApplyYearSpecificPatches;
     }
 }
 

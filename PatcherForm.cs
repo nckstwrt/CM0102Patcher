@@ -148,6 +148,7 @@ namespace CM0102Patcher
                 checkBoxNewRegenCode.Enabled = !isTapani;
                 checkBoxManageAnyTeam.Enabled = !isTapani;
                 checkBoxUpdateNames.Enabled = !isTapani;
+                checkBoxApplyYearSpecificPatches.Enabled = !isTapani;
                 checkBoxSwapSKoreaForChina.Enabled = !isTapani;
                 checkBoxPositionInTacticsView.Enabled = !isTapani;
                 checkBoxMakeYourPotential200.Enabled = !isTapani;
@@ -251,8 +252,15 @@ namespace CM0102Patcher
                     if (checkBoxRestrictTactics.Checked)
                         checkBoxRestrictTactics.Enabled = false;
 
+                    // Check for year specific patches
+                    if (patcher.DetectPatch(exeFile, new List<Patcher.HexPatch> { new Patcher.HexPatch(0x2390C7, "01") }))
+                    {
+                        checkBoxApplyYearSpecificPatches.Checked = true;
+                        checkBoxApplyYearSpecificPatches.Enabled = false;
+                    }
+
                     // Don't let 
-                    checkBoxShowHiddenAttributes.Checked = appliedPatches.Contains("addadditionalcolumns") || appliedPatches.Contains("addadditionalcolumns_italy");
+                        checkBoxShowHiddenAttributes.Checked = appliedPatches.Contains("addadditionalcolumns") || appliedPatches.Contains("addadditionalcolumns_italy");
                     checkBoxFixSuperKeepers.Checked = appliedPatches.Contains("fixsuperkeepers");
 
                     SetComboBox(comboBoxGameSpeed, speedHack);
@@ -422,15 +430,15 @@ namespace CM0102Patcher
                         if (Control.ModifierKeys == Keys.Shift)
                             forceOldMethod = true;
 
+                        var indexFile = Path.Combine(dataDir, "index.dat");
+                        var playerConfigFile = Path.Combine(dataDir, "player_setup.cfg");
+                        var staffCompHistoryFile = Path.Combine(dataDir, "staff_comp_history.dat");
+                        var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
+                        var staffHistoryFile = Path.Combine(dataDir, "staff_history.dat");
+                        var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
+
                         if (forceOldMethod || ((int)numericGameStartYear.Value) < 2001)
                         {
-                            var indexFile = Path.Combine(dataDir, "index.dat");
-                            var playerConfigFile = Path.Combine(dataDir, "player_setup.cfg");
-                            var staffCompHistoryFile = Path.Combine(dataDir, "staff_comp_history.dat");
-                            var clubCompHistoryFile = Path.Combine(dataDir, "club_comp_history.dat");
-                            var staffHistoryFile = Path.Combine(dataDir, "staff_history.dat");
-                            var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
-
                             // Old Version
                             try
                             {
@@ -467,8 +475,10 @@ namespace CM0102Patcher
                                         yearChanger.UpdateHistoryFile(staffCompHistoryFile, 0x3a, yearIncrement, 0x8, 0x30);
                                         yearChanger.UpdateHistoryFile(staffHistoryFile, 0x11, yearIncrement, 0x8);
 
-                                        yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement + 1, 0x8);
                                         yearChanger.UpdateHistoryFile(clubCompHistoryFile, 0x1a, yearIncrement, 0x8);
+
+                                        yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearIncrement + 1, 0x8);
+
                                     }
                                     else
                                     {
@@ -494,6 +504,14 @@ namespace CM0102Patcher
                                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatch"]);
                                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatchjumps"]);
                                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["comphistory_datecalcpatch"]);
+
+                                // 2021 HACK
+                                if ((int)numericGameStartYear.Value == 2021)
+                                {
+                                    // Fix the International Comp Data
+                                    // yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, -1, 0x8); // To do it manually
+                                    patcher.ApplyPatch(labelFilename.Text, 0x566F11, "D2");   // To patch my patch :)
+                                }
                             }
                         }
                     }
@@ -800,6 +818,16 @@ namespace CM0102Patcher
                                     zs.ExtractFile(file, outputFile);
                                 }
                             }
+                        }
+                    }
+
+                    if (checkBoxApplyYearSpecificPatches.Visible && checkBoxApplyYearSpecificPatches.Checked)
+                    {
+                        if (checkBoxUpdateNames.Checked)
+                            patcher.ApplyPatch(labelFilename.Text, new List<Patcher.HexPatch> { new Patcher.HexPatch("APPLYMISCPATCH", string.Format("{0} Patches/All Tested {0} + Saturn Patches.patch", (int)numericGameStartYear.Value), null) });
+                        else
+                        {
+                            MessageBox.Show("Unable to apply Year Specific patches without having the Updated Names!", "Year Specific Patch Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                     }
 
@@ -1142,6 +1170,45 @@ namespace CM0102Patcher
             catch { }
 
             comboBoxReplaceAITactics.SelectedItem = selectedTactics;
+        }
+
+        private void numericGameStartYear_ValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int year = (int)numericGameStartYear.Value;
+                switch (year)
+                {
+                    case 2020:
+                    case 2021:
+                        checkBoxApplyYearSpecificPatches.Visible = true;
+                        break;
+                    default:
+                        checkBoxApplyYearSpecificPatches.Visible = false;
+                        break;
+                }
+            }
+            catch { }
+        }
+
+        private void numericGameStartYear_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (numericGameStartYear.Text.Length == 4)
+                numericGameStartYear_ValueChanged(sender, e);
+            else
+                checkBoxApplyYearSpecificPatches.Visible = false;
+        }
+
+        private void checkBoxApplyYearSpecificPatches_Click(object sender, EventArgs e)
+        {
+            if (checkBoxApplyYearSpecificPatches.Checked && checkBoxUpdateNames.Enabled && !checkBoxUpdateNames.Checked)
+                checkBoxUpdateNames.Checked = true;
+        }
+
+        private void checkBoxUpdateNames_Click(object sender, EventArgs e)
+        {
+            if (!checkBoxUpdateNames.Checked && checkBoxApplyYearSpecificPatches.Checked)
+                checkBoxUpdateNames.Checked = true;
         }
     }
 
