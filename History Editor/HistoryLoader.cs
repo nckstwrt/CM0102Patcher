@@ -244,11 +244,26 @@ namespace CM0102Patcher
             {
                 var tempClub = club[i];
                 if (tempClub.Rival1 >= 0)
-                    tempClub.Rival1 = clubMap[tempClub.Rival1];
+                {
+                    if (clubMap.Contains(tempClub.Rival1))
+                        tempClub.Rival1 = clubMap[tempClub.Rival1];
+                    else
+                        tempClub.Rival1 = -1;
+                }
                 if (tempClub.Rival2 >= 0)
-                    tempClub.Rival2 = clubMap[tempClub.Rival2]; 
+                {
+                    if (clubMap.Contains(tempClub.Rival2))
+                        tempClub.Rival2 = clubMap[tempClub.Rival2];
+                    else
+                        tempClub.Rival2 = -1;
+                }
                 if (tempClub.Rival3 >= 0)
-                    tempClub.Rival3 = clubMap[tempClub.Rival3]; 
+                {
+                    if (clubMap.Contains(tempClub.Rival3))
+                        tempClub.Rival3 = clubMap[tempClub.Rival3];
+                    else
+                        tempClub.Rival3 = -1;
+                }
                 club[i] = tempClub;
             }
 
