@@ -821,7 +821,7 @@ namespace CM0102Patcher
                         }
                     }
 
-                    if (checkBoxApplyYearSpecificPatches.Visible && checkBoxApplyYearSpecificPatches.Checked)
+                    if (checkBoxApplyYearSpecificPatches.Visible && checkBoxApplyYearSpecificPatches.Checked && checkBoxApplyYearSpecificPatches.Enabled)
                     {
                         if (checkBoxUpdateNames.Checked)
                             patcher.ApplyPatch(labelFilename.Text, new List<Patcher.HexPatch> { new Patcher.HexPatch("APPLYMISCPATCH", string.Format("{0} Patches/All Tested {0} + Saturn Patches.patch", (int)numericGameStartYear.Value), null) });

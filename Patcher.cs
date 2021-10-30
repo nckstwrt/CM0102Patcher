@@ -385,6 +385,7 @@ namespace CM0102Patcher
             return ret;
         }
 
+        // Random Function: 0090CFC0
         // 006DC000 in the file will equal 00DE7000 in memory = 70B000 Difference
         // DE7000 = Extra Attributes Patch (with text at DE8000)
         // DE7300 = Subs Control (9+5 but not England)
