@@ -504,14 +504,6 @@ namespace CM0102Patcher
                                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatch"]);
                                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["datecalcpatchjumps"]);
                                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["comphistory_datecalcpatch"]);
-
-                                // 2021 HACK
-                                if ((int)numericGameStartYear.Value == 2021)
-                                {
-                                    // Fix the International Comp Data
-                                    // yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, -1, 0x8); // To do it manually
-                                    patcher.ApplyPatch(labelFilename.Text, 0x566F11, "D2");   // To patch my patch :)
-                                }
                             }
                         }
                     }
