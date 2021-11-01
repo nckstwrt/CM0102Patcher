@@ -391,6 +391,7 @@ namespace CM0102Patcher
         // DE7000 = Extra Attributes Patch (with text at DE8000)
         // DE7300 = Subs Control (9+5 but not England)
         // DE7350 = World Cup NULL Pointer crash (from Fairedinkum notes)
+        // DE7375 = DoubleHeapMemory.patch 
         public void ExpandExe(string fileName)
         {
             ApplyPatch(fileName, patches["addextraspaceheader"]);
