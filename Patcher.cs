@@ -321,7 +321,8 @@ namespace CM0102Patcher
                     try
                     {
                         if (parts[0].ToUpper() == "CHANGECLUBDIVISION" || 
-                            parts[0].ToUpper() == "CHANGECLUBLASTDIVISION" || 
+                            parts[0].ToUpper() == "CHANGECLUBLASTDIVISION" ||
+                            parts[0].ToUpper() == "CHANGECLUBLASTPOSITION" ||
                             parts[0].ToUpper() == "EXPANDEXE" || 
                             parts[0].ToUpper() == "TAPANISPACEPATCH" ||
                             parts[0].ToUpper() == "PATCHCLUBCOMP" ||
@@ -460,6 +461,28 @@ namespace CM0102Patcher
                                 hl.UpdateClubsDivision(tClub.ID, tDivision.ID);
                             else
                                 hl.UpdateClubsLastDivision(tClub.ID, tDivision.ID);
+                        }
+                    }
+                    hl.Save(indexFile, true);
+                }
+
+                // Check for club last division changes
+                var clubLastPositionChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGECLUBLASTPOSITION")).ToList();
+                if (clubLastPositionChanges.Count > 0)
+                {
+                    HistoryLoader hl = new HistoryLoader();
+                    var dir = Path.GetDirectoryName(fileName);
+                    var dataDir = Path.Combine(dir, "Data");
+                    var indexFile = Path.Combine(dataDir, "index.dat");
+                    hl.Load(indexFile);
+                    foreach (var clubLastPositionChange in clubLastPositionChanges)
+                    {
+                        var clubName = clubLastPositionChange.part1;
+                        var newPosition = int.Parse(clubLastPositionChange.part2);
+                        var tClub = hl.club.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == clubName);
+                        if (tClub.ID != 0)
+                        {
+                            hl.UpdateClubsLastPosition(tClub.ID, newPosition);
                         }
                     }
                     hl.Save(indexFile, true);

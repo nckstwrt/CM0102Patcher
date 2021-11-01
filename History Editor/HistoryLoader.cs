@@ -143,6 +143,19 @@ namespace CM0102Patcher
             }
         }
 
+        public void UpdateClubsLastPosition(int clubId, int lastPosition)
+        {
+            for (int i = 0; i < club.Count; i++)
+            {
+                if (club[i].ID == clubId)
+                {
+                    TClub temp = club[i];
+                    temp.LastPosition = (byte)lastPosition;
+                    club[i] = temp;
+                }
+            }
+        }
+
         public void Save(string indexFile, bool saveClubData = false, bool saveStaffData = false)
         {
             var dir = Path.GetDirectoryName(indexFile);
