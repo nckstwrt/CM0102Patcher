@@ -1,4 +1,4 @@
-# CM0102Patcher v2.18
+# CM0102Patcher v2.19
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/298qzh9.png)
+![alt text](https://i.imgur.com/I50WbQ9.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,15 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.19:
+* New 2021 Patches. Which includes:
+* New main page screen to apply year specific patches
+* Memory Fixes - Uses double the heap memory asks to ensure no crashes for Max Players
+* Ensures Irish, Welsh and Portuguese Leagues have the teams they need
+* Fairedinkum + Xeno patches for 2021 (including Tournaments and Hosts)
+* Updated France + Italy Restructures
+* Fixes Tournament history dates
 
 v2.18:
 * Sheffield Weds patch updated to work with April release (and changed to -6 points)
