@@ -323,6 +323,7 @@ namespace CM0102Patcher
                         if (parts[0].ToUpper() == "CHANGECLUBDIVISION" || 
                             parts[0].ToUpper() == "CHANGECLUBLASTDIVISION" ||
                             parts[0].ToUpper() == "CHANGECLUBLASTPOSITION" ||
+                            parts[0].ToUpper() == "CHANGECLUBNATION" ||
                             parts[0].ToUpper() == "EXPANDEXE" || 
                             parts[0].ToUpper() == "TAPANISPACEPATCH" ||
                             parts[0].ToUpper() == "PATCHCLUBCOMP" ||
@@ -441,15 +442,30 @@ namespace CM0102Patcher
                     }
                 }
 
+                HistoryLoader hl = null;
+                string indexFile = null;
+
                 // Check for club division changes
                 var clubDivisionChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("CHANGECLUBDIVISION") || x.command.ToUpper().StartsWith("CHANGECLUBLASTDIVISION"))).ToList();
-                if (clubDivisionChanges.Count > 0)
+                
+                // Check for club last position changes
+                var clubLastPositionChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGECLUBLASTPOSITION")).ToList();
+
+                // Check for club change nation changes
+                var clubNationChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGECLUBNATION")).ToList();
+
+                if (clubDivisionChanges.Count > 0 || clubLastPositionChanges.Count > 0 || clubNationChanges.Count > 0)
                 {
-                    HistoryLoader hl = new HistoryLoader();
+                    hl = new HistoryLoader();
                     var dir = Path.GetDirectoryName(fileName);
                     var dataDir = Path.Combine(dir, "Data");
-                    var indexFile = Path.Combine(dataDir, "index.dat");
+                    indexFile = Path.Combine(dataDir, "index.dat");
                     hl.Load(indexFile);
+                }
+
+                // CHANGECLUBDIVISION + CHANGECLUBLASTDIVISION
+                if (clubDivisionChanges.Count > 0)
+                {
                     foreach (var clubDivisionChange in clubDivisionChanges)
                     {
                         var clubName = clubDivisionChange.part1;
@@ -464,18 +480,11 @@ namespace CM0102Patcher
                                 hl.UpdateClubsLastDivision(tClub.ID, tDivision.ID);
                         }
                     }
-                    hl.Save(indexFile, true);
                 }
 
-                // Check for club last division changes
-                var clubLastPositionChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGECLUBLASTPOSITION")).ToList();
+                // CHANGECLUBLASTPOSITION
                 if (clubLastPositionChanges.Count > 0)
                 {
-                    HistoryLoader hl = new HistoryLoader();
-                    var dir = Path.GetDirectoryName(fileName);
-                    var dataDir = Path.Combine(dir, "Data");
-                    var indexFile = Path.Combine(dataDir, "index.dat");
-                    hl.Load(indexFile);
                     foreach (var clubLastPositionChange in clubLastPositionChanges)
                     {
                         var clubName = clubLastPositionChange.part1;
@@ -486,8 +495,27 @@ namespace CM0102Patcher
                             hl.UpdateClubsLastPosition(tClub.ID, newPosition);
                         }
                     }
-                    hl.Save(indexFile, true);
                 }
+
+                // CHANGECLUBNATION
+                if (clubNationChanges.Count > 0)
+                {
+                    foreach (var clubNationChange in clubNationChanges)
+                    {
+                        var clubName = clubNationChange.part1;
+                        var nationName = clubNationChange.part2;
+                        var tClub = hl.club.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == clubName);
+                        var tNation = hl.nation.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == nationName);
+                        if (tClub.ID != 0 && tNation.ID != 0)
+                        {
+                            hl.UpdateClubsNation(tClub.ID, tNation.ID);
+                        }
+
+                    }
+                }
+
+                if (hl != null)
+                    hl.Save(indexFile, true);
 
                 // Patch Club Competition Names
                 var clubCompNameChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("PATCHCLUBCOMP"))).ToList();

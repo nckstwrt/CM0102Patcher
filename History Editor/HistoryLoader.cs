@@ -156,6 +156,22 @@ namespace CM0102Patcher
             }
         }
 
+        public void UpdateClubsNation(int clubId, int nationId)
+        {
+            for (int i = 0; i < club.Count; i++)
+            {
+                if (club[i].ID == clubId)
+                {
+                    TClub temp = club[i];
+                    temp.Nation = nationId;
+                    // This is what the editor suggests when reactivating a club
+                    if (temp.Reputation == 0)
+                        temp.Reputation = 2 * 500;
+                    club[i] = temp;
+                }
+            }
+        }
+
         public void Save(string indexFile, bool saveClubData = false, bool saveStaffData = false)
         {
             var dir = Path.GetDirectoryName(indexFile);
