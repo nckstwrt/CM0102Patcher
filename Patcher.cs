@@ -295,10 +295,10 @@ namespace CM0102Patcher
             }
         }
 
-        public List<string> patcherCommands = new List<string> { "TAPANISPACEPATCH", "APPLYMISCPATCH", "APPLYEXTERNALPATCH", "EXPANDEXE",
+        public List<string> patcherCommands = new List<string> { "TAPANISPACEPATCH", "APPLYMISCPATCH", "APPLYEXTERNALPATCH", "EXPANDEXE", "PATCHCLUBCOMP", "RENAMECLUB",
                                                                  "CHANGECLUBDIVISION", "CHANGECLUBLASTDIVISION", "CHANGECLUBLASTPOSITION", "CHANGECLUBNATION", 
-                                                                 "PATCHCLUBCOMP", "RENAMECLUB", "CHANGENATIONCOMPNAME", "CHANGENATIONCOMPCOLOR", 
-                                                                 "CLEARNATIONCOMPHISTORY", "ADDNATIONCOMPHISTORY", "DELETECLUBCOMPHISTORY", "DELETENATIONCOMPHISTORY"
+                                                                 "CHANGENATIONCOMPNAME", "CHANGENATIONCOMPCOLOR", "CLEARNATIONCOMPHISTORY", 
+                                                                 "ADDNATIONCOMPHISTORY", "DELETECLUBCOMPHISTORY", "DELETENATIONCOMPHISTORY"
         };
 
         Dictionary<string, List<HexPatch>> GetCommands(IEnumerable<HexPatch> patch)
@@ -457,8 +457,8 @@ namespace CM0102Patcher
                 var commandDictionary = GetCommands(patch);
                 var clubDivisionChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("CHANGECLUBDIVISION") || x.command.ToUpper().StartsWith("CHANGECLUBLASTDIVISION"))).ToList();
 
-                // The first 5 commands don't need a history loader, but if we have any after that, load one up
-                for (int i = 4; i < commandDictionary.Keys.Count; i++)
+                // The first 6 commands don't need a history loader, but if we have any after that, load one up
+                for (int i = 6; i < commandDictionary.Keys.Count; i++)
                 { 
                     if (commandDictionary[commandDictionary.Keys.ElementAt(i)].Count > 0)
                     {
@@ -604,15 +604,15 @@ namespace CM0102Patcher
                 }
 
                 // ADDNATIONCOMPHISTORY (code put after the delete because else it will add then delete them all :) )
-                foreach (var nationCompClearHistoryItem in commandDictionary["ADDNATIONCOMPHISTORY"])
+                foreach (var nationCompAddHistoryItem in commandDictionary["ADDNATIONCOMPHISTORY"])
                 {
                     int year;
-                    if (int.TryParse(nationCompClearHistoryItem.part2, out year))
+                    if (int.TryParse(nationCompAddHistoryItem.part2, out year))
                     {
-                        var nationCompName = nationCompClearHistoryItem.part1;
-                        var winner = nationCompClearHistoryItem.part3;
-                        var runner_up = nationCompClearHistoryItem.part4;
-                        var host = nationCompClearHistoryItem.part5;
+                        var nationCompName = nationCompAddHistoryItem.part1;
+                        var winner = nationCompAddHistoryItem.part3;
+                        var runner_up = nationCompAddHistoryItem.part4;
+                        var host = nationCompAddHistoryItem.part5;
 
                         hl.AddNationCompHistory(nationCompName, year, winner, runner_up, host);
                     }
