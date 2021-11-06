@@ -298,7 +298,7 @@ namespace CM0102Patcher
         public List<string> patcherCommands = new List<string> { "TAPANISPACEPATCH", "APPLYMISCPATCH", "APPLYEXTERNALPATCH", "EXPANDEXE",
                                                                  "CHANGECLUBDIVISION", "CHANGECLUBLASTDIVISION", "CHANGECLUBLASTPOSITION", "CHANGECLUBNATION", 
                                                                  "PATCHCLUBCOMP", "RENAMECLUB", "CHANGENATIONCOMPNAME", "CHANGENATIONCOMPCOLOR", 
-                                                                 "CLEARNATIONCOMPHISTORY", "ADDNATIONCOMPHISTORY", "DELETECLUBCOMPHISTORY",
+                                                                 "CLEARNATIONCOMPHISTORY", "ADDNATIONCOMPHISTORY", "DELETECLUBCOMPHISTORY", "DELETENATIONCOMPHISTORY"
         };
 
         Dictionary<string, List<HexPatch>> GetCommands(IEnumerable<HexPatch> patch)
@@ -571,21 +571,6 @@ namespace CM0102Patcher
                     }
                 }
 
-                // ADDNATIONCOMPHISTORY
-                foreach (var nationCompClearHistoryItem in commandDictionary["ADDNATIONCOMPHISTORY"])
-                {
-                    int year;
-                    if (int.TryParse(nationCompClearHistoryItem.part2, out year))
-                    {
-                        var nationCompName = nationCompClearHistoryItem.part1;
-                        var winner = nationCompClearHistoryItem.part3;
-                        var runner_up = nationCompClearHistoryItem.part4;
-                        var host = nationCompClearHistoryItem.part5;
-
-                        hl.AddNationCompHistory(nationCompName, year, winner, runner_up, host);
-                    }
-                }
-
                 // DELETECLUBCOMPHISTORY
                 foreach (var deleteClubCompHistoryItem in commandDictionary["DELETECLUBCOMPHISTORY"])
                 {
@@ -599,6 +584,37 @@ namespace CM0102Patcher
                         {
                             hl.club_comp_history.RemoveAll(x => x.Comp == tClubComp.ID && x.Year == year);
                         }
+                    }
+                }
+
+                // DELETENATIONCOMPHISTORY
+                foreach (var deleteNationCompHistoryItem in commandDictionary["DELETENATIONCOMPHISTORY"])
+                {
+                    var nationCompName = deleteNationCompHistoryItem.part1;
+                    int year;
+
+                    if (int.TryParse(deleteNationCompHistoryItem.part2, out year))
+                    {
+                        var tNationComp = hl.nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
+                        if (tNationComp.ID != 0)
+                        {
+                            hl.nation_comp_history.RemoveAll(x => x.Comp == tNationComp.ID && x.Year == year);
+                        }
+                    }
+                }
+
+                // ADDNATIONCOMPHISTORY (code put after the delete because else it will add then delete them all :) )
+                foreach (var nationCompClearHistoryItem in commandDictionary["ADDNATIONCOMPHISTORY"])
+                {
+                    int year;
+                    if (int.TryParse(nationCompClearHistoryItem.part2, out year))
+                    {
+                        var nationCompName = nationCompClearHistoryItem.part1;
+                        var winner = nationCompClearHistoryItem.part3;
+                        var runner_up = nationCompClearHistoryItem.part4;
+                        var host = nationCompClearHistoryItem.part5;
+
+                        hl.AddNationCompHistory(nationCompName, year, winner, runner_up, host);
                     }
                 }
 
