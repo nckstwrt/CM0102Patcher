@@ -329,7 +329,11 @@ namespace CM0102Patcher
                             parts[0].ToUpper() == "PATCHCLUBCOMP" ||
                             parts[0].ToUpper() == "RENAMECLUB" ||
                             parts[0].ToUpper() == "APPLYMISCPATCH" ||
-                            parts[0].ToUpper() == "APPLYEXTERNALPATCH"
+                            parts[0].ToUpper() == "APPLYEXTERNALPATCH" ||
+                            parts[0].ToUpper() == "CHANGENATIONCOMPNAME" ||
+                            parts[0].ToUpper() == "CHANGENATIONCOMPCOLOR" ||
+                            parts[0].ToUpper() == "CLEARNATIONCOMPHISTORY" ||
+                            parts[0].ToUpper() == "ADDNATIONCOMPHISTORY"
                            )
                         {
                             patchList.Add(new HexPatch(parts[0].ToUpper(), (parts.Count > 1) ? parts[1] : null, (parts.Count > 2) ? parts[2] : null, (parts.Count > 3) ? parts[3] : null, (parts.Count > 4) ? parts[4] : null, (parts.Count > 5) ? parts[5] : null));
@@ -444,16 +448,29 @@ namespace CM0102Patcher
                 }
 
                 HistoryLoader hl = null;
+                bool saveNationData = false;
                 string indexFile = null;
 
                 // Check for club division changes
                 var clubDivisionChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("CHANGECLUBDIVISION") || x.command.ToUpper().StartsWith("CHANGECLUBLASTDIVISION"))).ToList();
-                
+
                 // Check for club last position changes
                 var clubLastPositionChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGECLUBLASTPOSITION")).ToList();
 
                 // Check for club change nation changes
                 var clubNationChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGECLUBNATION")).ToList();
+
+                // Check for Nation Competition's Name
+                var nationCompNameChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGENATIONCOMPNAME")).ToList();
+
+                // Check for Nation Competition's Color
+                var nationCompColorChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGENATIONCOMPCOLOR")).ToList();
+
+                // Clear Nation Comp History
+                var nationCompClearHistory = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CLEARNATIONCOMPHISTORY")).ToList();
+
+                // Add Nation Comp History
+                var addNationCompHistory = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("ADDNATIONCOMPHISTORY")).ToList();
 
                 if (clubDivisionChanges.Count > 0 || clubLastPositionChanges.Count > 0 || clubNationChanges.Count > 0)
                 {
@@ -515,8 +532,82 @@ namespace CM0102Patcher
                     }
                 }
 
+                // CHANGENATIONCOMPNAME
+                if (nationCompNameChanges.Count > 0)
+                {
+                    saveNationData = true;
+                    foreach (var nationCompNameChange in nationCompNameChanges)
+                    {
+                        var nationCompName = nationCompNameChange.part1;
+                        var newNationCompName = nationCompNameChange.part2;
+                        var newNationCompNameShort = nationCompNameChange.part3;
+                        var newContinentId = nationCompNameChange.part4;
+                        var tNationComp = hl.nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
+                        if (tNationComp.ID != 0)
+                        {
+                            int? newContinentIdTemp = null;
+                            if (!string.IsNullOrEmpty(newContinentId))
+                                newContinentIdTemp = int.Parse(newContinentId);
+                            hl.UpdateNationCompName(tNationComp.ID, newNationCompName, newNationCompNameShort, newContinentIdTemp);
+                        }
+                    }
+                }
+
+                // CHANGENATIONCOMPCOLOR
+                if (nationCompColorChanges.Count > 0)
+                {
+                    saveNationData = true;
+                    foreach (var nationCompColorChange in nationCompColorChanges)
+                    {
+                        var nationCompName = nationCompColorChange.part1;
+                        var newNationCompForegroundColor = nationCompColorChange.part2;
+                        var newNationCompBackgroundColor = nationCompColorChange.part3;
+                        var tNationComp = hl.nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
+                        if (tNationComp.ID != 0)
+                        {
+                            int newNationCompForegroundColorTemp, newNationCompBackgroundColorTemp;
+                            if (int.TryParse(newNationCompForegroundColor, out newNationCompForegroundColorTemp) && int.TryParse(newNationCompBackgroundColor, out newNationCompBackgroundColorTemp))
+                            { 
+                                hl.UpdateNationCompColor(tNationComp.ID, newNationCompForegroundColorTemp, newNationCompBackgroundColorTemp);
+                            }
+                        }
+                    }
+                }
+
+                // CLEARNATIONCOMPHISTORY
+                if (nationCompClearHistory.Count > 0)
+                {
+                    foreach (var nationCompClearHistoryItem in nationCompClearHistory)
+                    {
+                        var nationCompName = nationCompClearHistoryItem.part1;
+                        var tNationComp = hl.nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
+                        if (tNationComp.ID != 0)
+                        {
+                             hl.ClearNationCompHistory(tNationComp.ID);
+                        }
+                    }
+                }
+
+                // ADDNATIONCOMPHISTORY
+                if (addNationCompHistory.Count > 0)
+                {
+                    foreach (var nationCompClearHistoryItem in addNationCompHistory)
+                    {
+                        int year;
+                        if (int.TryParse(nationCompClearHistoryItem.part2, out year))
+                        {
+                            var nationCompName = nationCompClearHistoryItem.part1;
+                            var winner = nationCompClearHistoryItem.part3;
+                            var runner_up = nationCompClearHistoryItem.part4;
+                            var host = nationCompClearHistoryItem.part5;
+
+                            hl.AddNationCompHistory(nationCompName, year, winner, runner_up, host);
+                        }
+                    }
+                }
+
                 if (hl != null)
-                    hl.Save(indexFile, true);
+                    hl.Save(indexFile, true, false, saveNationData);
 
                 // Patch Club Competition Names
                 var clubCompNameChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("PATCHCLUBCOMP"))).ToList();

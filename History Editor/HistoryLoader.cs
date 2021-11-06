@@ -172,14 +172,71 @@ namespace CM0102Patcher
             }
         }
 
-        public void Save(string indexFile, bool saveClubData = false, bool saveStaffData = false)
+        public void UpdateNationCompName(int nationCompId, string compName, string compNameShort, int? newNationId = null)
+        {
+            for (int i = 0; i < nation_comp.Count; i++)
+            {
+                if (nation_comp[i].ID == nationCompId)
+                {
+                    var temp = nation_comp[i];
+                    temp.Name = MiscFunctions.GetBytesFromText(compName, 51);
+                    temp.ShortName = MiscFunctions.GetBytesFromText(compNameShort, 26);
+                    if (newNationId != null)
+                        temp.ClubCompContinent = newNationId.Value;
+                    nation_comp[i] = temp;
+                }
+            }
+        }
+
+        public void UpdateNationCompColor(int nationCompId, int foregroundColorId, int backgroundColorId)
+        {
+            for (int i = 0; i < nation_comp.Count; i++)
+            {
+                if (nation_comp[i].ID == nationCompId)
+                {
+                    var temp = nation_comp[i];
+                    temp.ClubCompForegroundColour = foregroundColorId;
+                    temp.ClubCompBackgroundColour = backgroundColorId;
+                    nation_comp[i] = temp;
+                }
+            }
+        }
+
+        public void ClearNationCompHistory(int nationCompId)
+        {
+            nation_comp_history.RemoveAll(x => x.Comp == nationCompId);
+        }
+
+        public void AddNationCompHistory(string nationCompName, int year, string winner, string runner_up, string host)
+        {
+            var tNationComp = nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
+            var tNationWinner = nat_club.FirstOrDefault(x => x.Name.ReadString() == winner);
+            var tNationRunnerUp = nat_club.FirstOrDefault(x => x.Name.ReadString() == runner_up);
+            var tNationHost = nat_club.FirstOrDefault(x => x.Name.ReadString() == host);
+
+            if (tNationComp.ID != 0 && tNationWinner.ID != 0 && tNationRunnerUp.ID != 0 && tNationHost.ID != 0)
+            {
+                TCompHistory newHistory = new TCompHistory();
+                newHistory.ID = nation_comp_history.Max(x => x.ID) + 1;
+                newHistory.Comp = tNationComp.ID;
+                newHistory.Year = (short)year;
+                newHistory.Winners = tNationWinner.ID;
+                newHistory.RunnersUp = tNationRunnerUp.ID;
+                newHistory.ThirdPlace = -1;
+                newHistory.Host = tNationHost.ID;
+                nation_comp_history.Add(newHistory);
+            }
+        }
+
+        public void Save(string indexFile, bool saveClubData = false, bool saveStaffData = false, bool saveNationData = false)
         {
             var dir = Path.GetDirectoryName(indexFile);
 
-            /*
-            UpdateIndex("nation_comp.dat", nation_comp);
-            UpdateIndex("nation.dat", nation);
-            */
+            if (saveNationData)
+            {
+                UpdateIndex("nation_comp.dat", nation_comp);
+                UpdateIndex("nation.dat", nation);
+            }
 
             if (saveClubData)
             {
@@ -194,6 +251,13 @@ namespace CM0102Patcher
 
             MiscFunctions.SaveFile<TIndex>(indexFile, index, 8);
 
+            if (saveNationData)
+            {
+                MiscFunctions.SaveFile<TComp>(Path.Combine(dir, "nation_comp.dat"), nation_comp);
+                MiscFunctions.SaveFile<TClub>(Path.Combine(dir, "nat_club.dat"), nat_club);
+                MiscFunctions.SaveFile<TNation>(Path.Combine(dir, "nation.dat"), nation);
+            }
+
             if (saveClubData)
             {
                 MiscFunctions.SaveFile<TComp>(Path.Combine(dir, "club_comp.dat"), club_comp);
@@ -206,11 +270,6 @@ namespace CM0102Patcher
                 MiscFunctions.SaveFile<TPreferences>(Path.Combine(dir, "staff.dat"), preferences, preferenceDetails.Offset);
             }
 
-            /*
-            MiscFunctions.SaveFile<TComp>(Path.Combine(dir, "nation_comp.dat"), nation_comp);
-            MiscFunctions.SaveFile<TClub>(Path.Combine(dir, "nat_club.dat"), nat_club);
-            MiscFunctions.SaveFile<TNation>(Path.Combine(dir, "nation.dat"), nation);
-            */
             MiscFunctions.SaveFile<TCompHistory>(Path.Combine(dir, "nation_comp_history.dat"), nation_comp_history);
             MiscFunctions.SaveFile<TCompHistory>(Path.Combine(dir, "club_comp_history.dat"), club_comp_history);
             MiscFunctions.SaveFile<TStaffCompHistory>(Path.Combine(dir, "staff_comp_history.dat"), staff_comp_history);
