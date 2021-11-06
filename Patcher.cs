@@ -295,6 +295,22 @@ namespace CM0102Patcher
             }
         }
 
+        public List<string> patcherCommands = new List<string> { "TAPANISPACEPATCH", "APPLYMISCPATCH", "APPLYEXTERNALPATCH", "EXPANDEXE",
+                                                                 "CHANGECLUBDIVISION", "CHANGECLUBLASTDIVISION", "CHANGECLUBLASTPOSITION", "CHANGECLUBNATION", 
+                                                                 "PATCHCLUBCOMP", "RENAMECLUB", "CHANGENATIONCOMPNAME", "CHANGENATIONCOMPCOLOR", 
+                                                                 "CLEARNATIONCOMPHISTORY", "ADDNATIONCOMPHISTORY", "DELETECLUBCOMPHISTORY",
+        };
+
+        Dictionary<string, List<HexPatch>> GetCommands(IEnumerable<HexPatch> patch)
+        {
+            Dictionary<string, List<HexPatch>> commandDictionary = new Dictionary<string, List<HexPatch>>();
+            foreach (var command in patcherCommands)
+            {
+                commandDictionary[command] = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith(command))).ToList();
+            }
+            return commandDictionary;
+        }
+
         public IEnumerable<HexPatch> LoadPatchFile(Stream patchStream)
         {
             var patchList = new List<HexPatch>();
@@ -320,21 +336,7 @@ namespace CM0102Patcher
                     parts[0] = parts[0].Replace(":", "");
                     try
                     {
-                        if (parts[0].ToUpper() == "CHANGECLUBDIVISION" || 
-                            parts[0].ToUpper() == "CHANGECLUBLASTDIVISION" ||
-                            parts[0].ToUpper() == "CHANGECLUBLASTPOSITION" ||
-                            parts[0].ToUpper() == "CHANGECLUBNATION" ||
-                            parts[0].ToUpper() == "EXPANDEXE" || 
-                            parts[0].ToUpper() == "TAPANISPACEPATCH" ||
-                            parts[0].ToUpper() == "PATCHCLUBCOMP" ||
-                            parts[0].ToUpper() == "RENAMECLUB" ||
-                            parts[0].ToUpper() == "APPLYMISCPATCH" ||
-                            parts[0].ToUpper() == "APPLYEXTERNALPATCH" ||
-                            parts[0].ToUpper() == "CHANGENATIONCOMPNAME" ||
-                            parts[0].ToUpper() == "CHANGENATIONCOMPCOLOR" ||
-                            parts[0].ToUpper() == "CLEARNATIONCOMPHISTORY" ||
-                            parts[0].ToUpper() == "ADDNATIONCOMPHISTORY"
-                           )
+                        if (patcherCommands.Contains(parts[0].ToUpper()))
                         {
                             patchList.Add(new HexPatch(parts[0].ToUpper(), (parts.Count > 1) ? parts[1] : null, (parts.Count > 2) ? parts[2] : null, (parts.Count > 3) ? parts[3] : null, (parts.Count > 4) ? parts[4] : null, (parts.Count > 5) ? parts[5] : null));
                         }
@@ -448,31 +450,24 @@ namespace CM0102Patcher
                 }
 
                 HistoryLoader hl = null;
+                bool historyLoaderRequired = false;
                 bool saveNationData = false;
                 string indexFile = null;
 
-                // Check for club division changes
+                var commandDictionary = GetCommands(patch);
                 var clubDivisionChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("CHANGECLUBDIVISION") || x.command.ToUpper().StartsWith("CHANGECLUBLASTDIVISION"))).ToList();
 
-                // Check for club last position changes
-                var clubLastPositionChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGECLUBLASTPOSITION")).ToList();
-
-                // Check for club change nation changes
-                var clubNationChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGECLUBNATION")).ToList();
-
-                // Check for Nation Competition's Name
-                var nationCompNameChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGENATIONCOMPNAME")).ToList();
-
-                // Check for Nation Competition's Color
-                var nationCompColorChanges = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CHANGENATIONCOMPCOLOR")).ToList();
-
-                // Clear Nation Comp History
-                var nationCompClearHistory = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("CLEARNATIONCOMPHISTORY")).ToList();
-
-                // Add Nation Comp History
-                var addNationCompHistory = patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("ADDNATIONCOMPHISTORY")).ToList();
-
-                if (clubDivisionChanges.Count > 0 || clubLastPositionChanges.Count > 0 || clubNationChanges.Count > 0)
+                // The first 5 commands don't need a history loader, but if we have any after that, load one up
+                for (int i = 4; i < commandDictionary.Keys.Count; i++)
+                { 
+                    if (commandDictionary[commandDictionary.Keys.ElementAt(i)].Count > 0)
+                    {
+                        historyLoaderRequired = true;
+                        break;
+                    }
+                }
+                
+                if (historyLoaderRequired)
                 {
                     hl = new HistoryLoader();
                     var dir = Path.GetDirectoryName(fileName);
@@ -501,9 +496,9 @@ namespace CM0102Patcher
                 }
 
                 // CHANGECLUBLASTPOSITION
-                if (clubLastPositionChanges.Count > 0)
+                if (commandDictionary["CHANGECLUBLASTPOSITION"].Count > 0)
                 {
-                    foreach (var clubLastPositionChange in clubLastPositionChanges)
+                    foreach (var clubLastPositionChange in commandDictionary["CHANGECLUBLASTPOSITION"])
                     {
                         var clubName = clubLastPositionChange.part1;
                         var newPosition = int.Parse(clubLastPositionChange.part2);
@@ -516,92 +511,93 @@ namespace CM0102Patcher
                 }
 
                 // CHANGECLUBNATION
-                if (clubNationChanges.Count > 0)
+                foreach (var clubNationChange in commandDictionary["CHANGECLUBNATION"])
                 {
-                    foreach (var clubNationChange in clubNationChanges)
+                    var clubName = clubNationChange.part1;
+                    var nationName = clubNationChange.part2;
+                    var tClub = hl.club.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == clubName);
+                    var tNation = hl.nation.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == nationName);
+                    if (tClub.ID != 0 && tNation.ID != 0)
                     {
-                        var clubName = clubNationChange.part1;
-                        var nationName = clubNationChange.part2;
-                        var tClub = hl.club.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == clubName);
-                        var tNation = hl.nation.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == nationName);
-                        if (tClub.ID != 0 && tNation.ID != 0)
-                        {
-                            hl.UpdateClubsNation(tClub.ID, tNation.ID);
-                        }
-
+                        hl.UpdateClubsNation(tClub.ID, tNation.ID);
                     }
+
                 }
 
                 // CHANGENATIONCOMPNAME
-                if (nationCompNameChanges.Count > 0)
+                foreach (var nationCompNameChange in commandDictionary["CHANGENATIONCOMPNAME"])
                 {
                     saveNationData = true;
-                    foreach (var nationCompNameChange in nationCompNameChanges)
+                    var nationCompName = nationCompNameChange.part1;
+                    var newNationCompName = nationCompNameChange.part2;
+                    var newNationCompNameShort = nationCompNameChange.part3;
+                    var newContinentId = nationCompNameChange.part4;
+                    var tNationComp = hl.nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
+                    if (tNationComp.ID != 0)
                     {
-                        var nationCompName = nationCompNameChange.part1;
-                        var newNationCompName = nationCompNameChange.part2;
-                        var newNationCompNameShort = nationCompNameChange.part3;
-                        var newContinentId = nationCompNameChange.part4;
-                        var tNationComp = hl.nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
-                        if (tNationComp.ID != 0)
-                        {
-                            int? newContinentIdTemp = null;
-                            if (!string.IsNullOrEmpty(newContinentId))
-                                newContinentIdTemp = int.Parse(newContinentId);
-                            hl.UpdateNationCompName(tNationComp.ID, newNationCompName, newNationCompNameShort, newContinentIdTemp);
-                        }
+                        int? newContinentIdTemp = null;
+                        if (!string.IsNullOrEmpty(newContinentId))
+                            newContinentIdTemp = int.Parse(newContinentId);
+                        hl.UpdateNationCompName(tNationComp.ID, newNationCompName, newNationCompNameShort, newContinentIdTemp);
                     }
                 }
 
                 // CHANGENATIONCOMPCOLOR
-                if (nationCompColorChanges.Count > 0)
+                foreach (var nationCompColorChange in commandDictionary["CHANGENATIONCOMPCOLOR"])
                 {
                     saveNationData = true;
-                    foreach (var nationCompColorChange in nationCompColorChanges)
+                    var nationCompName = nationCompColorChange.part1;
+                    var newNationCompForegroundColor = nationCompColorChange.part2;
+                    var newNationCompBackgroundColor = nationCompColorChange.part3;
+                    var tNationComp = hl.nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
+                    if (tNationComp.ID != 0)
                     {
-                        var nationCompName = nationCompColorChange.part1;
-                        var newNationCompForegroundColor = nationCompColorChange.part2;
-                        var newNationCompBackgroundColor = nationCompColorChange.part3;
-                        var tNationComp = hl.nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
-                        if (tNationComp.ID != 0)
-                        {
-                            int newNationCompForegroundColorTemp, newNationCompBackgroundColorTemp;
-                            if (int.TryParse(newNationCompForegroundColor, out newNationCompForegroundColorTemp) && int.TryParse(newNationCompBackgroundColor, out newNationCompBackgroundColorTemp))
-                            { 
-                                hl.UpdateNationCompColor(tNationComp.ID, newNationCompForegroundColorTemp, newNationCompBackgroundColorTemp);
-                            }
+                        int newNationCompForegroundColorTemp, newNationCompBackgroundColorTemp;
+                        if (int.TryParse(newNationCompForegroundColor, out newNationCompForegroundColorTemp) && int.TryParse(newNationCompBackgroundColor, out newNationCompBackgroundColorTemp))
+                        { 
+                            hl.UpdateNationCompColor(tNationComp.ID, newNationCompForegroundColorTemp, newNationCompBackgroundColorTemp);
                         }
                     }
                 }
 
                 // CLEARNATIONCOMPHISTORY
-                if (nationCompClearHistory.Count > 0)
+                foreach (var nationCompClearHistoryItem in commandDictionary["CLEARNATIONCOMPHISTORY"])
                 {
-                    foreach (var nationCompClearHistoryItem in nationCompClearHistory)
+                    var nationCompName = nationCompClearHistoryItem.part1;
+                    var tNationComp = hl.nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
+                    if (tNationComp.ID != 0)
                     {
-                        var nationCompName = nationCompClearHistoryItem.part1;
-                        var tNationComp = hl.nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
-                        if (tNationComp.ID != 0)
-                        {
-                             hl.ClearNationCompHistory(tNationComp.ID);
-                        }
+                            hl.ClearNationCompHistory(tNationComp.ID);
                     }
                 }
 
                 // ADDNATIONCOMPHISTORY
-                if (addNationCompHistory.Count > 0)
+                foreach (var nationCompClearHistoryItem in commandDictionary["ADDNATIONCOMPHISTORY"])
                 {
-                    foreach (var nationCompClearHistoryItem in addNationCompHistory)
+                    int year;
+                    if (int.TryParse(nationCompClearHistoryItem.part2, out year))
                     {
-                        int year;
-                        if (int.TryParse(nationCompClearHistoryItem.part2, out year))
-                        {
-                            var nationCompName = nationCompClearHistoryItem.part1;
-                            var winner = nationCompClearHistoryItem.part3;
-                            var runner_up = nationCompClearHistoryItem.part4;
-                            var host = nationCompClearHistoryItem.part5;
+                        var nationCompName = nationCompClearHistoryItem.part1;
+                        var winner = nationCompClearHistoryItem.part3;
+                        var runner_up = nationCompClearHistoryItem.part4;
+                        var host = nationCompClearHistoryItem.part5;
 
-                            hl.AddNationCompHistory(nationCompName, year, winner, runner_up, host);
+                        hl.AddNationCompHistory(nationCompName, year, winner, runner_up, host);
+                    }
+                }
+
+                // DELETECLUBCOMPHISTORY
+                foreach (var deleteClubCompHistoryItem in commandDictionary["DELETECLUBCOMPHISTORY"])
+                {
+                    var clubCompName = deleteClubCompHistoryItem.part1;
+                    int year;
+                        
+                    if (int.TryParse(deleteClubCompHistoryItem.part2, out year))
+                    {
+                        var tClubComp = hl.club_comp.FirstOrDefault(x => x.Name.ReadString() == clubCompName);
+                        if (tClubComp.ID != 0)
+                        {
+                            hl.club_comp_history.RemoveAll(x => x.Comp == tClubComp.ID && x.Year == year);
                         }
                     }
                 }
