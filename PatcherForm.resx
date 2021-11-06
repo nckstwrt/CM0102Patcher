@@ -120,9 +120,6 @@
   <metadata name="toolTips.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="toolTips.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <data name="checkBoxMakeYourPotential200.ToolTip" xml:space="preserve">
     <value>A patch from Tapani that makes your own potential as a manager 0 from the outset and then it grows to 200. Without this patch your potential is random and fixed throughout which can affect getting jobs</value>
   </data>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Windows.Forms;
 
 namespace CM0102Patcher
@@ -13,25 +14,49 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
-            //CM9798.Test();
             /*
-            CM2 cm2 = new CM2();
-            cm2.ReadData();
-            */
-            //CM9798.SavedPlayerCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLDATA1.S16");
-
-            /*
-            HistoryLoader hl = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2021\Data\index.dat");
-
-            var latvia = hl.nation.First(x => x.Name.ReadString() == "Bolivia");
-            foreach (var club in hl.club)
+            using (StreamReader sr = new StreamReader(@"C:\ChampMan\Notes\2020\2021\Derby County Minus 12 Points.patch"))
             {
-                if (club.Nation == latvia.ID)
+                int firstAddr = -1;
+                int lastAddr = -1;
+                while (true)
                 {
-                    Console.WriteLine("{0} - {1}", club.Name.ReadString(), club.ShortName.ReadString());
+                    var line = sr.ReadLine();
+                    if (line == null)
+                        break;
+                    var splits = line.Split(' ');
+                    if (splits.Length >= 3)
+                    {
+                        var addrStr = splits[0].Substring(0, splits[0].Length - 1);
+                        var addr = Convert.ToInt32(addrStr, 16);
+                        if (addr != lastAddr + 1)
+                            firstAddr = addr;
+                        lastAddr = addr;
+                        var newAddr = (addr - firstAddr) + 0x006DC000 + (0xDE7383 - 0xDE7000);
+                        Console.WriteLine("{0}: {1} {2}", newAddr.ToString("X8"), splits[1], splits[2]);
+                    }
                 }
             }*/
+
+                //CM9798.Test();
+                /*
+                CM2 cm2 = new CM2();
+                cm2.ReadData();
+                */
+                //CM9798.SavedPlayerCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLDATA1.S16");
+
+                /*
+                HistoryLoader hl = new HistoryLoader();
+                hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2021\Data\index.dat");
+
+                var latvia = hl.nation.First(x => x.Name.ReadString() == "Bolivia");
+                foreach (var club in hl.club)
+                {
+                    if (club.Nation == latvia.ID)
+                    {
+                        Console.WriteLine("{0} - {1}", club.Name.ReadString(), club.ShortName.ReadString());
+                    }
+                }*/
 
                 /*
                 var serie = hl.club_comp.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == "French Ligue 2");
@@ -65,7 +90,7 @@ namespace CM0102Patcher
                 */
                 //  hl.Save(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2021\Data\index.dat", true);
 
-            Application.EnableVisualStyles();
+                Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new PatcherForm());
         }
