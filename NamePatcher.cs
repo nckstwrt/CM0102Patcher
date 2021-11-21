@@ -118,6 +118,7 @@ namespace CM0102Patcher
             PatchClubComp("FIFA Club World Championship", "FIFA Club World Cup", "World Championship", "Club World Cup");
             PatchClubComp("Inter-American Cup", "Copa Interamericana", "Inter-American Cup", "Copa Interamericana");
             PatchClubComp("Inter-Toto Cup", "UEFA Europa League Qualifying", "Inter-Toto Cup", "Europa League Qualifying");
+            //PatchClubComp("Inter-Toto Cup", "UEFA Europa Conference League", "Inter-Toto Cup", "Conference League");
             PatchClubComp("Oceania Champions Cup", "OFC Champions League", "OFC Champions Cup", "Champions League");
             PatchClubComp("South American Copa Libertadores", "Copa Libertadores de América", "Copa Libertadores", "Copa Libertadores");
             PatchClubComp("South American Copa Mercosur", "Copa Sudamericana", "Copa Mercosur", "Copa Sudamericana");
@@ -410,7 +411,7 @@ namespace CM0102Patcher
             PatchClubComp("Portuguese Second Division B South", "Campeonato de Portugal South", "Second Division B South", "Campeonato South", "D3S");
             PatchClubComp("Portuguese Third Division", "Campeonato Distrital", "Third Division", "Campeonato Distrital", "D4");
             PatchClubComp("Portuguese Cup", "Taça de Portugal", "Portuguese Cup", "Taça de Portugal");
-            PatchClubComp("Portuguese Super Cup", "Supertaça Cândido de Oliveira", "Portuguese Super Cup", "Supertaça");
+            PatchClubComp("Portuguese Super Cup", "Supertaça Cândido de Oliveira", "Super Cup", "Supertaça");
 
             progress.SetProgressPercent(70);
 
