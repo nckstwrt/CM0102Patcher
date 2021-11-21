@@ -384,6 +384,7 @@
             // 
             this.checkBoxApplyYearSpecificPatches.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
             this.checkBoxApplyYearSpecificPatches.AutoSize = true;
+            this.checkBoxApplyYearSpecificPatches.Enabled = false;
             this.checkBoxApplyYearSpecificPatches.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxApplyYearSpecificPatches.Location = new System.Drawing.Point(219, 381);
             this.checkBoxApplyYearSpecificPatches.Name = "checkBoxApplyYearSpecificPatches";
@@ -393,7 +394,6 @@
             this.toolTips.SetToolTip(this.checkBoxApplyYearSpecificPatches, "This will automatically apply year specific patches, from the Misc Patches sectio" +
         "ns");
             this.checkBoxApplyYearSpecificPatches.UseVisualStyleBackColor = true;
-            this.checkBoxApplyYearSpecificPatches.Visible = false;
             this.checkBoxApplyYearSpecificPatches.Click += new System.EventHandler(this.checkBoxApplyYearSpecificPatches_Click);
             // 
             // checkBoxFixSuperKeepers
@@ -409,6 +409,7 @@
             this.toolTips.SetToolTip(this.checkBoxFixSuperKeepers, "\"Super keepers\" is a common issues where occassionally in some games you can\'t sc" +
         "ore as every shot you have on goal is saved. This should reduce the problem.");
             this.checkBoxFixSuperKeepers.UseVisualStyleBackColor = true;
+            this.checkBoxFixSuperKeepers.Visible = false;
             // 
             // comboBoxReplaceAITactics
             // 

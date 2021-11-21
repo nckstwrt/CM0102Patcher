@@ -49,7 +49,7 @@ namespace CM0102Patcher
                 // Set selectable leagues
                 comboBoxReplacementLeagues.Items.Add("English National League North");
                 comboBoxReplacementLeagues.Items.Add("English National League South");
-                comboBoxReplacementLeagues.Items.Add("English Southern Premier Central Division");
+                //comboBoxReplacementLeagues.Items.Add("English Southern Premier Central Division");
 
                 // Screen Resolution
                 comboBoxResolution.Items.AddRange(new ComboboxItem[]
@@ -153,7 +153,8 @@ namespace CM0102Patcher
                 checkBoxPositionInTacticsView.Enabled = !isTapani;
                 checkBoxMakeYourPotential200.Enabled = !isTapani;
                 checkBoxChangeStartYear_CheckedChanged(null, null);
-                
+                numericGameStartYear_ValueChanged(null, null);
+
                 // Reset options that might have been locked from a previous exe load
                 checkBoxRestrictTactics.Enabled = true;
                 comboBoxReplacementLeagues.Enabled = false;
@@ -260,7 +261,7 @@ namespace CM0102Patcher
                     }
 
                     // Don't let 
-                        checkBoxShowHiddenAttributes.Checked = appliedPatches.Contains("addadditionalcolumns") || appliedPatches.Contains("addadditionalcolumns_italy");
+                    checkBoxShowHiddenAttributes.Checked = appliedPatches.Contains("addadditionalcolumns") || appliedPatches.Contains("addadditionalcolumns_italy");
                     checkBoxFixSuperKeepers.Checked = appliedPatches.Contains("fixsuperkeepers");
 
                     SetComboBox(comboBoxGameSpeed, speedHack);
@@ -813,7 +814,7 @@ namespace CM0102Patcher
                         }
                     }
 
-                    if (checkBoxApplyYearSpecificPatches.Visible && checkBoxApplyYearSpecificPatches.Checked && checkBoxApplyYearSpecificPatches.Enabled)
+                    if (checkBoxApplyYearSpecificPatches.Checked && checkBoxApplyYearSpecificPatches.Enabled)
                     {
                         if (checkBoxUpdateNames.Checked)
                             patcher.ApplyPatch(labelFilename.Text, new List<Patcher.HexPatch> { new Patcher.HexPatch("APPLYMISCPATCH", string.Format("{0} Patches/All Tested {0} + Saturn Patches.patch", (int)numericGameStartYear.Value), null) });
@@ -1173,14 +1174,17 @@ namespace CM0102Patcher
                 {
                     case 2020:
                     case 2021:
-                        checkBoxApplyYearSpecificPatches.Visible = true;
+                        checkBoxApplyYearSpecificPatches.Enabled = true;
                         break;
                     default:
-                        checkBoxApplyYearSpecificPatches.Visible = false;
+                        checkBoxApplyYearSpecificPatches.Enabled = false;
                         break;
                 }
             }
-            catch { }
+            catch 
+            {
+                checkBoxApplyYearSpecificPatches.Enabled = false;
+            }
         }
 
         private void numericGameStartYear_KeyUp(object sender, KeyEventArgs e)
@@ -1188,7 +1192,7 @@ namespace CM0102Patcher
             if (numericGameStartYear.Text.Length == 4)
                 numericGameStartYear_ValueChanged(sender, e);
             else
-                checkBoxApplyYearSpecificPatches.Visible = false;
+                checkBoxApplyYearSpecificPatches.Enabled = false;
         }
 
         private void checkBoxApplyYearSpecificPatches_Click(object sender, EventArgs e)
