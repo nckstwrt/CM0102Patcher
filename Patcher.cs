@@ -486,13 +486,23 @@ namespace CM0102Patcher
                         var divisionName = clubDivisionChange.part2;
                         var tClub = hl.club.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == clubName);
                         var tDivision = hl.club_comp.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == divisionName);
-                        if (tClub.ID != 0 && tDivision.ID != 0)
+                        if (tDivision != null)
                         {
-                            if (clubDivisionChange.command.ToUpper().StartsWith("CHANGECLUBDIVISION"))
-                                hl.UpdateClubsDivision(tClub.ID, tDivision.ID);
+                            if (tClub != null)
+                            {
+                                if (tClub.ID != 0 && tDivision.ID != 0)
+                                {
+                                    if (clubDivisionChange.command.ToUpper().StartsWith("CHANGECLUBDIVISION"))
+                                        hl.UpdateClubsDivision(tClub.ID, tDivision.ID);
+                                    else
+                                        hl.UpdateClubsLastDivision(tClub.ID, tDivision.ID);
+                                }
+                            }
                             else
-                                hl.UpdateClubsLastDivision(tClub.ID, tDivision.ID);
+                                Console.WriteLine("Club ({0}) in clubDivisionChanges not found!!! (Division: {1})", clubName, divisionName);
                         }
+                        else
+                            Console.WriteLine("Division ({0}) in clubDivisionChanges not found!!! (Club: {1})", divisionName, clubName);
                     }
                 }
 
@@ -504,10 +514,12 @@ namespace CM0102Patcher
                         var clubName = clubLastPositionChange.part1;
                         var newPosition = int.Parse(clubLastPositionChange.part2);
                         var tClub = hl.club.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == clubName);
-                        if (tClub.ID != 0)
+                        if (tClub != null)
                         {
                             hl.UpdateClubsLastPosition(tClub.ID, newPosition);
                         }
+                        else
+                            Console.WriteLine("Cannot find club: ({0}) in CHANGECLUBLASTPOSITION", clubName);
                     }
                 }
 
