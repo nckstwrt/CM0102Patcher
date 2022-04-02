@@ -103,8 +103,6 @@
             // checkBoxShowIntrinstics
             // 
             this.checkBoxShowIntrinstics.AutoSize = true;
-            this.checkBoxShowIntrinstics.Checked = true;
-            this.checkBoxShowIntrinstics.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxShowIntrinstics.Location = new System.Drawing.Point(541, 312);
             this.checkBoxShowIntrinstics.Name = "checkBoxShowIntrinstics";
             this.checkBoxShowIntrinstics.Size = new System.Drawing.Size(97, 17);

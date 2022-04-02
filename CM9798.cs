@@ -311,9 +311,20 @@ namespace CM0102Patcher
             }
         }
 
-        const int TeamDataStartPos = 895;
-        const int PlayerDataStartPos = 666;
-        const int ManagerDataStartPos = 268;
+        public const int TeamDataStartPos = 895;
+        public const int PlayerDataStartPos = 666;
+        public const int ManagerDataStartPos = 268;
+
+        public static List<CM9798Team> tmdata;
+        public static List<CM9798Player> pldata;
+        public static List<CM9798Manager> mgdata;
+
+        public static void LoadCM9798DataFromDirectory(string dir)
+        {
+            tmdata = MiscFunctions.ReadFile<CM9798Team>(Path.Combine(dir, "TMDATA.DB1"), TeamDataStartPos);
+            pldata = MiscFunctions.ReadFile<CM9798Player>(Path.Combine(dir, "PLAYERS.DB1"), PlayerDataStartPos);
+            mgdata = MiscFunctions.ReadFile<CM9798Manager>(Path.Combine(dir, "MGDATA.DB1"), ManagerDataStartPos);
+        }
 
         public static void Test()
         {
@@ -346,9 +357,7 @@ namespace CM0102Patcher
 
             // CM2 Load
             int CM9798PlayerSize = Marshal.SizeOf(typeof(CM9798Player));
-            var tmdata = MiscFunctions.ReadFile<CM9798Team>(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\TMDATA.DB1", TeamDataStartPos);
-            var pldata = MiscFunctions.ReadFile<CM9798Player>(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\PLAYERS.DB1", PlayerDataStartPos);
-            var mgdata = MiscFunctions.ReadFile<CM9798Manager>(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\MGDATA.DB1", ManagerDataStartPos);
+            LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG");
             var plhist = new List<CM2.CM2History>();
 
             //WriteTeamDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\TMDATA.CSV", tmdata);
@@ -1500,7 +1509,7 @@ namespace CM0102Patcher
             return t;
         }
 
-        static void WritePlayerDataToCSV(string fileName, List<CM9798Player> pldata)
+        public static void WritePlayerDataToCSV(string fileName, List<CM9798Player> pldata)
         {
             using (var sw = new StreamWriter(fileName))
             {
@@ -1513,7 +1522,7 @@ namespace CM0102Patcher
             }
         }
 
-        static void WriteManagerDataToCSV(string fileName, List<CM9798Manager> mgdata)
+        public static void WriteManagerDataToCSV(string fileName, List<CM9798Manager> mgdata)
         {
 
             using (var sw = new StreamWriter(fileName))
@@ -1525,7 +1534,7 @@ namespace CM0102Patcher
             }
         }
 
-        static void WriteTeamDataToCSV(string fileName, List<CM9798Team> tmdata)
+        public static void WriteTeamDataToCSV(string fileName, List<CM9798Team> tmdata)
         {
             using (var sw = new StreamWriter(fileName))
             {

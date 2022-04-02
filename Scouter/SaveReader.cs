@@ -479,6 +479,7 @@ namespace CM0102Scout
             dataTable.Columns.Add("Contract Age", typeof(int));
             dataTable.Columns.Add("Leaving Club", typeof(string));
             dataTable.Columns.Add("Scouter Rating", typeof(int));
+            dataTable.Columns.Add("No of 20s", typeof(int));
 
             // Creativity = Vision
             // Movement = Off The Ball
@@ -620,6 +621,46 @@ namespace CM0102Scout
                         weighter.Add(player.Bravery, 20, 4);
                     }
 
+                    int noOfTwenties = 0;
+                    if (player.Acceleration >= 20) noOfTwenties++;
+                    if (player.Aggression >= 20) noOfTwenties++;
+                    if (player.Agility >= 20) noOfTwenties++;
+                    if (player.Convert(player.Anticipation) >= 20) noOfTwenties++;
+                    if (player.Balance >= 20) noOfTwenties++;
+                    if (player.Bravery >= 20) noOfTwenties++;
+                    if (player.Consistency >= 20) noOfTwenties++;
+                    if (player.Corners >= 20) noOfTwenties++;
+                    if (player.Convert(player.Crossing, true) >= 20) noOfTwenties++;
+                    if (player.Convert(player.Decisions) >= 20) noOfTwenties++;
+                    if (player.Convert(player.Dribbling, true) >= 20) noOfTwenties++;
+                    if (player.Convert(player.Finishing, true) >= 20) noOfTwenties++;
+                    if (player.Flair >= 20) noOfTwenties++;
+                    if (player.FreeKicks >= 20) noOfTwenties++;
+                    if (player.Convert(player.Handling, true, true) >= 20) noOfTwenties++;
+                    if (player.Convert(player.Heading) >= 20) noOfTwenties++;
+                    if (player.ImportantMatches >= 20) noOfTwenties++;
+                    if (player.Jumping >= 20) noOfTwenties++;
+                    if (player.Leadership >= 20) noOfTwenties++;
+                    if (player.Convert(player.LongShots) >= 20) noOfTwenties++;
+                    if (player.Convert(player.Marking, true) >= 20) noOfTwenties++;
+                    if (player.Convert(player.Movement, true) >= 20) noOfTwenties++;
+                    if (player.NaturalFitness >= 20) noOfTwenties++;
+                    if (player.Convert(player.OneOnOnes, true, true) >= 20) noOfTwenties++;
+                    if (player.Convert(player.Passing) >= 20) noOfTwenties++;
+                    if (player.Convert(player.Penalties) >= 20) noOfTwenties++;
+                    if (player.PlayerPace >= 20) noOfTwenties++;
+                    if (player.Convert(player.Positioning) >= 20) noOfTwenties++;
+                    if (player.Convert(player.Reflexes, true, true) >= 20) noOfTwenties++;
+                    if (player.Stamina >= 20) noOfTwenties++;
+                    if (player.Strength >= 20) noOfTwenties++;
+                    if (player.Convert(player.Tackling) >= 20) noOfTwenties++;
+                    if (player.Teamwork >= 20) noOfTwenties++;
+                    if (player.Technique >= 20) noOfTwenties++;
+                    if (player.Convert(player.ThrowIns, true) >= 20) noOfTwenties++;
+                    if (player.Versatility >= 20) noOfTwenties++;
+                    if (player.Convert(player.Vision, true) >= 20) noOfTwenties++;
+                    if (player.WorkRate >= 20) noOfTwenties++;
+                    if (staff.determination >= 20) noOfTwenties++;
 
                     string leavingClub = "Unknown";
                     string squadStatus = "Unknown";
@@ -721,7 +762,8 @@ namespace CM0102Scout
                         squadStatus,
                         contractAgesMonths,
                         leavingClub,
-                        weighter.RatingPercentage
+                        weighter.RatingPercentage,
+                        noOfTwenties
                         );
                 }
                 catch

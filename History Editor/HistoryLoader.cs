@@ -20,6 +20,7 @@ namespace CM0102Patcher
         public List<TClub> club;
         public List<TClub> nat_club;
         public List<TNation> nation;
+        public List<TContinent> continent;
         public List<TCompHistory> nation_comp_history;
         public List<TCompHistory> club_comp_history;
         public List<TStaffCompHistory> staff_comp_history;
@@ -64,6 +65,7 @@ namespace CM0102Patcher
             club = MiscFunctions.ReadFile<TClub>(Path.Combine(dir, "club.dat"));
             nat_club = MiscFunctions.ReadFile<TClub>(Path.Combine(dir, "nat_club.dat"));
             nation = MiscFunctions.ReadFile<TNation>(Path.Combine(dir, "nation.dat"));
+            continent = MiscFunctions.ReadFile<TContinent>(Path.Combine(dir, "continent.dat"));
             nation_comp_history = MiscFunctions.ReadFile<TCompHistory>(Path.Combine(dir, "nation_comp_history.dat"));
             club_comp_history = MiscFunctions.ReadFile<TCompHistory>(Path.Combine(dir, "club_comp_history.dat"));
             
@@ -87,7 +89,8 @@ namespace CM0102Patcher
             nonPlayers = MiscFunctions.ReadFile<TNonPlayer>(Path.Combine(dir, "staff.dat"), nonPlayerDetails.Offset, nonPlayerDetails.Count); 
 
             preferenceDetails = index.Find(x => GetTextFromBytes(x.Name) == "staff.dat" && x.FileType == 22);
-            preferences = MiscFunctions.ReadFile<TPreferences>(Path.Combine(dir, "staff.dat"), preferenceDetails.Offset, preferenceDetails.Count);
+            if (preferenceDetails != null)
+                preferences = MiscFunctions.ReadFile<TPreferences>(Path.Combine(dir, "staff.dat"), preferenceDetails.Offset, preferenceDetails.Count);
 
             first_names = MiscFunctions.ReadFile<TNames>(Path.Combine(dir, "first_names.dat"));
             second_names = MiscFunctions.ReadFile<TNames>(Path.Combine(dir, "second_names.dat"));

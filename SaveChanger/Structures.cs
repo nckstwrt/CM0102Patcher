@@ -7,11 +7,18 @@ using System.Text;
 namespace CM0102Patcher
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TCMDate
+    public class TCMDate
     {
         public short Day;
         public short Year;
         public int LeapYear;
+
+        public TCMDate()
+        {
+            Day = 1;
+            Year = 1970;
+            LeapYear = 0;
+        }
 
         public TCMDate(byte[] data, int position)
         {
@@ -31,12 +38,19 @@ namespace CM0102Patcher
 
         public static DateTime ToDateTime(TCMDate date)
         {
-            return new DateTime(date.Year, 1, 1).AddDays(date.Day);
+            try
+            {
+                return new DateTime(date.Year, 1, 1).AddDays(date.Day);
+            }
+            catch
+            {
+                return new DateTime(1900, 1, 1);
+            }
         }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TContract
+    public class TContract
     {
         public int ID;
         public int Club;
@@ -65,7 +79,7 @@ namespace CM0102Patcher
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TStaff
+    public class TStaff
     {
         /*0*/
         public int ID;
@@ -141,7 +155,7 @@ namespace CM0102Patcher
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TPreferences
+    public class TPreferences
     {
         public int StaffPreferencesID;
         public int StaffFavouriteClubs1;
@@ -159,7 +173,7 @@ namespace CM0102Patcher
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TPlayer
+    public class TPlayer
     {
         /*0*/
         public int ID;
@@ -168,7 +182,7 @@ namespace CM0102Patcher
         /*5*/
         public UInt16 CurrentAbility;
         /*7*/
-        public UInt16 PotentialAbility;
+        public Int16 PotentialAbility;
         /*9*/
         public UInt16 HomeReputation;
         /*B*/
@@ -290,30 +304,53 @@ namespace CM0102Patcher
 
     // 68
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TNonPlayer
+    public class TNonPlayer
     {
+        /* 0 */
         public int ID;
+        /* 4 */
         public UInt16 CurrentAbility;
+        /* 6 */
         public UInt16 PotentialAbility;
+        /* 8 */
         public UInt16 HomeReputation;
+        /* A */
         public UInt16 CurrentReputation;
+        /* C */
         public UInt16 WorldReputation;
+        /* E */
         public sbyte Attacking;
+        /* F */
         public sbyte Business;
+        /* 10 */
         public sbyte Coaching;
+        /* 11 */
         public sbyte CoachingGks;
+        /* 12 */
         public sbyte CoachingTechnique;
+        /* 13 */
         public sbyte Directness;
+        /* 14 */
         public sbyte Discipline;
+        /* 15 */
         public sbyte FreeRoles;
+        /* 16 */
         public sbyte Interference;
+        /* 17 */
         public sbyte Judgement;
+        /* 18 */
         public sbyte JudgingPotential;
+        /* 19 */
         public sbyte ManHandling;
+        /* 1A */
         public sbyte Marking;
+        /* 1B */
         public sbyte Motivating;
+        /* 1C */
         public sbyte Offside;
+        /* 1D */
         public sbyte Patience;
+        /* 1E */
         public sbyte Physiotherapy;
         public sbyte Pressing;
         public sbyte Resources;
@@ -332,7 +369,7 @@ namespace CM0102Patcher
     
     // 581
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TClub
+    public class TClub
     {
         public int ID;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)] public byte[] Name;
@@ -388,7 +425,7 @@ namespace CM0102Patcher
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TComp
+    public class TComp
     {
         /*0x0*/
         public int ID;
@@ -416,7 +453,7 @@ namespace CM0102Patcher
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TStaffComp
+    public class TStaffComp
     {
         public int ID;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)] public byte[] Name;
@@ -431,7 +468,7 @@ namespace CM0102Patcher
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TCompHistory
+    public class TCompHistory
     {
         public int ID;
         public int Comp;
@@ -443,7 +480,7 @@ namespace CM0102Patcher
     };
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TStaffCompHistory
+    public class TStaffCompHistory
     {
         public int ID;
         public int Comp;
@@ -463,7 +500,7 @@ namespace CM0102Patcher
     };
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TStaffHistory
+    public class TStaffHistory
     {
         public int ID;
         public int StaffID;
@@ -475,7 +512,7 @@ namespace CM0102Patcher
     };
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TNames
+    public class TNames
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)] public byte[] Name;
         public int ID;
@@ -484,14 +521,21 @@ namespace CM0102Patcher
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TStadiums
+    public class TStadiums
     {
+        // 0x0
         public int ID;
+        // 0x4
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)] public byte[] Name;
+        // 0x37
         public byte StadiumGenderName;
+        // 0x38
         public int StadiumCity;
+        // 0x3C
         public int StadiumCapacity;
+        // 0x40
         public int StadiumSeatingCapacity;
+        // 0x44
         public int StadiumExpansionCapacity;
         public int StadiumNearbyStadium;
         public byte StadiumCovered;
@@ -499,7 +543,7 @@ namespace CM0102Patcher
     };
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TCities
+    public class TCities
     {
         public int ID;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] Name;
@@ -512,7 +556,7 @@ namespace CM0102Patcher
     };
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TNation
+    public class TNation
     {
         // original data
         public int ID;
@@ -523,10 +567,15 @@ namespace CM0102Patcher
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] public byte[] ThreeLetterName;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] Nationality;
         public int Continent;
+        /*75*/
         public sbyte Region;
+        /*76*/
         public sbyte ActualRegion;
+        /*77*/
         public sbyte FirstLanguage;
+        /*78*/
         public sbyte SecondLanguage;
+        /*79*/
         public sbyte ThirdLanguage;
         /*7A*/
         public int CapitalCity;
@@ -577,7 +626,26 @@ namespace CM0102Patcher
     };
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct TIndex
+    public class TContinent
+    {
+        // 0x0
+        public int ContinentID;
+        // 0x4
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] ContinentName;
+        // 0x1E
+        public char ContinentGenderName;
+        // 0x1F
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] public byte[] ContinentNameThreeLetter;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] ContinentNameContinentality;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 101)] public byte[] ContinentFederationName;
+        public char ContinentGenderFederationName;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] ContinentFederationNameShort;
+        public char ContinentGenderFederationNameShort;
+        public double ContinentRegionalStrength;
+    };
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public class TIndex
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)] public byte[] Name;
         public int FileType;
