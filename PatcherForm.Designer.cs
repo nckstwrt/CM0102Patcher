@@ -54,7 +54,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.checkBoxApplyYearSpecificPatches = new System.Windows.Forms.CheckBox();
-            this.checkBoxFixSuperKeepers = new System.Windows.Forms.CheckBox();
+            this.checkBoxBugFixes = new System.Windows.Forms.CheckBox();
             this.comboBoxReplaceAITactics = new System.Windows.Forms.ComboBox();
             this.checkBoxReplaceAITactics = new System.Windows.Forms.CheckBox();
             this.checkBoxMakeYourPotential200 = new System.Windows.Forms.CheckBox();
@@ -352,7 +352,7 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.checkBoxApplyYearSpecificPatches);
-            this.groupBox3.Controls.Add(this.checkBoxFixSuperKeepers);
+            this.groupBox3.Controls.Add(this.checkBoxBugFixes);
             this.groupBox3.Controls.Add(this.comboBoxReplaceAITactics);
             this.groupBox3.Controls.Add(this.checkBoxReplaceAITactics);
             this.groupBox3.Controls.Add(this.checkBoxMakeYourPotential200);
@@ -396,20 +396,19 @@
             this.checkBoxApplyYearSpecificPatches.UseVisualStyleBackColor = true;
             this.checkBoxApplyYearSpecificPatches.Click += new System.EventHandler(this.checkBoxApplyYearSpecificPatches_Click);
             // 
-            // checkBoxFixSuperKeepers
+            // checkBoxBugFixes
             // 
-            this.checkBoxFixSuperKeepers.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
-            this.checkBoxFixSuperKeepers.AutoSize = true;
-            this.checkBoxFixSuperKeepers.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxFixSuperKeepers.Location = new System.Drawing.Point(7, 380);
-            this.checkBoxFixSuperKeepers.Name = "checkBoxFixSuperKeepers";
-            this.checkBoxFixSuperKeepers.Size = new System.Drawing.Size(208, 20);
-            this.checkBoxFixSuperKeepers.TabIndex = 42;
-            this.checkBoxFixSuperKeepers.Text = "Fix \"super keepers\" (BETA v2)";
-            this.toolTips.SetToolTip(this.checkBoxFixSuperKeepers, "\"Super keepers\" is a common issues where occassionally in some games you can\'t sc" +
-        "ore as every shot you have on goal is saved. This should reduce the problem.");
-            this.checkBoxFixSuperKeepers.UseVisualStyleBackColor = true;
-            this.checkBoxFixSuperKeepers.Visible = false;
+            this.checkBoxBugFixes.AccessibleRole = System.Windows.Forms.AccessibleRole.Cursor;
+            this.checkBoxBugFixes.AutoSize = true;
+            this.checkBoxBugFixes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxBugFixes.Location = new System.Drawing.Point(7, 380);
+            this.checkBoxBugFixes.Name = "checkBoxBugFixes";
+            this.checkBoxBugFixes.Size = new System.Drawing.Size(159, 20);
+            this.checkBoxBugFixes.TabIndex = 42;
+            this.checkBoxBugFixes.Text = "Apply known bug fixes";
+            this.toolTips.SetToolTip(this.checkBoxBugFixes, "Corrects bugs in the original CM0102 code (includes UnlockYourCreativity, Marking" +
+        "AndPositionClampTo100 and EnsureCashDoesNotResetToZero)");
+            this.checkBoxBugFixes.UseVisualStyleBackColor = true;
             // 
             // comboBoxReplaceAITactics
             // 
@@ -801,7 +800,7 @@
         private System.Windows.Forms.CheckBox checkBoxPositionInTacticsView;
         private System.Windows.Forms.CheckBox checkBoxShowHiddenAttributes;
         private System.Windows.Forms.CheckBox checkBoxMakeYourPotential200;
-        private System.Windows.Forms.CheckBox checkBoxFixSuperKeepers;
+        private System.Windows.Forms.CheckBox checkBoxBugFixes;
         private System.Windows.Forms.ComboBox comboBoxReplaceAITactics;
         private System.Windows.Forms.CheckBox checkBoxReplaceAITactics;
         private System.Windows.Forms.CheckBox checkBoxApplyYearSpecificPatches;

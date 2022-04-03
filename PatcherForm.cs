@@ -262,7 +262,7 @@ namespace CM0102Patcher
 
                     // Don't let 
                     checkBoxShowHiddenAttributes.Checked = appliedPatches.Contains("addadditionalcolumns") || appliedPatches.Contains("addadditionalcolumns_italy");
-                    checkBoxFixSuperKeepers.Checked = appliedPatches.Contains("fixsuperkeepers");
+                    checkBoxBugFixes.Checked = appliedPatches.Contains("bugfixes");
 
                     SetComboBox(comboBoxGameSpeed, speedHack);
                     numericCurrencyInflation.Value = (decimal)currencyMultiplier;
@@ -567,10 +567,14 @@ namespace CM0102Patcher
                     else
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["addadditionalcolumns"]);
 
-                    if (checkBoxFixSuperKeepers.Checked)
-                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["fixsuperkeepers"]);
+                    if (checkBoxBugFixes.Checked)
+                    {
+                        patcher.ExpandExe(labelFilename.Text);
+                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
+                        patcher.ApplyPatch(labelFilename.Text, patcher.patches["bugfixes"]);
+                    }
                     else
-                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["fixsuperkeepers"]);
+                        patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["bugfixes"]);
 
                     if (checkBoxCDRemoval.Checked)
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablecdremove"]);
