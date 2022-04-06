@@ -31,9 +31,14 @@ namespace CM0102Patcher
             ofd.Title = "Select an input image file...";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                textBoxInput.Text = ofd.FileName;
-                textBoxOutput.Text = Path.Combine(Path.GetDirectoryName(textBoxInput.Text), Path.GetFileNameWithoutExtension(textBoxInput.Text)) + "_Modified.sav";
+                SetNewInputFile(ofd.FileName);
             }
+        }
+
+        private void SetNewInputFile(string newFile)
+        {
+            textBoxInput.Text = newFile;
+            textBoxOutput.Text = Path.Combine(Path.GetDirectoryName(textBoxInput.Text), Path.GetFileNameWithoutExtension(textBoxInput.Text)) + "_Modified.sav";
         }
 
         private void buttonOutputSelectFile_Click(object sender, EventArgs e)
@@ -260,6 +265,21 @@ namespace CM0102Patcher
                     sr2.Write(textBoxOutput.Text, checkBoxSaveCompressed.Checked);
 
                     MessageBox.Show(string.Format("Modification complete!\r\n\r\nSaved to {0} successfully!", Path.GetFileName(textBoxOutput.Text)), "Modification Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    if (MessageBox.Show("Load new modified save file to enable making further changes?", "Load new file?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        // Swap the new saved name to be the new input name
+                        SetNewInputFile(textBoxOutput.Text);
+
+                        // Reset any player moves
+                        checkBoxMovePlayerTrigger = true;
+                        checkBoxMovePlayer.Checked = false;
+                        comboBoxPlayerName.Items.Clear();
+                        comboBoxPlayerName.Text = "";
+                        comboBoxClub.Items.Clear();
+                        comboBoxClub.Text = "";
+                    }
+
                 }
                 catch (Exception ex)
                 {
