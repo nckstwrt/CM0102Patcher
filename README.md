@@ -1,4 +1,4 @@
-# CM0102Patcher v2.20
+# CM0102Patcher v2.21
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/XIFt3Hu.png)
+![alt text](https://i.imgur.com/jH94Ol4.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,12 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.21:
+* Updated to support April 2022 Update (works with Oct 2021 too - now more stable (Gold Cup disabled))
+* New Bug Fixes option (fixes bugs found by MadScientist and others in the core code (adds UnlockCreativity, MarkingAndPositionClampTo100 and EnsureCashDoesNotResetToZero))
+* New Misc Patches (GoldCupCrashFixV2, MarkingAndPositionClampTo100, AllowVeryYoungPlayers, AllowFutureTransfersToBeFarOut)
+* Improvements to Save Game changer
 
 v2.20:
 * Stability and bug fix changes to 2021 Year Specific Patches
