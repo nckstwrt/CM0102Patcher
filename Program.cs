@@ -20,12 +20,17 @@ namespace CM0102Patcher
             */
             /*
             HistoryLoader hl = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct21\Data\index.dat");
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2022\Data\index.dat");
             var Italy = hl.nation.FirstOrDefault(x => x.Name.ReadString() == "Italy");
             var ItalianClubs = hl.club.Where(x => x.Nation == Italy.ID).ToList();
             foreach (var club in ItalianClubs)
             {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", club.Name.ReadString(), club.ShortName.ReadString(), club.Division >= 0 ? hl.club_comp.First(x => x.ID == club.Division).Name.ReadString() : club.Division.ToString(), club.LastPosition, club.LastDivision >= 0 ? hl.club_comp.First(x => x.ID == club.LastDivision).Name.ReadString() : club.LastDivision.ToString());
+                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", 
+                    club.Name.ReadString(), 
+                    club.ShortName.ReadString(), 
+                    club.Division >= 0 ? hl.club_comp.First(x => x.ID == club.Division).Name.ReadString() : club.Division.ToString(), 
+                    club.LastDivision >= 0 ? hl.club_comp.First(x => x.ID == club.LastDivision).Name.ReadString() : club.LastDivision.ToString(), 
+                    club.LastPosition);
             }
             */
             /*
