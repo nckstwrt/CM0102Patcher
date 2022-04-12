@@ -403,6 +403,7 @@ namespace CM0102Patcher
         // DE7375 - DE737D = DoubleHeapMemory.patch 
         // DE7383 - DE7470 = Derby County 12 point deduction (gives a bit of space after)
         // DE7470 - DE74A0 = Floating point clamping patch (with a little space)
+        // DE74B0 - DE74C3 = Null News Item Protection Patch
         public void ExpandExe(string fileName)
         {
             ApplyPatch(fileName, patches["addextraspaceheader"]);
