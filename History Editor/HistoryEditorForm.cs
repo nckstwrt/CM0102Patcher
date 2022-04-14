@@ -234,7 +234,7 @@ namespace CM0102Patcher
             }
 
             var club = compClubs.FirstOrDefault(x => historyLoader.GetTextFromBytes(x.Name) == clubName);
-            if (club.Name == null)
+            if (club == null || club.Name == null)
                 return -1;
             else
                 return club.ID;
