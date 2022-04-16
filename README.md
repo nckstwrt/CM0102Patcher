@@ -1,4 +1,4 @@
-# CM0102Patcher v2.21
+# CM0102Patcher v2.22
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/jH94Ol4.png)
+![alt text](https://i.imgur.com/cqHJY7x.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,16 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.22:
+* Fixed and added Points Reduction patch (Derby -21, Reading -12) to 2021 patches
+* Added Xeno's FIFA World Cup 2022 Groups for 2021 patches
+* Added a Null News Item Protection patch to stop a rare crash
+* Fixed the History Loader (was broken in 2.21)
+* Changed the Clamp for position and marking in Bug Fixes to 75 as per Fiestita
+* Enabled the "World Cup first year add reputable teams.patch" for 2021
+* Added a Misc Patch to make subs in Brazil + Copa Libertardores 9 (and enabled in 2021)
+* Added a patch to make sure only reputable teams enter the Asia Cup
 
 v2.21:
 * Updated to support April 2022 Update (works with Oct 2021 too - now more stable (Gold Cup disabled))
