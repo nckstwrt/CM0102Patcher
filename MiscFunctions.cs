@@ -254,6 +254,27 @@ namespace CM0102Patcher
             }
         }
 
+        public static byte[] StructToBytes<T>(T obj)
+        {
+            int objSize = Marshal.SizeOf(typeof(T));
+            byte[] arr = new byte[objSize];
+            IntPtr ptr = Marshal.AllocHGlobal(objSize);
+            Marshal.StructureToPtr(obj, ptr, true);
+            Marshal.Copy(ptr, arr, 0, objSize);
+            Marshal.FreeHGlobal(ptr);
+            return arr;
+        }
+
+        public static T BytesToStruct<T>(byte[] bytes)
+        {
+            int objSize = Marshal.SizeOf(typeof(T));
+            var ptrObj = Marshal.AllocHGlobal(objSize);
+            Marshal.Copy(bytes, 0, ptrObj, objSize);
+            var obj = (T)Marshal.PtrToStructure(ptrObj, typeof(T));
+            Marshal.FreeHGlobal(ptrObj);
+            return obj;
+        }
+
         public static ZipStorer OpenZip(string zipFileName)
         {
             var assembly = Assembly.GetExecutingAssembly();

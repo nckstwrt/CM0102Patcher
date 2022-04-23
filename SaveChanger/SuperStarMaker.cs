@@ -80,8 +80,8 @@ namespace CM0102Patcher
         public void OutputPlayer(TStaff thePlayer, List<TPlayer> players, List<string> firstNames, List<string> secondNames, DateTime gameDate)
         {
             var playerData = players.First(x => x.ID == thePlayer.Player);
-            var staffBytes = StructToBytes(thePlayer);
-            var playerBytes = StructToBytes(playerData);
+            var staffBytes = MiscFunctions.StructToBytes(thePlayer);
+            var playerBytes = MiscFunctions.StructToBytes(playerData);
 
             string firstName = firstNames[thePlayer.FirstName];
             string secondName = secondNames[thePlayer.SecondName];
@@ -101,37 +101,16 @@ namespace CM0102Patcher
 
         TStaff MakeStaff(TStaff staff, byte[] staffData)
         {
-            var staffBytes = StructToBytes(staff);
+            var staffBytes = MiscFunctions.StructToBytes(staff);
             Array.Copy(staffData, 0, staffBytes, 86, 8);
-            return BytesToStruct<TStaff>(staffBytes);
+            return MiscFunctions.BytesToStruct<TStaff>(staffBytes);
         }
 
         TPlayer MakePlayer(TPlayer player, byte[] playerData)
         {
-            var playerBytes = StructToBytes(player);
+            var playerBytes = MiscFunctions.StructToBytes(player);
             Array.Copy(playerData, 5, playerBytes, 5, playerData.Length - 5);
-            return BytesToStruct<TPlayer>(playerBytes);
-        }
-
-        byte[] StructToBytes<T>(T obj)
-        {
-            int objSize = Marshal.SizeOf(typeof(T));
-            byte[] arr = new byte[objSize];
-            IntPtr ptr = Marshal.AllocHGlobal(objSize);
-            Marshal.StructureToPtr(obj, ptr, true);
-            Marshal.Copy(ptr, arr, 0, objSize);
-            Marshal.FreeHGlobal(ptr);
-            return arr;
-        }
-
-        T BytesToStruct<T>(byte[] bytes)
-        {
-            int objSize = Marshal.SizeOf(typeof(T));
-            var ptrObj = Marshal.AllocHGlobal(objSize);
-            Marshal.Copy(bytes, 0, ptrObj, objSize);
-            var obj = (T)Marshal.PtrToStructure(ptrObj, typeof(T));
-            Marshal.FreeHGlobal(ptrObj);
-            return obj;
+            return MiscFunctions.BytesToStruct<TPlayer>(playerBytes);
         }
 
         string ByteArrayToString(byte[] arr, int start = 0, int length = -1)

@@ -12,8 +12,8 @@ namespace CM0102Patcher
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public class CM9798Player  // 215 bytes
         {
-            public int _UniqueID;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)] public byte[] _FirstName;
+    /*0*/   public int _UniqueID;
+    /*4*/   [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)] public byte[] _FirstName;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] _SecondName;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] _Nationality;
             public byte NationalCaps;
@@ -22,44 +22,44 @@ namespace CM0102Patcher
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] _DateJoined;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)] public byte[] _ContractEnds;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 13)] public byte[] _BirthDate;
-            public byte Age;
-            public byte Goalkeeper;
-            public byte Sweeper;
-            public byte Defence;
-            public byte Anchor;
-            public byte Midfield;
-            public byte Support;
-            public byte Attack;
-            public byte RightSided;
-            public byte LeftSided;
-            public byte CentralSided;
-            public short Ability;           // First byte = 1, then add 128
-            public short Potential;
-            public short Reputation;
-            public byte Adaptability;
-            public byte Aggression;
-            public byte BigOccasion;
-            public byte Character;
-            public byte Consistency;
-            public byte Creativity;
-            public byte Determination;
-            public byte Dirtyness;
-            public byte Dribbling;
-            public byte Flair;
-            public byte Heading;
-            public byte Influence;
-            public byte InjProne;
-            public byte Marking;
-            public byte OffTheBall;
-            public byte Pace;
-            public byte Passing;
-            public byte Positioning;
-            public byte SetPieces;
-            public byte Shooting;
-            public byte Stamina;
-            public byte Strength;
-            public byte Tackling;
-            public byte Technique;
+    /*AE*/  public byte Age;
+    /*AF*/  public byte Goalkeeper;
+    /*B0*/  public byte Sweeper;
+    /*B1*/  public byte Defence;
+    /*B2*/  public byte Anchor;
+    /*B3*/  public byte Midfield;
+    /*B4*/  public byte Support;
+    /*B5*/  public byte Attack;
+    /*B6*/  public byte RightSided;
+    /*B7*/  public byte LeftSided;
+    /*B8*/  public byte CentralSided;
+    /*B9*/  public short Ability;           // First byte = 1, then add 128
+    /*BB*/  public short Potential;
+    /*BD*/  public short Reputation;
+    /*BF*/  public byte Adaptability;  // 23
+            public byte Aggression;    // 24
+            public byte BigOccasion;   // 25
+            public byte Character;     // 26
+            public byte Consistency;   // 27
+            public byte Creativity;    // 28
+            public byte Determination; // 29
+            public byte Dirtyness;     // 30
+            public byte Dribbling;     // 31 
+            public byte Flair;         // 32
+            public byte Heading;       // 33
+            public byte Influence;     // 34
+            public byte InjProne;      // 35
+            public byte Marking;       // 36
+            public byte OffTheBall;    // 37
+            public byte Pace;          // 38
+            public byte Passing;       // 39
+            public byte Positioning;   // 40
+            public byte SetPieces;     // 41
+            public byte Shooting;      // 42
+            public byte Stamina;       // 43
+            public byte Strength;      // 44
+            public byte Tackling;      // 45
+            public byte Technique;     // 46
 
             public int UniqueID
             {
@@ -107,7 +107,8 @@ namespace CM0102Patcher
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public class CM9798Team
         {
-            /* 1 */  public int _UniqueID;
+                    /* 1 */
+            public int _UniqueID;
             /* 2 */  [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] UKLongName;
             /* 3 */  [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] UKShortName;
             /* 4 */  [MarshalAs(UnmanagedType.ByValArray, SizeConst = 35)] public byte[] UKDescription;

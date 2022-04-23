@@ -14,6 +14,7 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
+            //LinearExecutableFixUps.CheckFixups();
             /*
             Patcher p = new Patcher();
             p.CreateReversePatches(@"C:\ChampMan\Championship Manager 0102\cm0102 - Fresh - 3_9_68.exe");

@@ -79,6 +79,7 @@
     <Compile Include="ImageConverterForm.Designer.cs">
       <DependentUpon>ImageConverterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LinearExecutableFixUps.cs" />
     <Compile Include="MiscFunctions.cs" />
     <Compile Include="NamePatcher.cs" />
     <Compile Include="NamePatcherProgressWindow.cs">
