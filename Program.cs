@@ -14,6 +14,7 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
+            //CM9798.Test();
             //LinearExecutableFixUps.CheckFixups();
             /*
             Patcher p = new Patcher();

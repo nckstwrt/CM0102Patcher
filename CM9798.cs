@@ -334,7 +334,7 @@ namespace CM0102Patcher
 
             // CM0102 Load
             HistoryLoader hl = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2021\Data\index.dat");
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2022\Data\index.dat");
 
             // To speed things up, make a ID -> StaffHistoryMap + Club ID -> ClubMap
             Dictionary<int, List<TStaffHistory>> staffHistoryMap = new Dictionary<int, List<TStaffHistory>>();
@@ -797,7 +797,7 @@ namespace CM0102Patcher
                         var newPlayer = CM0102PlayerTo9798(newID++, ref newTeamID, hl, cm0102bestPlayer.ID, string.IsNullOrEmpty(cm2team.ShortName) ? cm2team.LongName : cm2team.ShortName, staffHistoryMap, clubMap, plhist, tmdata);
                         if (newPlayer != null)
                         {
-                            Console.WriteLine("Adding addtional player: {0} {1} at club {2} ({3})", newPlayer.FirstName, newPlayer.SecondName, cm2team.LongName, CM2.ConvertShortToNormalFormat(newPlayer.Reputation));
+                            // Console.WriteLine("Adding addtional player: {0} {1} at club {2} ({3})", newPlayer.FirstName, newPlayer.SecondName, cm2team.LongName, CM2.ConvertShortToNormalFormat(newPlayer.Reputation));
                             pldata.Add(newPlayer);
                         }
                     }
@@ -1093,7 +1093,7 @@ namespace CM0102Patcher
             return returnTeam;
         }
 
-        static CM9798Player CM0102PlayerTo9798(int newPlayerID, ref int newTeamID, HistoryLoader hl, int playerId, string setTeamTo, Dictionary<int, List<TStaffHistory>> staffHistoryMap, Dictionary<int, TClub> clubMap, List<CM2.CM2History> plhist, List<CM9798Team> tmdata, int yearModifier = -5)
+        static CM9798Player CM0102PlayerTo9798(int newPlayerID, ref int newTeamID, HistoryLoader hl, int playerId, string setTeamTo, Dictionary<int, List<TStaffHistory>> staffHistoryMap, Dictionary<int, TClub> clubMap, List<CM2.CM2History> plhist, List<CM9798Team> tmdata, int yearModifier = -4)
         {
             var s = hl.staff[playerId];
 
@@ -1251,13 +1251,17 @@ namespace CM0102Patcher
                     "Gibraltar",
                     "Seville",
                     "Comoros",
-                    "New Caledonia"
+                    "New Caledonia",
+                    "Maldives"
                 };
             if (nationsToBeMapped.Contains(nation))
                 nation = "France";
 
             if (tmdata.FirstOrDefault(x => x.LongName.ToLower() == nation.ToLower() || x.ShortName.ToLower() == nation.ToLower()) == null)
+            {
                 Console.WriteLine("********** NATION NOT KNOWN FOR PLAYER: {0} {1} - {2}", firstName, secondName, nation);
+                nation = "France";
+            }
 
             var newPlayer = new CM9798Player();
             newPlayer.UniqueID = newPlayerID;
@@ -1318,6 +1322,8 @@ namespace CM0102Patcher
             newPlayer.ContractEnds = ContractEnd;
 
             // Get History
+            if (firstName == "Jadon" && secondName == "Sancho")
+                Console.WriteLine("Found Jadon");
             if (staffHistoryMap.ContainsKey(s.ID) && s.DateOfBirth.Year != 0)
             {
                 var cm0102player_history = staffHistoryMap[s.ID].OrderBy(x => x.Year).ToList();
@@ -1328,9 +1334,9 @@ namespace CM0102Patcher
                 foreach (var h in cm0102player_history)
                 {
                     CM2.CM2History.CM2HistoryDetails detail = new CM2.CM2History.CM2HistoryDetails();
-                    detail.Year = (byte)(((h.Year - 1900) + yearModifier) + 1);
+                    detail.Year = (byte)(((h.Year - 1900) + yearModifier));// + 1);
 
-                    if (detail.Year >= 99 /*|| detail.Year <= 94*/)
+                    if (detail.Year > 100 /*|| detail.Year <= 94*/)
                         continue;
 
                     if (clubMap.ContainsKey(h.ClubID))
