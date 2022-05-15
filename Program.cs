@@ -14,8 +14,54 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
-            //CM9798.Test();
-            //LinearExecutableFixUps.CheckFixups();
+            //CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798");
+            /*
+            CM9798.Test();
+            CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG");
+            Console.WriteLine("{0:X} {1:X}", CM2.ConvertLongToCM2Format(CM9798.pldata.Count), CM2.ConvertShortToCM2Format((short)CM9798.pldata.Count));
+            Console.WriteLine("{0:X} {1:X} ({2})", CM2.ConvertLongToCM2Format(CM9798.mgdata.Count), CM2.ConvertShortToCM2Format((short)CM9798.mgdata.Count), CM9798.mgdata.Count);
+
+            var xx = CM9798.pldata.Max(x => x.UniqueID);
+            var xx2 = CM2.ConvertShortToCM2Format((short)xx);
+
+
+            CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798");
+
+            xx = CM9798.mgdata.Max(x => x.UniqueID);
+            xx2 = CM2.ConvertShortToCM2Format((short)xx);
+
+
+            var surnames = CM9798.mgdata.Select(x => x._SecondName).Distinct().ToList();
+            foreach (var name in surnames)
+            {
+                var strName = name.ReadString();
+                bool foundZero = false;
+                int namelen = 0;
+                foreach (var x in name)
+                {
+                    if (name[0] == ' ')
+                        Console.WriteLine("Weird3");
+                    if (name[29] != 0)
+                        Console.WriteLine("Weird4");
+
+                    if (x == 0)
+                        foundZero = true;
+                    else
+                    {
+                        namelen++;
+                        if (foundZero)
+                            Console.WriteLine("Weird");
+                    }
+                }
+                if (namelen <= 1)
+                    Console.WriteLine("Weird2");
+            }
+
+            //var xx = CM9798.pldata.Where(x => x.SecondName.ToList());
+            Console.WriteLine();
+            */
+            
+            //LinearExecutableFixUps.CheckFixups(@"C:\Development\DOSTEST\DOSTEST.EXE");
             /*
             Patcher p = new Patcher();
             p.CreateReversePatches(@"C:\ChampMan\Championship Manager 0102\cm0102 - Fresh - 3_9_68.exe");

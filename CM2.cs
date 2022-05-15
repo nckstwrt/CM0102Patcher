@@ -471,7 +471,7 @@ namespace CM0102Patcher
             return tmdata.FindIndex(x => x.LongName.ReadString().StartsWithIgnoreBlank(team) || x.ShortName.ReadString().StartsWithIgnoreBlank(team) || x.LongName.ReadString().StartsWithIgnoreBlank(extraCheck) || x.ShortName.ReadString().StartsWithIgnoreBlank(extraCheck));
         }
 
-        public static void ApplyCorrectCount(string file, int position, int count, bool cm9798mode = false)
+        public static void ApplyCorrectCount(string file, int position, int count, bool cm9798mode = false, short maxID = -1)
         {
             using (var f = File.Open(file, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             using (var bw = new BinaryWriter(f))
@@ -481,6 +481,9 @@ namespace CM0102Patcher
                     bw.Write(ConvertLongToCM2Format(count));
                 else
                     bw.Write(ConvertShortToCM2Format((short)count));
+
+                if (maxID != -1)
+                    bw.Write(maxID);
             }
         }
 

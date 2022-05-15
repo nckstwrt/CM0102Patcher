@@ -219,12 +219,12 @@ namespace CM0102Patcher
             public UInt32 address;
         }
 
-        public static void CheckFixups()
+        public static void CheckFixups(string fileName)
         {
-            using (var f = File.Open(@"C:\ChampMan\cm9798\NewBuild\Data\CM9798\cm2e16.exe", FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            using (var f = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             using (var br = new BinaryReader(f))
             {
-                var ptrToLE = FindLEOffset(@"C:\ChampMan\cm9798\NewBuild\Data\CM9798\cm2e16.exe");
+                var ptrToLE = FindLEOffset(fileName);
                 
                 // Seems the Code Org Offset is here - probably isn't always. TODO: Parse LE properly
                 f.Seek(ptrToLE + 0xC8, SeekOrigin.Begin);
@@ -270,7 +270,8 @@ namespace CM0102Patcher
                 var table_offset = (UInt32)(ptrToLE + le_header.fixup_record_table_offset);
 
                 int counter = 0;
-                using (StreamWriter sw = new StreamWriter(@"C:\ChampMan\cm9798\FixUpOffsets.txt"))
+                using (StreamWriter sw = new StreamWriter(Path.Combine(Path.GetDirectoryName(fileName), "FixUpOffsets.txt")))
+                using (StreamWriter sw2 = new StreamWriter(Path.Combine(Path.GetDirectoryName(fileName), "FixUpOffsetsCode.txt")))
                 {
                     for (int oi = 0; oi < object_headers.Count; oi++)
                     {
@@ -298,6 +299,8 @@ namespace CM0102Patcher
                                 var outStr = string.Format("{0:0000000}. File Offset: 0x{1:X} has IDA Code: 0x{2:X} (IDA Code raw:{3:X}) and Fixup Address 0x{4:X} {5}", counter++, saved_offset, fixup.offset + codeOrg, fixup.offset, fixup.address, dupe ? "DUPE!" : "");
                                 sw.WriteLine(outStr);
                                 Console.WriteLine(outStr);
+
+                                sw2.WriteLine("\tFixUpLocation(0x{0:X}, 0x{1:X}),", fixup.offset + codeOrg, fixup.address);
                             }
                         }
                     }

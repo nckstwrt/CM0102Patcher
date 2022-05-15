@@ -9,6 +9,11 @@ namespace CM0102Patcher
 {
     public class CM9798
     {
+        public static bool RemoveDiatrics = false;
+        public static int MaxPlayers = 20000;   // EditHelp = 20000
+        public static int MaxTeams = 2300;      // EditHelp = 2300
+        public static int MaxManagers = 1000;   // EditHelp = 1000
+
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public class CM9798Player  // 215 bytes
         {
@@ -70,37 +75,37 @@ namespace CM0102Patcher
             public string FirstName
             {
                 get { return MiscFunctions.GetTextFromBytes(_FirstName); }
-                set { _FirstName = MiscFunctions.GetBytesFromText(value, 30); }
+                set { _FirstName = MiscFunctions.GetBytesFromText(value, 30, RemoveDiatrics); }
             }
             public string SecondName
             {
                 get { return MiscFunctions.GetTextFromBytes(_SecondName); }
-                set { _SecondName = MiscFunctions.GetBytesFromText(value, 35); }
+                set { _SecondName = MiscFunctions.GetBytesFromText(value, 35, RemoveDiatrics); }
             }
             public string Nationality
             {
                 get { return MiscFunctions.GetTextFromBytes(_Nationality); }
-                set { _Nationality = MiscFunctions.GetBytesFromText(value, 35); }
+                set { _Nationality = MiscFunctions.GetBytesFromText(value, 35, RemoveDiatrics); }
             }
             public string Team
             {
                 get { return MiscFunctions.GetTextFromBytes(_Team); }
-                set { _Team = MiscFunctions.GetBytesFromText(value, 35); }
+                set { _Team = MiscFunctions.GetBytesFromText(value, 35, RemoveDiatrics); }
             }
             public string DateJoined
             {
                 get { return MiscFunctions.GetTextFromBytes(_DateJoined); }
-                set { _DateJoined = MiscFunctions.GetBytesFromText(value, 10); }
+                set { _DateJoined = MiscFunctions.GetBytesFromText(value, 10, RemoveDiatrics); }
             }
             public string ContractEnds
             {
                 get { return MiscFunctions.GetTextFromBytes(_ContractEnds); }
-                set { _ContractEnds = MiscFunctions.GetBytesFromText(value, 10); }
+                set { _ContractEnds = MiscFunctions.GetBytesFromText(value, 10, RemoveDiatrics); }
             }
             public string BirthDate
             {
                 get { return MiscFunctions.GetTextFromBytes(_BirthDate); }
-                set { _BirthDate = MiscFunctions.GetBytesFromText(value, 13); }
+                set { _BirthDate = MiscFunctions.GetBytesFromText(value, 13, RemoveDiatrics); }
             }
         }
 
@@ -172,37 +177,37 @@ namespace CM0102Patcher
             public string LongName
             {
                 get { return MiscFunctions.GetTextFromBytes(UKLongName); }
-                set { UKLongName = MiscFunctions.GetBytesFromText(value, 35); }
+                set { UKLongName = MiscFunctions.GetBytesFromText(value, 35, RemoveDiatrics); }
             }
             public string ShortName
             {
                 get { return MiscFunctions.GetTextFromBytes(UKShortName); }
-                set { UKShortName = MiscFunctions.GetBytesFromText(value, 35); }
+                set { UKShortName = MiscFunctions.GetBytesFromText(value, 35, RemoveDiatrics); }
             }
             public string Nation
             {
                 get { return MiscFunctions.GetTextFromBytes(_Nation); }
-                set { _Nation = MiscFunctions.GetBytesFromText(value, 35); }
+                set { _Nation = MiscFunctions.GetBytesFromText(value, 35, RemoveDiatrics); }
             }
             public string Region
             {
                 get { return MiscFunctions.GetTextFromBytes(_Region); }
-                set { _Region = MiscFunctions.GetBytesFromText(value, 35); }
+                set { _Region = MiscFunctions.GetBytesFromText(value, 35, RemoveDiatrics); }
             }
             public string Division
             {
                 get { return MiscFunctions.GetTextFromBytes(_Division); }
-                set { _Division = MiscFunctions.GetBytesFromText(value, 15); }
+                set { _Division = MiscFunctions.GetBytesFromText(value, 15, RemoveDiatrics); }
             }
             public string LastDivision
             {
                 get { return MiscFunctions.GetTextFromBytes(_LastDivision); }
-                set { _LastDivision = MiscFunctions.GetBytesFromText(value, 15); }
+                set { _LastDivision = MiscFunctions.GetBytesFromText(value, 15, RemoveDiatrics); }
             }
             public string Stadium
             {
                 get { return MiscFunctions.GetTextFromBytes(_Stadium); }
-                set { _Stadium = MiscFunctions.GetBytesFromText(value, 35); }
+                set { _Stadium = MiscFunctions.GetBytesFromText(value, 35, RemoveDiatrics); }
             }
             public int Seating
             {
@@ -245,22 +250,22 @@ namespace CM0102Patcher
             public string FirstName
             {
                 get { return MiscFunctions.GetTextFromBytes(_FirstName); }
-                set { _FirstName = MiscFunctions.GetBytesFromText(value, 20); }
+                set { _FirstName = MiscFunctions.GetBytesFromText(value, 20, RemoveDiatrics); }
             }
             public string SecondName
             {
                 get { return MiscFunctions.GetTextFromBytes(_SecondName); }
-                set { _SecondName = MiscFunctions.GetBytesFromText(value, 35); }
+                set { _SecondName = MiscFunctions.GetBytesFromText(value, 35, RemoveDiatrics); }
             }
             public string Nationality
             {
                 get { return MiscFunctions.GetTextFromBytes(_Nationality); }
-                set { _Nationality = MiscFunctions.GetBytesFromText(value, 35); }
+                set { _Nationality = MiscFunctions.GetBytesFromText(value, 35, RemoveDiatrics); }
             }
             public string Favoured
             {
                 get { return MiscFunctions.GetTextFromBytes(_Favoured); }
-                set { _Favoured = MiscFunctions.GetBytesFromText(value, 35); }
+                set { _Favoured = MiscFunctions.GetBytesFromText(value, 35, RemoveDiatrics); }
             }
 
             public short MotivatingAbility
@@ -284,31 +289,32 @@ namespace CM0102Patcher
             public string Formation
             {
                 get { return MiscFunctions.GetTextFromBytes(_Formation); }
-                set { _Formation = MiscFunctions.GetBytesFromText(value, 10); }
+                set { _Formation = MiscFunctions.GetBytesFromText(value, 10, RemoveDiatrics); }
             }
             public string Style
             {
                 get { return MiscFunctions.GetTextFromBytes(_Style); }
-                set { _Style = MiscFunctions.GetBytesFromText(value, 10); }
+                set { _Style = MiscFunctions.GetBytesFromText(value, 10, RemoveDiatrics); }
             }
             public string Team
             {
                 get { return MiscFunctions.GetTextFromBytes(CurrentClub); }
+                set { CurrentClub = MiscFunctions.GetBytesFromText(value, 35, RemoveDiatrics); }
             }
             public string DateJoined
             {
                 get { return MiscFunctions.GetTextFromBytes(_DateJoined); }
-                set { _DateJoined = MiscFunctions.GetBytesFromText(value, 10); }
+                set { _DateJoined = MiscFunctions.GetBytesFromText(value, 10, RemoveDiatrics); }
             }
             public string NationalJob
             {
                 get { return MiscFunctions.GetTextFromBytes(_NationalJob); }
-                set { _NationalJob = MiscFunctions.GetBytesFromText(value, 35); }
+                set { _NationalJob = MiscFunctions.GetBytesFromText(value, 35, RemoveDiatrics); }
             }
             public string DateStarted
             {
                 get { return MiscFunctions.GetTextFromBytes(_DateStarted); }
-                set { _DateStarted = MiscFunctions.GetBytesFromText(value, 10); }
+                set { _DateStarted = MiscFunctions.GetBytesFromText(value, 10, RemoveDiatrics); }
             }
         }
 
@@ -323,8 +329,26 @@ namespace CM0102Patcher
         public static void LoadCM9798DataFromDirectory(string dir)
         {
             tmdata = MiscFunctions.ReadFile<CM9798Team>(Path.Combine(dir, "TMDATA.DB1"), TeamDataStartPos);
+            Console.WriteLine("tmdata array: {0} MaxID: {1}", tmdata.Count, tmdata.Select(x => x.UniqueID).Max());
+            PrintFileCounts(Path.Combine(dir, "TMDATA.DB1"), TeamDataStartPos);
             pldata = MiscFunctions.ReadFile<CM9798Player>(Path.Combine(dir, "PLAYERS.DB1"), PlayerDataStartPos);
+            Console.WriteLine("pldata array: {0} MaxID: {1}", pldata.Count, pldata.Select(x => x.UniqueID).Max());
+            PrintFileCounts(Path.Combine(dir, "PLAYERS.DB1"), PlayerDataStartPos);
             mgdata = MiscFunctions.ReadFile<CM9798Manager>(Path.Combine(dir, "MGDATA.DB1"), ManagerDataStartPos);
+            Console.WriteLine("mgdata array: {0} MaxID: {1}", mgdata.Count, mgdata.Select(x => x.UniqueID).Max());
+            PrintFileCounts(Path.Combine(dir, "MGDATA.DB1"), ManagerDataStartPos);
+        }
+
+        static void PrintFileCounts(string fileName, int startPos)
+        {
+            using (var f = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                f.Seek(startPos - 8, SeekOrigin.Begin);
+                using (var br = new BinaryReader(f))
+                {
+                    Console.WriteLine("{0} - Count: {1} MaxID: {2}", Path.GetFileName(fileName), CM2.ConvertLongToNormalFormat(br.ReadInt32()), br.ReadInt32());
+                }
+            }
         }
 
         public static void Test()
@@ -569,7 +593,7 @@ namespace CM0102Patcher
                     if (cm9798mgr != null)
                     {
                         var cm0102mgr = hl.staff.FindIndex(x => x.ID == cm0102team.Manager);
-                        if (cm0102mgr != -1)
+                        if (cm0102mgr != -1 && convertedManagers.Count < 1000)
                         {
                             cm9798mgr.FirstName = MiscFunctions.GetTextFromBytes(hl.first_names[hl.staff[cm0102mgr].FirstName].Name);
                             cm9798mgr.SecondName = MiscFunctions.GetTextFromBytes(hl.second_names[hl.staff[cm0102mgr].SecondName].Name);
@@ -578,7 +602,20 @@ namespace CM0102Patcher
                         }
                     }
                     else
-                        Console.WriteLine("CANT FIND CM9798 Manager: " + cm2team.LongName);
+                    {
+                        var cm0102mgr = hl.staff.FindIndex(x => x.ID == cm0102team.Manager);
+                        if (cm0102mgr != -1 && convertedManagers.Count < 1000)
+                        {
+                            CM9798Manager newMgr = new CM9798Manager();
+                            newMgr.Team = cm2team.ShortName;
+                            newMgr.FirstName = hl.first_names[hl.staff[cm0102mgr].FirstName].Name.ReadString();
+                            newMgr.SecondName = hl.second_names[hl.staff[cm0102mgr].SecondName].Name.ReadString();
+                            newMgr.Nationality = "England";
+                            convertedManagers.Add(newMgr);
+                        }
+                        else
+                            Console.WriteLine("CANT FIND CM9798 Manager: " + cm2team.LongName);
+                    }
                     // MANAGER HANDLING --- END
 
                     Console.WriteLine("{0} - Was {1} now {2}", cm2team.LongName, cm2team.Division, DivisionMapper(hl, cm0102team));
@@ -769,7 +806,17 @@ namespace CM0102Patcher
             // This is needed at least for the EPR as if you load the Scottish league without the English league, you can have errors where the European Cups will try and find the 2nd place team
             // In the EPR and not find it
             ListDivisionAndFixLastPositions(tmdata, "EPR", true);
+            ListDivisionAndFixLastPositions(tmdata, "ED1", true);
+            ListDivisionAndFixLastPositions(tmdata, "ED2", true);
+            ListDivisionAndFixLastPositions(tmdata, "ED3", true);
+            ListDivisionAndFixLastPositions(tmdata, "ENL", true);
+
             ListDivisionAndFixLastPositions(tmdata, "SPR", true);
+            ListDivisionAndFixLastPositions(tmdata, "SD1", true);
+            ListDivisionAndFixLastPositions(tmdata, "SD2", true);
+            ListDivisionAndFixLastPositions(tmdata, "SD3", true);
+            ListDivisionAndFixLastPositions(tmdata, "SNL", true);
+
             ListDivisionAndFixLastPositions(tmdata, "ISA", true);
             ListDivisionAndFixLastPositions(tmdata, "GD1", true);
             ListDivisionAndFixLastPositions(tmdata, "FD1", true);
@@ -803,28 +850,52 @@ namespace CM0102Patcher
                     }
                 }
 
-                if (pldata.Count > 25000)
+                if (pldata.Count >= MaxPlayers)
                     break;
             }
 
+            // Ensure all English Division teams are English!
+            foreach (var team in tmdata.Where(x => x.Division.StartsWith("E")))
+                team.Nation = "England";
+            foreach (var team in tmdata.Where(x => x.Division.StartsWith("P")))
+                team.Nation = "Portugal";
+            foreach (var team in tmdata.Where(x => x.Division.StartsWith("B")))
+                team.Nation = "Belgium";
+            foreach (var team in tmdata.Where(x => x.Division.StartsWith("SP") && x.Division != "SPR"))
+                team.Nation = "Spain";
+            foreach (var team in tmdata.Where(x => x.Division.StartsWith("SD") || x.Division == "SPR" || x.Division == "SNL"))
+                team.Nation = "Scotland";
+            foreach (var team in tmdata.Where(x => x.Division.StartsWith("G")))
+                team.Nation = "Germany";
+            foreach (var team in tmdata.Where(x => x.Division.StartsWith("F")))
+                team.Nation = "France";
+
+            // Reassign the Unique IDs
             mgdata = convertedManagers;
+            for (int i = 0; i < mgdata.Count; i++)
+                mgdata[i].UniqueID = i;
+            for (int i = 0; i < pldata.Count; i++)
+                pldata[i].UniqueID = i;
+            for (int i = 0; i < tmdata.Count; i++)
+                tmdata[i].UniqueID = i;
 
-            MiscFunctions.SaveFile<CM9798Team>(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\TMDATA.DB1", tmdata, TeamDataStartPos);
+            MiscFunctions.SaveFile<CM9798Team>(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\TMDATA.DB1", tmdata, TeamDataStartPos, true);
             MiscFunctions.SaveFile<CM9798Player>(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLAYERS.DB1", pldata, PlayerDataStartPos, true);
-            MiscFunctions.SaveFile<CM9798Manager>(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\MGDATA.DB1", mgdata, ManagerDataStartPos);
+            MiscFunctions.SaveFile<CM9798Manager>(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\MGDATA.DB1", mgdata, ManagerDataStartPos, true);
 
-            CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\TMDATA.DB1", TeamDataStartPos-8, tmdata.Count, true);
-            //CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\TMDATA.DB1", TeamDataStartPos-2, tmdata.Count);
-            CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLAYERS.DB1", 660, pldata.Count, false);
-            CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\MGDATA.DB1", ManagerDataStartPos-8, mgdata.Count, true);
+            CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\TMDATA.DB1", TeamDataStartPos-8, tmdata.Count, true, (short)(tmdata.Max(x => x.UniqueID)+1));
+            CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLAYERS.DB1", 660, pldata.Count, false, (short)(pldata.Max(x => x.UniqueID)+1));
+            CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\MGDATA.DB1", ManagerDataStartPos-8, mgdata.Count, true, (short)(mgdata.Max(x => x.UniqueID)+1));
+
             CM2.WriteCM2HistoryFile(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLHIST98.BIN", plhist, true);
 
             WriteTeamDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\TMDATA.CSV", tmdata);
             WritePlayerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLAYERS.CSV", pldata);
             WriteManagerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\MGDATA.CSV", mgdata);
 
-            Console.WriteLine("Player Count: {0}", pldata.Count);
-            Console.WriteLine("Team Count: {0}", tmdata.Count);
+            Console.WriteLine("Player Count: {0} (MaxID: {1})", pldata.Count, pldata.Max(x => x.UniqueID) + 1);
+            Console.WriteLine("Team Count: {0} (MaxID: {1})", tmdata.Count, tmdata.Max(x => x.UniqueID) + 1);
+            Console.WriteLine("Manager Count: {0} (MaxID: {1})", mgdata.Count, mgdata.Max(x => x.UniqueID) + 1);
         }
 
         static void ListDivisionAndFixLastPositions(List<CM9798Team> tmdata, string division, bool quietly = false)
@@ -1110,7 +1181,7 @@ namespace CM0102Patcher
 
             // Have to cut to 20 letter (even though the max you get from CM0102 is 25)
             // Any more and you get addname 1 (maybe)
-            firstName = firstName.Substring(0, Math.Min(39, firstName.Length));
+            firstName = firstName.Substring(0, Math.Min(29, firstName.Length));
             secondName = secondName.Substring(0, Math.Min(34, secondName.Length));
             commonName = commonName.Substring(0, Math.Min(34, commonName.Length));
 
@@ -1367,7 +1438,7 @@ namespace CM0102Patcher
                         // Now check that team exists in CM2
                         if (cm0102TeamName != setTeamTo && cm2team == null)
                         {
-                            if (tmdata.Count() < 2000)
+                            if (tmdata.Count() < (MaxTeams - 100))   // buffer, as we add teams elsewhere
                             {
                                 tmdata.Insert(100, CreateUnknownTeam(newTeamID++, cm0102TeamName, cm0102ShortTeamName));
                                 detail.Team = cm0102ShortTeamName;

@@ -26,8 +26,11 @@ namespace CM0102Patcher
             return ret;
         }
 
-        public static byte[] GetBytesFromText(string text, int byteArraySize)
+        public static byte[] GetBytesFromText(string text, int byteArraySize, bool removeDiatrics = false)
         {
+            if (removeDiatrics)
+                text = RemoveDiacritics(text);
+
             var bytes = new byte[byteArraySize];
             var len = text.Length;
             if (len > byteArraySize)
