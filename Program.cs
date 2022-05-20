@@ -14,16 +14,25 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
-            //CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798");
             /*
-            CM9798.Test();
+            CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798");
+
             CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG");
+
+            CM9798.Test();
+
+            
+            CM9798.WriteTeamDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\TMDATA.CSV", CM9798.tmdata);
+            CM9798.WritePlayerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\PLAYERS.CSV", CM9798.pldata);
+            CM9798.WriteManagerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\MGDATA.CSV", CM9798.mgdata);
+
             Console.WriteLine("{0:X} {1:X}", CM2.ConvertLongToCM2Format(CM9798.pldata.Count), CM2.ConvertShortToCM2Format((short)CM9798.pldata.Count));
             Console.WriteLine("{0:X} {1:X} ({2})", CM2.ConvertLongToCM2Format(CM9798.mgdata.Count), CM2.ConvertShortToCM2Format((short)CM9798.mgdata.Count), CM9798.mgdata.Count);
 
             var xx = CM9798.pldata.Max(x => x.UniqueID);
             var xx2 = CM2.ConvertShortToCM2Format((short)xx);
-
+            */
+            /*
 
             CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798");
 

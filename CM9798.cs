@@ -10,9 +10,10 @@ namespace CM0102Patcher
     public class CM9798
     {
         public static bool RemoveDiatrics = false;
-        public static int MaxPlayers = 20000;   // EditHelp = 20000
+        public static int MaxPlayers = 18300;   // EditHelp = 20000
         public static int MaxTeams = 2300;      // EditHelp = 2300
         public static int MaxManagers = 1000;   // EditHelp = 1000
+        public static Random rand = new Random();
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public class CM9798Player  // 215 bytes
@@ -316,6 +317,11 @@ namespace CM0102Patcher
                 get { return MiscFunctions.GetTextFromBytes(_DateStarted); }
                 set { _DateStarted = MiscFunctions.GetBytesFromText(value, 10, RemoveDiatrics); }
             }
+
+            public CM9798Manager Copy()
+            {
+                return (CM9798Manager)this.MemberwiseClone();
+            }
         }
 
         public const int TeamDataStartPos = 895;
@@ -329,13 +335,13 @@ namespace CM0102Patcher
         public static void LoadCM9798DataFromDirectory(string dir)
         {
             tmdata = MiscFunctions.ReadFile<CM9798Team>(Path.Combine(dir, "TMDATA.DB1"), TeamDataStartPos);
-            Console.WriteLine("tmdata array: {0} MaxID: {1}", tmdata.Count, tmdata.Select(x => x.UniqueID).Max());
+            Console.WriteLine("tmdata array: {0} MaxID: {1} MinID: {2}", tmdata.Count, tmdata.Select(x => x.UniqueID).Max(), tmdata.Select(x => x.UniqueID).Min());
             PrintFileCounts(Path.Combine(dir, "TMDATA.DB1"), TeamDataStartPos);
             pldata = MiscFunctions.ReadFile<CM9798Player>(Path.Combine(dir, "PLAYERS.DB1"), PlayerDataStartPos);
-            Console.WriteLine("pldata array: {0} MaxID: {1}", pldata.Count, pldata.Select(x => x.UniqueID).Max());
+            Console.WriteLine("pldata array: {0} MaxID: {1} MinID: {2}", pldata.Count, pldata.Select(x => x.UniqueID).Max(), pldata.Select(x => x.UniqueID).Min());
             PrintFileCounts(Path.Combine(dir, "PLAYERS.DB1"), PlayerDataStartPos);
             mgdata = MiscFunctions.ReadFile<CM9798Manager>(Path.Combine(dir, "MGDATA.DB1"), ManagerDataStartPos);
-            Console.WriteLine("mgdata array: {0} MaxID: {1}", mgdata.Count, mgdata.Select(x => x.UniqueID).Max());
+            Console.WriteLine("mgdata array: {0} MaxID: {1} MinID: {2}", mgdata.Count, mgdata.Select(x => x.UniqueID).Max(), mgdata.Select(x => x.UniqueID).Min());
             PrintFileCounts(Path.Combine(dir, "MGDATA.DB1"), ManagerDataStartPos);
         }
 
@@ -572,6 +578,8 @@ namespace CM0102Patcher
             var newID = pldata.Count > 0 ? pldata.Max(x => x.UniqueID) + 1 : 0;
             var newTeamID = tmdata.Max(x => x.UniqueID) + 1;
 
+            var ManagersAlreadyAdded = new List<int>();
+
             foreach (var cm0102team in cm0102clubs)
             {
                 var currentCM0102Team = MiscFunctions.GetTextFromBytes(cm0102team.Name);
@@ -593,25 +601,30 @@ namespace CM0102Patcher
                     if (cm9798mgr != null)
                     {
                         var cm0102mgr = hl.staff.FindIndex(x => x.ID == cm0102team.Manager);
-                        if (cm0102mgr != -1 && convertedManagers.Count < 1000)
+                        if (cm0102mgr != -1 && convertedManagers.Count < MaxManagers && !ManagersAlreadyAdded.Contains(cm0102mgr))
                         {
                             cm9798mgr.FirstName = MiscFunctions.GetTextFromBytes(hl.first_names[hl.staff[cm0102mgr].FirstName].Name);
                             cm9798mgr.SecondName = MiscFunctions.GetTextFromBytes(hl.second_names[hl.staff[cm0102mgr].SecondName].Name);
 
-                            convertedManagers.Add(cm9798mgr);
+                            if (cm9798mgr.CurrentClub.ReadString() == "Juventus")
+                                Console.WriteLine();
+
+                            if (convertedManagers.Count(x => x.CurrentClub == cm9798mgr.CurrentClub) == 0)
+                            {
+                                convertedManagers.Add(cm9798mgr.Copy());
+                                ManagersAlreadyAdded.Add(cm0102mgr);
+                            }
+                            else
+                                Console.WriteLine("****** Already added a manager for this club! *******");
                         }
                     }
                     else
                     {
                         var cm0102mgr = hl.staff.FindIndex(x => x.ID == cm0102team.Manager);
-                        if (cm0102mgr != -1 && convertedManagers.Count < 1000)
+                        if (cm0102mgr != -1 && convertedManagers.Count < MaxManagers)
                         {
-                            CM9798Manager newMgr = new CM9798Manager();
-                            newMgr.Team = cm2team.ShortName;
-                            newMgr.FirstName = hl.first_names[hl.staff[cm0102mgr].FirstName].Name.ReadString();
-                            newMgr.SecondName = hl.second_names[hl.staff[cm0102mgr].SecondName].Name.ReadString();
-                            newMgr.Nationality = "England";
-                            convertedManagers.Add(newMgr);
+                            int job = hl.staff[cm0102mgr].JobForClub;
+                            AddManager(hl, cm0102mgr, cm2team.ShortName, "", convertedManagers, ManagersAlreadyAdded);
                         }
                         else
                             Console.WriteLine("CANT FIND CM9798 Manager: " + cm2team.LongName);
@@ -870,14 +883,70 @@ namespace CM0102Patcher
             foreach (var team in tmdata.Where(x => x.Division.StartsWith("F")))
                 team.Nation = "France";
 
+            // Add extra managers
+            var unaddedManagers = hl.staff.Where(x => x.ClubJob == (int)StaffJob.JOB_MANAGER && !ManagersAlreadyAdded.Contains(x.ID)).ToList();
+            for (int i = convertedManagers.Count, j = 0; i < MaxManagers; i++)
+            {
+                if (j < unaddedManagers.Count)
+                    AddManager(hl, unaddedManagers[j++].ID, "", "", convertedManagers, ManagersAlreadyAdded);
+            }
+
+            // Add national managers
+            var nationalManagerNationsFromOriginalGame = new List<string>()
+            {
+                "Australia",
+                "Belgium",
+                "Denmark",
+                "Eire",
+                "England",
+                "Faroe Islands",
+                "Finland",
+                "France",
+                "Germany",
+                "Holland",
+                "Italy",
+                "Morocco",
+                "N.Ireland",
+                "Nigeria",
+                "Portugal",
+                "Scotland",
+                "Spain",
+                "Wales"
+            };
+            var nationalManagers = hl.staff.Where(x => x.NationalJob > 0 && !ManagersAlreadyAdded.Contains(x.ID)).ToList();
+            foreach (var nationalManager in nationalManagers)
+            {
+                var nat_club = hl.nat_club.FirstOrDefault(x => x.ID == nationalManager.NationalJob);
+                if (nat_club != null)
+                {
+                    var nation = hl.nation[nat_club.Nation].Name.ReadString();
+
+                    bool mapped;
+                    nation = NationMapper(nation, out mapped);
+
+                    // Hack: For Northern Ireland
+                    if (nation == "N.Ireland")
+                        mapped = false;
+
+                    if (!mapped && !convertedManagers.Exists(x => x.NationalJob == nation))
+                    {
+                        if (nationalManagerNationsFromOriginalGame.Contains(nation))
+                            AddManager(hl, nationalManager.ID, "", nation, convertedManagers, ManagersAlreadyAdded);
+                    }
+                    Console.WriteLine("Adding National Manager {0} {1} to nation {2}", hl.first_names[nationalManager.FirstName].Name.ReadString(), hl.second_names[nationalManager.SecondName].Name.ReadString(), nation);
+                }
+            }
+
             // Reassign the Unique IDs
             mgdata = convertedManagers;
-            for (int i = 0; i < mgdata.Count; i++)
-                mgdata[i].UniqueID = i;
+
+            int startUniqueID = 1;
             for (int i = 0; i < pldata.Count; i++)
-                pldata[i].UniqueID = i;
+                pldata[i].UniqueID = i + (startUniqueID++);
+            for (int i = 0; i < mgdata.Count; i++)
+                mgdata[i].UniqueID = i + (startUniqueID++);
             for (int i = 0; i < tmdata.Count; i++)
-                tmdata[i].UniqueID = i;
+                tmdata[i].UniqueID = i + (startUniqueID++);
 
             MiscFunctions.SaveFile<CM9798Team>(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\TMDATA.DB1", tmdata, TeamDataStartPos, true);
             MiscFunctions.SaveFile<CM9798Player>(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLAYERS.DB1", pldata, PlayerDataStartPos, true);
@@ -896,6 +965,65 @@ namespace CM0102Patcher
             Console.WriteLine("Player Count: {0} (MaxID: {1})", pldata.Count, pldata.Max(x => x.UniqueID) + 1);
             Console.WriteLine("Team Count: {0} (MaxID: {1})", tmdata.Count, tmdata.Max(x => x.UniqueID) + 1);
             Console.WriteLine("Manager Count: {0} (MaxID: {1})", mgdata.Count, mgdata.Max(x => x.UniqueID) + 1);
+        }
+
+        static void AddManager(HistoryLoader hl, int cm0102mgr, string teamName, string NationalJob, List<CM9798Manager> convertedManagers, List<int> ManagersAlreadyAdded)
+        {
+            var formations = new List<string>
+            {
+                "352D",
+                "352N",
+                "352SW",
+                "422N",
+                "433N",
+                "433VA",
+                "442A",
+                "442D",
+                "442N",
+                "451D",
+                "532A",
+                "532N",
+                "532VD",
+                "AJAX",
+                "CMSN",
+                "DIAN"
+            };
+
+            var style = new List<string>
+            {
+                "CONT",
+                "DRCT",
+                "LONG",
+                "PASS"
+            };
+
+            if (hl.staff[cm0102mgr].NonPlayer > 0)
+            { 
+                CM9798Manager newMgr = new CM9798Manager();
+                TNonPlayer nonPlayer = hl.nonPlayers[hl.staff[cm0102mgr].NonPlayer];
+                newMgr.Team = teamName;
+                newMgr.NationalJob = NationalJob;
+                newMgr.FirstName = hl.first_names[hl.staff[cm0102mgr].FirstName].Name.ReadString();
+                newMgr.SecondName = hl.second_names[hl.staff[cm0102mgr].SecondName].Name.ReadString();
+                var nation = hl.nation[hl.staff[cm0102mgr].Nation].Name.ReadString();
+                bool mapped;
+                nation = NationMapper(nation, out mapped);
+                newMgr.Nationality = nation;
+                newMgr.BoardConfidence = (byte)rand.Next(100);
+                newMgr.YearsInGame = (byte)rand.Next(10);
+                newMgr.Reputation = (short)nonPlayer.CurrentReputation;
+                newMgr.Judgement = (short)nonPlayer.CurrentAbility;
+                newMgr.MotivatingAbility = (short)(nonPlayer.Motivating * 10);
+                newMgr.Formation = formations[rand.Next(formations.Count)];
+                newMgr.Style = style[rand.Next(style.Count)];
+                if (string.IsNullOrEmpty(NationalJob))
+                    newMgr.DateStarted = "01.97";
+                else
+                    newMgr.DateJoined = "01.96";
+
+                convertedManagers.Add(newMgr);
+                ManagersAlreadyAdded.Add(cm0102mgr);
+            }
         }
 
         static void ListDivisionAndFixLastPositions(List<CM9798Team> tmdata, string division, bool quietly = false)
@@ -1164,6 +1292,91 @@ namespace CM0102Patcher
             return returnTeam;
         }
 
+        public static string NationMapper(string nation, out bool mapped)
+        {
+            var tempNation = nation;
+            if (nation == "Serbia" || nation == "Bosnia-Herzegovina" || nation == "Montenegro" || nation == "North Macedonia" || nation == "Kosovo")
+                nation = "Yugoslavia";
+            if (nation == "Gabon")
+                nation = "France";
+            if (nation == "Democratic Republic of Congo" || nation == "Tanzania")
+                nation = "Zaire";
+            if (nation == "Mali")
+                nation = "Senegal";
+            if (nation == "Benin")
+                nation = "Nigeria";
+            if (nation == "Burkina Faso")
+                nation = "Nigeria";
+            if (nation == "Zaire" || nation == "The Congo")
+                nation = "Republic of Congo";
+            if (nation == "The Gambia")
+                nation = "Gambia";
+            if (nation == "Pays Basque")
+                nation = "France";
+            if (nation == "French Guiana")
+                nation = "France";
+            if (nation.Contains("Principe"))
+                nation = "France";
+            if (nation == "Trinidad & Tobago")
+                nation = "Venezuela";
+            if (nation == "Eritrea")
+                nation = "Ethiopia";
+            if (nation == "Palestine")
+                nation = "Israel";
+            if (nation == "Belarus")
+                nation = "Bielorussia";
+            if (nation == "eSwatini")
+                nation = "Swaziland";
+            if (nation == "Chinese Taipei")
+                nation = "China";
+            if (nation == "Cambodia")
+                nation = "Kampuchea";
+            if (nation == "Guam" || nation == "US Virgin Islands" || nation == "Northern Mariana Islands")
+                nation = "United States";
+            if (nation == "Timor")
+                nation = "Australia";
+            if (nation == "South Sudan")
+                nation = "Sudan";
+            if (nation == "Northern Ireland")
+                nation = "N.Ireland";
+
+            var nationsToBeMapped = new string[] {
+                    "Curaçao",
+                    "Cuba",
+                    "Réunion",
+                    "Namibia",
+                    "Samoa",
+                    "The Philippines",
+                    "Montserrat",
+                    "Surinam",
+                    "Curaçao",
+                    "Antigua & Barbuda",
+                    "Cape Verde Islands",
+                    "St Kitts & Nevis",
+                    "Oman",
+                    "Martinique",
+                    "Sierra Leone",
+                    "Saint Lucia",
+                    "Indonesia",
+                    "Pakistan",
+                    "Sudan",
+                    "Grenada",
+                    "Guyana",
+                    "Guinea-Bissau",
+                    "St Kitts & Nevis",
+                    "Gibraltar",
+                    "Seville",
+                    "Comoros",
+                    "New Caledonia",
+                    "Maldives"
+                };
+            if (nationsToBeMapped.Contains(nation))
+                nation = "France";
+
+            mapped = (nation != tempNation);
+            return nation;
+        }
+
         static CM9798Player CM0102PlayerTo9798(int newPlayerID, ref int newTeamID, HistoryLoader hl, int playerId, string setTeamTo, Dictionary<int, List<TStaffHistory>> staffHistoryMap, Dictionary<int, TClub> clubMap, List<CM2.CM2History> plhist, List<CM9798Team> tmdata, int yearModifier = -4)
         {
             var s = hl.staff[playerId];
@@ -1252,81 +1465,8 @@ namespace CM0102Patcher
             var ContractEnd = s.DateExpiresClub.Year == 0 ? "" : TCMDate.ToDateTime(s.DateExpiresClub).AddYears(yearModifier).ToString("M.yy");
 
             // Nation Mappings
-            if (nation == "Serbia" || nation == "Bosnia-Herzegovina" || nation == "Montenegro" || nation == "North Macedonia" || nation == "Kosovo")
-                nation = "Yugoslavia";
-            if (nation == "Gabon")
-                nation = "France";
-            if (nation == "Democratic Republic of Congo" || nation == "Tanzania")
-                nation = "Zaire";
-            if (nation == "Mali")
-                nation = "Senegal";
-            if (nation == "Benin")
-                nation = "Nigeria";
-            if (nation == "Burkina Faso")
-                nation = "Nigeria";
-            if (nation == "Zaire" || nation == "The Congo")
-                nation = "Republic of Congo";
-            if (nation == "The Gambia")
-                nation = "Gambia";
-            if (nation == "Pays Basque")
-                nation = "France";
-            if (nation == "French Guiana")
-                nation = "France";
-            if (nation.Contains("Principe"))
-                nation = "France";
-            if (nation == "Trinidad & Tobago")
-                nation = "Venezuela";
-            if (nation == "Eritrea")
-                nation = "Ethiopia";
-            if (nation == "Palestine")
-                nation = "Israel";
-            if (nation == "Belarus")
-                nation = "Bielorussia";
-            if (nation == "eSwatini")
-                nation = "Swaziland";
-            if (nation == "Chinese Taipei")
-                nation = "China";
-            if (nation == "Cambodia")
-                nation = "Kampuchea";
-            if (nation == "Guam" || nation == "US Virgin Islands" || nation == "Northern Mariana Islands")
-                nation = "United States";
-            if (nation == "Timor")
-                nation = "Australia";
-            if (nation == "South Sudan")
-                nation = "Sudan";
-
-            var nationsToBeMapped = new string[] {
-                    "Curaçao",
-                    "Cuba",
-                    "Réunion",
-                    "Namibia",
-                    "Samoa",
-                    "The Philippines",
-                    "Montserrat",
-                    "Surinam",
-                    "Curaçao",
-                    "Antigua & Barbuda",
-                    "Cape Verde Islands",
-                    "St Kitts & Nevis",
-                    "Oman",
-                    "Martinique",
-                    "Sierra Leone",
-                    "Saint Lucia",
-                    "Indonesia",
-                    "Pakistan",
-                    "Sudan",
-                    "Grenada",
-                    "Guyana",
-                    "Guinea-Bissau",
-                    "St Kitts & Nevis",
-                    "Gibraltar",
-                    "Seville",
-                    "Comoros",
-                    "New Caledonia",
-                    "Maldives"
-                };
-            if (nationsToBeMapped.Contains(nation))
-                nation = "France";
+            bool mapped;
+            nation = NationMapper(nation, out mapped);
 
             if (tmdata.FirstOrDefault(x => x.LongName.ToLower() == nation.ToLower() || x.ShortName.ToLower() == nation.ToLower()) == null)
             {
@@ -1393,8 +1533,6 @@ namespace CM0102Patcher
             newPlayer.ContractEnds = ContractEnd;
 
             // Get History
-            if (firstName == "Jadon" && secondName == "Sancho")
-                Console.WriteLine("Found Jadon");
             if (staffHistoryMap.ContainsKey(s.ID) && s.DateOfBirth.Year != 0)
             {
                 var cm0102player_history = staffHistoryMap[s.ID].OrderBy(x => x.Year).ToList();
@@ -1486,6 +1624,7 @@ namespace CM0102Patcher
             return newPlayer;
         }
 
+        // Not Used
         public static CM9798Manager CreateManager(HistoryLoader hl, TClub club)
         {
             CM9798Manager cm2mgr = null;

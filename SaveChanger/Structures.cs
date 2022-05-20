@@ -78,6 +78,28 @@ namespace CM0102Patcher
         public byte SquadStatus;
     }
 
+    public enum StaffJob
+    {
+        JOB_INVALID_JOB,
+        JOB_CHAIRMAN,
+        JOB_MANAGING_DIRECTOR,
+        JOB_GENERAL_MANAGER,
+        JOB_DIRECTOR_OF_FOOTBALL,
+        JOB_MANAGER,
+        JOB_ASSISTANT_MANAGER,
+        JOB_RESERVE_TEAM_MANAGER,
+        JOB_COACH,
+        JOB_SCOUT,
+        JOB_PHYSIO,
+        JOB_PLAYER,
+        JOB_PLAYER_MANAGER,
+        JOB_PLAYER_ASSISTANT_MANAGER,
+        PLAYER_RESERVE_TEAM_MANAGER,
+        JOB_PLAYER_COACH,
+        JOB_PLAYER_RETIRED,
+        JOB_MEDIA_PUNDIT
+    }
+
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class TStaff
     {
