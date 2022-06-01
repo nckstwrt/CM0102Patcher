@@ -14,7 +14,7 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
-            //football_api api = new football_api("df11781692msh76c090b6812c8d2p13d983jsn3352c6239cf9");
+            //football_api api = new football_api("");
             //api.GetLeagues(2021, true);
 /*
             CM9798.ShiftPlayerAges(@"C:\ChampMan\cm9798\Fresh\Data\CM9798", -5);
