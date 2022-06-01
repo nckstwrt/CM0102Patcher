@@ -14,14 +14,19 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
-            /*
-            CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798");
+            //football_api api = new football_api("df11781692msh76c090b6812c8d2p13d983jsn3352c6239cf9");
+            //api.GetLeagues(2021, true);
+/*
+            CM9798.ShiftPlayerAges(@"C:\ChampMan\cm9798\Fresh\Data\CM9798", -5);
 
-            CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG");
+            //CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798");
+            //CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG");
+
+            CM9798.LimitEXNMESTXT(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\EXNMES.TXT");
 
             CM9798.Test();
-
-            
+*/
+            /*
             CM9798.WriteTeamDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\TMDATA.CSV", CM9798.tmdata);
             CM9798.WritePlayerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\PLAYERS.CSV", CM9798.pldata);
             CM9798.WriteManagerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\MGDATA.CSV", CM9798.mgdata);

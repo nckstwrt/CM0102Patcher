@@ -5,6 +5,7 @@ using System.Net;
 using System.IO;
 using System.Text;
 using System.Web.Script.Serialization;
+using System.Threading;
 
 namespace CM0102Patcher
 {
@@ -260,31 +261,50 @@ namespace CM0102Patcher
             return GetJSON<api_standings>("https://api-football-v1.p.rapidapi.com/v2/leagueTable/" + api_standing[0].league_id, string.Format(@"C:\ChampMan\Notes\api-football-league-serie-a-{0}.txt", api_standing[0].league_id));
         }
 
-        public void GetLeagues()
+        public void GetLeagues(int year = 2021, bool readFromFile = true)
         {
-            var leagues = GetJSON<api_leagues>(@"C:\ChampMan\Notes\api-football-leagues.txt" /*"https://api-football-v1.p.rapidapi.com/v2/leagues"*/);
-            var eng_prem = leagues.api.leagues.FirstOrDefault(x => x.name == "Premier League" && x.season == 2020 && x.country == "England");
-            var italy_leagues = leagues.api.leagues.FindAll(x => x.country == "Italy" && x.season == 2020);
+            string leaguesFile = @"C:\ChampMan\Notes\api-football-leagues.txt";
+            api_leagues leagues;
+            if (readFromFile)
+                leagues = GetJSON<api_leagues>(leaguesFile);
+            else
+            {
+                leagues = GetJSON<api_leagues>("https://api-football-v1.p.rapidapi.com/v2/leagues", leaguesFile);
+            }
+            var eng_prem = leagues.api.leagues.FirstOrDefault(x => x.name == "Premier League" && x.season == year && x.country == "England");
+            var italy_leagues = leagues.api.leagues.FindAll(x => x.country == "Italy" && x.season == year);
+
+            var selectedCountries = new List<string> { "Italy", "England", "France", "Sweden" };
+            var selectedleagues = leagues.api.leagues.FindAll(x => selectedCountries.Contains(x.country) && x.season == year && !x.name.Contains("Women"));
 
             using (var sw = new StreamWriter(@"C:\ChampMan\Notes\api-football-league-data.txt"))
             {
-                foreach (var italy_league in italy_leagues)
+                foreach (var league in selectedleagues)
                 {
-                    var standings = GetJSON<api_standings>("https://api-football-v1.p.rapidapi.com/v2/leagueTable/" + italy_league.league_id, string.Format(@"C:\ChampMan\Notes\api-football-league-{0}.txt", italy_league.league_id));
-                    foreach (var standing in standings.api.standings)
+                    Thread.Sleep(5000);
+                    try
                     {
-                        for (int i = 0; i < standing.Count; i++)
+                        var standings = GetJSON<api_standings>("https://api-football-v1.p.rapidapi.com/v2/leagueTable/" + league.league_id, string.Format(@"C:\ChampMan\Notes\api-football-league-{0}.txt", league.league_id));
+                        foreach (var standing in standings.api.standings)
                         {
-                            if (i == 0)
+                            for (int i = 0; i < standing.Count; i++)
                             {
-                                sw.WriteLine(standing[i].group);
-                                for (int j = 0; j < standing[i].group.Length; j++)
-                                    sw.Write("-");
-                                sw.WriteLine();
+                                if (i == 0)
+                                {
+                                    string header = string.Format("{0} - {1} ({2})", standing[i].group, league.country, standing.Count);
+                                    sw.WriteLine(header);
+                                    for (int j = 0; j < header.Length; j++)
+                                        sw.Write("-");
+                                    sw.WriteLine();
+                                }
+                                sw.WriteLine(standing[i].teamName);
                             }
-                            sw.WriteLine(standing[i].teamName);
+                            sw.WriteLine();
                         }
-                        sw.WriteLine();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
                     }
                 }
             }
@@ -292,6 +312,9 @@ namespace CM0102Patcher
 
         public T GetJSON<T>(string source, string dumpToFile = null)
         {
+            // TLS 1.2 issue
+            System.Net.ServicePointManager.SecurityProtocol = (System.Net.SecurityProtocolType)(768 | 3072);
+
             var Serializer = new JavaScriptSerializer();
             Serializer.MaxJsonLength = Int32.MaxValue;
 
@@ -299,8 +322,8 @@ namespace CM0102Patcher
             {
                 using (var client = new WebClient())
                 {
-                    client.Headers.Add("x-rapidapi-key", key);
-                    client.Headers.Add("x-rapidapi-host", "api-football-v1.p.rapidapi.com");
+                    client.Headers.Add("X-RapidAPI-Key", key);
+                    //client.Headers.Add("x-rapidapi-host", "api-football-v1.p.rapidapi.com");
 
                     using (var leagueStream = client.OpenRead(source))
                     {

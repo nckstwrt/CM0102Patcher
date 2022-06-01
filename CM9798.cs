@@ -10,8 +10,8 @@ namespace CM0102Patcher
     public class CM9798
     {
         public static bool RemoveDiatrics = false;
-        public static int MaxPlayers = 18300;   // EditHelp = 20000
-        public static int MaxTeams = 2300;      // EditHelp = 2300
+        public static int MaxPlayers = 17300;   // EditHelp = 20000
+        public static int MaxTeams = 2200;      // EditHelp = 2300
         public static int MaxManagers = 1000;   // EditHelp = 1000
         public static Random rand = new Random();
 
@@ -937,16 +937,21 @@ namespace CM0102Patcher
                 }
             }
 
-            // Reassign the Unique IDs
+            // Manager Data becomes our converted managers
             mgdata = convertedManagers;
 
-            int startUniqueID = 1;
+            // Sort the players as per zicko
+            // "If the database is properly sorted (Nation -> Surname -> Name) after adding/changing records, than the chance of generating new players with exactly the same names and surnames as already existing players is significantly reduced."
+            pldata = pldata.OrderBy(x => x.FirstName).OrderBy(x => x.SecondName).OrderBy(x => x.Nationality).ToList();
+
+            // Reassign the Unique IDs
+            //int startUniqueID = 1;
             for (int i = 0; i < pldata.Count; i++)
-                pldata[i].UniqueID = i + (startUniqueID++);
+                pldata[i].UniqueID = i;// + (startUniqueID++);
             for (int i = 0; i < mgdata.Count; i++)
-                mgdata[i].UniqueID = i + (startUniqueID++);
+                mgdata[i].UniqueID = i;// + (startUniqueID++);
             for (int i = 0; i < tmdata.Count; i++)
-                tmdata[i].UniqueID = i + (startUniqueID++);
+                tmdata[i].UniqueID = i;// + (startUniqueID++);
 
             MiscFunctions.SaveFile<CM9798Team>(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\TMDATA.DB1", tmdata, TeamDataStartPos, true);
             MiscFunctions.SaveFile<CM9798Player>(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLAYERS.DB1", pldata, PlayerDataStartPos, true);
@@ -2133,6 +2138,77 @@ namespace CM0102Patcher
                     GKL         00
                 */
             }
+        }
+
+        public static void LimitEXNMESTXT(string exnmesFile)
+        {
+            using (var fin = File.Open(exnmesFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var fout = File.Open(Path.Combine(Path.GetDirectoryName(exnmesFile), Path.GetFileNameWithoutExtension(exnmesFile) +"_NEW.TXT"), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
+            using (var tr = new StreamReader(fin))
+            using (var tw = new StreamWriter(fout))
+            {
+                while (true)
+                {
+                    var country = tr.ReadLine();
+
+                    if (country == null)
+                        break;
+
+                    if (country == "")
+                        continue;
+
+                    tw.WriteLine(country);
+
+                    List<string> names = new List<string>();
+                    while (true)
+                    {
+                        var name = tr.ReadLine();
+                        if (string.IsNullOrEmpty(name))
+                            break;
+                        names.Add(name);
+                    }
+
+                    int newCount = names.Count / 3;
+                    if (newCount == 0 && names.Count > 0)
+                        newCount = 1;
+
+                    // Write out a limited form of the names
+                    for (int i = 0; i < newCount; i++)
+                        tw.WriteLine(names[i]);
+
+                    tw.WriteLine();
+                }
+            }
+        }
+
+        public static void ShiftPlayerAges(string folder, int shift)
+        {
+            LoadCM9798DataFromDirectory(folder);
+            foreach (var player in pldata)
+            {
+                if (player.Age != 0)
+                    player.Age += (byte)shift;
+                if (player.BirthDate.Length >= 2 && Char.IsNumber(player.BirthDate[player.BirthDate.Length-2]) && Char.IsNumber(player.BirthDate[player.BirthDate.Length - 1]))
+                {
+                    var year = int.Parse(player.BirthDate.Substring(player.BirthDate.Length - 2));
+                    year += shift;
+                    player.BirthDate = player.BirthDate.Substring(0, player.BirthDate.Length - 2) + year.ToString();
+                }
+            }
+            var plhist = CM2.ReadCM2HistoryFile(Path.Combine(folder, "PLHIST98.BIN"), true);
+            foreach (var hist in plhist)
+            {
+                if (hist.BirthDate.Length >= 2 && Char.IsNumber(hist.BirthDate[hist.BirthDate.Length - 2]) && Char.IsNumber(hist.BirthDate[hist.BirthDate.Length - 1]))
+                {
+                    var year = int.Parse(hist.BirthDate.Substring(hist.BirthDate.Length - 2));
+                    year += shift;
+                    hist.BirthDate = hist.BirthDate.Substring(0, hist.BirthDate.Length - 2) + year.ToString();
+                }
+            }
+            
+            MiscFunctions.SaveFile<CM9798Player>(Path.Combine(folder, "PLAYERS.DB1"), pldata, PlayerDataStartPos, true);
+            CM2.ApplyCorrectCount(Path.Combine(folder, "PLAYERS.DB1"), 660, pldata.Count, false, (short)(pldata.Max(x => x.UniqueID) + 1));
+            CM2.WriteCM2HistoryFile(Path.Combine(folder, "PLHIST98.BIN"), plhist, true);
         }
     }
 }

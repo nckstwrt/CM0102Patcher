@@ -1127,8 +1127,5 @@ namespace CM0102Patcher
                 MiscFunctions.GetTextFromBytes(team.Formation), MiscFunctions.GetTextFromBytes(team.Style), MiscFunctions.GetTextFromBytes(team.FirstHomeCol), MiscFunctions.GetTextFromBytes(team.SecondHomeCol), MiscFunctions.GetTextFromBytes(team.FirstAwayCol), MiscFunctions.GetTextFromBytes(team.SecondAwayCol),
                 MiscFunctions.GetTextFromBytes(team.Division), MiscFunctions.GetTextFromBytes(team.LastDivision), team.LastPosition, ConvertLongToNormalFormat(team.Cash) * 1000, team.LeagueStandard, team.TransferSystem, MiscFunctions.GetTextFromBytes(team.Wav));
         }
-
-        
-
     }
 }
