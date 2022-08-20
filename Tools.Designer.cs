@@ -39,6 +39,7 @@
             this.buttonRemoveStadiumLimits = new System.Windows.Forms.Button();
             this.buttonSaveChangerTool = new System.Windows.Forms.Button();
             this.buttonHistoryEditor = new System.Windows.Forms.Button();
+            this.buttonPlayerTransfer = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonApplyPatchfile
@@ -110,7 +111,7 @@
             // buttonApplyMiscPatch
             // 
             this.buttonApplyMiscPatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonApplyMiscPatch.Location = new System.Drawing.Point(11, 272);
+            this.buttonApplyMiscPatch.Location = new System.Drawing.Point(11, 302);
             this.buttonApplyMiscPatch.Name = "buttonApplyMiscPatch";
             this.buttonApplyMiscPatch.Size = new System.Drawing.Size(166, 24);
             this.buttonApplyMiscPatch.TabIndex = 6;
@@ -151,11 +152,23 @@
             this.buttonHistoryEditor.UseVisualStyleBackColor = true;
             this.buttonHistoryEditor.Click += new System.EventHandler(this.buttonHistoryEditor_Click);
             // 
+            // buttonPlayerTransfer
+            // 
+            this.buttonPlayerTransfer.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonPlayerTransfer.Location = new System.Drawing.Point(11, 272);
+            this.buttonPlayerTransfer.Name = "buttonPlayerTransfer";
+            this.buttonPlayerTransfer.Size = new System.Drawing.Size(166, 24);
+            this.buttonPlayerTransfer.TabIndex = 10;
+            this.buttonPlayerTransfer.Text = "Player Transfer Tool...";
+            this.buttonPlayerTransfer.UseVisualStyleBackColor = true;
+            this.buttonPlayerTransfer.Click += new System.EventHandler(this.buttonPlayerTransfer_Click);
+            // 
             // Tools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(189, 302);
+            this.ClientSize = new System.Drawing.Size(189, 338);
+            this.Controls.Add(this.buttonPlayerTransfer);
             this.Controls.Add(this.buttonHistoryEditor);
             this.Controls.Add(this.buttonSaveChangerTool);
             this.Controls.Add(this.buttonRemoveStadiumLimits);
@@ -189,5 +202,6 @@
         private System.Windows.Forms.Button buttonRemoveStadiumLimits;
         private System.Windows.Forms.Button buttonSaveChangerTool;
         private System.Windows.Forms.Button buttonHistoryEditor;
+        private System.Windows.Forms.Button buttonPlayerTransfer;
     }
 }

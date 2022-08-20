@@ -102,6 +102,18 @@
     <Compile Include="PatcherForm.Designer.cs">
       <DependentUpon>PatcherForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlayerTransferForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PlayerTransferForm.Designer.cs">
+      <DependentUpon>PlayerTransferForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PlayerTransferScratchPadForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PlayerTransferScratchPadForm.Designer.cs">
+      <DependentUpon>PlayerTransferScratchPadForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PnnQuantizer.cs" />
     <Compile Include="PresetNameForm.cs">
       <SubType>Form</SubType>
@@ -201,6 +213,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PictureConvertProgressForm.resx">
       <DependentUpon>PictureConvertProgressForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlayerTransferForm.resx">
+      <DependentUpon>PlayerTransferForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlayerTransferScratchPadForm.resx">
+      <DependentUpon>PlayerTransferScratchPadForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PresetNameForm.resx">
       <DependentUpon>PresetNameForm.cs</DependentUpon>

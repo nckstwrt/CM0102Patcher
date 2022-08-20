@@ -33,6 +33,8 @@ namespace CM0102Patcher
         public List<TNames> second_names;
         public List<TNames> common_names;
         public Dictionary<int, string> staffNames;
+        public Dictionary<string, int> clubNames;
+        public Dictionary<string, List<int>> staffNamesReverse;
         public List<TCities> cities;
         public List<TStadiums> stadiums;
 
@@ -97,19 +99,45 @@ namespace CM0102Patcher
             common_names = MiscFunctions.ReadFile<TNames>(Path.Combine(dir, "common_names.dat"));
 
             staffNames = new Dictionary<int, string>();
+            staffNamesReverse = new Dictionary<string, List<int>>();
             foreach (var staffMember in staff)
             {
-                if (staffMember.ID >= 0 && staffMember.FirstName >= 0 && staffMember.FirstName < first_names.Count && staffMember.SecondName >= 0 && staffMember.SecondName < second_names.Count)
+                string name;
+                if (StaffToName(staffMember, out name))
                 {
-                    if (staffMember.CommonName >= 0 && staffMember.CommonName < common_names.Count && GetTextFromBytes(common_names[staffMember.CommonName].Name).Trim() != "")
-                        staffNames[staffMember.ID] = GetTextFromBytes(common_names[staffMember.CommonName].Name);
-                    else
-                        staffNames[staffMember.ID] = GetTextFromBytes(second_names[staffMember.SecondName].Name) + ", " + GetTextFromBytes(first_names[staffMember.FirstName].Name);
+                    staffNames[staffMember.ID] = name;
+
+                    if (!staffNamesReverse.ContainsKey(name))
+                        staffNamesReverse[name] = new List<int>();
+                    staffNamesReverse[name].Add(staffMember.ID);
                 }
+            }
+
+            clubNames = new Dictionary<string, int>();
+            foreach (var clubObj in club)
+            {
+                clubNames[clubObj.Name.ReadString()] = clubObj.ID;
             }
 
             cities = MiscFunctions.ReadFile<TCities>(Path.Combine(dir, "city.dat"));
             stadiums = MiscFunctions.ReadFile<TStadiums>(Path.Combine(dir, "stadium.dat"));
+        }
+
+        public bool StaffToName(TStaff staffMember, out string name)
+        {
+            if (staffMember.ID >= 0 && staffMember.FirstName >= 0 && staffMember.FirstName < first_names.Count && staffMember.SecondName >= 0 && staffMember.SecondName < second_names.Count)
+            {
+                if (staffMember.CommonName >= 0 && staffMember.CommonName < common_names.Count && GetTextFromBytes(common_names[staffMember.CommonName].Name).Trim() != "")
+                    name = GetTextFromBytes(common_names[staffMember.CommonName].Name);
+                else
+                    name = GetTextFromBytes(second_names[staffMember.SecondName].Name) + ", " + GetTextFromBytes(first_names[staffMember.FirstName].Name);
+                return true;
+            }
+            else
+            {
+                name = "";
+                return false;
+            }
         }
         
         void UpdateIndex<T>(string fileName, List<T> data)
@@ -313,6 +341,26 @@ namespace CM0102Patcher
                     break;
             }
             return ret;
+        }
+
+        public int FindStaffIndex(string firstName, string secondName, string commonName, string clubName)
+        {
+            //var clubList = club.FindAll(x => x.Name.ReadString() == clubName || x.ShortName.ReadString() == clubName);
+            if (!clubNames.ContainsKey(clubName))
+                return -1;
+
+            if (staffNamesReverse.ContainsKey(commonName == "" ? secondName + ", " + firstName : commonName))
+            {
+                var matchingNameIDs = staffNamesReverse[commonName == "" ? secondName + ", " + firstName : commonName];
+                foreach (var matchingID in matchingNameIDs)
+                {
+                    if (clubNames[clubName] == staff[matchingID].ClubJob)
+                        return matchingID;
+                }
+            }
+            //var matchingNameIDs = staffNames.Where(x => commonName == "" ? x.Value == secondName + ", " + firstName : x.Value == commonName).Select(x => x.Key).ToList();
+
+            return -1;
         }
 
         public void SortClubNames()

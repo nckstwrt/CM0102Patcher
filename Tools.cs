@@ -233,5 +233,11 @@ namespace CM0102Patcher
             catch { }
             hef.ShowDialog();
         }
+
+        private void buttonPlayerTransfer_Click(object sender, EventArgs e)
+        {
+            PlayerTransferForm ptf = new PlayerTransferForm();
+            ptf.ShowDialog();
+        }
     }
 }

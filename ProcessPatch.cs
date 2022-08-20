@@ -224,5 +224,8 @@ namespace CM0102Patcher
 
 		[DllImport("kernel32.dll")]
 		public static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
+
+		[DllImport("user32.dll")]
+		public static extern IntPtr SendMessage(IntPtr hWnd, Int32 Msg, IntPtr wParam, IntPtr lParam);
 	}
 }
