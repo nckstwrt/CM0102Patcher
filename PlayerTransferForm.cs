@@ -300,30 +300,40 @@ namespace CM0102Patcher
             bool ret = false;
 
             // Find first available -1 and change to our new staff id
-            for (int i = 0; i < 50; i++)
+            if (clubToID != -1)
             {
-                if (hl.club[clubToID].Squad[i] == -1)
-                {
-                    hl.club[clubToID].Squad[i] = staffID;
-                    ret = true;
-                    break;
-                }
-            }
-
-            if (ret)
-            {
-                ret = false;
-               
-                // Remove staff ID from squad and replace with -1
                 for (int i = 0; i < 50; i++)
                 {
-                    if (hl.club[clubFromID].Squad[i] == staffID)
+                    if (hl.club[clubToID].Squad[i] == -1)
                     {
-                        hl.club[clubFromID].Squad[i] = -1;
+                        hl.club[clubToID].Squad[i] = staffID;
                         ret = true;
                         break;
                     }
                 }
+            }
+            else
+                ret = true;
+
+            if (ret)
+            {
+                ret = false;
+
+                if (clubFromID != -1)
+                {
+                    // Remove staff ID from squad and replace with -1
+                    for (int i = 0; i < 50; i++)
+                    {
+                        if (hl.club[clubFromID].Squad[i] == staffID)
+                        {
+                            hl.club[clubFromID].Squad[i] = -1;
+                            ret = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                    ret = true;
             }
 
             return ret;
@@ -338,7 +348,7 @@ namespace CM0102Patcher
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 listBoxTransfers.Items.Clear();
-                using (var importFile = File.Open(ofd.FileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
+                using (var importFile = File.Open(ofd.FileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
                 using (var sr = new StreamReader(importFile, latin1))
                 {
                     while (true)
@@ -370,19 +380,13 @@ namespace CM0102Patcher
             sfd.Title = "Select a transfer text file to export...";
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                var ofd = new OpenFileDialog();
-                ofd.Filter = "Text Files (*.txt)|*.txt|All files (*.*)|*.*";
-                ofd.Title = "Select an text file to import...";
-                if (ofd.ShowDialog() == DialogResult.OK)
+                using (var exportFile = File.Open(sfd.FileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
+                using (var sw = new StreamWriter(exportFile, latin1))
                 {
-                    using (var exportFile = File.Open(sfd.FileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
-                    using (var sw = new StreamWriter(exportFile, latin1))
+                    for (int i = 0; i < listBoxTransfers.Items.Count; i++)
                     {
-                        for (int i = 0; i < listBoxTransfers.Items.Count; i++)
-                        {
-                            var transferLine = listBoxTransfers.Items[i].ToString();
-                            sw.WriteLine(transferLine);
-                        }
+                        var transferLine = listBoxTransfers.Items[i].ToString();
+                        sw.WriteLine(transferLine);
                     }
                 }
             }

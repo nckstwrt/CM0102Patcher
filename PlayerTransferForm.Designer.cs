@@ -307,7 +307,7 @@ namespace CM0102Patcher
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "PlayerTransferForm";
-            this.Text = "Player Transfer";
+            this.Text = "Player Transfer Tool";
             this.ResumeLayout(false);
             this.PerformLayout();
 
