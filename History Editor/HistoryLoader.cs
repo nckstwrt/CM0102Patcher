@@ -33,6 +33,7 @@ namespace CM0102Patcher
         public List<TNames> second_names;
         public List<TNames> common_names;
         public Dictionary<int, string> staffNames;
+        public Dictionary<int, string> staffNamesNoDiacritics;
         public Dictionary<string, int> clubNames;
         public Dictionary<string, List<int>> staffNamesReverse;
         public List<TCities> cities;
@@ -99,6 +100,7 @@ namespace CM0102Patcher
             common_names = MiscFunctions.ReadFile<TNames>(Path.Combine(dir, "common_names.dat"));
 
             staffNames = new Dictionary<int, string>();
+            staffNamesNoDiacritics = new Dictionary<int, string>();
             staffNamesReverse = new Dictionary<string, List<int>>();
             foreach (var staffMember in staff)
             {
@@ -106,6 +108,7 @@ namespace CM0102Patcher
                 if (StaffToName(staffMember, out name))
                 {
                     staffNames[staffMember.ID] = name;
+                    staffNamesNoDiacritics[staffMember.ID] = MiscFunctions.RemoveDiacritics(name);
 
                     if (!staffNamesReverse.ContainsKey(name))
                         staffNamesReverse[name] = new List<int>();

@@ -39,6 +39,7 @@ namespace CM0102Patcher
             this.textBox.Location = new System.Drawing.Point(16, 15);
             this.textBox.Multiline = true;
             this.textBox.Name = "textBox";
+            this.textBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox.Size = new System.Drawing.Size(561, 414);
             this.textBox.TabIndex = 0;
             // 

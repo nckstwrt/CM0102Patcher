@@ -49,7 +49,8 @@ namespace CM0102Patcher
         void RefreshPlayerData()
         {
             var filterText = textBoxPlayerFilter.Text.ToLower();
-            var staff = hl.staff.Where(x => x.Player != -1 && (filterText == "" || filterText.Length <= 3 || hl.staffNames[x.ID].ToLower().Contains(filterText))).OrderBy(x => hl.staffNames[x.ID]).ToList();
+            filterText = MiscFunctions.RemoveDiacritics(filterText);
+            var staff = hl.staff.Where(x => x.Player != -1 && (filterText == "" || filterText.Length <= 3 || hl.staffNamesNoDiacritics[x.ID].ToLower().Contains(filterText))).OrderBy(x => hl.staffNames[x.ID]).ToList();
 
             listBoxPlayers.Items.Clear();
             labelAllPlayers.Text = string.Format("All Players ({0})", staff.Count);
@@ -70,7 +71,8 @@ namespace CM0102Patcher
         void RefreshTeamData()
         {
             var filterText = textBoxTeamFilter.Text.ToLower();
-            var sortedClubs = hl.club.OrderBy(x => x.Name.ReadString()).Where(x => x.Name.ReadString().ToLower().Contains(filterText)).ToArray();
+            //filterText = MiscFunctions.RemoveDiacritics(filterText);
+            var sortedClubs = hl.club.OrderBy(x => x.Name.ReadString()).Where(x => /*MiscFunctions.RemoveDiacritics*/(x.Name.ReadString()).ToLower().Contains(filterText)).ToArray();
 
             listBoxTeams.Items.Clear();
             labelAllTeams.Text = string.Format("Team To Transfer To ({0})", sortedClubs.Length);
@@ -126,6 +128,7 @@ namespace CM0102Patcher
             }
 
             listBoxTransfers.Items.Add(selectedPlayer.ToString() + " -> " + selectedTeam.ToString() + (isLoan ? (" " + LoanText) : ""));
+            listBoxTransfers.TopIndex = listBoxTransfers.Items.Count - 1;   // Scroll to bottom
         }
 
         private void buttonTransfer_Click(object sender, EventArgs e)
