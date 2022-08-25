@@ -66,6 +66,9 @@ namespace CM0102Patcher
             }
             listBoxPlayers.Items.AddRange(listBoxPlayerItems.ToArray());
             listBoxPlayers.ExternalScrollBar = vScrollBarPlayers;
+
+            if (listBoxPlayers.Items.Count == 1)
+                listBoxPlayers.SelectedIndex = 0;
         }
 
         void RefreshTeamData()
@@ -85,6 +88,9 @@ namespace CM0102Patcher
                 listBoxTeams.Items.Add(new TransferListBoxItem(NoClub, -1));
             listBoxTeams.Items.AddRange(listBoxTeamItems.ToArray());
             listBoxTeams.ExternalScrollBar = vScrollBarTeams;
+
+            if (listBoxTeams.Items.Count == 1)
+                listBoxTeams.SelectedIndex = 0;
         }
 
         private void textBoxPlayerFilter_TextChanged(object sender, EventArgs e)
@@ -201,6 +207,8 @@ namespace CM0102Patcher
                 {
                     if (clubTo.ToLower() == club.ToLower())
                         count++;
+                    if (clubFrom.ToLower() == club.ToLower())
+                        count--;
                 }
             }
             return count;
