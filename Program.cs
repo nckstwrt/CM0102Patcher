@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace CM0102Patcher
 {
@@ -14,18 +15,41 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
+            /*
+            var now = new DateTime(2022, 1, 1);
+            for (int i = 0; i < 365; i++)
+            {
+                var tcm = TCMDate.FromDateTime(now);
+                Console.WriteLine("{0} {1} = {2:X}", now.ToString("MMMM", CultureInfo.InvariantCulture), now.Day, tcm.Day);
+                now = now.AddDays(1);
+            }
+            */
+            /*
+            HistoryLoader hl = new HistoryLoader();
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\CM93 Swiss\Data\index.dat");
+            int albcount = 0;
+            foreach (var staff in hl.staff)
+            {
+                if (staff.SecondNation == 1)
+                    staff.SecondNation = -1;
+                if (staff.SecondNation < -1)
+                    staff.SecondNation = -1;
+            }
+            hl.Save(@"C:\ChampMan\Championship Manager 0102\CM93 Swiss\Data\index.dat", false, true, false);
+            */
             //football_api api = new football_api("");
-            //api.GetLeagues(2021, true);
-/*
-            CM9798.ShiftPlayerAges(@"C:\ChampMan\cm9798\Fresh\Data\CM9798", -5);
+            //api.GetLeagues(2022, false);
+            //api.GetCM0102Leagues(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2022_Test1\Data\index.dat", 2022, false, true);
+            /*
+                        CM9798.ShiftPlayerAges(@"C:\ChampMan\cm9798\Fresh\Data\CM9798", -5);
 
-            //CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798");
-            //CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG");
+                        //CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798");
+                        //CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG");
 
-            CM9798.LimitEXNMESTXT(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\EXNMES.TXT");
+                        CM9798.LimitEXNMESTXT(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\EXNMES.TXT");
 
-            CM9798.Test();
-*/
+                        CM9798.Test();
+            */
             /*
             CM9798.WriteTeamDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\TMDATA.CSV", CM9798.tmdata);
             CM9798.WritePlayerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\PLAYERS.CSV", CM9798.pldata);
@@ -74,7 +98,7 @@ namespace CM0102Patcher
             //var xx = CM9798.pldata.Where(x => x.SecondName.ToList());
             Console.WriteLine();
             */
-            
+
             //LinearExecutableFixUps.CheckFixups(@"C:\Development\DOSTEST\DOSTEST.EXE");
             /*
             Patcher p = new Patcher();

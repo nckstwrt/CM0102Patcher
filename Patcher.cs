@@ -300,7 +300,7 @@ namespace CM0102Patcher
         public List<string> patcherCommands = new List<string> { "TAPANISPACEPATCH", "APPLYMISCPATCH", "APPLYEXTERNALPATCH", "EXPANDEXE", "PATCHCLUBCOMP", "RENAMECLUB",
                                                                  "CHANGECLUBDIVISION", "CHANGECLUBLASTDIVISION", "CHANGECLUBLASTPOSITION", "CHANGECLUBNATION", 
                                                                  "CHANGENATIONCOMPNAME", "CHANGENATIONCOMPCOLOR", "CLEARNATIONCOMPHISTORY", 
-                                                                 "ADDNATIONCOMPHISTORY", "DELETECLUBCOMPHISTORY", "DELETENATIONCOMPHISTORY"
+                                                                 "ADDNATIONCOMPHISTORY", "DELETECLUBCOMPHISTORY", "DELETENATIONCOMPHISTORY", "SHIFTNATIONCOMPHISTORY"
         };
 
         Dictionary<string, List<HexPatch>> GetCommands(IEnumerable<HexPatch> patch)
@@ -405,6 +405,8 @@ namespace CM0102Patcher
         // DE7470 - DE74A0 = Floating point clamping patch (with a little space)
         // DE74B0 - DE74C3 = Null News Item Protection Patch
         // DE74C4 - DE74E2 = Better teams in Asia Cup patch
+        // DE74F0 -        = World Cup 2022 - Qatar in Nov/Dec
+
         public void ExpandExe(string fileName)
         {
             ApplyPatch(fileName, patches["addextraspaceheader"]);
@@ -634,6 +636,24 @@ namespace CM0102Patcher
                         hl.AddNationCompHistory(nationCompName, year, winner, runner_up, host);
                     }
                 }
+
+                // SHIFTNATIONCOMPHISTORY (Shift the years of the national comps)
+                // e.g. SHIFTNATIONCOMPHISTORY -4
+                foreach (var nationCompShiftdHistoryItem in commandDictionary["SHIFTNATIONCOMPHISTORY"])
+                {
+                    int yearShift;
+                    if (int.TryParse(nationCompShiftdHistoryItem.part2, out yearShift))
+                    {
+                        var dir = Path.GetDirectoryName(fileName);
+                        var dataDir = Path.Combine(dir, "Data");
+                        var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
+
+                        YearChanger yearChanger = new YearChanger();
+                        yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearShift, 0x8);
+
+                    }
+                }
+
 
                 if (hl != null)
                     hl.Save(indexFile, true, false, saveNationData);

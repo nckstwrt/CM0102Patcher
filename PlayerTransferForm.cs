@@ -274,10 +274,16 @@ namespace CM0102Patcher
                         AddLoan(transfer.Player, transfer.ClubTo);
                     else
                     {
+                        int backupClubJob = hl.staff[transfer.Player].ClubJob;
                         hl.staff[transfer.Player].ClubJob = transfer.ClubTo;
 
                         if (!AddPlayerToClubSquad(transfer.Player, transfer.ClubFrom, transfer.ClubTo))
-                            MessageBox.Show("Was not able to attach player to squad! Changes were still applied!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        {
+                            hl.staff[transfer.Player].ClubJob = backupClubJob;
+                            var playerName = "Unknown";
+                            hl.StaffToName(hl.staff.FirstOrDefault(x => x.ID == transfer.Player), out playerName);
+                            MessageBox.Show(string.Format("Was not able to attach player ({0}) to squad! (possible duplicate?) Rest of the changes we still be applied!", playerName), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
 
