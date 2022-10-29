@@ -1,4 +1,4 @@
-# CM0102Patcher v2.22
+# CM0102Patcher v2.23
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/cqHJY7x.png)
+![alt text](https://i.imgur.com/GisFlyV.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,16 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.23:
+* Updated to support the October 2022 Data Update:
+* World Cup 2022 starting in Nov '22 in Qatar with all the right teams and groups (with an optional patch for those that want it to start in Summer '23)
+* Euro 2024 plays in Germany
+* Restructured Italy (thanks Andrea71 for all the details!)
+* Restructured France (with 4 relegation spaces added for Ligue 1)
+* San Marino/Smaller Teams now included in Euros (Tapani Patch)
+* Plus most of the other patches included in the previous 2020 + 2021 patches.
+* First cut of new Player Transfer Tool (for easy mass updates to data) - pretty untested!
 
 v2.22:
 * Fixed and added Points Reduction patch (Derby -21, Reading -12) to 2021 patches
