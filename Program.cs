@@ -15,6 +15,35 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
+
+            /*
+            HistoryLoader hl = new HistoryLoader();
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2022_Test2\Data\index.dat");
+            var Italy = hl.nation.Find(x => x.Name.ReadString() == "Italy");
+            var allItalianClubs = hl.club.FindAll(x => x.Nation == Italy.ID);
+            allItalianClubs.ForEach(x => {
+                if (x.Name.ReadString().ToLower().Contains("brus") || x.ShortName.ReadString().ToLower().Contains("brus"))
+                    Console.WriteLine("{0} {1}", x.Name.ReadString(), x.ShortName.ReadString());
+            });
+            */
+
+            /*
+            HistoryLoader hl = new HistoryLoader();
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2022_Test2\Data\index.dat");
+            var Liechtenstein = hl.nation.Find(x => x.Name.ReadString() == "Liechtenstein");
+            var SanMarino = hl.nation.Find(x => x.Name.ReadString() == "San Marino");
+            int oldLichID = Liechtenstein.ID;
+            int oldSanMarinoID = SanMarino.ID;
+            Liechtenstein.ID = SanMarino.ID;
+            SanMarino.ID = oldLichID;
+            int lichIndex = hl.nation.IndexOf(Liechtenstein);
+            int sanIndex = hl.nation.IndexOf(SanMarino);
+            hl.nation[lichIndex] = SanMarino;
+            hl.nation[sanIndex] = Liechtenstein;
+            hl.nation_comp.ForEach(x => { if (x.ClubCompNation == oldLichID) x.ClubCompNation = oldSanMarinoID; else if (x.ClubCompNation == oldSanMarinoID) x.ClubCompNation = oldLichID; });
+            hl.nat_club.ForEach(x => { if (x.Nation == oldLichID) x.Nation = oldSanMarinoID; else if (x.Nation == oldSanMarinoID) x.Nation = oldLichID; });
+            hl.Save(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2022_Test2\Data\index.dat", false, false, true);
+            */
             /*
             var now = new DateTime(2022, 1, 1);
             for (int i = 0; i < 365; i++)
@@ -154,7 +183,7 @@ namespace CM0102Patcher
             List<CM9798.CM9798Player> newpldata = pldata;
             List<CM9798.CM9798Team> newtmdata = tmdata;
             //List<CM9798.CM9798Manager> newmgdata = mgdata;
-            
+
             List<CM9798.CM9798Manager> newmgdata = new List<CM9798.CM9798Manager>();
             foreach (var mgr in mgdata)
             {
