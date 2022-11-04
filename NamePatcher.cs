@@ -545,6 +545,14 @@ namespace CM0102Patcher
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthawards"]);
             patcher.ApplyPatch(exeFile, patcher.patches["tapanispacemaker"]);
             patcher.ApplyPatch(exeFile, patcher.patches["englishleaguenorthpatchrelegation"]);
+
+            var cm = new ClubMover();
+            cm.LoadClubAndComp(Path.Combine(dataDir, "club_comp.dat"), Path.Combine(dataDir, "club.dat"));
+            var northernTeams = cm.CountTeams("English National League North");
+
+            // Patch the number of teams
+            ByteWriter.WriteToFile(exeFile, 0x525B3C, BitConverter.GetBytes(northernTeams * 59));
+            ByteWriter.WriteToFile(exeFile, 0x525B46, new byte[] { ((byte)northernTeams) });
         }
 
         public void PatchWelshWithSouthernLeague()
@@ -557,7 +565,7 @@ namespace CM0102Patcher
 
             var cm = new ClubMover();
             cm.LoadClubAndComp(Path.Combine(dataDir, "club_comp.dat"), Path.Combine(dataDir, "club.dat"));
-            var southernTeams = cm.CountSouthernTeams();
+            var southernTeams = cm.CountTeams("English Southern League Premier Division");
 
             // Patch the number of teams
             ByteWriter.WriteToFile(exeFile, 0x525B3C, BitConverter.GetBytes(southernTeams * 59));

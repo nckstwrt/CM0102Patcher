@@ -153,13 +153,13 @@ namespace CM0102Patcher
                 }
             }
 
-            return CountSouthernTeams();
+            return CountTeams("English Southern League Premier Division");
         }
 
-        public int CountSouthernTeams()
+        public int CountTeams(string leagueName)
         {
-            var southernLeague = GetDivision("English Southern League Premier Division");
-            return clubList.Count(x => x.ClubDivision == southernLeague.ClubCompID);
+            var League = GetDivision(leagueName);
+            return clubList.Count(x => x.ClubDivision == League.ClubCompID);
         }
 
         Club GetClub(string clubName)
