@@ -116,7 +116,7 @@ namespace CM0102Patcher
             PatchClubComp("European Champions Cup", "UEFA Champions League", "Champions Cup", "Champions League");
             PatchClubComp("European Super Cup", "UEFA Super Cup", "Super Cup", "Super Cup");
             PatchClubComp("FIFA Club World Championship", "FIFA Club World Cup", "World Championship", "Club World Cup");
-            PatchClubComp("Inter-American Cup", "Copa Interamericana", "Inter-American Cup", "Copa Interamericana");
+            PatchClubComp("Inter-American Cup", "Copa Interamericana", "Inter-American Cup", "Copa Interamericana", null, false);
             PatchClubComp("Inter-Toto Cup", "UEFA Europa League Qualifying", "Inter-Toto Cup", "Europa League Qualifying");
             //PatchClubComp("Inter-Toto Cup", "UEFA Europa Conference League", "Inter-Toto Cup", "Conference League");
             PatchClubComp("Oceania Champions Cup", "OFC Champions League", "OFC Champions Cup", "Champions League");
@@ -416,12 +416,12 @@ namespace CM0102Patcher
             progress.SetProgressPercent(70);
 
             // Northern Irish (has to be above Ireland - else you'll get a clash)
-            PatchClubComp("Northern Irish League Premier Division", "NIFL Premiership", "Premier Division", "Premiership", "PRM");
-            PatchClubComp("Northern Irish League First Division", "NIFL Championship", "First Division", "Championship", "FLC");
-            PatchClubComp("Northern Irish League Lower Division", "Northern Irish League Lower Division", "Lower Division", "Intermediate League", "INT");
-            PatchClubComp("Northern Irish Cup", "Irish Football Association Challenge Cup", "Irish Cup", "Irish Cup");
-            PatchClubComp("Northern Irish League Cup", "NIFL Cup", "League Cup", "League Cup");
-            PatchClubComp("Northern Irish Charity Shield", "NIFL Charity Shield", "Charity Shield", "Charity Shield");
+            PatchClubComp("Northern Irish League Premier Division", "NIFL Premiership", "Premier Division", "Premiership", "PRM", true);
+            PatchClubComp("Northern Irish League First Division", "NIFL Championship", "First Division", "Championship", "FLC", true);
+            PatchClubComp("Northern Irish League Lower Division", "Northern Irish League Lower Division", "Lower Division", "Intermediate League", "INT", true);
+            PatchClubComp("Northern Irish Cup", "Irish Football Association Challenge Cup", "Irish Cup", "Irish Cup", null, true);
+            PatchClubComp("Northern Irish League Cup", "NIFL Cup", "League Cup", "League Cup", null, true);
+            PatchClubComp("Northern Irish Charity Shield", "NIFL Charity Shield", "Charity Shield", "Charity Shield", null, true);
 
             // Irish
             PatchClubComp("Irish Premier Division", "League of Ireland Premier Division", "Premier Division", "Premier Division", "PRM");
@@ -435,7 +435,7 @@ namespace CM0102Patcher
             PatchClubComp("Italian Cup", "Coppa Italia", "Italian Cup", "Coppa Italia");
             PatchClubComp("Italian Serie C Cup", "Coppa Italia Lega Pro", "Serie C Cup", "Coppa Italia Lega Pro");
             PatchClubComp("Italian Super Cup", "Supercoppa Italiana", "Super Cup", "Supercoppa");
-            PatchClubComp("Italian C1 Super Cup", "Supercoppa di Lega Pro", "C1 Super Cup", "Supercoppa di Lega Pro");
+            PatchClubComp("Italian C1 Super Cup", "Supercoppa di Lega Pro", "C1 Super Cup", "Supercoppa di Lega Pro", null, true);
 
             // Italy Awards
             PatchStaffAward("Italian Serie A Manager of the Year", "Italian Serie A Panchina d'Oro");

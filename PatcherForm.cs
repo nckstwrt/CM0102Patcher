@@ -551,12 +551,14 @@ namespace CM0102Patcher
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["changeregistrylocation"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["memorycheckfix"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["removemutexcheck"]);
+                        patcher.ApplyPatch(labelFilename.Text, new List<Patcher.HexPatch> { new Patcher.HexPatch("APPLYMISCPATCH", "Misc Patches/MakeExeRequireAdmin.patch", null) });
                     }
                     else
                     {
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["changeregistrylocation"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["memorycheckfix"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["removemutexcheck"]);
+                        patcher.UnApplyPatch(labelFilename.Text, new List<Patcher.HexPatch> { new Patcher.HexPatch("APPLYMISCPATCH", "Misc Patches/MakeExeRequireAdmin.patch", null) });
                     }
 
                     if (checkBoxShowHiddenAttributes.Checked)

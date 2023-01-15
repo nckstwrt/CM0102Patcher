@@ -35,6 +35,7 @@
             this.textBoxFilter = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonCopyToClipboard = new System.Windows.Forms.Button();
+            this.buttonUnApply = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // checkedListBoxPatches
@@ -97,11 +98,23 @@
             this.buttonCopyToClipboard.UseVisualStyleBackColor = true;
             this.buttonCopyToClipboard.Click += new System.EventHandler(this.buttonCopyToClipboard_Click);
             // 
+            // buttonUnApply
+            // 
+            this.buttonUnApply.Enabled = false;
+            this.buttonUnApply.Location = new System.Drawing.Point(416, 279);
+            this.buttonUnApply.Name = "buttonUnApply";
+            this.buttonUnApply.Size = new System.Drawing.Size(75, 23);
+            this.buttonUnApply.TabIndex = 6;
+            this.buttonUnApply.Text = "UnApply Patch";
+            this.buttonUnApply.UseVisualStyleBackColor = true;
+            this.buttonUnApply.Click += new System.EventHandler(this.buttonUnApply_Click);
+            // 
             // MiscPatches
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(809, 311);
+            this.Controls.Add(this.buttonUnApply);
             this.Controls.Add(this.buttonCopyToClipboard);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxFilter);
@@ -127,5 +140,6 @@
         private System.Windows.Forms.TextBox textBoxFilter;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonCopyToClipboard;
+        private System.Windows.Forms.Button buttonUnApply;
     }
 }

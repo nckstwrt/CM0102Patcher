@@ -128,7 +128,38 @@ namespace CM0102Patcher
             }
         }
 
-        public static void ApplyMiscPatch(string exeFile, string patchPath)
+        private void buttonUnApply_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(exeFile))
+            {
+                MessageBox.Show("No exe selected. Closing.", "Misc Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Close();
+                return;
+            }
+
+            var yesNo = MessageBox.Show("Are you REALLY sure you want to try and unapply this patch to your exe?\r\nThis could very easily not work and/or break your cm0102.exe - are you REALLY REALLY sure?", "Misc Patches", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (yesNo == DialogResult.Yes)
+            {
+                var patch = (ZipStorer.ZipFileEntry)checkedListBoxPatches.SelectedItem;
+                using (var zs = MiscFunctions.OpenZip("MiscPatches.zip"))
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        zs.ExtractFile(patch, ms);
+                        ms.Seek(0, SeekOrigin.Begin);
+
+                        Patcher patcher = new Patcher();
+                        var hexPatch = patcher.LoadPatchFile(ms);
+                        patcher.UnApplyPatch(exeFile, hexPatch);
+                    }
+                }
+
+                MessageBox.Show("Patch UnApplied!", "Patch UnApplied", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                textBoxFilter_TextChanged(null, null);
+            }
+        }
+
+        public static void ApplyMiscPatch(string exeFile, string patchPath, bool unapply = false)
         {
             using (var zs = MiscFunctions.OpenZip("MiscPatches.zip"))
             {
@@ -142,7 +173,11 @@ namespace CM0102Patcher
 
                         Patcher patcher = new Patcher();
                         var hexPatch = patcher.LoadPatchFile(ms);
-                        patcher.ApplyPatch(exeFile, hexPatch);
+
+                        if (!unapply)
+                            patcher.ApplyPatch(exeFile, hexPatch);
+                        else
+                            patcher.UnApplyPatch(exeFile, hexPatch);
                     }
                 }
             }
@@ -152,6 +187,8 @@ namespace CM0102Patcher
         {
             if (checkedListBoxPatches.SelectedItem != null)
             {
+                buttonUnApply.Enabled = (checkedListBoxPatches.SelectedIndex != -1 && checkedListBoxPatches.GetItemCheckState(checkedListBoxPatches.SelectedIndex) != CheckState.Unchecked);
+
                 var patch = (ZipStorer.ZipFileEntry)checkedListBoxPatches.SelectedItem;
                 var txtFileName = patch.FilenameInZip.Replace(".patch", ".txt");
                 var infoFileName = patch.FilenameInZip.Replace(".patch", ".info");

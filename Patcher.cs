@@ -23,14 +23,16 @@ namespace CM0102Patcher
                 this.part5 = part5;
             }
 
-            public HexPatch(int offset, string hex)
+            public HexPatch(int offset, string hex, string oldhex = null)
             {
                 this.offset = offset;
                 this.hex = hex;
+                this.oldhex = oldhex;
             }
 
             public int offset;
             public string hex;
+            public string oldhex;
             public string command;
             public string part1;
             public string part2;
@@ -347,7 +349,7 @@ namespace CM0102Patcher
                             var offset = Convert.ToInt32(parts[0], 16);
                             var from = Convert.ToByte(parts[1], 16);
                             var to = Convert.ToByte(parts[2], 16);
-                            patchList.Add(new HexPatch(offset, string.Format("{0:x02}", to)));
+                            patchList.Add(new HexPatch(offset, string.Format("{0:x02}", to), string.Format("{0:x02}", from)));
                         }
                     }
                     catch { }
@@ -405,7 +407,9 @@ namespace CM0102Patcher
         // DE7470 - DE74A0 = Floating point clamping patch (with a little space)
         // DE74B0 - DE74C3 = Null News Item Protection Patch
         // DE74C4 - DE74E2 = Better teams in Asia Cup patch
-        // DE74F0 -        = World Cup 2022 - Qatar in Nov/Dec
+        // DE74F0 - DE75FF = World Cup 2022 - Qatar in Nov/Dec
+        // DE7600 - DE7629 = "Irish Football Association Challenge Cup" <-- weird fix where name patching doesnt work
+        // DE7630 - DE7648 = Protection patch for danny_bhoy67 crash - squad_manager.cpp
 
         public void ExpandExe(string fileName)
         {
@@ -413,6 +417,32 @@ namespace CM0102Patcher
             using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
                 file.SetLength(0x8DC000);
+            }
+        }
+
+        public void UnApplyPatch(string fileName, IEnumerable<HexPatch> patch)
+        {
+            // UnApply patches
+            using (var file = File.Open(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                using (var bw = new BinaryWriter(file))
+                {
+                    foreach (var hexpatch in patch)
+                    {
+                        if (hexpatch.offset == -1)
+                        {
+                            if (hexpatch.command.ToUpper().StartsWith("APPLYMISCPATCH"))
+                            {
+                                MiscPatches.ApplyMiscPatch(fileName, hexpatch.part1, true);
+                            }
+                        }
+                        else
+                        {
+                            bw.Seek(hexpatch.offset, SeekOrigin.Begin);
+                            bw.Write(HexStringToBytes(hexpatch.oldhex));
+                        }
+                    }
+                }
             }
         }
 
