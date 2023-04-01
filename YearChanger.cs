@@ -19,7 +19,7 @@ namespace CM0102Patcher
         List<int> startYearPlus3 = new List<int> { 0xdc113, 0x19ba24 };
         List<int> startYearPlus9 = new List<int> { 0x135d89, 0x135df8, 0x3A3D64, 0x3A3FD1, 0x3A4224, 0x3A4844, 0x3A4CB4, 0x3A4F68, 0x3A4FA1 };
 
-        byte[] YearToBytes(int year)
+        public static byte[] YearToBytes(int year)
         {
             return new byte[] { (byte)(year & 0xff), (byte)(year >> 8) };
         }
@@ -347,7 +347,7 @@ namespace CM0102Patcher
                     bw.Write((byte)0xa);
                 }
 
-                if (year >= 1994 && year < 1997)
+                if ((year >= 1994 && year < 1997) || year == 1991)
                 {
                     // World Cup - especially 27th Dec 2001 is a major issue. This massive patch fixes it - but was a bit of a nuclear option. Needs disecting.
                     patcher.ApplyPatch(stream, patcher.patches["fixworldcuppre2000"]);
@@ -358,12 +358,13 @@ namespace CM0102Patcher
                         bw.Write(YearToBytes(year));
                     }
                 }
-                if (year == 1997 || year == 1989 || year == 1993)
+                if (year == 1997 || year == 1989 || year == 1993 || year == 1991)
                 {
                     var setWorldCupQualTo = 2000;
 
                     switch (year)
                     {
+                        case 1991:
                         case 1989:
                             setWorldCupQualTo = 1992;
                             break;

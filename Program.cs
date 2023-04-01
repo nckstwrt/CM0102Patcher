@@ -9,13 +9,182 @@ namespace CM0102Patcher
 {
     static class Program
     {
+        static void patch()
+        {
+            int year = 1991;
+            using (var stream = System.IO.File.Open(@"C:\ChampMan\Championship Manager 0102\Cam91_Issue\Attempt3\cm91.exe", FileMode.Open))
+            using (var bw = new BinaryWriter(stream))
+            {
+                Patcher patcher = new Patcher();
+
+                // Set to normally be a USA start
+                bw.Seek(0x1F99A1, SeekOrigin.Begin);        // Normally 7CD (1997)
+                bw.Write((short)(1993));
+                bw.Seek(0x1F99BC, SeekOrigin.Begin);        // Normally 7CE (1998)
+                bw.Write((short)(1994));
+
+                // Make USA The Hosts Replacing France
+                bw.Seek(0x1F99E9, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x8B, 0x0D, 0xf8, 0xf4, 0x9c, 0x00 }); // Make USA the hosts (replacing France)
+                bw.Seek(0x52DD67, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0xA1, 0x54, 0xf2, 0x9c, 0x00 }); // Make Bolivia replace USA in qualifiers so we don't get 2 USAs
+
+                // This, like the Euros shunts everything along, so the 1998 World Cup would get hosted by S.Korea and Japan. Replace with just France.
+                bw.Seek(0x1F9A21, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x8B, 0x15, 0x00, 0xf3, 0x9c, 0x00, 0x89, 0x51, 0x28, 0x8B, 0x06, 0xB9, 0xFF, 0xFF, 0xFF, 0xFF, 0x90 });
+
+                // Make Germany = S.Korea + Japan
+                bw.Seek(0x1F9A5D, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x84, 0xf4 });
+                bw.Seek(0x1F9A64, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0xC7, 0x40, 0x4E, 0x61, 0x00, 0x00, 0x00 });    /// <---- Put 61 in (which is Japan)
+
+                // We have the space maker - so we can put in the reputation fix for when we don't have qualifiers
+                // Currently, if we don't have qualifiers the world cup will pick teams in alphabetical order. This fixes that based on rep.
+                patcher.ApplyPatch(stream, new[] { new Patcher.HexPatch(0x201a83, "90e84799f3ff80787f0a0f8d7ad8320083c404ff4c2414e982d832009090"), new Patcher.HexPatch(0x52f308, "e97727cd") });
+
+                bw.Seek(0x1F9DD3, SeekOrigin.Begin);    // Switzerland -> Belgium
+                bw.Write(new byte[] { 0xA1, 0x44, 0xf2, 0x9c, 0x00, 0x89, 0x82, 0xC0, 0x01, 0x00, 0x00, 0xC7, 0x81, 0xC4, 0x01, 0x00, 0x00, 0x53, 0x00, 0x00, 0x00 });
+
+                // New Approach for Switzerland + Sweden:
+                // Doesn't work either - or maybe it does if you make BL = FD rather than FE
+                bw.Seek(0x1F9D04, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x44, 0xf2 });
+                bw.Seek(0x1F9D0E, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0xC7, 0x82, 0x66, 0x01, 0x00, 0x00, 0x53, 0x00, 0x00, 0x00 });
+
+                bw.Seek(0x1F9D19, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x44, 0xf2 });
+                bw.Seek(0x1F9D23, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0xC7, 0x82, 0x6e, 0x01, 0x00, 0x00, 0x53, 0x00, 0x00, 0x00 });
+
+                // Change BL to FD, (use EDX rather than EAX)
+                bw.Seek(0x1F9D2D, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0xC6, 0x82, 0x72, 0x01, 0x00, 0x00, 0xFD, 0x90 });
+                bw.Seek(0x1F9D3c, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x8a });
+
+                bw.Seek(0x1F9CE9, SeekOrigin.Begin); // Wales/Scotland (easier as already dual nation hosted)
+                bw.Write(new byte[] { 0x44, 0xf2 });
+                bw.Seek(0x1F9CF7, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x38, 0xf3 });
+
+                // Make 2004 Portugal
+                bw.Seek(0x1F9D37, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x34, 0xf4 });
+                bw.Seek(0x1F9D4D, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x34, 0xf4 });
+                bw.Seek(0x1F9D63, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x34, 0xf4 });
+
+                /*
+
+                // Wembley Fix
+                bw.Seek(0x45b843, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0xeb });
+                bw.Seek(0x45c40e, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0xeb });
+
+                // Turn off transfer_manager..cpp 10691
+                // This is a bad one - you need to do more than turn it off
+                // This occurs when the staff member being transferred does not have a Player pointer at +61
+                // So you need to eject! :)
+                // bw.Seek(0x4CC7BB, SeekOrigin.Begin);
+                // bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+                bw.Seek(0x4CC76A, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0xEB, 0xA4, 0x90, 0x90, });
+
+                // Turn off match_eng..cpp 612
+                bw.Seek(0x2B896E, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+                // Turn off match_eng..cpp 652
+                bw.Seek(0x2B8AC5, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+                // Turn off Cup 1187 error
+                bw.Seek(0x11A396, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+                // Turn off comp_stats..CPP 1664.
+                bw.Seek(0x0A25A3, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+
+                // German Regional
+                List<int> startYearMinus1_GerRegional = new List<int> { 0x001DCF10, 0x001DD7FF, 0x001DD9FE,  };
+                foreach (var offset in startYearMinus1_GerRegional)
+                {
+                    bw.Seek(offset, SeekOrigin.Begin);
+                    bw.Write(YearChanger.YearToBytes(year - 1));
+                }
+
+                
+                // Scotland
+                List<int> startYearMinus1_Scotland = new List<int> { 0x3EE026, 0x3EEE61, 0x3EEF79, 0x3F0413, 0x3F0C00, 0x3F0E95, 0x3F2831, 0x3F297E, 0x3F2A4E, 0x3F2A8D, 0x3F31D4, 0x3F3F8B, 0x3F4F3F };
+                foreach (var offset in startYearMinus1_Scotland)
+                {
+                    bw.Seek(offset, SeekOrigin.Begin);
+                    bw.Write(YearChanger.YearToBytes(year - 1));
+                }
+                */
+                /*
+                // Remove Eidos Logo Splash Screen
+                bw.Seek(0x1CCFB6, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+                bw.Seek(0x1CCFD1, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0xeb });
+                bw.Seek(0x1CCFF9, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 });
+                
+
+                // Change the name
+                var newGameName1 = year.ToString().Substring(2) + "/" + (year + 1).ToString().Substring(2);
+                var newGameName2 = year.ToString() + "/" + (year + 1).ToString().Substring(2);
+                ByteWriter.WriteToBinaryWriter(bw, 0x5cd33d, newGameName1 + "\0");  // Window Title
+                ByteWriter.WriteToBinaryWriter(bw, 0x68029d, newGameName2 + "\0");  // Main Menu Screen
+                */
+                /*
+                // Remove the non-playable leagues for the 93 update (with fix so Select All does not select unselectable leagues)
+                // (These should be all one patch - but i'm lazy and pressed for time :) )
+                patcher.ApplyPatch(stream, new Patcher.HexPatch[] { new Patcher.HexPatch(0x202f05, "0f8473ac21"), new Patcher.HexPatch(0x202f0b, "807d000b74f4807d002a74ee807d002f74e8807d004474e2807d004b74dc807d00aa74d6807d008074d0807d009474ca807d005c74c4807d009a74be807d00c074b8807d00cf74b2e915a8210090"), new Patcher.HexPatch(0x41d767, "e99957deff90") });
+                patcher.ApplyPatch(stream, new Patcher.HexPatch[] { new Patcher.HexPatch(0x202f10, "47"), new Patcher.HexPatch(0x202f16, "41"), new Patcher.HexPatch(0x202f1c, "3b"), new Patcher.HexPatch(0x202f22, "35"), new Patcher.HexPatch(0x202f28, "2f"), new Patcher.HexPatch(0x202f2e, "29"), new Patcher.HexPatch(0x202f34, "23"), new Patcher.HexPatch(0x202f3a, "1d"), new Patcher.HexPatch(0x202f40, "17"), new Patcher.HexPatch(0x202f46, "11"), new Patcher.HexPatch(0x202f4c, "0b"), new Patcher.HexPatch(0x202f52, "05"), new Patcher.HexPatch(0x202f58, "c6851c010000"), new Patcher.HexPatch(0x202f5f, "e91aac210090") });
+                patcher.ApplyPatch(stream, new Patcher.HexPatch[] { new Patcher.HexPatch(0x202f5f, "833d042dae00107e0ac705042dae001000"), new Patcher.HexPatch(0x202f71, "00e907ac21"), new Patcher.HexPatch(0x41d5e3, "10") });
+
+                // Turn off Swedish Second Division too
+                bw.Seek(0x26A096, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0xE9, 0x3B, 0xFF, 0xFF, 0xFF, 0x90 });
+
+                // Turn off Merconorte Cup
+                bw.Seek(0x431856, SeekOrigin.Begin);
+                bw.Write(new byte[] { 0xEB });*/
+            }
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
-
+            //patch();
+            /*
+            // For match man 1225 errors! :)
+            HistoryLoader hl = new HistoryLoader();
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\Cam91_Issue\Attempt1\Data\index.dat");
+            foreach (var club in hl.club)
+            {
+                var dupes = club.Squad.Where(x => x != -1).GroupBy(x => x).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+                if (dupes.Count > 0)
+                {
+                    foreach (var dupe in dupes)
+                    {
+                        string name = "Unknown";
+                        hl.StaffToName(hl.staff[dupe], out name);
+                        Console.WriteLine("Dupe Quad Found for Club {0} ({1}) - Player: {2}", club.Name.ReadString(), club.ShortName.ReadString(), name);
+                    }
+                }
+            }
+            */
             /*
             HistoryLoader hl = new HistoryLoader();
             hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2022_Test2\Data\index.dat");

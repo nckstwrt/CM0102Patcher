@@ -831,8 +831,9 @@ namespace CM0102Patcher
             {
                 using (var bw = new BinaryWriter(file))
                 {
-                    file.Seek(0x5472ce, SeekOrigin.Begin);
-                    bw.Write(speed);
+                    file.Seek(0x5472cd, SeekOrigin.Begin);
+                    bw.Write((byte)0x68);       // Write a DWORD push as Tapani sometimes changes this in his patch
+                    bw.Write((int)speed);       // Force to DWORD (again to stop Tapani nonsense)
                 }
             }
         }
