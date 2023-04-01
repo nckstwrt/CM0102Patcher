@@ -11,7 +11,7 @@ namespace CM0102Patcher
     {
         static void patch()
         {
-            int year = 1991;
+            //int year = 1991;
             using (var stream = System.IO.File.Open(@"C:\ChampMan\Championship Manager 0102\Cam91_Issue\Attempt3\cm91.exe", FileMode.Open))
             using (var bw = new BinaryWriter(stream))
             {
