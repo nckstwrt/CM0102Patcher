@@ -410,6 +410,7 @@ namespace CM0102Patcher
         // DE74F0 - DE75FF = World Cup 2022 - Qatar in Nov/Dec
         // DE7600 - DE7629 = "Irish Football Association Challenge Cup" <-- weird fix where name patching doesnt work
         // DE7630 - DE7648 = Protection patch for danny_bhoy67 crash - squad_manager.cpp
+        // DE7650 - DE7677 = Protection patch for vascobenny and staff_records when a player is to transfer but has already left the club they are transferring from
 
         public void ExpandExe(string fileName)
         {
