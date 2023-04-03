@@ -184,6 +184,12 @@
     <Compile Include="Tools.Designer.cs">
       <DependentUpon>Tools.cs</DependentUpon>
     </Compile>
+    <Compile Include="UpdatingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdatingForm.Designer.cs">
+      <DependentUpon>UpdatingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="WuColorQuantizer.cs" />
     <Compile Include="YearChanger.cs" />
     <Compile Include="History Editor\YearShifterForm.cs">
@@ -258,6 +264,9 @@
       <DependentUpon>YearShifterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AITactics.zip" />
+    <EmbeddedResource Include="UpdatingForm.resx">
+      <DependentUpon>UpdatingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.manifest">
       <SubType>Designer</SubType>
     </None>

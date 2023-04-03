@@ -36,7 +36,7 @@ namespace CM0102Patcher
         private void LoadData()
         {
             hl = new HistoryLoader();
-            hl.Load(textBoxIndexFile.Text);
+            hl.Load(textBoxIndexFile.Text, false);
             // LoadLoans(textBoxIndexFile.Text);
 
             // Load the data into the listboxes

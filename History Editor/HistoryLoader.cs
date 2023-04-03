@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace CM0102Patcher
 {
@@ -52,7 +53,7 @@ namespace CM0102Patcher
             return ret;
         }
 
-        public void Load(string indexFile, bool overrideOldVersionError = false)
+        public void Load(string indexFile, bool quickLoad = true)
         {
             var dir = Path.GetDirectoryName(indexFile);
             
@@ -63,25 +64,35 @@ namespace CM0102Patcher
                 Console.WriteLine("{3}: {0} {1} {2}", idx.Name.ReadString(), idx.Count, idx.FileType, idx.Offset);
             }
 
+            Application.DoEvents();
+
             nation_comp = MiscFunctions.ReadFile<TComp>(Path.Combine(dir, "nation_comp.dat"));
             club_comp = MiscFunctions.ReadFile<TComp>(Path.Combine(dir, "club_comp.dat"));
             club = MiscFunctions.ReadFile<TClub>(Path.Combine(dir, "club.dat"));
             nat_club = MiscFunctions.ReadFile<TClub>(Path.Combine(dir, "nat_club.dat"));
+
+            Application.DoEvents();
+
             nation = MiscFunctions.ReadFile<TNation>(Path.Combine(dir, "nation.dat"));
             continent = MiscFunctions.ReadFile<TContinent>(Path.Combine(dir, "continent.dat"));
             nation_comp_history = MiscFunctions.ReadFile<TCompHistory>(Path.Combine(dir, "nation_comp_history.dat"));
             club_comp_history = MiscFunctions.ReadFile<TCompHistory>(Path.Combine(dir, "club_comp_history.dat"));
-            
+
+            Application.DoEvents();
+
             staff_comp = MiscFunctions.ReadFile<TStaffComp>(Path.Combine(dir, "staff_comp.dat"));
             staff_comp_history = MiscFunctions.ReadFile<TStaffCompHistory>(Path.Combine(dir, "staff_comp_history.dat"));
 
             staffDetails = index.Find(x => GetTextFromBytes(x.Name) == "staff.dat" && x.FileType == 6);
 
-            if (staffDetails.Version == 1 && overrideOldVersionError == false)
+            Application.DoEvents();
+
+            if (staffDetails.Version == 1)
             {
                 throw new Exception("This is a very old version of the data!\r\n\r\nLoad in the Champ Man Editor and then save it to update it before history editing!\r\n\r\n");
             }
 
+            Application.DoEvents();
             playerDetails = index.Find(x => GetTextFromBytes(x.Name) == "staff.dat" && x.FileType == 10);
             nonPlayerDetails = index.Find(x => GetTextFromBytes(x.Name) == "staff.dat" && x.FileType == 9);
 
@@ -95,6 +106,8 @@ namespace CM0102Patcher
             if (preferenceDetails != null)
                 preferences = MiscFunctions.ReadFile<TPreferences>(Path.Combine(dir, "staff.dat"), preferenceDetails.Offset, preferenceDetails.Count);
 
+            Application.DoEvents();
+
             first_names = MiscFunctions.ReadFile<TNames>(Path.Combine(dir, "first_names.dat"));
             second_names = MiscFunctions.ReadFile<TNames>(Path.Combine(dir, "second_names.dat"));
             common_names = MiscFunctions.ReadFile<TNames>(Path.Combine(dir, "common_names.dat"));
@@ -102,19 +115,25 @@ namespace CM0102Patcher
             staffNames = new Dictionary<int, string>();
             staffNamesNoDiacritics = new Dictionary<int, string>();
             staffNamesReverse = new Dictionary<string, List<int>>();
-            foreach (var staffMember in staff)
-            {
-                string name;
-                if (StaffToName(staffMember, out name))
-                {
-                    staffNames[staffMember.ID] = name;
-                    staffNamesNoDiacritics[staffMember.ID] = MiscFunctions.RemoveDiacritics(name);
 
-                    if (!staffNamesReverse.ContainsKey(name))
-                        staffNamesReverse[name] = new List<int>();
-                    staffNamesReverse[name].Add(staffMember.ID);
+            if (!quickLoad)
+            {
+                foreach (var staffMember in staff)
+                {
+                    string name;
+                    if (StaffToName(staffMember, out name))
+                    {
+                        staffNames[staffMember.ID] = name;
+                        staffNamesNoDiacritics[staffMember.ID] = MiscFunctions.RemoveDiacritics(name);
+
+                        if (!staffNamesReverse.ContainsKey(name))
+                            staffNamesReverse[name] = new List<int>();
+                        staffNamesReverse[name].Add(staffMember.ID);
+                    }
                 }
             }
+
+            Application.DoEvents();
 
             clubNames = new Dictionary<string, int>();
             foreach (var clubObj in club)
@@ -124,6 +143,8 @@ namespace CM0102Patcher
 
             cities = MiscFunctions.ReadFile<TCities>(Path.Combine(dir, "city.dat"));
             stadiums = MiscFunctions.ReadFile<TStadiums>(Path.Combine(dir, "stadium.dat"));
+
+            Application.DoEvents();
         }
 
         public bool StaffToName(TStaff staffMember, out string name)

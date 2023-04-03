@@ -17,6 +17,7 @@ namespace CM0102Patcher
     {
         bool isTapani = false;
         bool shownTapaniWarning = false;
+        public static UpdatingForm updatingForm;
 
         public PatcherForm()
         {
@@ -24,6 +25,8 @@ namespace CM0102Patcher
 
             try
             {
+                updatingForm = new UpdatingForm();
+
                 if (!string.IsNullOrEmpty(RegString.GetRegString()))
                 {
                     var exeLocation = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
@@ -797,9 +800,13 @@ namespace CM0102Patcher
                         }
                     }
 
+                    updatingForm.Show();
+
                     if (checkBoxReplaceAITactics.Checked && comboBoxReplaceAITactics.SelectedIndex >= 0)
                     {
                         var selectedPack = comboBoxReplaceAITactics.SelectedItem as string;
+
+                        updatingForm.SetUpdateText(selectedPack);
 
                         using (var zs = MiscFunctions.OpenZip("AITactics.zip"))
                         {
@@ -836,6 +843,7 @@ namespace CM0102Patcher
                         var patched = NoCDPatch.PatchEXEFile(labelFilename.Text);
                     }
 
+                    updatingForm.Hide();
                     MessageBox.Show("Patched Successfully!", "CM0102 Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     TapaniDetection();
                 }
@@ -843,6 +851,11 @@ namespace CM0102Patcher
             catch (Exception ex)
             {
                 ExceptionMsgBox.Show(ex);
+            }
+            finally
+            {
+                if (updatingForm.Visible)
+                    updatingForm.Hide();
             }
         }
 

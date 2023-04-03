@@ -471,11 +471,13 @@ namespace CM0102Patcher
                             {
                                 if (hexpatch.command.ToUpper().StartsWith("APPLYMISCPATCH"))
                                 {
+                                    PatcherForm.updatingForm.SetUpdateText(hexpatch.part1);
                                     MiscPatches.ApplyMiscPatch(fileName, hexpatch.part1);
                                 }
                                 if (hexpatch.command.ToUpper().StartsWith("APPLYEXTERNALPATCH"))
                                 {
                                     Patcher patcher = new Patcher();
+                                    PatcherForm.updatingForm.SetUpdateText(hexpatch.part1);
                                     patcher.ApplyPatch(fileName, hexpatch.part1);
                                 }
                             }
@@ -508,11 +510,13 @@ namespace CM0102Patcher
                 
                 if (historyLoaderRequired)
                 {
+                    PatcherForm.updatingForm.SetUpdateText("Loading Data Files...");
                     hl = new HistoryLoader();
                     var dir = Path.GetDirectoryName(fileName);
                     var dataDir = Path.Combine(dir, "Data");
                     indexFile = Path.Combine(dataDir, "index.dat");
                     hl.Load(indexFile);
+                    PatcherForm.updatingForm.SetUpdateText("Data Files Loaded.");
                 }
 
                 // CHANGECLUBDIVISION + CHANGECLUBLASTDIVISION
@@ -530,10 +534,16 @@ namespace CM0102Patcher
                             {
                                 if (tClub.ID != 0 && tDivision.ID != 0)
                                 {
+                                    PatcherForm.updatingForm.SetUpdateText(clubDivisionChange.command + " " + clubName + " " + divisionName);
+
                                     if (clubDivisionChange.command.ToUpper().StartsWith("CHANGECLUBDIVISION"))
+                                    {
                                         hl.UpdateClubsDivision(tClub.ID, tDivision.ID);
+                                    }
                                     else
+                                    {
                                         hl.UpdateClubsLastDivision(tClub.ID, tDivision.ID);
+                                    }
                                 }
                             }
                             else
@@ -554,6 +564,7 @@ namespace CM0102Patcher
                         var tClub = hl.club.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == clubName);
                         if (tClub != null)
                         {
+                            PatcherForm.updatingForm.SetUpdateText(clubLastPositionChange.command + " " + clubName + " " + newPosition);
                             hl.UpdateClubsLastPosition(tClub.ID, newPosition);
                         }
                         else
@@ -570,6 +581,7 @@ namespace CM0102Patcher
                     var tNation = hl.nation.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == nationName);
                     if (tClub.ID != 0 && tNation.ID != 0)
                     {
+                        PatcherForm.updatingForm.SetUpdateText(clubNationChange.command + " " + clubName + " " + nationName);
                         hl.UpdateClubsNation(tClub.ID, tNation.ID);
                     }
 
@@ -589,6 +601,7 @@ namespace CM0102Patcher
                         int? newContinentIdTemp = null;
                         if (!string.IsNullOrEmpty(newContinentId))
                             newContinentIdTemp = int.Parse(newContinentId);
+                        PatcherForm.updatingForm.SetUpdateText(nationCompNameChange.command + " " + nationCompName + " " + newNationCompName + " " + newNationCompNameShort);
                         hl.UpdateNationCompName(tNationComp.ID, newNationCompName, newNationCompNameShort, newContinentIdTemp);
                     }
                 }
@@ -605,7 +618,8 @@ namespace CM0102Patcher
                     {
                         int newNationCompForegroundColorTemp, newNationCompBackgroundColorTemp;
                         if (int.TryParse(newNationCompForegroundColor, out newNationCompForegroundColorTemp) && int.TryParse(newNationCompBackgroundColor, out newNationCompBackgroundColorTemp))
-                        { 
+                        {
+                            PatcherForm.updatingForm.SetUpdateText(nationCompColorChange.command + " " + nationCompName + " " + newNationCompForegroundColor + " " + newNationCompBackgroundColor);
                             hl.UpdateNationCompColor(tNationComp.ID, newNationCompForegroundColorTemp, newNationCompBackgroundColorTemp);
                         }
                     }
@@ -618,7 +632,8 @@ namespace CM0102Patcher
                     var tNationComp = hl.nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
                     if (tNationComp.ID != 0)
                     {
-                            hl.ClearNationCompHistory(tNationComp.ID);
+                        PatcherForm.updatingForm.SetUpdateText(nationCompClearHistoryItem.command + " " + nationCompName);
+                        hl.ClearNationCompHistory(tNationComp.ID);
                     }
                 }
 
@@ -630,6 +645,7 @@ namespace CM0102Patcher
                         
                     if (int.TryParse(deleteClubCompHistoryItem.part2, out year))
                     {
+                        PatcherForm.updatingForm.SetUpdateText(deleteClubCompHistoryItem.command + " " + clubCompName + " " + year);
                         var tClubComp = hl.club_comp.FirstOrDefault(x => x.Name.ReadString() == clubCompName);
                         if (tClubComp.ID != 0)
                         {
@@ -646,6 +662,7 @@ namespace CM0102Patcher
 
                     if (int.TryParse(deleteNationCompHistoryItem.part2, out year))
                     {
+                        PatcherForm.updatingForm.SetUpdateText(deleteNationCompHistoryItem.command + " " + nationCompName + " " + year);
                         var tNationComp = hl.nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
                         if (tNationComp.ID != 0)
                         {
@@ -665,6 +682,8 @@ namespace CM0102Patcher
                         var runner_up = nationCompAddHistoryItem.part4;
                         var host = nationCompAddHistoryItem.part5;
 
+                        PatcherForm.updatingForm.SetUpdateText(nationCompAddHistoryItem.command + " " + nationCompName + " " + winner + " " + runner_up + " " + host);
+
                         hl.AddNationCompHistory(nationCompName, year, winner, runner_up, host);
                     }
                 }
@@ -681,6 +700,9 @@ namespace CM0102Patcher
                         var nationCompHistoryFile = Path.Combine(dataDir, "nation_comp_history.dat");
 
                         YearChanger yearChanger = new YearChanger();
+
+                        PatcherForm.updatingForm.SetUpdateText(nationCompShiftdHistoryItem.command + " " + yearShift);
+
                         yearChanger.UpdateHistoryFile(nationCompHistoryFile, 0x1a, yearShift, 0x8);
 
                     }
@@ -700,6 +722,7 @@ namespace CM0102Patcher
                     np.FindFreePos();
                     foreach (var clubNameChange in clubCompNameChanges)
                     {
+                        PatcherForm.updatingForm.SetUpdateText(clubNameChange.command + " " + clubNameChange.part1);
                         np.PatchClubComp(clubNameChange.part1, clubNameChange.part2, clubNameChange.part3, clubNameChange.part4, clubNameChange.part5);
                     }
                 }
@@ -715,6 +738,7 @@ namespace CM0102Patcher
                     var clubs = MiscFunctions.ReadFile<TClub>(Path.Combine(dataDir, "club.dat"));
                     foreach (var clubReNameChange in clubReNameChanges)
                     {
+                        PatcherForm.updatingForm.SetUpdateText(clubReNameChange.command + " " + clubReNameChange.part1);
                         var idx = clubs.FindIndex(x => MiscFunctions.GetTextFromBytes(x.Name) == clubReNameChange.part1);
                         if (idx != -1)
                         {
