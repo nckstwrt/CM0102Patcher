@@ -302,7 +302,8 @@ namespace CM0102Patcher
         public List<string> patcherCommands = new List<string> { "TAPANISPACEPATCH", "APPLYMISCPATCH", "APPLYEXTERNALPATCH", "EXPANDEXE", "PATCHCLUBCOMP", "RENAMECLUB",
                                                                  "CHANGECLUBDIVISION", "CHANGECLUBLASTDIVISION", "CHANGECLUBLASTPOSITION", "CHANGECLUBNATION", 
                                                                  "CHANGENATIONCOMPNAME", "CHANGENATIONCOMPCOLOR", "CLEARNATIONCOMPHISTORY", 
-                                                                 "ADDNATIONCOMPHISTORY", "DELETECLUBCOMPHISTORY", "DELETENATIONCOMPHISTORY", "SHIFTNATIONCOMPHISTORY"
+                                                                 "ADDNATIONCOMPHISTORY", "DELETECLUBCOMPHISTORY", "DELETENATIONCOMPHISTORY", "SHIFTNATIONCOMPHISTORY",
+                                                                 "CHANGENATIONCONTINENT"
         };
 
         Dictionary<string, List<HexPatch>> GetCommands(IEnumerable<HexPatch> patch)
@@ -708,9 +709,17 @@ namespace CM0102Patcher
                     }
                 }
 
+                // CHANGENATIONCONTINENT (Mainly for changing Australia to Asia)
+                foreach (var changeNationContinent in commandDictionary["CHANGENATIONCONTINENT"])
+                {
+                    saveNationData = true;
+                    var Australia = hl.nation.FirstOrDefault(x => x.Name.ReadString() == "Australia");
+                    var AsiaContinent = hl.continent.FirstOrDefault(x => x.ContinentName.ReadString() == "Asia");
+                    Australia.Continent = AsiaContinent.ContinentID;
+                }
 
                 if (hl != null)
-                    hl.Save(indexFile, true, false, saveNationData);
+                hl.Save(indexFile, true, false, saveNationData);
 
                 // Patch Club Competition Names
                 var clubCompNameChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("PATCHCLUBCOMP"))).ToList();
