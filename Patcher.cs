@@ -768,7 +768,7 @@ namespace CM0102Patcher
             }
         }
 
-        // Not used
+        // Used by APPLYEXTERNALPATCH
         public void ApplyPatch(string fileName, string patchFile)
         {
             var patch = LoadPatchFile(patchFile);
