@@ -12,7 +12,7 @@ namespace CM0102Patcher
     {
         public class HexPatch
         {
-            public HexPatch(string command, string part1, string part2, string part3 = null, string part4 = null, string part5 = null)
+            public HexPatch(string command, string part1, string part2, string part3 = null, string part4 = null, string part5 = null, string part6 = null)
             {
                 this.offset = -1;
                 this.command = command;
@@ -21,6 +21,7 @@ namespace CM0102Patcher
                 this.part3 = part3;
                 this.part4 = part4;
                 this.part5 = part5;
+                this.part6 = part6;
             }
 
             public HexPatch(int offset, string hex, string oldhex = null)
@@ -39,6 +40,7 @@ namespace CM0102Patcher
             public string part3;
             public string part4;
             public string part5;
+            public string part6;
         }
 
         public Dictionary<string, List<HexPatch>> patches = new Dictionary<string, List<HexPatch>>
@@ -343,7 +345,7 @@ namespace CM0102Patcher
                     {
                         if (patcherCommands.Contains(parts[0].ToUpper()))
                         {
-                            patchList.Add(new HexPatch(parts[0].ToUpper(), (parts.Count > 1) ? parts[1] : null, (parts.Count > 2) ? parts[2] : null, (parts.Count > 3) ? parts[3] : null, (parts.Count > 4) ? parts[4] : null, (parts.Count > 5) ? parts[5] : null));
+                            patchList.Add(new HexPatch(parts[0].ToUpper(), (parts.Count > 1) ? parts[1] : null, (parts.Count > 2) ? parts[2] : null, (parts.Count > 3) ? parts[3] : null, (parts.Count > 4) ? parts[4] : null, (parts.Count > 5) ? parts[5] : null, (parts.Count > 6) ? parts[6] : null));
                         }
                         else
                         {
@@ -413,6 +415,7 @@ namespace CM0102Patcher
         // DE7630 - DE7648 = Protection patch for danny_bhoy67 crash - squad_manager.cpp
         // DE7650 - DE7677 = Protection patch for vascobenny and staff_records when a player is to transfer but has already left the club they are transferring from
         // DE7680 - DE7698 = Luke trasfer_offer Protection Patch
+        // DE76A0 - DE76B8 = woerd86_netherlands_protection_patch.patch
 
         public void ExpandExe(string fileName)
         {
@@ -682,10 +685,11 @@ namespace CM0102Patcher
                         var winner = nationCompAddHistoryItem.part3;
                         var runner_up = nationCompAddHistoryItem.part4;
                         var host = nationCompAddHistoryItem.part5;
+                        var third_place = nationCompAddHistoryItem.part6;
 
-                        PatcherForm.updatingForm.SetUpdateText(nationCompAddHistoryItem.command + " " + nationCompName + " " + winner + " " + runner_up + " " + host);
+                        PatcherForm.updatingForm.SetUpdateText(nationCompAddHistoryItem.command + " " + nationCompName + " " + winner + " " + runner_up + " " + host + " " + third_place);
 
-                        hl.AddNationCompHistory(nationCompName, year, winner, runner_up, host);
+                        hl.AddNationCompHistory(nationCompName, year, winner, runner_up, host, third_place);
                     }
                 }
 

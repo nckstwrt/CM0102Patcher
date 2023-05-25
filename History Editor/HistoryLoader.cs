@@ -262,12 +262,16 @@ namespace CM0102Patcher
             nation_comp_history.RemoveAll(x => x.Comp == nationCompId);
         }
 
-        public void AddNationCompHistory(string nationCompName, int year, string winner, string runner_up, string host)
+        public void AddNationCompHistory(string nationCompName, int year, string winner, string runner_up, string host, string third_place = null)
         {
             var tNationComp = nation_comp.FirstOrDefault(x => x.Name.ReadString() == nationCompName);
             var tNationWinner = nat_club.FirstOrDefault(x => x.Name.ReadString() == winner);
             var tNationRunnerUp = nat_club.FirstOrDefault(x => x.Name.ReadString() == runner_up);
             var tNationHost = nat_club.FirstOrDefault(x => x.Name.ReadString() == host);
+
+            TClub third_place_club = null;
+            if (!string.IsNullOrEmpty(third_place))
+                third_place_club = nat_club.FirstOrDefault(x => x.Name.ReadString() == third_place);
 
             if (tNationComp.ID != 0 && tNationWinner.ID != 0 && tNationRunnerUp.ID != 0 && tNationHost.ID != 0)
             {
@@ -277,8 +281,12 @@ namespace CM0102Patcher
                 newHistory.Year = (short)year;
                 newHistory.Winners = tNationWinner.ID;
                 newHistory.RunnersUp = tNationRunnerUp.ID;
-                newHistory.ThirdPlace = -1;
                 newHistory.Host = tNationHost.ID;
+                if (third_place_club != null)
+                    newHistory.ThirdPlace = third_place_club.ID;
+                else
+                    newHistory.ThirdPlace = -1;
+
                 nation_comp_history.Add(newHistory);
             }
         }
