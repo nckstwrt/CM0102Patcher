@@ -398,6 +398,10 @@ namespace CM0102Patcher
                             return;
                     }
 
+                    // We now always expand the EXE!
+                    patcher.ExpandExe(labelFilename.Text);
+                    Logger.Log(labelFilename.Text, "Applying to {0} using {1} (isTapani: {2})", labelFilename.Text, this.Text, isTapani.ToString());
+
                     // Initialise the name patcher
                     var namePatcher = new NamePatcher(labelFilename.Text, dataDir);
 
@@ -446,6 +450,8 @@ namespace CM0102Patcher
                             // Old Version
                             try
                             {
+                                Logger.Log(labelFilename.Text, "Changing Year to {0} (OLD VERSION!)", ((int)numericGameStartYear.Value).ToString());
+
                                 // Reverse out any date patches (this could break Tapani!!)
                                 patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["datecalcpatch"]);
                                 patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["datecalcpatchjumps"]);
@@ -498,6 +504,8 @@ namespace CM0102Patcher
                         }
                         else
                         {
+                            Logger.Log(labelFilename.Text, "Changing Year to {0} (NEW VERSION!)", ((int)numericGameStartYear.Value).ToString());
+
                             // New EXE Version
                             YearChanger yearChanger = new YearChanger();
                             var currentYear = yearChanger.GetCurrentExeYear(labelFilename.Text);
@@ -514,35 +522,61 @@ namespace CM0102Patcher
 
                     // Patches
                     if (checkBoxEnableColouredAtts.Checked)
+                    {
+                        Logger.Log(labelFilename.Text, "Applying ColouredAttributes");
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["colouredattributes"]);
+                    }
                     else
+                    {
+                        Logger.Log(labelFilename.Text, "UnApplying ColouredAttributes");
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["colouredattributes"]);
+                    }
 
                     if (checkBoxHideNonPublicBids.Checked)
+                    {
+                        Logger.Log(labelFilename.Text, "Applying hideprivatebids");
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["hideprivatebids"]);
+                    }
                     else
+                    {
+                        Logger.Log(labelFilename.Text, "UnApplying disableunprotectedcontracts");
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["hideprivatebids"]);
+                    }
 
                     if (checkBoxDisableUnprotectedContracts.Checked)
+                    {
+                        Logger.Log(labelFilename.Text, "Applying disableunprotectedcontracts");
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["disableunprotectedcontracts"]);
+                    }
                     else
+                    {
+                        Logger.Log(labelFilename.Text, "UnApplying disableunprotectedcontracts");
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["disableunprotectedcontracts"]);
+                    }
 
                     if (checkBoxForceLoadAllPlayers.Checked)
+                    {
+                        Logger.Log(labelFilename.Text, "Applying forceloadallplayers");
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["forceloadallplayers"]);
+                    }
                     else
+                    {
+                        Logger.Log(labelFilename.Text, "UnApplying forceloadallplayers");
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["forceloadallplayers"]);
+                    }
 
                     if (checkBoxRestrictTactics.Enabled)
                     {
                         if (checkBoxRestrictTactics.Checked)
                         {
+                            Logger.Log(labelFilename.Text, "Applying restricttactics");
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["restricttactics"]);
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["changegeneraldat"]);
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["changenamecolour"]);
                         }
                         else
                         {
+                            Logger.Log(labelFilename.Text, "UnApplying restricttactics");
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["restricttactics"]);
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["changegeneraldat"]);
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["changenamecolour"]);
@@ -551,6 +585,7 @@ namespace CM0102Patcher
 
                     if (checkBoxMakeExecutablePortable.Checked)
                     {
+                        Logger.Log(labelFilename.Text, "Applying MakeExecutablePortable");
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["changeregistrylocation"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["memorycheckfix"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["removemutexcheck"]);
@@ -558,6 +593,7 @@ namespace CM0102Patcher
                     }
                     else
                     {
+                        Logger.Log(labelFilename.Text, "UnApplying MakeExecutablePortable");
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["changeregistrylocation"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["memorycheckfix"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["removemutexcheck"]);
@@ -566,35 +602,51 @@ namespace CM0102Patcher
 
                     if (checkBoxShowHiddenAttributes.Checked)
                     {
+                        Logger.Log(labelFilename.Text, "Applying addadditionalcolumns");
                         patcher.ExpandExe(labelFilename.Text);
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["addadditionalcolumns"]);
                     }
                     else
+                    {
+                        Logger.Log(labelFilename.Text, "UnApplying addadditionalcolumns");
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["addadditionalcolumns"]);
+                    }
 
                     if (checkBoxBugFixes.Checked)
                     {
+                        Logger.Log(labelFilename.Text, "Applying Bug Fixes");
                         patcher.ExpandExe(labelFilename.Text);
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["bugfixes"]);
                     }
                     else
+                    {
+                        Logger.Log(labelFilename.Text, "UnApplying Bug Fixes");
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["bugfixes"]);
+                    }
 
                     if (checkBoxCDRemoval.Checked)
+                    {
+                        Logger.Log(labelFilename.Text, "Applying disablecdremove");
                         patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablecdremove"]);
+                    }
                     else
+                    {
+                        Logger.Log(labelFilename.Text, "UnApplying disablecdremove");
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["disablecdremove"]);
+                    }
 
                     if (!isTapani)
                     {
                         if (checkBoxIdleSensitivity.Checked)
                         {
+                            Logger.Log(labelFilename.Text, "Applying idlesensitivity");
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["idlesensitivity"]);
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["idlesensitivitytransferscreen"]);
                         }
                         else
                         {
+                            Logger.Log(labelFilename.Text, "UnApplying idlesensitivity");
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["idlesensitivity"]);
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["idlesensitivitytransferscreen"]);
                         }
@@ -602,76 +654,139 @@ namespace CM0102Patcher
                         if (checkBox7Subs.Enabled)
                         {
                             if (checkBox7Subs.Checked)
+                            {
+                                Logger.Log(labelFilename.Text, "Applying 7subs");
                                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["sevensubs"]);
+                            }
                             else
+                            {
+                                Logger.Log(labelFilename.Text, "UnApplying 7subs");
                                 patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["sevensubs"]);
+                            }
                         }
 
                         if (checkBoxShowStarPlayers.Checked)
+                        {
+                            Logger.Log(labelFilename.Text, "Applying showstarplayers");
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["showstarplayers"]);
+                        }
                         else
+                        {
+                            Logger.Log(labelFilename.Text, "UnApplying showstarplayers");
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["showstarplayers"]);
+                        }
 
                         if (checkBoxDisableSplashScreen.Checked)
+                        {
+                            Logger.Log(labelFilename.Text, "Applying disablesplashscreen");
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["disablesplashscreen"]);
+                        }
                         else
+                        {
+                            Logger.Log(labelFilename.Text, "UnApplying disablesplashscreen");
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["disablesplashscreen"]);
+                        }
 
                         if (checkBoxAllowCloseWindow.Enabled)
                         {
                             if (checkBoxAllowCloseWindow.Checked)
+                            {
+                                Logger.Log(labelFilename.Text, "Applying allowclosewindow");
                                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["allowclosewindow"]);
+                            }
                             else
+                            {
+                                Logger.Log(labelFilename.Text, "UnApplying allowclosewindow");
                                 patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["allowclosewindow"]);
+                            }
                         }
 
                         if (checkBoxRegenFixes.Checked)
+                        {
+                            Logger.Log(labelFilename.Text, "Applying regenfixes");
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["regenfixes"]);
+                        }
                         else
+                        {
+                            Logger.Log(labelFilename.Text, "UnApplying regenfixes");
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["regenfixes"]);
+                        }
 
                         if (checkBoxJobsAbroadBoost.Checked)
+                        {
+                            Logger.Log(labelFilename.Text, "Applying jobsabroadboost");
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["jobsabroadboost"]);
+                        }
                         else
+                        {
+                            Logger.Log(labelFilename.Text, "UnApplying jobsabroadboost");
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["jobsabroadboost"]);
+                        }
 
                         if (checkBoxManageAnyTeam.Checked)
+                        {
+                            Logger.Log(labelFilename.Text, "Applying manageanyteam");
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["manageanyteam"]);
+                        }
                         else
+                        {
+                            Logger.Log(labelFilename.Text, "UnApplying manageanyteam");
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["manageanyteam"]);
+                        }
 
                         if (checkBoxRemove3NonEULimit.Checked)
+                        {
+                            Logger.Log(labelFilename.Text, "Applying remove3playerlimit");
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["remove3playerlimit"]);
+                        }
                         else
+                        {
+                            Logger.Log(labelFilename.Text, "UnApplying remove3playerlimit");
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["remove3playerlimit"]);
+                        }
 
                         if (checkBoxNewRegenCode.Enabled)
                         {
                             if (checkBoxNewRegenCode.Checked)
                             {
+                                Logger.Log(labelFilename.Text, "Applying tapaninewregencode");
                                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapaninewregencode"]);
                                 patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
                             }
                             else
+                            {
+                                Logger.Log(labelFilename.Text, "UnApplying tapaninewregencode");
                                 patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["tapaninewregencode"]);
+                            }
                         }
 
                         if (checkBoxMakeYourPotential200.Checked)
                         {
+                            Logger.Log(labelFilename.Text, "Applying MakeYourPotential200");
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["tapanispacemaker"]);
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["makeyourpotential200"]);
                         }
                         else
+                        {
+                            Logger.Log(labelFilename.Text, "UnApplying MakeYourPotential200");
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["makeyourpotential200"]);
+                        }
 
                         if (checkBoxPositionInTacticsView.Checked)
+                        {
+                            Logger.Log(labelFilename.Text, "Applying PositionInTacticsView");
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["positionintacticsview"]);
+                        }
                         else
+                        {
+                            Logger.Log(labelFilename.Text, "UnApplying PositionInTacticsView");
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["positionintacticsview"]);
+                        }
 
                         // Irreversible, only try and apply it if the checkbox is Enabled
                         if (checkBoxUpdateNames.Checked && checkBoxUpdateNames.Enabled)
                         {
+                            Logger.Log(labelFilename.Text, "Applying NamePatch");
                             namePatcher.RunPatch();
                         }
 
@@ -682,12 +797,15 @@ namespace CM0102Patcher
                             switch (comboBoxReplacementLeagues.SelectedIndex)
                             {
                                 case 0:
+                                    Logger.Log(labelFilename.Text, "Applying PatchWelshWithNorthernLeague");
                                     namePatcher.PatchWelshWithNorthernLeague();
                                     break;
                                 case 1:
+                                    Logger.Log(labelFilename.Text, "Applying PatchWelshWithSouthernLeague");
                                     namePatcher.PatchWelshWithSouthernLeague();
                                     break;
                                 case 2:
+                                    Logger.Log(labelFilename.Text, "Applying PatchWelshWithSouthernPremierCentral");
                                     namePatcher.PatchWelshWithSouthernPremierCentral();
                                     break;
                             }
@@ -707,6 +825,8 @@ namespace CM0102Patcher
                             namePatcher.PatchStaffAward("South Korean Player Of The Month", "Super League Player Of the Month", true, true);
                             namePatcher.PatchStaffAward("South Korean Player Of The Year", "Super League Player Of The Year", true, true);
                             namePatcher.PatchComp("club_comp.dat", "Chinese First Division A", "Chinese Super League", "First Division A", "Super League", "CSL");
+
+                            Logger.Log(labelFilename.Text, "Applying SwapSKoreaForChina");
                         }
                     }
 
@@ -734,6 +854,8 @@ namespace CM0102Patcher
                                 ResolutionChanger.SetResolution(labelFilename.Text, newWidth, newHeight);
                             }
 
+                            Logger.Log(labelFilename.Text, "Applying Resolution Change: {0}x{1}", newWidth.ToString(), newHeight.ToString());
+
                             // Convert the core gfx
                             int menuWidth = newWidth > 800 ? 126 : 90;
                             RGNConverter.RGN2RGN(Path.Combine(dataDir, "DEFAULT_PIC.RGN"), Path.Combine(dataDir, "bkg1280_800.rgn"), newWidth, newHeight);
@@ -751,6 +873,7 @@ namespace CM0102Patcher
                                 var yesNo = MessageBox.Show(string.Format("Do you wish to convert your CM0102 Pictures directory to {0}x{1} too?\r\n\r\nIf no, please turn off Background Changes in CM0102's Options else pictures will not appear correctly.\r\n\r\nIf yes, this takes a few moments.", newWidth, newHeight), "CM0102Patcher - Resolution Change", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                                 if (yesNo == DialogResult.Yes)
                                 {
+                                    Logger.Log(labelFilename.Text, "Converting Pictures...");
                                     var pf = new PictureConvertProgressForm();
 
                                     pf.OnLoadAction = () =>
@@ -807,6 +930,7 @@ namespace CM0102Patcher
                         var selectedPack = comboBoxReplaceAITactics.SelectedItem as string;
 
                         updatingForm.SetUpdateText(selectedPack);
+                        Logger.Log(labelFilename.Text, "Applying Tactics Pack: {0}", selectedPack);
 
                         using (var zs = MiscFunctions.OpenZip("AITactics.zip"))
                         {
@@ -830,7 +954,10 @@ namespace CM0102Patcher
                     if (checkBoxApplyYearSpecificPatches.Checked && checkBoxApplyYearSpecificPatches.Enabled)
                     {
                         if (checkBoxUpdateNames.Checked)
+                        {
+                            Logger.Log(labelFilename.Text, "Applying Year Specific Patches for {0}!", ((int)numericGameStartYear.Value).ToString());
                             patcher.ApplyPatch(labelFilename.Text, new List<Patcher.HexPatch> { new Patcher.HexPatch("APPLYMISCPATCH", string.Format("{0} Patches/All Tested {0} + Saturn Patches.patch", (int)numericGameStartYear.Value), null) });
+                        }
                         else
                         {
                             MessageBox.Show("Unable to apply Year Specific patches without having the Updated Names!", "Year Specific Patch Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -840,11 +967,13 @@ namespace CM0102Patcher
                     // NOCD Crack
                     if (checkBoxRemoveCDChecks.Checked)
                     {
+                        Logger.Log(labelFilename.Text, "Applying NOCD Crack");
                         var patched = NoCDPatch.PatchEXEFile(labelFilename.Text);
                     }
 
                     updatingForm.Hide();
                     MessageBox.Show("Patched Successfully!", "CM0102 Patcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Logger.Log(labelFilename.Text, "Patched Successfully!");
                     TapaniDetection();
                 }
             }

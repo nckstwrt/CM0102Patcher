@@ -112,6 +112,7 @@ namespace CM0102Patcher
                         {
                             using (var ms = new MemoryStream())
                             {
+                                Logger.Log(exeFile, "Applying MISCPATCH {0} to {1}", patch.FilenameInZip, exeFile);
                                 zs.ExtractFile(patch, ms);
                                 ms.Seek(0, SeekOrigin.Begin);
 
@@ -145,6 +146,7 @@ namespace CM0102Patcher
                 {
                     using (var ms = new MemoryStream())
                     {
+                        Logger.Log(exeFile, "UnApplying MISCPATCH {0} to {1}", patch.FilenameInZip, exeFile);
                         zs.ExtractFile(patch, ms);
                         ms.Seek(0, SeekOrigin.Begin);
 

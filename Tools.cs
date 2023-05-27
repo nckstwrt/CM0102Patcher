@@ -31,6 +31,7 @@ namespace CM0102Patcher
                 ofd.Title = "Select a CM0102 .patch file";
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
+                    Logger.Log(exeFile, "Applying External Patchfile {0} to {1}", ofd.FileName, exeFile);
                     Patcher patcher = new Patcher();
                     var patch = patcher.LoadPatchFile(ofd.FileName);
                     patcher.ApplyPatch(exeFile, patch);
@@ -163,6 +164,7 @@ namespace CM0102Patcher
 
         private void buttonApplyMiscPatch_Click(object sender, EventArgs e)
         {
+            Logger.Log(exeFile, "Opening up Misc Patches");
             MessageBox.Show("This will provide a list of ALL current miscellaneous patches.\r\nDO NOT APPLY ANY OF THESE UNLESS YOU KNOW WHAT YOU ARE DOING!!\r\nYou will most likely break your exe by applying these!!\r\nBest to do a Save so you can Restore afterwards!!\r\n\r\nDO NOT ASK FOR SUPPORT ON APPLYING THESE. YOU ARE ON YOUR OWN ON THIS!! :)", "WARNING!!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             new MiscPatches(exeFile).ShowDialog();
         }
@@ -226,6 +228,7 @@ namespace CM0102Patcher
             HistoryEditorForm hef = new HistoryEditorForm();
             try
             {
+                Logger.Log(exeFile, "Opening up History Editor");
                 var indexFile = Path.Combine(Path.Combine(Path.GetDirectoryName(exeFile), "Data"), "index.dat");
                 if (File.Exists(indexFile))
                     hef.IndexFile = indexFile;
@@ -238,6 +241,12 @@ namespace CM0102Patcher
         {
             PlayerTransferForm ptf = new PlayerTransferForm();
             ptf.ShowDialog();
+        }
+
+        private void buttonReviewExeLog_Click(object sender, EventArgs e)
+        {
+            ReviewExeLog rel = new ReviewExeLog(exeFile);
+            rel.ShowDialog();
         }
     }
 }

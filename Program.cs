@@ -166,6 +166,11 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
+            /*
+            Logger.Log(@"C:\ChampMan\Championship Manager 0102\TestQuick\Leeds2022\cm0102_logger.exe", "Test Start String");
+            Logger.Log(@"C:\ChampMan\Championship Manager 0102\TestQuick\Leeds2022\cm0102_logger.exe", "String 2");
+            var strs = Logger.ReadStrings(@"C:\ChampMan\Championship Manager 0102\TestQuick\Leeds2022\cm0102_logger.exe");
+            */
             //patch();
             /*
             // For match man 1225 errors! :)

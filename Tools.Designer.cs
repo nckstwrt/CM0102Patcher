@@ -40,6 +40,7 @@
             this.buttonSaveChangerTool = new System.Windows.Forms.Button();
             this.buttonHistoryEditor = new System.Windows.Forms.Button();
             this.buttonPlayerTransfer = new System.Windows.Forms.Button();
+            this.buttonReviewExeLog = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonApplyPatchfile
@@ -111,7 +112,7 @@
             // buttonApplyMiscPatch
             // 
             this.buttonApplyMiscPatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonApplyMiscPatch.Location = new System.Drawing.Point(11, 302);
+            this.buttonApplyMiscPatch.Location = new System.Drawing.Point(11, 333);
             this.buttonApplyMiscPatch.Name = "buttonApplyMiscPatch";
             this.buttonApplyMiscPatch.Size = new System.Drawing.Size(166, 24);
             this.buttonApplyMiscPatch.TabIndex = 6;
@@ -163,11 +164,23 @@
             this.buttonPlayerTransfer.UseVisualStyleBackColor = true;
             this.buttonPlayerTransfer.Click += new System.EventHandler(this.buttonPlayerTransfer_Click);
             // 
+            // buttonReviewExeLog
+            // 
+            this.buttonReviewExeLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonReviewExeLog.Location = new System.Drawing.Point(12, 303);
+            this.buttonReviewExeLog.Name = "buttonReviewExeLog";
+            this.buttonReviewExeLog.Size = new System.Drawing.Size(166, 24);
+            this.buttonReviewExeLog.TabIndex = 11;
+            this.buttonReviewExeLog.Text = "Review EXE Log...";
+            this.buttonReviewExeLog.UseVisualStyleBackColor = true;
+            this.buttonReviewExeLog.Click += new System.EventHandler(this.buttonReviewExeLog_Click);
+            // 
             // Tools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(189, 338);
+            this.ClientSize = new System.Drawing.Size(189, 369);
+            this.Controls.Add(this.buttonReviewExeLog);
             this.Controls.Add(this.buttonPlayerTransfer);
             this.Controls.Add(this.buttonHistoryEditor);
             this.Controls.Add(this.buttonSaveChangerTool);
@@ -203,5 +216,6 @@
         private System.Windows.Forms.Button buttonSaveChangerTool;
         private System.Windows.Forms.Button buttonHistoryEditor;
         private System.Windows.Forms.Button buttonPlayerTransfer;
+        private System.Windows.Forms.Button buttonReviewExeLog;
     }
 }

@@ -80,6 +80,7 @@
       <DependentUpon>ImageConverterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="LinearExecutableFixUps.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="MiscFunctions.cs" />
     <Compile Include="NamePatcher.cs" />
     <Compile Include="NamePatcherProgressWindow.cs">
@@ -140,6 +141,12 @@
     <Compile Include="RegString.cs" />
     <Compile Include="ResolutionChanger.cs" />
     <Compile Include="RestorePoint.cs" />
+    <Compile Include="ReviewExeLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReviewExeLog.Designer.cs">
+      <DependentUpon>ReviewExeLog.cs</DependentUpon>
+    </Compile>
     <Compile Include="RGNConverter.cs" />
     <Compile Include="MiscPatches.cs">
       <SubType>Form</SubType>
@@ -244,6 +251,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MiscPatches.resx">
       <DependentUpon>MiscPatches.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReviewExeLog.resx">
+      <DependentUpon>ReviewExeLog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SaveChanger\SaveChangerForm.resx">
       <DependentUpon>SaveChangerForm.cs</DependentUpon>
