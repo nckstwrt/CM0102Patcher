@@ -31,6 +31,8 @@ namespace CM0102Patcher
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReviewExeLog));
             this.textBoxLog = new System.Windows.Forms.TextBox();
+            this.buttonCopyToClipboard = new System.Windows.Forms.Button();
+            this.buttonClose = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxLog
@@ -46,12 +48,34 @@ namespace CM0102Patcher
             this.textBoxLog.TabIndex = 0;
             this.textBoxLog.WordWrap = false;
             // 
+            // buttonCopyToClipboard
+            // 
+            this.buttonCopyToClipboard.Location = new System.Drawing.Point(556, 377);
+            this.buttonCopyToClipboard.Name = "buttonCopyToClipboard";
+            this.buttonCopyToClipboard.Size = new System.Drawing.Size(110, 23);
+            this.buttonCopyToClipboard.TabIndex = 1;
+            this.buttonCopyToClipboard.Text = "Copy to Clipboard";
+            this.buttonCopyToClipboard.UseVisualStyleBackColor = true;
+            this.buttonCopyToClipboard.Click += new System.EventHandler(this.buttonCopyToClipboard_Click);
+            // 
+            // buttonClose
+            // 
+            this.buttonClose.Location = new System.Drawing.Point(304, 377);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(75, 23);
+            this.buttonClose.TabIndex = 2;
+            this.buttonClose.Text = "Close";
+            this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            // 
             // ReviewExeLog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(678, 383);
+            this.ClientSize = new System.Drawing.Size(678, 412);
+            this.Controls.Add(this.buttonClose);
+            this.Controls.Add(this.buttonCopyToClipboard);
             this.Controls.Add(this.textBoxLog);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -66,5 +90,7 @@ namespace CM0102Patcher
         #endregion
 
         private System.Windows.Forms.TextBox textBoxLog;
+        private System.Windows.Forms.Button buttonCopyToClipboard;
+        private System.Windows.Forms.Button buttonClose;
     }
 }
