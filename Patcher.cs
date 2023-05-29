@@ -416,6 +416,8 @@ namespace CM0102Patcher
         // DE7650 - DE7677 = Protection patch for vascobenny and staff_records when a player is to transfer but has already left the club they are transferring from
         // DE7680 - DE7698 = Luke trasfer_offer Protection Patch
         // DE76A0 - DE76B8 = woerd86_netherlands_protection_patch.patch
+        // DE76C0 - DE76DD = Font Size Changing Code
+
 
         public void ExpandExe(string fileName)
         {
