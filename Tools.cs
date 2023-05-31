@@ -34,8 +34,8 @@ namespace CM0102Patcher
                     Logger.Log(exeFile, "Applying External Patchfile {0} to {1}", ofd.FileName, exeFile);
                     Patcher patcher = new Patcher();
                     var patch = patcher.LoadPatchFile(ofd.FileName);
-                    patcher.ApplyPatch(exeFile, patch);
-                    MessageBox.Show("Patch applied successfully!", "Patch Applied", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (patcher.ApplyPatch(exeFile, patch))
+                        MessageBox.Show("Patch applied successfully!", "Patch Applied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)

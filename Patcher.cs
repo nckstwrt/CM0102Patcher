@@ -459,7 +459,7 @@ namespace CM0102Patcher
         }
 
         // Main apply
-        public void ApplyPatch(string fileName, IEnumerable<HexPatch> patch)
+        public bool ApplyPatch(string fileName, IEnumerable<HexPatch> patch)
         {
             // Check if we need to expand the exe
             if (patch.Where(x => x.offset == -1 && x.command.ToUpper().StartsWith("EXPANDEXE")).Count() >= 1)
@@ -788,8 +788,9 @@ namespace CM0102Patcher
             catch (Exception ex)
             {
                 ExceptionMsgBox.Show(ex);
-                return;
+                return false;
             }
+            return true;
         }
 
         // Used by APPLYEXTERNALPATCH
