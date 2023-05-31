@@ -578,7 +578,7 @@ namespace CM0102Patcher
         {
             try
             {
-                historyLoader.Load(textBoxIndexFile.Text);
+                historyLoader.Load(textBoxIndexFile.Text, false);
                 ResetData();
             }
             catch (Exception ex)
@@ -625,6 +625,7 @@ namespace CM0102Patcher
 
                 listBoxStaff.Items.Clear();
                 staffItemsStore = new List<ListBoxItem>();
+                
                 for (int i = 0; i < historyLoader.staff.Count; i++)
                     staffItemsStore.Add(new ListBoxItem(historyLoader.staffNames[historyLoader.staff[i].ID], i, historyLoader.staff[i]));
                 //staffItems.Sort((x, y) => x.Name.CompareTo(y.Name));
