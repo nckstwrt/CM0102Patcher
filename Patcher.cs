@@ -305,7 +305,7 @@ namespace CM0102Patcher
                                                                  "CHANGECLUBDIVISION", "CHANGECLUBLASTDIVISION", "CHANGECLUBLASTPOSITION", "CHANGECLUBNATION", 
                                                                  "CHANGENATIONCOMPNAME", "CHANGENATIONCOMPCOLOR", "CLEARNATIONCOMPHISTORY", 
                                                                  "ADDNATIONCOMPHISTORY", "DELETECLUBCOMPHISTORY", "DELETENATIONCOMPHISTORY", "SHIFTNATIONCOMPHISTORY",
-                                                                 "CHANGENATIONCONTINENT"
+                                                                 "CHANGENATIONCONTINENT", "REORDERDATA"
         };
 
         Dictionary<string, List<HexPatch>> GetCommands(IEnumerable<HexPatch> patch)
@@ -505,6 +505,7 @@ namespace CM0102Patcher
                 HistoryLoader hl = null;
                 bool historyLoaderRequired = false;
                 bool saveNationData = false;
+                bool saveStaffData = false;
                 string indexFile = null;
 
                 var commandDictionary = GetCommands(patch);
@@ -740,8 +741,17 @@ namespace CM0102Patcher
                     Logger.Log(fileName, "CHANGENATIONCONTINENT");
                 }
 
+                // REORDER all data
+                var reorderCommands = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("REORDERDATA"))).ToList();
+                if (reorderCommands.Count > 0)
+                {
+                    Logger.Log(fileName, "REORDERDATA");
+                    hl.SortClubNames();
+                    saveStaffData = true;
+                }
+
                 if (hl != null)
-                hl.Save(indexFile, true, false, saveNationData);
+                    hl.Save(indexFile, true, saveStaffData, saveNationData);
 
                 // Patch Club Competition Names
                 var clubCompNameChanges = patch.Where(x => x.offset == -1 && (x.command.ToUpper().StartsWith("PATCHCLUBCOMP"))).ToList();
