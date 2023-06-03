@@ -402,6 +402,19 @@ namespace CM0102Patcher
                     patcher.ExpandExe(labelFilename.Text);
                     Logger.Log(labelFilename.Text, "Applying to {0} using {1} (isTapani: {2})", labelFilename.Text, this.Text, isTapani.ToString());
 
+                    // Log the MD5 of the DB if you can find it
+                    try
+                    {
+                        var staffFile = Path.Combine(dataDir, "staff.dat");
+                        string staffFileHash = "";
+                        using (var md5 = MD5.Create())
+                        using (var staffFileStream = File.Open(labelFilename.Text, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                            staffFileHash = BitConverter.ToString(md5.ComputeHash(staffFileStream)).Replace("-", "");
+                        if (!string.IsNullOrEmpty(staffFileHash))
+                            Logger.Log(labelFilename.Text, "MD5 Hash of staff.dat: {0}", staffFileHash);
+                    }
+                    catch { }
+
                     // Initialise the name patcher
                     var namePatcher = new NamePatcher(labelFilename.Text, dataDir);
 
@@ -1275,8 +1288,8 @@ namespace CM0102Patcher
                         byte[] ourHash;
                         using (var outPCTFile = File.Open(pct424defaultFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
-                            var md5 = MD5.Create();
-                            ourHash = md5.ComputeHash(outPCTFile);
+                            using (var md5 = MD5.Create())
+                                ourHash = md5.ComputeHash(outPCTFile);
                         }
 
                         using (var zs = MiscFunctions.OpenZip("AITactics.zip"))
