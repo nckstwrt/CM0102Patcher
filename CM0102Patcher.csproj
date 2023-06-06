@@ -184,6 +184,7 @@
     <Compile Include="Scouter\ScoutGrid.Designer.cs">
       <DependentUpon>ScoutGrid.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scouter\ScoutList.cs" />
     <Compile Include="Stadium.cs" />
     <Compile Include="Tools.cs">
       <SubType>Form</SubType>

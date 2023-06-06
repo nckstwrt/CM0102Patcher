@@ -25,8 +25,8 @@ namespace CM0102Scout
         List<string> firstNames = new List<string>();
         List<string> secondNames = new List<string>();
         List<string> commonNames = new List<string>();
-        Dictionary<int, Staff> staffList = new Dictionary<int, Staff>();
-        List<Player> players = new List<Player>();
+        public Dictionary<int, Staff> staffList = new Dictionary<int, Staff>();
+        public List<Player> players = new List<Player>();
         Dictionary<int, Nation> nations = new Dictionary<int, Nation>();
         Dictionary<int, Club> clubs = new Dictionary<int, Club>();
         Dictionary<int, Contract> contracts = new Dictionary<int, Contract>();
@@ -145,11 +145,17 @@ namespace CM0102Scout
 
         DateTime CMDate(short day, short year, int leapYear)
         {
+            /*
+             dtDate:=2 + CMDate.Day;
+             if (CMDate.LeapYear = 1) then
+                dtDate:=dtDate - 1;
+            */
+
+            int dtDate = 2 + day;
             if (leapYear == 1)
-                day += 1;
-            else
-                day += 2;
-            return new DateTime(year, 1, 1).AddDays(day - 1);
+                dtDate = dtDate - 1;
+
+            return new DateTime(year, 1, 1).AddDays(day);
         }
 
         public void LoadPlayers()
@@ -169,6 +175,9 @@ namespace CM0102Scout
                 staff.playerId = BitConverter.ToInt32(staffBlock, StaffSize - (1 + 4 + 4 + 4));
                 staff.value = BitConverter.ToInt32(staffBlock, StaffSize - (1 + 4 + 4 + 4 + 11 + 4));
                 staff.determination = staffBlock[StaffSize - (1 + 4 + 4 + 4 + 9)];
+
+                if (staff.staffId == 120212)
+                    Console.WriteLine();
                 staff.dob = CMDate(staffBlock, 16);
                 staff.yearOfBirth = (short)(2001 - BitConverter.ToInt16(staffBlock, 24));
                 staff.nationID = BitConverter.ToInt32(staffBlock, 24 + 2);
@@ -422,6 +431,7 @@ namespace CM0102Scout
         public DataTable CreateDataTable(bool instrinsicsOn = true)
         {
             DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("ID", typeof(int));
             dataTable.Columns.Add("Name", typeof(string));
             dataTable.Columns.Add("Age", typeof(int));
             dataTable.Columns.Add("Club", typeof(string));
@@ -480,6 +490,9 @@ namespace CM0102Scout
             dataTable.Columns.Add("Leaving Club", typeof(string));
             dataTable.Columns.Add("Scouter Rating", typeof(int));
             dataTable.Columns.Add("No of 20s", typeof(int));
+
+            //dataTable.Columns[0].ColumnMapping = MappingType.Hidden;
+            //dataTable.Columns[0].
 
             // Creativity = Vision
             // Movement = Off The Ball
@@ -545,7 +558,7 @@ namespace CM0102Scout
                         var xx =commonNames.FirstOrDefault(x => x.Contains("Fucker"));
                     }*/
 
-                    weighter.Reset(instrinsicsOn);
+            weighter.Reset(instrinsicsOn);
                     if (player.Goalkeeper >= 15)
                     {
                         weighter.Add(instrinsicsOn ? player.Handling : player.Convert(player.Handling, true, true), 90, 20);
@@ -714,7 +727,7 @@ namespace CM0102Scout
                         }
                     }
 
-                    dataTable.Rows.Add(name, age, club, nationality, second_nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, staff.value,
+                    dataTable.Rows.Add(player.ID, name, age, club, nationality, second_nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, staff.value,
                         player.Acceleration,
                         player.Aggression,
                         player.Agility,

@@ -40,6 +40,7 @@
             this.buttonFilter = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.buttonCopyToClipboard = new System.Windows.Forms.Button();
+            this.buttonSaveToScoutFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -133,7 +134,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(248, 307);
+            this.button1.Location = new System.Drawing.Point(174, 308);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 5;
@@ -152,11 +153,22 @@
             this.buttonCopyToClipboard.UseVisualStyleBackColor = true;
             this.buttonCopyToClipboard.Click += new System.EventHandler(this.buttonCopyToClipboard_Click);
             // 
+            // buttonSaveToScoutFile
+            // 
+            this.buttonSaveToScoutFile.Location = new System.Drawing.Point(275, 308);
+            this.buttonSaveToScoutFile.Name = "buttonSaveToScoutFile";
+            this.buttonSaveToScoutFile.Size = new System.Drawing.Size(152, 23);
+            this.buttonSaveToScoutFile.TabIndex = 7;
+            this.buttonSaveToScoutFile.Text = "Append/Save To Scout File (.pls)";
+            this.buttonSaveToScoutFile.UseVisualStyleBackColor = true;
+            this.buttonSaveToScoutFile.Click += new System.EventHandler(this.buttonSaveToScoutFile_Click);
+            // 
             // ScoutGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(650, 337);
+            this.Controls.Add(this.buttonSaveToScoutFile);
             this.Controls.Add(this.buttonCopyToClipboard);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonFilter);
@@ -189,5 +201,6 @@
         private System.Windows.Forms.Button buttonFilter;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button buttonCopyToClipboard;
+        private System.Windows.Forms.Button buttonSaveToScoutFile;
     }
 }

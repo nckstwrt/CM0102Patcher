@@ -36,6 +36,15 @@ namespace CM0102Patcher
             return date;
         }
 
+        public byte[] ToBytes()
+        {
+            byte[] ret = new byte[8];
+            Array.Copy(BitConverter.GetBytes(Day), 0, ret, 0, 2);
+            Array.Copy(BitConverter.GetBytes(Year), 0, ret, 2, 2);
+            Array.Copy(BitConverter.GetBytes(LeapYear), 0, ret, 4, 4);
+            return ret;
+        }
+
         public static DateTime ToDateTime(TCMDate date)
         {
             try

@@ -206,6 +206,7 @@ namespace CM0102Patcher.Scouter
                     dataGridView.DataSource = saveReader.CreateDataTable(checkBoxShowIntrinstics.Checked);
                     dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
                     dataGridView.AllowUserToResizeColumns = true;
+                    dataGridView.Columns["ID"].Visible = false;
 
                     dataGridView.ResumeLayout();
 
@@ -218,7 +219,7 @@ namespace CM0102Patcher.Scouter
                         dataGridView.Columns["Value"].DefaultCellStyle.Format = "C0";
                         dataGridView.Columns[1].Width -= 20;
                         for (int i = 8; i < dataGridView.Columns.Count; i++)
-                                dataGridView.Columns[i].Width -= 20;
+                            dataGridView.Columns[i].Width -= 20;
                     }
 
                     RefreshGrid();
@@ -245,6 +246,8 @@ namespace CM0102Patcher.Scouter
             buttonColumns.Location = new Point(dataGridView.Location.X + 0,
                                                          dataGridView.Location.Y + (dataGridView.Height + 8));
             buttonFilter.Location = new Point(buttonColumns.Location.X + buttonColumns.Width + 5, buttonColumns.Location.Y);
+
+            buttonSaveToScoutFile.Location = new Point(buttonCopyToClipboard.Location.X - (buttonSaveToScoutFile.Width + 5), buttonCopyToClipboard.Location.Y);
         }
 
         private void checkBoxShowIntrinstics_CheckedChanged(object sender, EventArgs e)
@@ -317,6 +320,50 @@ namespace CM0102Patcher.Scouter
             dataGridView.CellFormatting -= DataGridView_CellFormatting;
             MessageBox.Show("Copied table to Clipboard", "Clipboard Copy", MessageBoxButtons.OK, MessageBoxIcon.Information);
             dataGridView.CellFormatting += DataGridView_CellFormatting;
+        }
+
+        private void buttonSaveToScoutFile_Click(object sender, EventArgs e)
+        {
+            var sfd = new SaveFileDialog();
+            sfd.Filter = "PLS Files (*.pls)|*.pls|All files (*.*)|*.*";
+            sfd.Title = "Select a name for to write/append your scout file to...";
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    bool append = false;
+                    if (File.Exists(sfd.FileName))
+                    {
+                        var MsgResult = MessageBox.Show("Scout file already exists. Do you wish to append these results to that file?\r\n\r\nIf you select No the file will be overwritten.", "Scout File Found", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                        switch (MsgResult)
+                        {
+                            case DialogResult.Cancel:
+                                return;
+                            case DialogResult.Yes:
+                                append = true;
+                                break;
+                            case DialogResult.No:
+                                append = false;
+                                break;
+                        }
+                    }
+                    int rows = dataGridView.Rows.Count;
+                    List<int> playerIDs = new List<int>();
+                    for (int i = 0; i < rows; i++)
+                    {
+                        using (DataGridViewRow row = dataGridView.Rows[i])
+                        {
+                            if (row.Cells["ID"].Value != null)
+                                playerIDs.Add((int)row.Cells["ID"].Value);
+                        }
+                    }
+                    ScoutList.WriteScoutFile(sfd.FileName, saveReader.staffList, playerIDs, append);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Failed to save Scout File!\r\n\r\n" + ex.Message, "Scout File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }
