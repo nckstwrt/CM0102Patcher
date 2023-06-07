@@ -348,16 +348,16 @@ namespace CM0102Patcher.Scouter
                         }
                     }
                     int rows = dataGridView.Rows.Count;
-                    List<int> playerIDs = new List<int>();
+                    List<int> staffIDs = new List<int>();
                     for (int i = 0; i < rows; i++)
                     {
                         using (DataGridViewRow row = dataGridView.Rows[i])
                         {
                             if (row.Cells["ID"].Value != null)
-                                playerIDs.Add((int)row.Cells["ID"].Value);
+                                staffIDs.Add((int)row.Cells["ID"].Value);
                         }
                     }
-                    ScoutList.WriteScoutFile(sfd.FileName, saveReader.staffList, playerIDs, append);
+                    ScoutList.WriteScoutFile(sfd.FileName, saveReader.staffList, staffIDs, append);
                 }
                 catch (Exception ex)
                 {

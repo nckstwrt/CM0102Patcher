@@ -55,7 +55,7 @@ namespace CM0102Patcher.Scouter
 
         static byte byPlsZero = 0x00;
 
-        public static void WriteScoutFile(string fileName, Dictionary<int, Staff> staffList, List<int> playerIDs, bool append)
+        public static void WriteScoutFile(string fileName, Dictionary<int, Staff> staffList, List<int> staffIDs, bool append)
         {
             using (var fs = File.Open(fileName, append ? FileMode.Open : FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite))
             using (var filScoutList = new BinaryWriter(fs))
@@ -68,12 +68,19 @@ namespace CM0102Patcher.Scouter
                     int offsetToPlayers = 367;
                     fs.Seek(offsetToPlayers, SeekOrigin.Begin);
                     var currentNumber = br.ReadInt32();
+                    fs.Seek(offsetToPlayers + 4, SeekOrigin.Begin);
+
+                    // Got to make sure we don't have duplicates - only solution is to read all of the current ones in
+                    for (j = 0; j < currentNumber; j++)
+                    {
+                        var block = br.ReadBytes(4 + 4 + 4 + 4 + 8 + 20 + 1);
+                        int ID = BitConverter.ToInt32(block, 12);
+                        staffIDs.Remove(ID);
+                    }
+
                     fs.Seek(offsetToPlayers, SeekOrigin.Begin);
-
-                    j = currentNumber + playerIDs.Count;
-
+                    j = currentNumber + staffIDs.Count;
                     filScoutList.Write(j);
-
                     fs.Seek(currentNumber * (4+4+4+4+8+20+1), SeekOrigin.Current);
                 }
                 else
@@ -89,14 +96,14 @@ namespace CM0102Patcher.Scouter
 
                     filScoutList.Write(byPlsMid);
 
-                    j = playerIDs.Count;
+                    j = staffIDs.Count;
 
                     filScoutList.Write(j);
                 }
 
-                for (j = 0; j < playerIDs.Count; j++)
+                for (j = 0; j < staffIDs.Count; j++)
                 {
-                    var staff = staffList[playerIDs[j]];
+                    var staff = staffList[staffIDs[j]];
                     filScoutList.Write(staff.firstName);
                     filScoutList.Write(staff.secondName);
                     filScoutList.Write(staff.commonName);

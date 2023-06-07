@@ -25,6 +25,7 @@ namespace CM0102Scout
         List<string> firstNames = new List<string>();
         List<string> secondNames = new List<string>();
         List<string> commonNames = new List<string>();
+        public Dictionary<int, Staff> playerToStaffList = new Dictionary<int, Staff>();
         public Dictionary<int, Staff> staffList = new Dictionary<int, Staff>();
         public List<Player> players = new List<Player>();
         Dictionary<int, Nation> nations = new Dictionary<int, Nation>();
@@ -183,7 +184,8 @@ namespace CM0102Scout
                 staff.nationID = BitConverter.ToInt32(staffBlock, 24 + 2);
                 staff.second_nationID = BitConverter.ToInt32(staffBlock, 24 + 2 + 4);
                 staff.clubID = BitConverter.ToInt32(staffBlock, StaffSize - (1 + 4 + 4 + 4 + 11 + 4 + +4 + 8 + 8 + 1 + 4));
-                staffList[staff.playerId] = staff;
+                playerToStaffList[staff.playerId] = staff;
+                staffList[staff.staffId] = staff;
             }
 
             // Load Player History
@@ -418,7 +420,7 @@ namespace CM0102Scout
             Staff ret = null;
             var firstNameId = firstNames.IndexOf(firstName);
             var secondNameId = secondNames.IndexOf(secondName);
-            foreach (var staff in staffList.Values)
+            foreach (var staff in playerToStaffList.Values)
             {
                 if (staff.firstName == firstNameId && staff.secondName == secondNameId)
                 {
@@ -502,7 +504,7 @@ namespace CM0102Scout
             {
                 try
                 {
-                    var staff = staffList[player.ID];
+                    var staff = playerToStaffList[player.ID];
 
                     /// SOME NOTES FOR MYSELF WHILE WRITING NEW REGEN CODE
                     // The increase happens at 5d5078. The increase is dependent, in a semi-random way, on a magic number stored at [esp+5c]
@@ -727,7 +729,7 @@ namespace CM0102Scout
                         }
                     }
 
-                    dataTable.Rows.Add(player.ID, name, age, club, nationality, second_nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, staff.value,
+                    dataTable.Rows.Add(staff.staffId, name, age, club, nationality, second_nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, staff.value,
                         player.Acceleration,
                         player.Aggression,
                         player.Agility,
