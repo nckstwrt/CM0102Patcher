@@ -412,13 +412,14 @@ namespace CM0102Patcher
         // DE74C4 - DE74E2 = Better teams in Asia Cup patch
         // DE74F0 - DE75FF = World Cup 2022 - Qatar in Nov/Dec
         // DE7600 - DE7629 = "Irish Football Association Challenge Cup" <-- weird fix where name patching doesnt work
-        // DE7630 - DE7648 = Protection patch for danny_bhoy67 crash - squad_manager.cpp
+        // DE7630 - DE7648 = Protection patch for danny_bhoy67 crash - squad_manager.cpp --- ARGH - Move World Cup to 2023 clashed with this patch
         // DE7650 - DE7677 = Protection patch for vascobenny and staff_records when a player is to transfer but has already left the club they are transferring from
         // DE7680 - DE7698 = Luke trasfer_offer Protection Patch
         // DE76A0 - DE76B8 = woerd86_netherlands_protection_patch.patch
         // DE76C0 - DE76DD = Font Size Changing Code
         // DE76E0 - DE76F6 = Teebo78 - Comp crash due to NULL ESI at 0048CE46 
         // DE7700 - DE7FFF = UseCommonNamesForBrazilRegens.patch
+        // DE8000 - DE8018 = Rewrite of the Protection patch for danny_bhoy67 crash - squad_manager.cpp
 
         public void ExpandExe(string fileName)
         {
