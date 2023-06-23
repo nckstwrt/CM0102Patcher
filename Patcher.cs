@@ -418,8 +418,9 @@ namespace CM0102Patcher
         // DE76A0 - DE76B8 = woerd86_netherlands_protection_patch.patch
         // DE76C0 - DE76DD = Font Size Changing Code
         // DE76E0 - DE76F6 = Teebo78 - Comp crash due to NULL ESI at 0048CE46 
-        // DE7700 - DE7FFF = UseCommonNamesForBrazilRegens.patch
-        // DE8000 - DE8018 = Rewrite of the Protection patch for danny_bhoy67 crash - squad_manager.cpp
+        // DE7700 - DE7748 = UseCommonNamesForBrazilRegens.patch
+        // DE7FF0 - DE8096 = Text for the Extra Attributes Patch
+        // DE8150 - DE8168 = 2nd Rewrite of the Protection patch for danny_bhoy67 crash - squad_manager.cpp
 
         public void ExpandExe(string fileName)
         {
