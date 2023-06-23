@@ -414,7 +414,7 @@ namespace CM0102Patcher
         public int ReserveDivision;
         public byte ProfessionalStatus;
         public int Cash;
-        public int Stadium;
+        public int Stadium;                         // +69
         public byte OwnStadium;
         public int ReserveStadium;
         public byte MatchDay;
@@ -576,14 +576,16 @@ namespace CM0102Patcher
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class TCities
     {
+        // 0x0
         public int ID;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] Name;
+        // 0x4
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] Name;   
         public char CityGenderName;
         public int CityNation;
         public double CityLatitude;
         public double CityLongitude;
         public char CityAttraction;
-        public long CityWeather;
+        public int CityWeather;
     };
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]

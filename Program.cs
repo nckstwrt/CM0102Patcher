@@ -167,6 +167,44 @@ namespace CM0102Patcher
         static void Main()
         {
             /*
+            // Count the Dublin Clubs
+            HistoryLoader hl = new HistoryLoader();
+            //hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2023\Data\index.dat");
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\quick\Data\index.dat");
+            int count = 1;
+            //var first = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "League of Ireland First Division".ToLower());
+            //var prem = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "League of Ireland Premier Division".ToLower());
+            var first = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "Irish First Division".ToLower());
+            var prem = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "Irish Premier Division".ToLower());
+            var leinster1 = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "Irish Leinster Senior League Division One".ToLower());
+            var leinster2 = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "Irish Leinster Senior League Premier".ToLower());
+            foreach (var club in hl.club)
+            {
+                var clubName = club.Name.ReadString().ToLower(); ;
+                if (club.Division == first.ID || club.Division == prem.ID )//|| club.Division == leinster1.ID || club.Division == leinster2.ID)
+                {
+                    if (club.Stadium > 0)
+                    {
+                        var stadium = hl.stadiums.FirstOrDefault(x => x.ID == club.Stadium);
+                        if (stadium != null)
+                        {
+                            var stadiumName = stadium.Name.ReadString();
+                            var city = hl.cities.FirstOrDefault(x => x.ID == stadium.StadiumCity);
+                            if (city != null)
+                            {
+                                var cityName = city.Name.ReadString().ToLower();
+                                if (cityName.Length >= 4 && cityName.Substring(0, 4) == "dubl")
+                                {
+                                    Console.WriteLine(count++ + ". " + club.Name.ReadString() + " " + hl.club_comp.First(x => x.ID == club.Division).Name.ReadString());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Console.WriteLine();
+            */
+            /*
             Logger.Log(@"C:\ChampMan\Championship Manager 0102\TestQuick\Leeds2022\cm0102_logger.exe", "Test Start String");
             Logger.Log(@"C:\ChampMan\Championship Manager 0102\TestQuick\Leeds2022\cm0102_logger.exe", "String 2");
             var strs = Logger.ReadStrings(@"C:\ChampMan\Championship Manager 0102\TestQuick\Leeds2022\cm0102_logger.exe");
