@@ -656,12 +656,14 @@ namespace CM0102Patcher
                             Logger.Log(labelFilename.Text, "Applying idlesensitivity");
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["idlesensitivity"]);
                             patcher.ApplyPatch(labelFilename.Text, patcher.patches["idlesensitivitytransferscreen"]);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.patches["idlesensitivitytransferstatusscreen"]);
                         }
                         else
                         {
                             Logger.Log(labelFilename.Text, "UnApplying idlesensitivity");
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["idlesensitivity"]);
                             patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["idlesensitivitytransferscreen"]);
+                            patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["idlesensitivitytransferstatusscreen"]);
                         }
 
                         if (checkBox7Subs.Enabled)

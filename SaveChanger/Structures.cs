@@ -580,11 +580,17 @@ namespace CM0102Patcher
         public int ID;
         // 0x4
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)] public byte[] Name;   
+        // 0x1E
         public char CityGenderName;
+        // 0x1F
         public int CityNation;
+        // 0x23
         public double CityLatitude;
+        // 0x2B
         public double CityLongitude;
+        // 0x33
         public char CityAttraction;
+        // 0x34
         public int CityWeather;
     };
 
