@@ -427,6 +427,8 @@ namespace CM0102Patcher
         // DE8150 - DE8168 = 2nd Rewrite of the Protection patch for danny_bhoy67 crash - squad_manager.cpp
         // DE8170 - DE817F = transfer_status_sensitivity_patch.patch
         // DE8180 - DE818F = discipline_screen_sensitivity_patch.patch
+        // DE8190 - DE81B1 = Load Our DLL (nick.dll)
+        // DE81BA - DE81EF = Force Confederates Cup to always be in the USA
 
         public void ExpandExe(string fileName)
         {
