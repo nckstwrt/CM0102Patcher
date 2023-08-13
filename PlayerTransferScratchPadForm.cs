@@ -16,6 +16,7 @@ namespace CM0102Patcher
         public PlayerTransferScratchPadForm()
         {
             InitializeComponent();
+            textBox.MaxLength = 0;
         }
 
         public void SetText(string text)

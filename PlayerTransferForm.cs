@@ -216,6 +216,8 @@ namespace CM0102Patcher
 
         private void buttonApplyChanges_Click(object sender, EventArgs e)
         {
+            bool outputGoodPlayers = false;     // change to true output to Console those that would work
+
             bool success = true;
             List<ClubPlayerTuple> transfers = new List<ClubPlayerTuple>();
             for (int i = 0; i < listBoxTransfers.Items.Count; i++)
@@ -231,23 +233,30 @@ namespace CM0102Patcher
                         var clubFromObj = hl.club.FirstOrDefault(x => x.Name.ReadString().ToLower() == clubFrom.ToLower());
                         var clubToObj = hl.club.FirstOrDefault(x => x.Name.ReadString().ToLower() == clubTo.ToLower());
 
-                        string tempName;
-                        var playersFound = hl.staff.Where(x => x.ClubJob == clubFromObj.ID && hl.StaffToName(x, out tempName) == true && tempName == playerName).ToList();
+                        string tempName, tempBasicName;
+                        var playersFound = hl.staff.Where(x => (x.ClubJob == ((clubFrom.ToLower() == NoClub.ToLower()) ? -1 : clubFromObj.ID)) && hl.StaffToName(x, out tempName, out tempBasicName) == true && (tempName == playerName || tempBasicName == playerName || MiscFunctions.RemoveDiacritics(tempBasicName) == playerName || MiscFunctions.RemoveDiacritics(tempName) == playerName)).ToList();
 
                         if (playersFound.Count == 0)
                         {
-                            MessageBox.Show(string.Format("Player ({0}) at club ({1}) can not be found", playerName, clubFrom), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            if (!outputGoodPlayers)
+                                MessageBox.Show(string.Format("Player ({0}) at club ({1}) can not be found", playerName, clubFrom), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             success = false;
                         }
                         else
                         if (playersFound.Count > 1)
                         {
-                            MessageBox.Show(string.Format("Multiple Players named ({0}) found at club ({1})", playerName, clubFrom), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            if (!outputGoodPlayers)
+                                MessageBox.Show(string.Format("Multiple Players named ({0}) found at club ({1})", playerName, clubFrom), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             success = false;
                         }
                         else
                         {
-                            transfers.Add(new ClubPlayerTuple(playersFound[0].ID, clubFromObj == null ? -1 : clubFromObj.ID, clubTo.ToLower() == NoClub.ToLower() ? -1 : clubToObj.ID, loan));
+                            if (outputGoodPlayers)
+                            {
+                                Console.WriteLine(transferLine);
+                            }
+                            else
+                                transfers.Add(new ClubPlayerTuple(playersFound[0].ID, clubFromObj == null ? -1 : clubFromObj.ID, clubTo.ToLower() == NoClub.ToLower() ? -1 : clubToObj.ID, loan));
                         }
                     }
                     catch
@@ -262,9 +271,12 @@ namespace CM0102Patcher
                     success = false;
                 }
 
-                if (!success)
+                if (!outputGoodPlayers && !success)
                     break;
             }
+
+            if (outputGoodPlayers)
+                return;
 
             if (success)
             {
@@ -281,7 +293,8 @@ namespace CM0102Patcher
                         {
                             hl.staff[transfer.Player].ClubJob = backupClubJob;
                             var playerName = "Unknown";
-                            hl.StaffToName(hl.staff.FirstOrDefault(x => x.ID == transfer.Player), out playerName);
+                            var basicPlayerName = "Unknown";
+                            hl.StaffToName(hl.staff.FirstOrDefault(x => x.ID == transfer.Player), out playerName, out basicPlayerName);
                             MessageBox.Show(string.Format("Was not able to attach player ({0}) to squad! (possible duplicate?) Rest of the changes we still be applied!", playerName), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }

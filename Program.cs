@@ -160,12 +160,257 @@ namespace CM0102Patcher
             }
         }
 
+        static string TeamConvert(string club)
+        {
+            if (club == "Sporting Lisbon")
+                return "Sporting CP";
+            if (club == "QPR")
+                return "Queens Park Rangers";
+            if (club == "Blackburn")
+                return "Blackburn Rovers";
+            if (club == "Inter Milan")
+                club = "Internazionale";
+            if (club == "Unattached")
+                club = "NO CLUB";
+            if (club == "Los Angeles FC")
+                club = "Los Angeles";
+            if (club == "Cambridge")
+                club = "Cambridge City";
+            if (club == "Lommel")
+                club = "Lommel SK";
+            if (club == "Bayer Leverkusen")
+                club = "Bayer 04 Leverkusen";
+            if (club == "Roda")
+                club = "Roda JC Kerkrade";
+            if (club == "Burton")
+                club = "Burton Albion";
+            if (club == "Hacken")
+                club = "BK Haken";
+            if (club == "Cray Valley")
+                club = "Cray Wanderers FC";
+            if (club == "Waterford")
+                club = "Waterford Bohemians";
+            if (club == "Derry")
+                club = "Derry City";
+            if (club == "Hammarby")
+                club = "Hammarby TFF";
+            if (club == "Partick")
+                club = "Partick Thistle FC";
+            if (club == "Twente")
+                club = "Twente Enschede FC";
+            if (club == "Sutton")
+                club = "Sutton United";
+            return club;
+        }
+
+        static void ParseBBCTransfers(string indexDatFile, string transfersSource, string transferOutput)
+        {
+            HistoryLoader hl = new HistoryLoader();
+            hl.Load(indexDatFile, false);
+            using (StreamWriter wr = new StreamWriter(transfersSource))
+            using (StreamReader sr = new StreamReader(transferOutput))
+            {
+                wr.WriteLine("Transfer\tInfo\tGood");
+
+                var staffNames = hl.staffNamesNoDiacritics.Values.ToList();
+                var clubNames = hl.clubNames.Keys.ToList();
+                var shortClubNames = hl.club.Select(x => new { ShortName = x.ShortName.ReadString(), LongName = x.Name.ReadString(), ID = x.ID }).ToList();
+                var playerNames = hl.staff.Select(x => { string name, basicName; hl.StaffToName(x, out name, out basicName); return new { basicName = MiscFunctions.RemoveDiacritics(basicName), name = MiscFunctions.RemoveDiacritics(name), staffObj = x }; }).ToList();
+                while (true)
+                {
+                    var line = sr.ReadLine();
+                    if (line == null)
+                        break;
+                    if (line.Contains("add-ons"))
+                        line = line.Replace("add-ons", "");
+                    if (line.Contains("["))
+                    {
+                        var playerName = line.Substring(0, line.IndexOf('[')).Trim();
+                        string sourceTeam, destTeam;
+                        if (line.Contains(" - "))
+                        {
+                            sourceTeam = line.Substring(line.IndexOf('[') + 1, line.LastIndexOf(" - ") - (line.IndexOf('[') + 1)).Trim();
+                            destTeam = line.Substring(line.LastIndexOf(" - ") + 3, line.IndexOf(']') - (line.LastIndexOf(" - ") + 3)).Trim();
+                        }
+                        else
+                        {
+                            sourceTeam = line.Substring(line.IndexOf('[') + 1, line.LastIndexOf('-') - (line.IndexOf('[') + 1)).Trim();
+                            destTeam = line.Substring(line.LastIndexOf('-') + 1, line.IndexOf(']') - (line.LastIndexOf('-') + 1)).Trim();
+                        }
+                        bool isLoan = line.Contains(" Loan");
+                        var playerObj = playerNames.FirstOrDefault(x => x.basicName == playerName); //hl.staffNamesNoDiacritics.FirstOrDefault(x => x.Value == playerName);
+
+                        sourceTeam = TeamConvert(sourceTeam);
+                        destTeam = TeamConvert(destTeam);
+
+                        float bestSimilarity = 0;
+                        string bestClubName = "", bestClubNameShort = "";
+                        float shortSimilarity = 0;
+                        float longSimilarity = 0;
+                        int clubID = 0;
+
+                        int bestDLDistance = 255;
+                        string bestDLDClubName = "";
+
+                        if (sourceTeam == "Lommel")
+                            Console.WriteLine();
+                        foreach (var club in shortClubNames)
+                        {
+                            if (sourceTeam == "NO CLUB")
+                            {
+                                bestClubName = "NO CLUB";
+                                bestSimilarity = 1f;
+                                clubID = -1;
+                                break;
+                            }
+
+                            if (club.LongName.EndsWith(" B") || club.LongName.EndsWith(" C") || club.LongName.EndsWith(" 2") || club.LongName.Contains("U21") || club.LongName.Contains("U23") || club.LongName.Contains("U19"))
+                                continue;
+
+                            shortSimilarity = MiscFunctions.GetSimilarity(sourceTeam, club.ShortName);
+                            longSimilarity = MiscFunctions.GetSimilarity(sourceTeam, club.LongName);
+
+                            var dldist = MiscFunctions.DamerauLevenshteinDistance(sourceTeam, club.ShortName);
+                            var dldist2 = MiscFunctions.DamerauLevenshteinDistance(sourceTeam, club.LongName.Substring(0, sourceTeam.Length < club.LongName.Length ? sourceTeam.Length : club.LongName.Length));
+
+                            if (dldist < bestDLDistance)
+                            {
+                                bestDLDistance = dldist;
+                                bestDLDClubName = club.LongName;
+                            }
+                            else
+                            if (dldist2 < bestDLDistance)
+                            {
+                                bestDLDistance = dldist2;
+                                bestDLDClubName = club.LongName;
+                            }
+
+                            if (sourceTeam == "Lommel" && club.LongName.Contains("Lommel"))
+                                Console.WriteLine();
+
+                            if (club.ShortName == sourceTeam)
+                            {
+                                bestSimilarity = 1f;
+                                bestClubName = club.LongName;
+                                bestClubNameShort = club.ShortName;
+                                clubID = club.ID;
+                            }
+                            else
+                            if (longSimilarity > bestSimilarity)
+                            {
+                                bestSimilarity = longSimilarity;
+                                bestClubName = club.LongName;
+                                bestClubNameShort = club.ShortName;
+                                clubID = club.ID;
+                            }
+                            else
+                            if (shortSimilarity > bestSimilarity)
+                            {
+                                bestSimilarity = shortSimilarity;
+                                bestClubName = club.LongName;
+                                bestClubNameShort = club.ShortName;
+                                clubID = club.ID;
+                            }
+                        }
+                        string bestSourceClubName = bestClubName;
+                        float sourceSimilarity = bestSimilarity;
+                        int sourceClubID = clubID;
+                        if (bestClubName != bestDLDClubName && bestClubName != "NO CLUB")
+                            Console.WriteLine("DLD DIFFERENCE!");
+
+                        var teams = shortClubNames.Where(x => x.LongName.StartsWith(destTeam)).ToList();
+
+                        bestSimilarity = 0;
+                        foreach (var club in shortClubNames)
+                        {
+                            if (club.LongName.EndsWith(" B") || club.LongName.EndsWith(" C") || club.LongName.EndsWith(" 2") || club.LongName.Contains("U21") || club.LongName.Contains("U23") || club.LongName.Contains("U19"))
+                                continue;
+
+                            shortSimilarity = MiscFunctions.GetSimilarity(club.ShortName, destTeam);
+                            longSimilarity = MiscFunctions.GetSimilarity(club.LongName, destTeam);
+
+                            if (club.ShortName == destTeam)
+                            {
+                                bestSimilarity = 1f;
+                                bestClubName = club.LongName;
+                                bestClubNameShort = club.ShortName;
+                                clubID = club.ID;
+                            }
+                            else
+                            if (longSimilarity > bestSimilarity)
+                            {
+                                bestSimilarity = longSimilarity;
+                                bestClubName = club.LongName;
+                                bestClubNameShort = club.ShortName;
+                                clubID = club.ID;
+                            }
+                            else
+                            if (shortSimilarity > bestSimilarity)
+                            {
+                                bestSimilarity = shortSimilarity;
+                                bestClubName = club.LongName;
+                                bestClubNameShort = club.ShortName;
+                                clubID = club.ID;
+                            }
+                        }
+                        string bestDestClubName = bestClubName;
+                        float destSimilarity = bestSimilarity;
+                        int destClubID = clubID;
+
+                        string storedName = "";
+                        if (playerObj == null)
+                        {
+                            if (playerName == "Momo Diaby")
+                                Console.WriteLine();
+                            // Can't find the player - see if we can find the player in the source team
+                            float nameSimilarity = 0;
+                            if (sourceSimilarity > 0.7)
+                            {
+                                var clubPlayers = hl.staff.Where(x => x.ClubJob == sourceClubID).ToList();
+                                foreach (var clubPlayer in clubPlayers)
+                                {
+                                    string name, basicName;
+                                    hl.StaffToName(clubPlayer, out name, out basicName);
+                                    var similiarity = MiscFunctions.GetSimilarity(playerName, basicName);
+                                    if (similiarity > nameSimilarity)
+                                    {
+                                        nameSimilarity = similiarity;
+                                        storedName = name;
+                                    }
+                                }
+                            }
+
+                            if (nameSimilarity < 0.6)
+                            {
+                                var playerNotFound = string.Format("Cannot find player: {0}\t\tFALSE", playerName);
+                                Console.WriteLine(playerNotFound);
+                                wr.WriteLine(playerNotFound);
+                                continue;
+
+                            }
+                        }
+                        else
+                            storedName = playerObj.name;
+
+                        var lineOut = string.Format("{0} ({1}) -> {2}", storedName, bestSourceClubName, bestDestClubName);
+                        if (isLoan)
+                            lineOut += " [LOAN]";
+                        lineOut += string.Format("\tsrcSim: {0} {2}, dstSim: {1} {3}\t{4}", sourceSimilarity, destSimilarity, sourceTeam, destTeam, (sourceSimilarity == 1f && destSimilarity == 1f) ? "TRUE" : "FALSE");
+                        Console.WriteLine(lineOut);
+                        wr.WriteLine(lineOut);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
+            //ParseBBCTransfers(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2023\Data\index.dat", @"c:\\downloads\\Transfers_2023.txt", @"c:\\downloads\\Transfers_August_2023.txt");
+
             /*
             // Count the Dublin Clubs
             HistoryLoader hl = new HistoryLoader();
@@ -652,8 +897,12 @@ namespace CM0102Patcher
             hl.Save(string.Format(@"C:\ChampMan\Championship Manager 0102\TestQuick\CamDateFix\CM\{0}\Data\index.dat", folderYear), false, true, false);
             */
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+            }
+            catch { }
             Application.Run(new PatcherForm());
         }
 

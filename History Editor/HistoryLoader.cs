@@ -120,8 +120,8 @@ namespace CM0102Patcher
             {
                 foreach (var staffMember in staff)
                 {
-                    string name;
-                    if (StaffToName(staffMember, out name))
+                    string name, basicName;
+                    if (StaffToName(staffMember, out name, out basicName))
                     {
                         staffNames[staffMember.ID] = name;
                         staffNamesNoDiacritics[staffMember.ID] = MiscFunctions.RemoveDiacritics(name);
@@ -147,19 +147,27 @@ namespace CM0102Patcher
             Application.DoEvents();
         }
 
-        public bool StaffToName(TStaff staffMember, out string name)
+        public bool StaffToName(TStaff staffMember, out string name, out string basicName)
         {
             if (staffMember.ID >= 0 && staffMember.FirstName >= 0 && staffMember.FirstName < first_names.Count && staffMember.SecondName >= 0 && staffMember.SecondName < second_names.Count)
             {
                 if (staffMember.CommonName >= 0 && staffMember.CommonName < common_names.Count && GetTextFromBytes(common_names[staffMember.CommonName].Name).Trim() != "")
-                    name = GetTextFromBytes(common_names[staffMember.CommonName].Name);
+                    basicName = name = GetTextFromBytes(common_names[staffMember.CommonName].Name);
                 else
+                {
+                    basicName = GetTextFromBytes(first_names[staffMember.FirstName].Name) + " " + GetTextFromBytes(second_names[staffMember.SecondName].Name);
                     name = GetTextFromBytes(second_names[staffMember.SecondName].Name) + ", " + GetTextFromBytes(first_names[staffMember.FirstName].Name);
-                return true;
+                }
+
+                if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(basicName))
+                    return false;
+                else
+                    return true;
             }
             else
             {
                 name = "";
+                basicName = "";
                 return false;
             }
         }
