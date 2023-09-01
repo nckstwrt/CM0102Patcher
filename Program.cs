@@ -207,8 +207,8 @@ namespace CM0102Patcher
         {
             HistoryLoader hl = new HistoryLoader();
             hl.Load(indexDatFile, false);
-            using (StreamWriter wr = new StreamWriter(transfersSource))
-            using (StreamReader sr = new StreamReader(transferOutput))
+            using (StreamWriter wr = new StreamWriter(transferOutput))
+            using (StreamReader sr = new StreamReader(transfersSource))
             {
                 wr.WriteLine("Transfer\tInfo\tGood");
 
@@ -409,7 +409,7 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
-            //ParseBBCTransfers(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2023\Data\index.dat", @"c:\\downloads\\Transfers_2023.txt", @"c:\\downloads\\Transfers_August_2023.txt");
+            //ParseBBCTransfers(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2023\Data\index.dat",  @"c:\downloads\Transfers_August_2023.txt", @"c:\downloads\Transfers_2023.txt");
 
             /*
             // Count the Dublin Clubs

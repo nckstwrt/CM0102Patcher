@@ -826,6 +826,9 @@ namespace CM0102Patcher
                                     namePatcher.PatchWelshWithSouthernPremierCentral();
                                     break;
                             }
+
+                            // Correct the FA Cup code with Saturn v9's when this is done (this will have the required Tapani 00601D94 func)
+                            patcher.ApplyPatch(labelFilename.Text, new List<Patcher.HexPatch> { new Patcher.HexPatch("APPLYMISCPATCH", "Misc Patches/[HIDDEN} 3.9.68 to Saturn 9 - FA Cup Changes.patch", null) });
                         }
                         
                         // Irreversible, only try and apply it if the checkbox is Enabled

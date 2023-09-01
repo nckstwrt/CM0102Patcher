@@ -26,7 +26,7 @@ namespace CM0102Patcher
 
             using (var zs = MiscFunctions.OpenZip("MiscPatches.zip"))
             {
-                patchFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".patch"));
+                patchFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".patch") && !x.FilenameInZip.Contains("[HIDDEN]"));
                 txtFiles = zs.ReadCentralDir().FindAll(x => x.FilenameInZip.Contains(".txt") || x.FilenameInZip.Contains(".info"));
 #if DEBUG
                 // For easy creation of patches
