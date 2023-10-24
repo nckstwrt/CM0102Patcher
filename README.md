@@ -1,4 +1,4 @@
-# CM0102Patcher v2.25
+# CM0102Patcher v2.26
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/lMZRRat.png)
+![alt text](https://i.imgur.com/sWCt5LA.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,22 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.26:
+* Suppport for October 2023 Update
+* New Logging Tools - All actions are now saved to the exe and can be viewed from the patcher
+* AddNationCompHistory can now add in a 3rd place
+* Fixed and updated protection patches being added in Year Specific
+* Added South American World Cup Qualifier fix from Saturn patches
+* Added Misc Patch: Increase Font Size By 1
+* Added Misc Patch: UseCommonNamesForBrazilRegens
+* History Editor fixes
+* Reorder alphabetically the data after Year Specific patch (REORDERDATA patch command)
+* April 2023 Data Tactics Support
+* Scouter now support .PLS files (appending and saving)
+* Fixed the FrenchRestructure patch
+* Added Xeno's Portugal No Restrictions patch
+* Add transfer status and discipline screen sensitivity patch to the patcher#s sensitivity patches
 
 v2.25:
 * Updated 2022 Patches with latest additions
