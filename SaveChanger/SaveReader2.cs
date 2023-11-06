@@ -10,12 +10,17 @@ namespace CM0102Patcher
 {
     public class SaveReader2
     {
+        public bool WasCompressed;
+
         public void Load(string inFile)
         {
             using (var fin = File.OpenRead(inFile))
             using (var br = new BinaryReader(fin))
             {
                 var compressed = (br.ReadInt32() == 4);
+
+                // Save this value
+                WasCompressed = compressed;
 
                 // Skip 4 bytes
                 unknownHdrBytes = br.ReadInt32();

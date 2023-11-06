@@ -41,6 +41,7 @@
             this.buttonHistoryEditor = new System.Windows.Forms.Button();
             this.buttonPlayerTransfer = new System.Windows.Forms.Button();
             this.buttonReviewExeLog = new System.Windows.Forms.Button();
+            this.buttonGoHome = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonApplyPatchfile
@@ -112,7 +113,7 @@
             // buttonApplyMiscPatch
             // 
             this.buttonApplyMiscPatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonApplyMiscPatch.Location = new System.Drawing.Point(11, 333);
+            this.buttonApplyMiscPatch.Location = new System.Drawing.Point(12, 363);
             this.buttonApplyMiscPatch.Name = "buttonApplyMiscPatch";
             this.buttonApplyMiscPatch.Size = new System.Drawing.Size(166, 24);
             this.buttonApplyMiscPatch.TabIndex = 6;
@@ -175,11 +176,23 @@
             this.buttonReviewExeLog.UseVisualStyleBackColor = true;
             this.buttonReviewExeLog.Click += new System.EventHandler(this.buttonReviewExeLog_Click);
             // 
+            // buttonGoHome
+            // 
+            this.buttonGoHome.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonGoHome.Location = new System.Drawing.Point(11, 333);
+            this.buttonGoHome.Name = "buttonGoHome";
+            this.buttonGoHome.Size = new System.Drawing.Size(166, 24);
+            this.buttonGoHome.TabIndex = 12;
+            this.buttonGoHome.Text = "\"Go Home\" Tool...";
+            this.buttonGoHome.UseVisualStyleBackColor = true;
+            this.buttonGoHome.Click += new System.EventHandler(this.buttonGoHome_Click);
+            // 
             // Tools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(189, 369);
+            this.ClientSize = new System.Drawing.Size(189, 400);
+            this.Controls.Add(this.buttonGoHome);
             this.Controls.Add(this.buttonReviewExeLog);
             this.Controls.Add(this.buttonPlayerTransfer);
             this.Controls.Add(this.buttonHistoryEditor);
@@ -217,5 +230,6 @@
         private System.Windows.Forms.Button buttonHistoryEditor;
         private System.Windows.Forms.Button buttonPlayerTransfer;
         private System.Windows.Forms.Button buttonReviewExeLog;
+        private System.Windows.Forms.Button buttonGoHome;
     }
 }

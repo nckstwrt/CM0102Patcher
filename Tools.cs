@@ -248,5 +248,11 @@ namespace CM0102Patcher
             ReviewExeLog rel = new ReviewExeLog(exeFile);
             rel.ShowDialog();
         }
+
+        private void buttonGoHome_Click(object sender, EventArgs e)
+        {
+            var ghf = new GoHomeForm();
+            ghf.ShowDialog();
+        }
     }
 }

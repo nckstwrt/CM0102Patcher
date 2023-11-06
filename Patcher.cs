@@ -429,6 +429,8 @@ namespace CM0102Patcher
         // DE8180 - DE818F = discipline_screen_sensitivity_patch.patch
         // DE8190 - DE81B1 = Load Our DLL (nick.dll)
         // DE81BA - DE81EF = Force Confederates Cup to always be in the USA
+        // DE8200 - DE8213 = Transfer Offer Protection Patch
+        // DE8220 - DE8254 = Retire Patch V4 (stops players retiring before 34)
 
         public void ExpandExe(string fileName)
         {

@@ -66,6 +66,12 @@
       <DependentUpon>FixtureScheduler.cs</DependentUpon>
     </Compile>
     <Compile Include="football-api.cs" />
+    <Compile Include="GoHomeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GoHomeForm.Designer.cs">
+      <DependentUpon>GoHomeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="History Editor\HistoryEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -209,6 +215,9 @@
     <Compile Include="ZipStorer.cs" />
     <EmbeddedResource Include="FixtureScheduler.resx">
       <DependentUpon>FixtureScheduler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GoHomeForm.resx">
+      <DependentUpon>GoHomeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="History Editor\HistoryEditorForm.resx">
       <DependentUpon>HistoryEditorForm.cs</DependentUpon>
