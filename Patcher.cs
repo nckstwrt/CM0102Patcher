@@ -744,14 +744,14 @@ namespace CM0102Patcher
                     }
                 }
 
-                // CHANGENATIONCONTINENT (Mainly for changing Australia to Asia)
+                // CHANGENATIONCONTINENT (Mainly for changing Australia to Asia or disabling a continent)
                 foreach (var changeNationContinent in commandDictionary["CHANGENATIONCONTINENT"])
                 {
                     saveNationData = true;
-                    var Australia = hl.nation.FirstOrDefault(x => x.Name.ReadString() == "Australia");
-                    var AsiaContinent = hl.continent.FirstOrDefault(x => x.ContinentName.ReadString() == "Asia");
-                    Australia.Continent = AsiaContinent.ContinentID;
-                    Logger.Log(fileName, "CHANGENATIONCONTINENT");
+                    var nation = hl.nation.FirstOrDefault(x => x.Name.ReadString() == changeNationContinent.part1);
+                    var continent = hl.continent.FirstOrDefault(x => x.ContinentName.ReadString() == changeNationContinent.part2);
+                    nation.Continent = (continent == null) ? -1 : continent.ContinentID;
+                    Logger.Log(fileName, "CHANGENATIONCONTINENT " + nation + " " + continent);
                 }
 
                 // REORDER all data

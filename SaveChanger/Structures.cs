@@ -636,25 +636,45 @@ namespace CM0102Patcher
         public Int16 SeasonUpdateDay;
         /*8E*/
         public Int16 Reputation;
+        /*90*/
         public int ForegroundColour1;
+        /*94*/
         public int BackgroundColour1;
+        /*98*/
         public int ForegroundColour2;
+        /*9C*/
         public int BackgroundColour2;
+        /*A0*/
         public int ForegroundColour3;
+        /*A4*/
         public int BackgroundColour3;
+        /*A8*/
         public double FIFACoefficient;
+        /*B0*/
         public double FIFACoefficient91;
+        /*B8*/
         public double FIFACoefficient92;
+        /*C0*/
         public double FIFACoefficient93;
+        /*C8*/
         public double FIFACoefficient94;
+        /*D0*/
         public double FIFACoefficient95;
+        /*D8*/
         public double FIFACoefficient96;
+        /*E0*/
         public double UEFACoefficient91;
+        /*E8*/
         public double UEFACoefficient92;
+        /*F0*/
         public double UEFACoefficient93;
+        /*F8*/
         public double UEFACoefficient94;
+        /*100*/
         public double UEFACoefficient95;
+        /*108*/
         public double UEFACoefficient96;
+        /*110*/
         public int Rivals1;
         public int Rivals2;
         public int Rivals3;
