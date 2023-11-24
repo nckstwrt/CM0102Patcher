@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/sWCt5LA.png)
+![alt text](https://i.imgur.com/jgGvVO6.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,15 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.27:
+* 2023: Freeze France to 18 Teams
+* 2023: Add 2022 World Cup History
+* 2023: Bruebous suggested default patches to Baseline(RemoveSecondNameRequirement, DontAskAboutPlayerComparison, Scout Role Offer)
+* 2023: Yugoslavia to Serbia patch added (to completely remove any reference to Yugoslavia)
+* "Go Home" Tool - Recreation of John Lockes tool to send International players back to their clubs
+* Fix to use the right UEFA Coefficients (2023: ensures Italy has 3 champ leagues places)
+* Transfer_Offer_Protection_Patch.patch Added
 
 v2.26:
 * Suppport for October 2023 Update
