@@ -409,6 +409,21 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
+            /*
+            // Count the Dublin Clubs
+            HistoryLoader hl = new HistoryLoader();
+            //hl.Load(@"C:\ChampMan\Championship Manager 0102\Cam84\Romania Names\Data\index.dat");
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Original\Data\index.dat");
+            var dupes = hl.staff.GroupBy(x => x.ID).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+            var dupes2 = hl.club.GroupBy(x => x.ID).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+            var dupes3 = hl.players.GroupBy(x => x.ID).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+            var dupes4 = hl.nonPlayers.GroupBy(x => x.ID).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+            var dinamo = hl.club.Where(x => x.Name.ReadString().Contains("Dinamo Bucharest")).ToList();
+            var bihor = hl.club.Where(x => x.Name.ReadString().Contains("Bihor")).ToList();
+            var player_count = hl.players.Count;
+            var nonplayer_count = hl.nonPlayers.Count;
+            Console.WriteLine();
+            */
             //ParseBBCTransfers(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2023\Data\index.dat",  @"c:\downloads\Transfers_August_2023.txt", @"c:\downloads\Transfers_2023.txt");
 
             /*

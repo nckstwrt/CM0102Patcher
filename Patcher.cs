@@ -431,6 +431,8 @@ namespace CM0102Patcher
         // DE81BA - DE81EF = Force Confederates Cup to always be in the USA
         // DE8200 - DE8213 = Transfer Offer Protection Patch
         // DE8220 - DE8254 = Retire Patch V4 (stops players retiring before 34)
+        // DE8260 -        = Remove Saudi Arabia from the Asia World Cup Qualifiers in 2023 ???
+        // DE8290 - DE82A6 = Code for CM84 to make it so relegation doesn't mean Euro football
 
         public void ExpandExe(string fileName)
         {

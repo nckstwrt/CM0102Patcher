@@ -179,7 +179,8 @@ namespace CM0102Patcher
                 row.Add(historyLoader.GetTextFromBytes(compClubs.FirstOrDefault(x => x.ID == history.RunnersUp).Name));
                 var thirdPlace = compClubs.FirstOrDefault(x => x.ID == history.ThirdPlace);
                 row.Add(thirdPlace == null ? "" : historyLoader.GetTextFromBytes(thirdPlace.Name));
-                row.Add(historyLoader.GetTextFromBytes(compClubs.FirstOrDefault(x => x.ID == history.Host).Name));
+                var clubHost = compClubs.FirstOrDefault(x => x.ID == history.Host);
+                row.Add(clubHost == null ? "" : historyLoader.GetTextFromBytes(clubHost.Name));
                 rows.Add(row);
             }
 

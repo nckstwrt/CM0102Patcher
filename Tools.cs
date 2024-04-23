@@ -26,16 +26,30 @@ namespace CM0102Patcher
         {
             try
             {
+                bool unApply = false;
+                if ((Control.ModifierKeys & Keys.Control) == Keys.Control && (Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+                {
+                    MessageBox.Show("Going to Unapply this patchfile!!!", "Unapply Patchfile", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    unApply = true;
+                }
                 var ofd = new OpenFileDialog();
                 ofd.Filter = "CM0102.exe Patch|*.patch|Text Files|*.txt|All files (*.*)|*.*";
                 ofd.Title = "Select a CM0102 .patch file";
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    Logger.Log(exeFile, "Applying External Patchfile {0} to {1}", ofd.FileName, exeFile);
+                    Logger.Log(exeFile, "{2} External Patchfile {0} to {1}", ofd.FileName, exeFile, unApply ? "Unapplying" : "Applying");
                     Patcher patcher = new Patcher();
                     var patch = patcher.LoadPatchFile(ofd.FileName);
-                    if (patcher.ApplyPatch(exeFile, patch))
-                        MessageBox.Show("Patch applied successfully!", "Patch Applied", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (unApply)
+                    {
+                        patcher.UnApplyPatch(exeFile, patch);
+                        MessageBox.Show("Patch Unapplied successfully!", "Patch Unapplied", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        if (patcher.ApplyPatch(exeFile, patch))
+                            MessageBox.Show("Patch applied successfully!", "Patch Applied", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
             }
             catch (Exception ex)
