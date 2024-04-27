@@ -1,4 +1,4 @@
-# CM0102Patcher v2.26
+# CM0102Patcher v2.28
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,7 +8,7 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://i.imgur.com/jgGvVO6.png)
+![alt text](https://i.imgur.com/JgaIicZ.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
@@ -35,6 +35,13 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![alt text](https://i.imgur.com/4LD4Gnu.png)
 
 ## Updates
+
+v2.28:
+* April 2024 Update Fixes for 2023 Year + Fixes
+* Fix for History Editor
+* Added Coup de France and Trophee des Champions Finals 95 Subs patch
+* Added Uncapped 20s fix
+* Allow *secret* unapply for external patches
 
 v2.27:
 * 2023: Freeze France to 18 Teams
