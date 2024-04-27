@@ -410,6 +410,22 @@ namespace CM0102Patcher
         static void Main()
         {
             /*
+            using (var fin = new StreamReader(File.OpenRead(@"c:\champman\notes\davdav_league_additions.txt")))
+            using (var fout = new StreamWriter(File.Create(@"c:\champman\notes\davdav_league_additions_converted.txt")))
+            {
+                var text = fin.ReadToEnd();
+
+                for (int i = 100; i >= 2 ; i--)
+                {
+                    var spaces = "";
+                    for (int j = 0; j < i; j++)
+                        spaces += " ";
+                    text = text.Replace(spaces, "\t");
+                }
+
+                fout.Write(text);
+            }*/
+            /*
             // Count the Dublin Clubs
             HistoryLoader hl = new HistoryLoader();
             //hl.Load(@"C:\ChampMan\Championship Manager 0102\Cam84\Romania Names\Data\index.dat");
