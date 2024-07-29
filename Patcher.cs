@@ -309,7 +309,7 @@ namespace CM0102Patcher
                                                                  "CHANGECLUBDIVISION", "CHANGECLUBLASTDIVISION", "CHANGECLUBLASTPOSITION", "CHANGECLUBNATION", 
                                                                  "CHANGENATIONCOMPNAME", "CHANGENATIONCOMPCOLOR", "CLEARNATIONCOMPHISTORY", 
                                                                  "ADDNATIONCOMPHISTORY", "DELETECLUBCOMPHISTORY", "DELETENATIONCOMPHISTORY", "SHIFTNATIONCOMPHISTORY",
-                                                                 "CHANGENATIONCONTINENT", "REORDERDATA"
+                                                                 "CHANGENATIONCONTINENT", "REORDERDATA", "CHANGE_DIVISION_REPUTATION"
         };
 
         Dictionary<string, List<HexPatch>> GetCommands(IEnumerable<HexPatch> patch)
@@ -615,6 +615,28 @@ namespace CM0102Patcher
                         hl.UpdateClubsNation(tClub.ID, tNation.ID);
                     }
 
+                }
+
+                // CHANGE_DIVISION_REPUTATION
+                if (commandDictionary["CHANGE_DIVISION_REPUTATION"].Count > 0)
+                {
+                    foreach (var divisionReputationChange in commandDictionary["CHANGE_DIVISION_REPUTATION"])
+                    {
+                        var divisionName = divisionReputationChange.part1; // Consider that division "Name" is ID
+                        var newDivisionReputation = int.Parse(divisionReputationChange.part2);
+                        var division = hl.club_comp.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == divisionName);
+
+                        if (divisionNameInDd != null) {
+                            if (0 < newDivisionReputation <= 20) { // Value should be moved to const
+                                PatcherForm.updatingForm.SetUpdateText(divisionReputationChange.command + " " + divisionName + " " + newDivisionReputation);
+                                hl.UpdateDivisionReputation(division.ID, newDivisionReputation);
+                            } else {
+                                Console.WriteLine("The reputation for Division '{0}' is incorrect. The value must be between 1 and 20 inclusive. You have provided the value '{1}'.", divisionName, divisionReputationChange.part2);
+                            }
+                        } else {
+                            Console.WriteLine("Division '{0}' in CHANGE_DIVISION_REPUTATION not found", divisionName);
+                        }
+                    }
                 }
 
                 // CHANGENATIONCOMPNAME
