@@ -299,6 +299,20 @@ namespace CM0102Patcher
             }
         }
 
+        public void UpdateDivisionReputation(int divisionID, int reputation)
+        {
+            for (int i = 0; i < club_comp.Count; i++)
+            {
+                if (club_comp[i].ID == divisionID)
+                {
+                    TComp divisionToUpdate = club_comp[i];
+                    // Based on types @see /SaveChanger/Structures.cs
+                    divisionToUpdate.ClubCompReputation = reputation;
+                    club_comp[i] = divisionToUpdate;
+                }
+            }
+        }
+
         public void Save(string indexFile, bool saveClubData = false, bool saveStaffData = false, bool saveNationData = false)
         {
             var dir = Path.GetDirectoryName(indexFile);
