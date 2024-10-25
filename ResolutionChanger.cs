@@ -237,6 +237,18 @@ namespace CM0102Patcher
                         centering2 = 814;
                     }
                     else
+                    if (width == 1024 && height == 576)
+                    {
+                        unknown1 = 16;
+                        widthMod = 322;
+                        heightMod = 245;
+                        unknownNegative = 255;
+                        unknown2 = 24;
+                        unknown3 = 948;
+                        centering1 = 864;
+                        centering2 = 854;
+                    }
+                    else
                     if (width == 1024 && height == 600)
                     {
                         unknown1 = 16;

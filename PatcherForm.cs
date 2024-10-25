@@ -59,6 +59,7 @@ namespace CM0102Patcher
                 {
                     new ComboboxItem("720 x 480", new Point(720, 480)),
                     new ComboboxItem("800 x 600 (default)", new Point(800, 600)),
+                    new ComboboxItem("1024 x 576", new Point(1024, 576)),
                     new ComboboxItem("1024 x 600", new Point(1024, 600)),
                     new ComboboxItem("1024 x 768", new Point(1024, 768)),
                     new ComboboxItem("1280 x 720", new Point(1280, 720)),
@@ -1269,7 +1270,7 @@ namespace CM0102Patcher
         {
             comboBoxResolution.Enabled = checkBoxChangeResolution.Checked;
             if (checkBoxChangeResolution.Checked && comboBoxResolution.SelectedIndex == -1)
-                comboBoxResolution.SelectedIndex = 5;
+                comboBoxResolution.SelectedIndex = 6;
         }
 
         private void checkBoxReplaceAITactics_CheckedChanged(object sender, EventArgs e)
@@ -1344,6 +1345,7 @@ namespace CM0102Patcher
                     case 2021:
                     case 2022:
                     case 2023:
+                    case 2024:
                         checkBoxApplyYearSpecificPatches.Enabled = true;
                         break;
                     default:

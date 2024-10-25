@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -309,7 +310,7 @@ namespace CM0102Patcher
                                                                  "CHANGECLUBDIVISION", "CHANGECLUBLASTDIVISION", "CHANGECLUBLASTPOSITION", "CHANGECLUBNATION", 
                                                                  "CHANGENATIONCOMPNAME", "CHANGENATIONCOMPCOLOR", "CLEARNATIONCOMPHISTORY", 
                                                                  "ADDNATIONCOMPHISTORY", "DELETECLUBCOMPHISTORY", "DELETENATIONCOMPHISTORY", "SHIFTNATIONCOMPHISTORY",
-                                                                 "CHANGENATIONCONTINENT", "REORDERDATA"
+                                                                 "CHANGENATIONCONTINENT", "REORDERDATA", "UPDATEDATA"
         };
 
         Dictionary<string, List<HexPatch>> GetCommands(IEnumerable<HexPatch> patch)
@@ -433,6 +434,7 @@ namespace CM0102Patcher
         // DE8220 - DE8254 = Retire Patch V4 (stops players retiring before 34)
         // DE8260 - DE8267 = Remove Saudi Arabia from the Asia World Cup Qualifiers in 2023 ???
         // DE8290 - DE82A6 = Code for CM84 to make it so relegation doesn't mean Euro football
+        // DE82AA - DE82C6 = Uncap20s Staff/Physio Patch
 
         public void ExpandExe(string fileName)
         {
@@ -754,6 +756,46 @@ namespace CM0102Patcher
                     var continent = hl.continent.FirstOrDefault(x => x.ContinentName.ReadString() == changeNationContinent.part2);
                     nation.Continent = (continent == null) ? -1 : continent.ContinentID;
                     Logger.Log(fileName, "CHANGENATIONCONTINENT " + nation + " " + continent);
+                }
+
+                // UPDATEDATA - naydav's suggestion: https://champman0102.net/viewtopic.php?p=117533#p117533
+                foreach (var updateData in commandDictionary["UPDATEDATA"])
+                {
+                    Logger.Log(fileName, "UPDATEDATA");
+                    var index = updateData.part1.ToLower();
+                    var id = updateData.part2;
+                    var field = updateData.part3.ToLower();
+                    var value = updateData.part4;
+                    object objectToChange = null;
+                    FieldInfo[] fields = null;
+                    switch (index)
+                    {
+                        case "club":
+                            fields = typeof(TClub).GetFields();
+                            objectToChange = hl.club.FirstOrDefault(x => x.Name.ReadString() == id);
+                            break;
+                    }
+
+                    var fieldToChange = fields.FirstOrDefault(x => x.Name.ToLower() == field);
+                    if (fieldToChange != null)
+                    {
+                        if (objectToChange != null)
+                        {
+                            if (fieldToChange.FieldType == typeof(byte[]))
+                            {
+                                var fieldValue = fieldToChange.GetValue(objectToChange) as byte[];
+                                fieldToChange.SetValue(objectToChange, MiscFunctions.GetBytesFromText(value, fieldValue.Length));
+                            }
+                            if (fieldToChange.FieldType == typeof(int))
+                                fieldToChange.SetValue(objectToChange, int.Parse(value));
+                            if (fieldToChange.FieldType == typeof(byte))
+                                fieldToChange.SetValue(objectToChange, byte.Parse(value));
+                            if (fieldToChange.FieldType == typeof(sbyte))
+                                fieldToChange.SetValue(objectToChange, sbyte.Parse(value));
+                            if (fieldToChange.FieldType == typeof(Int16))
+                                fieldToChange.SetValue(objectToChange, Int16.Parse(value));
+                        }
+                    }
                 }
 
                 // REORDER all data

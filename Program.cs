@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using System.Windows.Forms;
 using System.Globalization;
+using System.Reflection;
 
 namespace CM0102Patcher
 {
@@ -409,531 +410,547 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
-            /*
-            using (var fin = new StreamReader(File.OpenRead(@"c:\champman\notes\davdav_league_additions.txt")))
-            using (var fout = new StreamWriter(File.Create(@"c:\champman\notes\davdav_league_additions_converted.txt")))
+            /*using (var br = new BinaryReader(File.Open(@"C:\Downloads\magicx\arkos\ArkOS_RG351V_v2.0_04242024.img", FileMode.Open)))
             {
-                var text = fin.ReadToEnd();
-
-                for (int i = 100; i >= 2 ; i--)
-                {
-                    var spaces = "";
-                    for (int j = 0; j < i; j++)
-                        spaces += " ";
-                    text = text.Replace(spaces, "\t");
-                }
-
-                fout.Write(text);
+                var bytes = br.ReadBytes(512);
+                using (var bw = new BinaryWriter(File.Open(@"C:\Downloads\magicx\arkos\512_ArkOS_Bytes", FileMode.Create)))
+                    bw.Write(bytes);
             }*/
-            /*
-            // Count the Dublin Clubs
-            HistoryLoader hl = new HistoryLoader();
-            //hl.Load(@"C:\ChampMan\Championship Manager 0102\Cam84\Romania Names\Data\index.dat");
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Original\Data\index.dat");
-            var dupes = hl.staff.GroupBy(x => x.ID).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
-            var dupes2 = hl.club.GroupBy(x => x.ID).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
-            var dupes3 = hl.players.GroupBy(x => x.ID).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
-            var dupes4 = hl.nonPlayers.GroupBy(x => x.ID).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
-            var dinamo = hl.club.Where(x => x.Name.ReadString().Contains("Dinamo Bucharest")).ToList();
-            var bihor = hl.club.Where(x => x.Name.ReadString().Contains("Bihor")).ToList();
-            var player_count = hl.players.Count;
-            var nonplayer_count = hl.nonPlayers.Count;
-            Console.WriteLine();
-            */
-            //ParseBBCTransfers(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2023\Data\index.dat",  @"c:\downloads\Transfers_August_2023.txt", @"c:\downloads\Transfers_2023.txt");
 
-            /*
-            // Count the Dublin Clubs
-            HistoryLoader hl = new HistoryLoader();
-            //hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2023\Data\index.dat");
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\quick\Data\index.dat");
-            int count = 1;
-            //var first = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "League of Ireland First Division".ToLower());
-            //var prem = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "League of Ireland Premier Division".ToLower());
-            var first = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "Irish First Division".ToLower());
-            var prem = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "Irish Premier Division".ToLower());
-            var leinster1 = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "Irish Leinster Senior League Division One".ToLower());
-            var leinster2 = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "Irish Leinster Senior League Premier".ToLower());
-            foreach (var club in hl.club)
-            {
-                var clubName = club.Name.ReadString().ToLower(); ;
-                if (club.Division == first.ID || club.Division == prem.ID )//|| club.Division == leinster1.ID || club.Division == leinster2.ID)
+                /*
+                HistoryLoader hl = new HistoryLoader();
+                hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Derm\Data\index.dat", false);
+                var reu = hl.nation.FirstOrDefault(x => x.Name.ReadString() == "Réunion");
+                var reu_staff = hl.staff.Where(x => x.Nation == reu.ID).ToList();
+
+                foreach (var staff in reu_staff)
+                    Console.WriteLine($"{hl.staffNames[staff.ID]}");
+                Console.WriteLine();*/
+                /*
+                using (var fin = new StreamReader(File.OpenRead(@"c:\champman\notes\davdav_league_additions.txt")))
+                using (var fout = new StreamWriter(File.Create(@"c:\champman\notes\davdav_league_additions_converted.txt")))
                 {
-                    if (club.Stadium > 0)
+                    var text = fin.ReadToEnd();
+
+                    for (int i = 100; i >= 2 ; i--)
                     {
-                        var stadium = hl.stadiums.FirstOrDefault(x => x.ID == club.Stadium);
-                        if (stadium != null)
+                        var spaces = "";
+                        for (int j = 0; j < i; j++)
+                            spaces += " ";
+                        text = text.Replace(spaces, "\t");
+                    }
+
+                    fout.Write(text);
+                }*/
+                /*
+                // Count the Dublin Clubs
+                HistoryLoader hl = new HistoryLoader();
+                //hl.Load(@"C:\ChampMan\Championship Manager 0102\Cam84\Romania Names\Data\index.dat");
+                hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Original\Data\index.dat");
+                var dupes = hl.staff.GroupBy(x => x.ID).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+                var dupes2 = hl.club.GroupBy(x => x.ID).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+                var dupes3 = hl.players.GroupBy(x => x.ID).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+                var dupes4 = hl.nonPlayers.GroupBy(x => x.ID).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+                var dinamo = hl.club.Where(x => x.Name.ReadString().Contains("Dinamo Bucharest")).ToList();
+                var bihor = hl.club.Where(x => x.Name.ReadString().Contains("Bihor")).ToList();
+                var player_count = hl.players.Count;
+                var nonplayer_count = hl.nonPlayers.Count;
+                Console.WriteLine();
+                */
+                //ParseBBCTransfers(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2023\Data\index.dat",  @"c:\downloads\Transfers_August_2023.txt", @"c:\downloads\Transfers_2023.txt");
+
+                /*
+                // Count the Dublin Clubs
+                HistoryLoader hl = new HistoryLoader();
+                //hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2023\Data\index.dat");
+                hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\quick\Data\index.dat");
+                int count = 1;
+                //var first = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "League of Ireland First Division".ToLower());
+                //var prem = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "League of Ireland Premier Division".ToLower());
+                var first = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "Irish First Division".ToLower());
+                var prem = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "Irish Premier Division".ToLower());
+                var leinster1 = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "Irish Leinster Senior League Division One".ToLower());
+                var leinster2 = hl.club_comp.FirstOrDefault(x => x.Name.ReadString().ToLower() == "Irish Leinster Senior League Premier".ToLower());
+                foreach (var club in hl.club)
+                {
+                    var clubName = club.Name.ReadString().ToLower(); ;
+                    if (club.Division == first.ID || club.Division == prem.ID )//|| club.Division == leinster1.ID || club.Division == leinster2.ID)
+                    {
+                        if (club.Stadium > 0)
                         {
-                            var stadiumName = stadium.Name.ReadString();
-                            var city = hl.cities.FirstOrDefault(x => x.ID == stadium.StadiumCity);
-                            if (city != null)
+                            var stadium = hl.stadiums.FirstOrDefault(x => x.ID == club.Stadium);
+                            if (stadium != null)
                             {
-                                var cityName = city.Name.ReadString().ToLower();
-                                if (cityName.Length >= 4 && cityName.Substring(0, 4) == "dubl")
+                                var stadiumName = stadium.Name.ReadString();
+                                var city = hl.cities.FirstOrDefault(x => x.ID == stadium.StadiumCity);
+                                if (city != null)
                                 {
-                                    Console.WriteLine(count++ + ". " + club.Name.ReadString() + " " + hl.club_comp.First(x => x.ID == club.Division).Name.ReadString());
+                                    var cityName = city.Name.ReadString().ToLower();
+                                    if (cityName.Length >= 4 && cityName.Substring(0, 4) == "dubl")
+                                    {
+                                        Console.WriteLine(count++ + ". " + club.Name.ReadString() + " " + hl.club_comp.First(x => x.ID == club.Division).Name.ReadString());
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-            Console.WriteLine();
-            */
-            /*
-            Logger.Log(@"C:\ChampMan\Championship Manager 0102\TestQuick\Leeds2022\cm0102_logger.exe", "Test Start String");
-            Logger.Log(@"C:\ChampMan\Championship Manager 0102\TestQuick\Leeds2022\cm0102_logger.exe", "String 2");
-            var strs = Logger.ReadStrings(@"C:\ChampMan\Championship Manager 0102\TestQuick\Leeds2022\cm0102_logger.exe");
-            */
-            //patch();
-            /*
-            // For match man 1225 errors! :)
-            HistoryLoader hl = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\Cam91_Issue\Attempt1\Data\index.dat");
-            foreach (var club in hl.club)
-            {
-                var dupes = club.Squad.Where(x => x != -1).GroupBy(x => x).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
-                if (dupes.Count > 0)
-                {
-                    foreach (var dupe in dupes)
-                    {
-                        string name = "Unknown";
-                        hl.StaffToName(hl.staff[dupe], out name);
-                        Console.WriteLine("Dupe Quad Found for Club {0} ({1}) - Player: {2}", club.Name.ReadString(), club.ShortName.ReadString(), name);
-                    }
-                }
-            }
-            */
-            /*
-            HistoryLoader hl = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2022_Test2\Data\index.dat");
-            var Italy = hl.nation.Find(x => x.Name.ReadString() == "Italy");
-            var allItalianClubs = hl.club.FindAll(x => x.Nation == Italy.ID);
-            allItalianClubs.ForEach(x => {
-                if (x.Name.ReadString().ToLower().Contains("brus") || x.ShortName.ReadString().ToLower().Contains("brus"))
-                    Console.WriteLine("{0} {1}", x.Name.ReadString(), x.ShortName.ReadString());
-            });
-            */
-
-            /*
-            HistoryLoader hl = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2022_Test2\Data\index.dat");
-            var Liechtenstein = hl.nation.Find(x => x.Name.ReadString() == "Liechtenstein");
-            var SanMarino = hl.nation.Find(x => x.Name.ReadString() == "San Marino");
-            int oldLichID = Liechtenstein.ID;
-            int oldSanMarinoID = SanMarino.ID;
-            Liechtenstein.ID = SanMarino.ID;
-            SanMarino.ID = oldLichID;
-            int lichIndex = hl.nation.IndexOf(Liechtenstein);
-            int sanIndex = hl.nation.IndexOf(SanMarino);
-            hl.nation[lichIndex] = SanMarino;
-            hl.nation[sanIndex] = Liechtenstein;
-            hl.nation_comp.ForEach(x => { if (x.ClubCompNation == oldLichID) x.ClubCompNation = oldSanMarinoID; else if (x.ClubCompNation == oldSanMarinoID) x.ClubCompNation = oldLichID; });
-            hl.nat_club.ForEach(x => { if (x.Nation == oldLichID) x.Nation = oldSanMarinoID; else if (x.Nation == oldSanMarinoID) x.Nation = oldLichID; });
-            hl.Save(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2022_Test2\Data\index.dat", false, false, true);
-            */
-            /*
-            var now = new DateTime(2022, 1, 1);
-            for (int i = 0; i < 365; i++)
-            {
-                var tcm = TCMDate.FromDateTime(now);
-                Console.WriteLine("{0} {1} = {2:X}", now.ToString("MMMM", CultureInfo.InvariantCulture), now.Day, tcm.Day);
-                now = now.AddDays(1);
-            }
-            */
-            /*
-            HistoryLoader hl = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\CM93 Swiss\Data\index.dat");
-            int albcount = 0;
-            foreach (var staff in hl.staff)
-            {
-                if (staff.SecondNation == 1)
-                    staff.SecondNation = -1;
-                if (staff.SecondNation < -1)
-                    staff.SecondNation = -1;
-            }
-            hl.Save(@"C:\ChampMan\Championship Manager 0102\CM93 Swiss\Data\index.dat", false, true, false);
-            */
-            //football_api api = new football_api("");
-            //api.GetLeagues(2022, false);
-            //api.GetCM0102Leagues(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2022_Test1\Data\index.dat", 2022, false, true);
-            /*
-                        CM9798.ShiftPlayerAges(@"C:\ChampMan\cm9798\Fresh\Data\CM9798", -5);
-
-                        //CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798");
-                        //CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG");
-
-                        CM9798.LimitEXNMESTXT(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\EXNMES.TXT");
-
-                        CM9798.Test();
-            */
-            /*
-            CM9798.WriteTeamDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\TMDATA.CSV", CM9798.tmdata);
-            CM9798.WritePlayerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\PLAYERS.CSV", CM9798.pldata);
-            CM9798.WriteManagerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\MGDATA.CSV", CM9798.mgdata);
-
-            Console.WriteLine("{0:X} {1:X}", CM2.ConvertLongToCM2Format(CM9798.pldata.Count), CM2.ConvertShortToCM2Format((short)CM9798.pldata.Count));
-            Console.WriteLine("{0:X} {1:X} ({2})", CM2.ConvertLongToCM2Format(CM9798.mgdata.Count), CM2.ConvertShortToCM2Format((short)CM9798.mgdata.Count), CM9798.mgdata.Count);
-
-            var xx = CM9798.pldata.Max(x => x.UniqueID);
-            var xx2 = CM2.ConvertShortToCM2Format((short)xx);
-            */
-            /*
-
-            CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798");
-
-            xx = CM9798.mgdata.Max(x => x.UniqueID);
-            xx2 = CM2.ConvertShortToCM2Format((short)xx);
-
-
-            var surnames = CM9798.mgdata.Select(x => x._SecondName).Distinct().ToList();
-            foreach (var name in surnames)
-            {
-                var strName = name.ReadString();
-                bool foundZero = false;
-                int namelen = 0;
-                foreach (var x in name)
-                {
-                    if (name[0] == ' ')
-                        Console.WriteLine("Weird3");
-                    if (name[29] != 0)
-                        Console.WriteLine("Weird4");
-
-                    if (x == 0)
-                        foundZero = true;
-                    else
-                    {
-                        namelen++;
-                        if (foundZero)
-                            Console.WriteLine("Weird");
-                    }
-                }
-                if (namelen <= 1)
-                    Console.WriteLine("Weird2");
-            }
-
-            //var xx = CM9798.pldata.Where(x => x.SecondName.ToList());
-            Console.WriteLine();
-            */
-
-            //LinearExecutableFixUps.CheckFixups(@"C:\Development\DOSTEST\DOSTEST.EXE");
-            /*
-            Patcher p = new Patcher();
-            p.CreateReversePatches(@"C:\ChampMan\Championship Manager 0102\cm0102 - Fresh - 3_9_68.exe");
-            */
-            /*
-            HistoryLoader hl = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2022\Data\index.dat");
-            var Italy = hl.nation.FirstOrDefault(x => x.Name.ReadString() == "Italy");
-            var ItalianClubs = hl.club.Where(x => x.Nation == Italy.ID).ToList();
-            foreach (var club in ItalianClubs)
-            {
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", 
-                    club.Name.ReadString(), 
-                    club.ShortName.ReadString(), 
-                    club.Division >= 0 ? hl.club_comp.First(x => x.ID == club.Division).Name.ReadString() : club.Division.ToString(), 
-                    club.LastDivision >= 0 ? hl.club_comp.First(x => x.ID == club.LastDivision).Name.ReadString() : club.LastDivision.ToString(), 
-                    club.LastPosition);
-            }
-            */
-            /*
-            TCMDate date = new TCMDate();
-            date.Day = 0x62;
-            date.Year = 2005;
-            var dtt = TCMDate.ToDateTime(date);*/
-            /*
-            HistoryLoader hl = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Millwall\Data\index.dat");
-            foreach (var staff in hl.staff)
-            {
-                if (hl.first_names[staff.FirstName].Name.ReadString() == "Cherno")
-                    Console.WriteLine();
-                if (staff.Player >= 0)
-                {
-                    var player = hl.players[staff.Player];
-                    if (player.PotentialAbility == -2)
-                    {
-                        Console.WriteLine("{0} {1} {2}", hl.first_names[staff.FirstName].Name.ReadString(), hl.second_names[staff.SecondName].Name.ReadString(), player.PotentialAbility);
-                    }
-                }
-            }*/
-
-            /*
-            CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798");
-            var tmdata = CM9798.tmdata;
-            var pldata = CM9798.pldata;
-            var mgdata = CM9798.mgdata;
-            CM9798.WritePlayerDataToCSV(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\pldata.csv", pldata);
-            CM9798.WriteTeamDataToCSV(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\TMDATA.CSV", tmdata);
-            CM9798.WriteManagerDataToCSV(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\MGDATA.CSV", mgdata);
-
-            int cut_count = 0;
-            List<CM9798.CM9798Player> newpldata = pldata;
-            List<CM9798.CM9798Team> newtmdata = tmdata;
-            //List<CM9798.CM9798Manager> newmgdata = mgdata;
-
-            List<CM9798.CM9798Manager> newmgdata = new List<CM9798.CM9798Manager>();
-            foreach (var mgr in mgdata)
-            {
-                if (cut_count <= 200)
-                {
-                    cut_count++;
-                    continue;
-                }
-                newmgdata.Add(mgr);
-            }*/
-            /*
-            List<CM9798.CM9798Player> newpldata = new List<CM9798.CM9798Player>();
-            foreach (var player in pldata)
-            {
-                if (CM2.ConvertShortToNormalFormat(player.Ability) == 0 && cut_count <= 1500)
-                {
-                    cut_count++;
-                    continue;
-                }
-                newpldata.Add(player);
-            }*/
-            /*
-            List<CM9798.CM9798Team> newtmdata = new List<CM9798.CM9798Team>();
-            int cut_count = 0;
-            var aldershot = tmdata.Find(x => x.LongName == "Aldershot");
-            foreach (var team in tmdata)
-            {
-                if (CM2.ConvertShortToNormalFormat(team.Reputation) == 0 && (team.Nation == "Portugal" || team.Nation == "Germany") && cut_count <= 200)
-                {
-                    cut_count++;
-                    continue;
-                }
-                newtmdata.Add(team);
-            }
-            var aldershot2 = newtmdata.Find(x => x.LongName == "Aldershot");
-            */
-            /*
-            var plhist = new List<CM2.CM2History>();
-
-            MiscFunctions.SaveFile<CM9798.CM9798Team>(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\TMDATA.DB1", newtmdata, CM9798.TeamDataStartPos);
-            MiscFunctions.SaveFile<CM9798.CM9798Player>(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\PLAYERS.DB1", newpldata, CM9798.PlayerDataStartPos, true);
-            MiscFunctions.SaveFile<CM9798.CM9798Manager>(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\MGDATA.DB1", newmgdata, CM9798.ManagerDataStartPos);
-
-            CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\TMDATA.DB1", CM9798.TeamDataStartPos - 8, newtmdata.Count, true);
-            //CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\TMDATA.DB1", TeamDataStartPos-2, tmdata.Count);
-            CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\PLAYERS.DB1", 660, newpldata.Count, false);
-            CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\MGDATA.DB1", CM9798.ManagerDataStartPos - 8, newmgdata.Count, true);
-            CM2.WriteCM2HistoryFile(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\PLHIST98.BIN", plhist, true);
-
-            Console.WriteLine();*/
-            /*
-            using (StreamReader sr = new StreamReader(@"C:\ChampMan\Notes\2020\2021\Derby County Minus 12 Points.patch"))
-            {
-                int firstAddr = -1;
-                int lastAddr = -1;
-                while (true)
-                {
-                    var line = sr.ReadLine();
-                    if (line == null)
-                        break;
-                    var splits = line.Split(' ');
-                    if (splits.Length >= 3)
-                    {
-                        var addrStr = splits[0].Substring(0, splits[0].Length - 1);
-                        var addr = Convert.ToInt32(addrStr, 16);
-                        if (addr != lastAddr + 1)
-                            firstAddr = addr;
-                        lastAddr = addr;
-                        var newAddr = (addr - firstAddr) + 0x006DC000 + (0xDE7383 - 0xDE7000);
-                        Console.WriteLine("{0}: {1} {2}", newAddr.ToString("X8"), splits[1], splits[2]);
-                    }
-                }
-            }*/
-
-            //CM9798.Test();
-            /*
-            CM2 cm2 = new CM2();
-            cm2.ReadData();
-            */
-            //CM9798.SavedPlayerCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLDATA1.S16");
-            /*
-            using (var sr = new StreamReader(@"C:\ChampMan\Championship Manager 0102\TestQuick\3.9.68-Normal\Championship Manager 01-02\Data\euro.cfg"))
-            {
-                while (true)
-                {
-                    var line = sr.ReadLine();
-                    if (line == null)
-                        break;
-                    if (line.StartsWith("*"))
-                        Console.WriteLine(line.Substring(1));
-                }
-            }*/
-            /*
-            HistoryLoader hl = new HistoryLoader();
-            HistoryLoader hl_orig = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\2004\Data\index.dat");
-            hl_orig.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\3.9.68-Normal\Championship Manager 01-02\Data\index.dat", true);
-
-            foreach (var cont in hl.continent)
-            {
-                Console.WriteLine(cont.ContinentName.ReadString());
-            }
-
-            var SouthAmericaID = hl_orig.continent.First(x => x.ContinentName.ReadString() == "North America");
-            var so_am = hl_orig.nation.Where(x => x.Continent == SouthAmericaID.ContinentID).ToList();
-            foreach (var country in so_am)
-                Console.WriteLine(country.Name.ReadString() + "\t" + country.Region);
-            Console.WriteLine();*/
-            /*
-            foreach (var staff in hl.staff.Where(x => x.JobForClub == 1 && x.NonPlayer != -1))
-            {
-                var name = hl.first_names[staff.FirstName].Name.ReadString() + " " + hl.second_names[staff.SecondName].Name.ReadString();
-                var job = staff.ClubJob;
-                var nonPlayerInfo = hl.nonPlayers.First(x => x.ID == staff.NonPlayer);
-                if (name == "Joel Glazer")
-                {
-                    Console.WriteLine();
-                }
-            }
-            */
-
-            /*
-            var latvia = hl.nation.First(x => x.Name.ReadString() == "Bolivia");
-            foreach (var club in hl.club)
-            {
-                if (club.Nation == latvia.ID)
-                {
-                    Console.WriteLine("{0} - {1}", club.Name.ReadString(), club.ShortName.ReadString());
-                }
-            }*/
-
-            /*
-            var serie = hl.club_comp.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == "French Ligue 2");
-            int zerorep = 0;
-            //foreach (var club in hl.club)
-            List<int> removeClubs = new List<int>();
-            for (int i = 0; i < hl.club.Count; i++)
-            {
-                if (hl.club[i].Division == -1 && hl.club[i].Reputation > 0 && hl.club[i].Reputation <= 500 && hl.club[i].HasLinkedClub == 0)
-                    removeClubs.Add(i);
+                Console.WriteLine();
+                */
                 /*
-                if (hl.club[i].Reputation <= 1000)
+                Logger.Log(@"C:\ChampMan\Championship Manager 0102\TestQuick\Leeds2022\cm0102_logger.exe", "Test Start String");
+                Logger.Log(@"C:\ChampMan\Championship Manager 0102\TestQuick\Leeds2022\cm0102_logger.exe", "String 2");
+                var strs = Logger.ReadStrings(@"C:\ChampMan\Championship Manager 0102\TestQuick\Leeds2022\cm0102_logger.exe");
+                */
+                //patch();
+                /*
+                // For match man 1225 errors! :)
+                HistoryLoader hl = new HistoryLoader();
+                hl.Load(@"C:\ChampMan\Championship Manager 0102\Cam91_Issue\Attempt1\Data\index.dat");
+                foreach (var club in hl.club)
                 {
-                    var temp = hl.club[i];
-                    temp.Reputation = 1;
-                    hl.club[i] = temp;
+                    var dupes = club.Squad.Where(x => x != -1).GroupBy(x => x).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+                    if (dupes.Count > 0)
+                    {
+                        foreach (var dupe in dupes)
+                        {
+                            string name = "Unknown";
+                            hl.StaffToName(hl.staff[dupe], out name);
+                            Console.WriteLine("Dupe Quad Found for Club {0} ({1}) - Player: {2}", club.Name.ReadString(), club.ShortName.ReadString(), name);
+                        }
+                    }
+                }
+                */
+                /*
+                HistoryLoader hl = new HistoryLoader();
+                hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2022_Test2\Data\index.dat");
+                var Italy = hl.nation.Find(x => x.Name.ReadString() == "Italy");
+                var allItalianClubs = hl.club.FindAll(x => x.Nation == Italy.ID);
+                allItalianClubs.ForEach(x => {
+                    if (x.Name.ReadString().ToLower().Contains("brus") || x.ShortName.ReadString().ToLower().Contains("brus"))
+                        Console.WriteLine("{0} {1}", x.Name.ReadString(), x.ShortName.ReadString());
+                });
+                */
+
+                /*
+                HistoryLoader hl = new HistoryLoader();
+                hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2022_Test2\Data\index.dat");
+                var Liechtenstein = hl.nation.Find(x => x.Name.ReadString() == "Liechtenstein");
+                var SanMarino = hl.nation.Find(x => x.Name.ReadString() == "San Marino");
+                int oldLichID = Liechtenstein.ID;
+                int oldSanMarinoID = SanMarino.ID;
+                Liechtenstein.ID = SanMarino.ID;
+                SanMarino.ID = oldLichID;
+                int lichIndex = hl.nation.IndexOf(Liechtenstein);
+                int sanIndex = hl.nation.IndexOf(SanMarino);
+                hl.nation[lichIndex] = SanMarino;
+                hl.nation[sanIndex] = Liechtenstein;
+                hl.nation_comp.ForEach(x => { if (x.ClubCompNation == oldLichID) x.ClubCompNation = oldSanMarinoID; else if (x.ClubCompNation == oldSanMarinoID) x.ClubCompNation = oldLichID; });
+                hl.nat_club.ForEach(x => { if (x.Nation == oldLichID) x.Nation = oldSanMarinoID; else if (x.Nation == oldSanMarinoID) x.Nation = oldLichID; });
+                hl.Save(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2022_Test2\Data\index.dat", false, false, true);
+                */
+                /*
+                var now = new DateTime(2022, 1, 1);
+                for (int i = 0; i < 365; i++)
+                {
+                    var tcm = TCMDate.FromDateTime(now);
+                    Console.WriteLine("{0} {1} = {2:X}", now.ToString("MMMM", CultureInfo.InvariantCulture), now.Day, tcm.Day);
+                    now = now.AddDays(1);
+                }
+                */
+                /*
+                HistoryLoader hl = new HistoryLoader();
+                hl.Load(@"C:\ChampMan\Championship Manager 0102\CM93 Swiss\Data\index.dat");
+                int albcount = 0;
+                foreach (var staff in hl.staff)
+                {
+                    if (staff.SecondNation == 1)
+                        staff.SecondNation = -1;
+                    if (staff.SecondNation < -1)
+                        staff.SecondNation = -1;
+                }
+                hl.Save(@"C:\ChampMan\Championship Manager 0102\CM93 Swiss\Data\index.dat", false, true, false);
+                */
+                //football_api api = new football_api("");
+                //api.GetLeagues(2022, false);
+                //api.GetCM0102Leagues(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2022_Test1\Data\index.dat", 2022, false, true);
+                /*
+                            CM9798.ShiftPlayerAges(@"C:\ChampMan\cm9798\Fresh\Data\CM9798", -5);
+
+                            //CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798");
+                            //CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG");
+
+                            CM9798.LimitEXNMESTXT(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\EXNMES.TXT");
+
+                            CM9798.Test();
+                */
+                /*
+                CM9798.WriteTeamDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\TMDATA.CSV", CM9798.tmdata);
+                CM9798.WritePlayerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\PLAYERS.CSV", CM9798.pldata);
+                CM9798.WriteManagerDataToCSV(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\ORIG\MGDATA.CSV", CM9798.mgdata);
+
+                Console.WriteLine("{0:X} {1:X}", CM2.ConvertLongToCM2Format(CM9798.pldata.Count), CM2.ConvertShortToCM2Format((short)CM9798.pldata.Count));
+                Console.WriteLine("{0:X} {1:X} ({2})", CM2.ConvertLongToCM2Format(CM9798.mgdata.Count), CM2.ConvertShortToCM2Format((short)CM9798.mgdata.Count), CM9798.mgdata.Count);
+
+                var xx = CM9798.pldata.Max(x => x.UniqueID);
+                var xx2 = CM2.ConvertShortToCM2Format((short)xx);
+                */
+                /*
+
+                CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\Fresh\Data\CM9798");
+
+                xx = CM9798.mgdata.Max(x => x.UniqueID);
+                xx2 = CM2.ConvertShortToCM2Format((short)xx);
+
+
+                var surnames = CM9798.mgdata.Select(x => x._SecondName).Distinct().ToList();
+                foreach (var name in surnames)
+                {
+                    var strName = name.ReadString();
+                    bool foundZero = false;
+                    int namelen = 0;
+                    foreach (var x in name)
+                    {
+                        if (name[0] == ' ')
+                            Console.WriteLine("Weird3");
+                        if (name[29] != 0)
+                            Console.WriteLine("Weird4");
+
+                        if (x == 0)
+                            foundZero = true;
+                        else
+                        {
+                            namelen++;
+                            if (foundZero)
+                                Console.WriteLine("Weird");
+                        }
+                    }
+                    if (namelen <= 1)
+                        Console.WriteLine("Weird2");
+                }
+
+                //var xx = CM9798.pldata.Where(x => x.SecondName.ToList());
+                Console.WriteLine();
+                */
+
+                //LinearExecutableFixUps.CheckFixups(@"C:\Development\DOSTEST\DOSTEST.EXE");
+                /*
+                Patcher p = new Patcher();
+                p.CreateReversePatches(@"C:\ChampMan\Championship Manager 0102\cm0102 - Fresh - 3_9_68.exe");
+                */
+                /*
+                HistoryLoader hl = new HistoryLoader();
+                hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\April2022\Data\index.dat");
+                var Italy = hl.nation.FirstOrDefault(x => x.Name.ReadString() == "Italy");
+                var ItalianClubs = hl.club.Where(x => x.Nation == Italy.ID).ToList();
+                foreach (var club in ItalianClubs)
+                {
+                    Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}", 
+                        club.Name.ReadString(), 
+                        club.ShortName.ReadString(), 
+                        club.Division >= 0 ? hl.club_comp.First(x => x.ID == club.Division).Name.ReadString() : club.Division.ToString(), 
+                        club.LastDivision >= 0 ? hl.club_comp.First(x => x.ID == club.LastDivision).Name.ReadString() : club.LastDivision.ToString(), 
+                        club.LastPosition);
+                }
+                */
+                /*
+                TCMDate date = new TCMDate();
+                date.Day = 0x62;
+                date.Year = 2005;
+                var dtt = TCMDate.ToDateTime(date);*/
+                /*
+                HistoryLoader hl = new HistoryLoader();
+                hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Millwall\Data\index.dat");
+                foreach (var staff in hl.staff)
+                {
+                    if (hl.first_names[staff.FirstName].Name.ReadString() == "Cherno")
+                        Console.WriteLine();
+                    if (staff.Player >= 0)
+                    {
+                        var player = hl.players[staff.Player];
+                        if (player.PotentialAbility == -2)
+                        {
+                            Console.WriteLine("{0} {1} {2}", hl.first_names[staff.FirstName].Name.ReadString(), hl.second_names[staff.SecondName].Name.ReadString(), player.PotentialAbility);
+                        }
+                    }
                 }*/
 
-            //if (club.Reputation > 1000 && club.Division == -1)
-            //  Console.WriteLine("Hello");
-            /*6
-            if (club.Division == serie.ID)
-            {
-                Console.WriteLine("{0} ----- {1}  ({2})", MiscFunctions.GetTextFromBytes(club.Name), MiscFunctions.GetTextFromBytes(club.ShortName), club.Reputation);
-            }*/
-            /*}
-            removeClubs.Sort();
-            removeClubs.Reverse();
-            foreach (var remove in removeClubs)
-                hl.club.RemoveAt(remove);
-            */
-            //  hl.Save(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2021\Data\index.dat", true);
+                /*
+                CM9798.LoadCM9798DataFromDirectory(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798");
+                var tmdata = CM9798.tmdata;
+                var pldata = CM9798.pldata;
+                var mgdata = CM9798.mgdata;
+                CM9798.WritePlayerDataToCSV(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\pldata.csv", pldata);
+                CM9798.WriteTeamDataToCSV(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\TMDATA.CSV", tmdata);
+                CM9798.WriteManagerDataToCSV(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\MGDATA.CSV", mgdata);
 
+                int cut_count = 0;
+                List<CM9798.CM9798Player> newpldata = pldata;
+                List<CM9798.CM9798Team> newtmdata = tmdata;
+                //List<CM9798.CM9798Manager> newmgdata = mgdata;
 
-            /*
-            // FOR CAMF
-            int forYear = 1998;
-            string folderYear = (forYear - 1900).ToString();
-
-            HistoryLoader hl = new HistoryLoader();
-            hl.Load(string.Format(@"C:\ChampMan\Championship Manager 0102\TestQuick\CamDateFix\CM\{0}\Data\index.dat", folderYear));
-            var players = hl.staff.FindAll(x => x.ClubJob != -1 && x.Player != -1 && x.JobForClub == 11);
-
-            DateTime now = new DateTime(forYear, 7, 15);
-
-            Random rand = new Random();
-            using (var sw = new StreamWriter(string.Format(@"C:\ChampMan\Championship Manager 0102\TestQuick\CamDateFix\CM\{0}\player.csv", folderYear)))
-            {
-                foreach (var player in players)
+                List<CM9798.CM9798Manager> newmgdata = new List<CM9798.CM9798Manager>();
+                foreach (var mgr in mgdata)
                 {
-                    var player_hist = hl.staff_history.Where(x => x.StaffID == player.ID).OrderByDescending(x => x.Year).ToList();
-                    var player_stats = hl.players[player.Player];
-                    int years_at_club = 0;
-                    foreach (var hist in player_hist)
+                    if (cut_count <= 200)
                     {
-                        if (hist.ClubID != player.ClubJob)
-                            break;
-                        years_at_club++;
+                        cut_count++;
+                        continue;
                     }
-                    var last_year = player_hist.Count == 0 ? 0 : player_hist[0].Year;
-                    var dob = TCMDate.ToDateTime(player.DateOfBirth);
-                    var playerJoined = TCMDate.ToDateTime(player.DateJoinedClub);
-                    var playerExpires = TCMDate.ToDateTime(player.DateExpiresClub);
-                    int age = dob.Year > 1900 ? (int)((now - dob).TotalDays/365) : 0;
-
-                    DateTime newPlayerJoined = new DateTime(1900, 1, 1);
-                    DateTime newPlayerExpires = new DateTime(1900, 1, 1);
-                    if (age > 0 && age <= 19)
+                    newmgdata.Add(mgr);
+                }*/
+                /*
+                List<CM9798.CM9798Player> newpldata = new List<CM9798.CM9798Player>();
+                foreach (var player in pldata)
+                {
+                    if (CM2.ConvertShortToNormalFormat(player.Ability) == 0 && cut_count <= 1500)
                     {
-                        switch (age)
+                        cut_count++;
+                        continue;
+                    }
+                    newpldata.Add(player);
+                }*/
+                /*
+                List<CM9798.CM9798Team> newtmdata = new List<CM9798.CM9798Team>();
+                int cut_count = 0;
+                var aldershot = tmdata.Find(x => x.LongName == "Aldershot");
+                foreach (var team in tmdata)
+                {
+                    if (CM2.ConvertShortToNormalFormat(team.Reputation) == 0 && (team.Nation == "Portugal" || team.Nation == "Germany") && cut_count <= 200)
+                    {
+                        cut_count++;
+                        continue;
+                    }
+                    newtmdata.Add(team);
+                }
+                var aldershot2 = newtmdata.Find(x => x.LongName == "Aldershot");
+                */
+                /*
+                var plhist = new List<CM2.CM2History>();
+
+                MiscFunctions.SaveFile<CM9798.CM9798Team>(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\TMDATA.DB1", newtmdata, CM9798.TeamDataStartPos);
+                MiscFunctions.SaveFile<CM9798.CM9798Player>(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\PLAYERS.DB1", newpldata, CM9798.PlayerDataStartPos, true);
+                MiscFunctions.SaveFile<CM9798.CM9798Manager>(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\MGDATA.DB1", newmgdata, CM9798.ManagerDataStartPos);
+
+                CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\TMDATA.DB1", CM9798.TeamDataStartPos - 8, newtmdata.Count, true);
+                //CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\TMDATA.DB1", TeamDataStartPos-2, tmdata.Count);
+                CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\PLAYERS.DB1", 660, newpldata.Count, false);
+                CM2.ApplyCorrectCount(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\MGDATA.DB1", CM9798.ManagerDataStartPos - 8, newmgdata.Count, true);
+                CM2.WriteCM2HistoryFile(@"C:\ChampMan\cm9798\V2beta1\CM9798\Data\cm9798\PLHIST98.BIN", plhist, true);
+
+                Console.WriteLine();*/
+                /*
+                using (StreamReader sr = new StreamReader(@"C:\ChampMan\Notes\2020\2021\Derby County Minus 12 Points.patch"))
+                {
+                    int firstAddr = -1;
+                    int lastAddr = -1;
+                    while (true)
+                    {
+                        var line = sr.ReadLine();
+                        if (line == null)
+                            break;
+                        var splits = line.Split(' ');
+                        if (splits.Length >= 3)
                         {
-                            default:
-                                newPlayerExpires = new DateTime(forYear + rand.Next(4, 6), 6, 1);  // under 17 gets 4 to 5 year deal
-                                break;
-                            case 18:
-                                newPlayerExpires = new DateTime(forYear + rand.Next(3, 5), 6, 1);  // 18 gets 3 to 4 year deal
-                                break;
-                            case 19:
-                                newPlayerExpires = new DateTime(forYear + rand.Next(player_stats.CurrentAbility >= 120 ? 2 : 1, 3), 6, 1);  // 19 gets 1 to 2 year deal
-                                break;
+                            var addrStr = splits[0].Substring(0, splits[0].Length - 1);
+                            var addr = Convert.ToInt32(addrStr, 16);
+                            if (addr != lastAddr + 1)
+                                firstAddr = addr;
+                            lastAddr = addr;
+                            var newAddr = (addr - firstAddr) + 0x006DC000 + (0xDE7383 - 0xDE7000);
+                            Console.WriteLine("{0}: {1} {2}", newAddr.ToString("X8"), splits[1], splits[2]);
                         }
                     }
-                    else
+                }*/
+
+                //CM9798.Test();
+                /*
+                CM2 cm2 = new CM2();
+                cm2.ReadData();
+                */
+                //CM9798.SavedPlayerCount(@"C:\ChampMan\cm9798\Fresh\Data\CM9798\PLDATA1.S16");
+                /*
+                using (var sr = new StreamReader(@"C:\ChampMan\Championship Manager 0102\TestQuick\3.9.68-Normal\Championship Manager 01-02\Data\euro.cfg"))
+                {
+                    while (true)
                     {
-                        if (player_hist.Count > 0)
+                        var line = sr.ReadLine();
+                        if (line == null)
+                            break;
+                        if (line.StartsWith("*"))
+                            Console.WriteLine(line.Substring(1));
+                    }
+                }*/
+                /*
+                HistoryLoader hl = new HistoryLoader();
+                HistoryLoader hl_orig = new HistoryLoader();
+                hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\2004\Data\index.dat");
+                hl_orig.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\3.9.68-Normal\Championship Manager 01-02\Data\index.dat", true);
+
+                foreach (var cont in hl.continent)
+                {
+                    Console.WriteLine(cont.ContinentName.ReadString());
+                }
+
+                var SouthAmericaID = hl_orig.continent.First(x => x.ContinentName.ReadString() == "North America");
+                var so_am = hl_orig.nation.Where(x => x.Continent == SouthAmericaID.ContinentID).ToList();
+                foreach (var country in so_am)
+                    Console.WriteLine(country.Name.ReadString() + "\t" + country.Region);
+                Console.WriteLine();*/
+                /*
+                foreach (var staff in hl.staff.Where(x => x.JobForClub == 1 && x.NonPlayer != -1))
+                {
+                    var name = hl.first_names[staff.FirstName].Name.ReadString() + " " + hl.second_names[staff.SecondName].Name.ReadString();
+                    var job = staff.ClubJob;
+                    var nonPlayerInfo = hl.nonPlayers.First(x => x.ID == staff.NonPlayer);
+                    if (name == "Joel Glazer")
+                    {
+                        Console.WriteLine();
+                    }
+                }
+                */
+
+                /*
+                var latvia = hl.nation.First(x => x.Name.ReadString() == "Bolivia");
+                foreach (var club in hl.club)
+                {
+                    if (club.Nation == latvia.ID)
+                    {
+                        Console.WriteLine("{0} - {1}", club.Name.ReadString(), club.ShortName.ReadString());
+                    }
+                }*/
+
+                /*
+                var serie = hl.club_comp.FirstOrDefault(x => MiscFunctions.GetTextFromBytes(x.Name) == "French Ligue 2");
+                int zerorep = 0;
+                //foreach (var club in hl.club)
+                List<int> removeClubs = new List<int>();
+                for (int i = 0; i < hl.club.Count; i++)
+                {
+                    if (hl.club[i].Division == -1 && hl.club[i].Reputation > 0 && hl.club[i].Reputation <= 500 && hl.club[i].HasLinkedClub == 0)
+                        removeClubs.Add(i);
+                    /*
+                    if (hl.club[i].Reputation <= 1000)
+                    {
+                        var temp = hl.club[i];
+                        temp.Reputation = 1;
+                        hl.club[i] = temp;
+                    }*/
+
+                //if (club.Reputation > 1000 && club.Division == -1)
+                //  Console.WriteLine("Hello");
+                /*6
+                if (club.Division == serie.ID)
+                {
+                    Console.WriteLine("{0} ----- {1}  ({2})", MiscFunctions.GetTextFromBytes(club.Name), MiscFunctions.GetTextFromBytes(club.ShortName), club.Reputation);
+                }*/
+                /*}
+                removeClubs.Sort();
+                removeClubs.Reverse();
+                foreach (var remove in removeClubs)
+                    hl.club.RemoveAt(remove);
+                */
+                //  hl.Save(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2021\Data\index.dat", true);
+
+
+                /*
+                // FOR CAMF
+                int forYear = 1998;
+                string folderYear = (forYear - 1900).ToString();
+
+                HistoryLoader hl = new HistoryLoader();
+                hl.Load(string.Format(@"C:\ChampMan\Championship Manager 0102\TestQuick\CamDateFix\CM\{0}\Data\index.dat", folderYear));
+                var players = hl.staff.FindAll(x => x.ClubJob != -1 && x.Player != -1 && x.JobForClub == 11);
+
+                DateTime now = new DateTime(forYear, 7, 15);
+
+                Random rand = new Random();
+                using (var sw = new StreamWriter(string.Format(@"C:\ChampMan\Championship Manager 0102\TestQuick\CamDateFix\CM\{0}\player.csv", folderYear)))
+                {
+                    foreach (var player in players)
+                    {
+                        var player_hist = hl.staff_history.Where(x => x.StaffID == player.ID).OrderByDescending(x => x.Year).ToList();
+                        var player_stats = hl.players[player.Player];
+                        int years_at_club = 0;
+                        foreach (var hist in player_hist)
                         {
-                            newPlayerJoined = new DateTime(forYear - years_at_club, 6, 1);
-                            if (age >= 32)
+                            if (hist.ClubID != player.ClubJob)
+                                break;
+                            years_at_club++;
+                        }
+                        var last_year = player_hist.Count == 0 ? 0 : player_hist[0].Year;
+                        var dob = TCMDate.ToDateTime(player.DateOfBirth);
+                        var playerJoined = TCMDate.ToDateTime(player.DateJoinedClub);
+                        var playerExpires = TCMDate.ToDateTime(player.DateExpiresClub);
+                        int age = dob.Year > 1900 ? (int)((now - dob).TotalDays/365) : 0;
+
+                        DateTime newPlayerJoined = new DateTime(1900, 1, 1);
+                        DateTime newPlayerExpires = new DateTime(1900, 1, 1);
+                        if (age > 0 && age <= 19)
+                        {
+                            switch (age)
                             {
-                                newPlayerExpires = new DateTime(forYear + rand.Next(age == 32 ? 2 : 1, 3), 6, 1);  // between 1 or 2 years if 32 or over
+                                default:
+                                    newPlayerExpires = new DateTime(forYear + rand.Next(4, 6), 6, 1);  // under 17 gets 4 to 5 year deal
+                                    break;
+                                case 18:
+                                    newPlayerExpires = new DateTime(forYear + rand.Next(3, 5), 6, 1);  // 18 gets 3 to 4 year deal
+                                    break;
+                                case 19:
+                                    newPlayerExpires = new DateTime(forYear + rand.Next(player_stats.CurrentAbility >= 120 ? 2 : 1, 3), 6, 1);  // 19 gets 1 to 2 year deal
+                                    break;
                             }
-                            else
+                        }
+                        else
+                        {
+                            if (player_hist.Count > 0)
                             {
+                                newPlayerJoined = new DateTime(forYear - years_at_club, 6, 1);
+                                if (age >= 32)
                                 {
-                                    if (years_at_club >= 4)
-                                        newPlayerExpires = new DateTime(forYear + rand.Next(player_stats.CurrentAbility >= 120 ? 2 : 1, 4), 6, 1);  // between 1 to 3 years been at club for 4 years or more
-                                    else
-                                        newPlayerExpires = new DateTime(forYear + (4 - years_at_club) + rand.Next(player_stats.CurrentAbility >= 120 ? 1 : 0, 2), 6, 1);
+                                    newPlayerExpires = new DateTime(forYear + rand.Next(age == 32 ? 2 : 1, 3), 6, 1);  // between 1 or 2 years if 32 or over
+                                }
+                                else
+                                {
+                                    {
+                                        if (years_at_club >= 4)
+                                            newPlayerExpires = new DateTime(forYear + rand.Next(player_stats.CurrentAbility >= 120 ? 2 : 1, 4), 6, 1);  // between 1 to 3 years been at club for 4 years or more
+                                        else
+                                            newPlayerExpires = new DateTime(forYear + (4 - years_at_club) + rand.Next(player_stats.CurrentAbility >= 120 ? 1 : 0, 2), 6, 1);
+                                    }
                                 }
                             }
                         }
+
+                        MiscFunctions.WriteCSVLine(sw,
+                                                   player.ID,
+                                                   hl.first_names[player.FirstName].Name.ReadString(),
+                                                   hl.second_names[player.SecondName].Name.ReadString(),
+                                                   age,
+                                                   hl.club[player.ClubJob].ShortName.ReadString(),
+                                                   playerJoined.Year <= 1900 ? "" : playerJoined.ToShortDateString(),
+                                                   playerExpires.Year <= 1900 ? "" : playerExpires.ToShortDateString(),
+                                                   player_hist.Count > 0 ? years_at_club.ToString() : "",
+                                                   newPlayerJoined.Year <= 1900 ? "" : newPlayerJoined.ToShortDateString(),
+                                                   newPlayerExpires.Year <= 1900 ? "" : newPlayerExpires.ToShortDateString(),
+                                                   newPlayerExpires.Year <= 1900 ? "" : (newPlayerExpires.Year - forYear).ToString()
+                                                   );
+
+                        if (newPlayerJoined.Year >= 1900)
+                            player.DateJoinedClub = TCMDate.FromDateTime(newPlayerJoined);
+                        if (newPlayerExpires.Year >= 1900)
+                            player.DateExpiresClub = TCMDate.FromDateTime(newPlayerExpires);
                     }
-
-                    MiscFunctions.WriteCSVLine(sw,
-                                               player.ID,
-                                               hl.first_names[player.FirstName].Name.ReadString(),
-                                               hl.second_names[player.SecondName].Name.ReadString(),
-                                               age,
-                                               hl.club[player.ClubJob].ShortName.ReadString(),
-                                               playerJoined.Year <= 1900 ? "" : playerJoined.ToShortDateString(),
-                                               playerExpires.Year <= 1900 ? "" : playerExpires.ToShortDateString(),
-                                               player_hist.Count > 0 ? years_at_club.ToString() : "",
-                                               newPlayerJoined.Year <= 1900 ? "" : newPlayerJoined.ToShortDateString(),
-                                               newPlayerExpires.Year <= 1900 ? "" : newPlayerExpires.ToShortDateString(),
-                                               newPlayerExpires.Year <= 1900 ? "" : (newPlayerExpires.Year - forYear).ToString()
-                                               );
-
-                    if (newPlayerJoined.Year >= 1900)
-                        player.DateJoinedClub = TCMDate.FromDateTime(newPlayerJoined);
-                    if (newPlayerExpires.Year >= 1900)
-                        player.DateExpiresClub = TCMDate.FromDateTime(newPlayerExpires);
                 }
-            }
-            hl.Save(string.Format(@"C:\ChampMan\Championship Manager 0102\TestQuick\CamDateFix\CM\{0}\Data\index.dat", folderYear), false, true, false);
-            */
+                hl.Save(string.Format(@"C:\ChampMan\Championship Manager 0102\TestQuick\CamDateFix\CM\{0}\Data\index.dat", folderYear), false, true, false);
+                */
 
-            try
-            {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-            }
-            catch { }
+                try
+                {
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                }
+                catch { }
             Application.Run(new PatcherForm());
         }
 
