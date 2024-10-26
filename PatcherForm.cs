@@ -1141,6 +1141,7 @@ namespace CM0102Patcher
                 }
                 if (e.KeyChar == (char)6 && SecretMode) // F
                 {
+                    /*
                     var yearChanger = new YearChanger();
                     var patcher = new Patcher();
                     using (var pp = new ProcessPatch())
@@ -1164,7 +1165,7 @@ namespace CM0102Patcher
                             pp.Write();
                             pp.Start();
                         }
-                    }
+                    }*/
                 }
                 if (e.KeyChar == (char)7 && SecretMode) // G
                 {

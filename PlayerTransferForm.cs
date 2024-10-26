@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -609,11 +610,14 @@ namespace CM0102Patcher
         {
             base.WndProc(ref m);
             if (m.Msg == WM_MOUSEWHEEL)
-                Win32.SendMessage(_ExternalScrollBar.Handle, m.Msg, m.WParam, m.LParam);
+                SendMessage(_ExternalScrollBar.Handle, m.Msg, m.WParam, m.LParam);
             if (m.Msg == WM_KEYDOWN || m.Msg == WM_KEYUP)
             {
                 _ExternalScrollBar.Value = TopIndex;
             }
         }
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessage(IntPtr hWnd, Int32 Msg, IntPtr wParam, IntPtr lParam);
     }
 }

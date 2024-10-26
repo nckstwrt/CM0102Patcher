@@ -1,4 +1,6 @@
-﻿using System;
+﻿/*  // Removing all this code as I think it's what sets off sh!t virus detectors
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -229,3 +231,4 @@ namespace CM0102Patcher
 		public static extern IntPtr SendMessage(IntPtr hWnd, Int32 Msg, IntPtr wParam, IntPtr lParam);
 	}
 }
+*/
