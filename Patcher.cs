@@ -435,6 +435,7 @@ namespace CM0102Patcher
         // DE8260 - DE8267 = Remove Saudi Arabia from the Asia World Cup Qualifiers in 2023 ???
         // DE8290 - DE82A6 = Code for CM84 to make it so relegation doesn't mean Euro football
         // DE82AA - DE82C6 = Uncap20s Staff/Physio Patch
+        // DE82D0 - DE82E4 = Improved Manage Any Team Patch
 
         public void ExpandExe(string fileName)
         {

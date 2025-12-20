@@ -53,7 +53,7 @@ namespace CM0102Patcher
             return ret;
         }
 
-        public void Load(string indexFile, bool quickLoad = true)
+        public void Load(string indexFile, bool quickLoad = true, bool useBasicName = false)
         {
             var dir = Path.GetDirectoryName(indexFile);
             
@@ -123,12 +123,13 @@ namespace CM0102Patcher
                     string name, basicName;
                     if (StaffToName(staffMember, out name, out basicName))
                     {
-                        staffNames[staffMember.ID] = name;
-                        staffNamesNoDiacritics[staffMember.ID] = MiscFunctions.RemoveDiacritics(name);
+                        string useName = useBasicName ? basicName : name;
+                        staffNames[staffMember.ID] = useName;
+                        staffNamesNoDiacritics[staffMember.ID] = MiscFunctions.RemoveDiacritics(useName);
 
-                        if (!staffNamesReverse.ContainsKey(name))
-                            staffNamesReverse[name] = new List<int>();
-                        staffNamesReverse[name].Add(staffMember.ID);
+                        if (!staffNamesReverse.ContainsKey(useName))
+                            staffNamesReverse[useName] = new List<int>();
+                        staffNamesReverse[useName].Add(staffMember.ID);
                     }
                 }
             }

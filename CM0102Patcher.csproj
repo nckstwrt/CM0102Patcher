@@ -65,6 +65,7 @@
     <Compile Include="FixtureScheduler.Designer.cs">
       <DependentUpon>FixtureScheduler.cs</DependentUpon>
     </Compile>
+    <Compile Include="football-api-v3.cs" />
     <Compile Include="football-api.cs" />
     <Compile Include="GoHomeForm.cs">
       <SubType>Form</SubType>
@@ -192,6 +193,7 @@
     </Compile>
     <Compile Include="Scouter\ScoutList.cs" />
     <Compile Include="Stadium.cs" />
+    <Compile Include="TMAPI.cs" />
     <Compile Include="Tools.cs">
       <SubType>Form</SubType>
     </Compile>
