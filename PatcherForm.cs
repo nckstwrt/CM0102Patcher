@@ -409,7 +409,7 @@ namespace CM0102Patcher
                         var staffFile = Path.Combine(dataDir, "staff.dat");
                         string staffFileHash = "";
                         using (var md5 = MD5.Create())
-                        using (var staffFileStream = File.Open(labelFilename.Text, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                        using (var staffFileStream = File.Open(staffFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
                             staffFileHash = BitConverter.ToString(md5.ComputeHash(staffFileStream)).Replace("-", "");
                         if (!string.IsNullOrEmpty(staffFileHash))
                             Logger.Log(labelFilename.Text, "MD5 Hash of staff.dat: {0}", staffFileHash);
