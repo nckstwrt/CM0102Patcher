@@ -47,6 +47,9 @@ namespace CM0102Patcher
 
         public static DateTime ToDateTime(TCMDate date)
         {
+            if (date.Year == 0 && date.Day == 0)        // Do this to save having endless exceptions
+                return new DateTime(1900, 1, 1);
+
             try
             {
                 return new DateTime(date.Year, 1, 1).AddDays(date.Day);
@@ -676,9 +679,12 @@ namespace CM0102Patcher
         public double UEFACoefficient96;
         /*110*/
         public int Rivals1;
+        /*114*/
         public int Rivals2;
+        /*118*/
         public int Rivals3;
 
+        /*11C*/
         public sbyte NationLeagueSelected;
         public int NationShortlistOffset; // Version 0x02 - Added
         public sbyte NationGamesPlayed; // Version 0x02 - Moved to runtime

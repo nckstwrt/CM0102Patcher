@@ -756,7 +756,7 @@ namespace CM0102Patcher
                     var nation = hl.nation.FirstOrDefault(x => x.Name.ReadString() == changeNationContinent.part1);
                     var continent = hl.continent.FirstOrDefault(x => x.ContinentName.ReadString() == changeNationContinent.part2);
                     nation.Continent = (continent == null) ? -1 : continent.ContinentID;
-                    Logger.Log(fileName, "CHANGENATIONCONTINENT " + nation + " " + continent);
+                    Logger.Log(fileName, "CHANGENATIONCONTINENT " + changeNationContinent.part1 + " " + changeNationContinent.part2);
                 }
 
                 // UPDATEDATA - naydav's suggestion: https://champman0102.net/viewtopic.php?p=117533#p117533

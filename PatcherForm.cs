@@ -553,7 +553,7 @@ namespace CM0102Patcher
                     }
                     else
                     {
-                        Logger.Log(labelFilename.Text, "UnApplying disableunprotectedcontracts");
+                        Logger.Log(labelFilename.Text, "UnApplying hideprivatebids");
                         patcher.ApplyPatch(labelFilename.Text, patcher.ReversePatches["hideprivatebids"]);
                     }
 

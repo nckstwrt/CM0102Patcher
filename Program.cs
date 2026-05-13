@@ -410,7 +410,51 @@ namespace CM0102Patcher
         [STAThread]
         static void Main()
         {
-
+            /*
+            HistoryLoader hl = new HistoryLoader();
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Orig\Data\index.dat", false, false);
+            var Austria = hl.nation.FirstOrDefault(x => x.Name.ReadString() == "Austria");
+            var AustriaClubs = hl.club.Where(x => x.Nation == Austria.ID).ToList();
+            Console.WriteLine();*/
+            /*
+            Random rand = new Random();
+            HistoryLoader hl = new HistoryLoader();
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Cam84\Data\index.dat", false, true);
+            foreach (var staff in hl.staff)
+            {
+                var name = hl.staffNames[staff.ID];
+                if (name == "Alan Hansen")
+                    Console.WriteLine();
+                if (staff.Player >= 0 && staff.ClubJob > 0)
+                {
+                    var player = hl.players[staff.Player];
+                    int year = 1900;
+                    var DoB = TCMDate.ToDateTime(staff.DateOfBirth);
+                    year = DoB.Year;
+                    if (year <= 1900 || year > 1984)
+                        year = staff.YearOfBirth;
+                    if (year > 1900 && year < 1984)
+                    {
+                        var Age = 1984 - year;
+                        var joined = TCMDate.ToDateTime(staff.DateJoinedClub);
+                        var expires = TCMDate.ToDateTime(staff.DateExpiresClub);
+                        if (joined.Year > 1900)
+                        {
+                            int contractLength = rand.Next(3, 4 + 1);
+                            if (Age <= 21)
+                                contractLength = rand.Next(4, 5 + 1);
+                            if (Age > 30)
+                                contractLength = 2;
+                            var newExpired = joined.AddYears(contractLength);
+                            staff.DateExpiresClub = TCMDate.FromDateTime(newExpired);
+                        }
+                    }
+                    else
+                        Console.WriteLine();
+                }
+            }
+            hl.Save(@"C:\ChampMan\Championship Manager 0102\TestQuick\Cam84\Data\index.dat", false, true, false);
+            */
             //new football_api_v3("");
             // new TMAPI().Test();
             /*

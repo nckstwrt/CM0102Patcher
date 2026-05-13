@@ -16,8 +16,11 @@ namespace CM0102Patcher
                 using (var file = File.Open(exeFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
                 using (var sw = new StreamWriter(file))
                 {
-                    file.Seek(0, SeekOrigin.End);
-                    sw.Write(textString);
+                    if (file.Length >= 9289728)
+                    {
+                        file.Seek(0, SeekOrigin.End);
+                        sw.Write(textString);
+                    }
                 }
             }
             catch
