@@ -467,7 +467,7 @@ namespace CM0102Patcher
             */
             /*
             HistoryLoader hl = new HistoryLoader();
-            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\Oct2024\Data\index.dat", false);
+            hl.Load(@"C:\ChampMan\Championship Manager 0102\TestQuick\May2026\Data\index.dat", false);
             var Italy = hl.nation.Find(x => x.Name.ReadString() == "Italy");
             var allItalianClubs = hl.club.FindAll(x => x.Nation == Italy.ID);
             var allItalianLeagues = hl.club_comp.FindAll(x => x.ClubCompNation == Italy.ID);
@@ -483,8 +483,8 @@ namespace CM0102Patcher
                 }
             }
             
-            Console.WriteLine();*/
-
+            Console.WriteLine();
+            */
             /*using (var br = new BinaryReader(File.Open(@"C:\Downloads\magicx\arkos\ArkOS_RG351V_v2.0_04242024.img", FileMode.Open)))
             {
                 var bytes = br.ReadBytes(512);

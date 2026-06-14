@@ -1348,6 +1348,7 @@ namespace CM0102Patcher
                     case 2023:
                     case 2024:
                     case 2025:
+                    case 2026:
                         checkBoxApplyYearSpecificPatches.Enabled = true;
                         break;
                     default:
