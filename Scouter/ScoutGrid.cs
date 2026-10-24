@@ -19,10 +19,22 @@ namespace CM0102Patcher.Scouter
         CultureInfo ci = CultureInfo.CreateSpecificCulture("en-GB");
         SaveReader saveReader;
         PlayerSearch ps = new PlayerSearch();
+        Button buttonBestPotential;
 
         public ScoutGrid()
         {
             InitializeComponent();
+            Text = "Player search";
+            openToolStripMenuItem.Text = "Open &save...";
+            var openGameData = new ToolStripMenuItem("Open &game data...");
+            openGameData.Click += openGameData_Click;
+            fileToolStripMenuItem.DropDownItems.Add(openGameData);
+
+            buttonBestPotential = new Button();
+            buttonBestPotential.Text = "Best potential";
+            buttonBestPotential.AutoSize = true;
+            buttonBestPotential.Click += buttonBestPotential_Click;
+            Controls.Add(buttonBestPotential);
             EnableDoubleBuffering(true);
             dataGridView.CellFormatting += DataGridView_CellFormatting;
             dataGridView.RowHeadersVisible = false;
@@ -37,7 +49,7 @@ namespace CM0102Patcher.Scouter
             dataGridView.AllowUserToResizeRows = false;
             dataGridView.AutoSize = false;
             dataGridView.ReadOnly = true;
-            dataGridView.VirtualMode = true;
+            dataGridView.VirtualMode = false;
 
             ScoutGrid_Resize(null, null);
         }
@@ -191,46 +203,20 @@ namespace CM0102Patcher.Scouter
 
         private bool LoadSaveFile(string saveFileName)
         {
-            var ret = false;
             try
             {
-                using (saveReader = new SaveReader(saveFileName))
-                {
-                    // if on Mono - don't try this
-                    if (!Program.RunningInMono())
-                        dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
-
-                    dataGridView.AllowUserToResizeColumns = true;
-                    saveReader.LoadPlayers();
-                    dataGridView.SuspendLayout();
-                    dataGridView.DataSource = saveReader.CreateDataTable(checkBoxShowIntrinstics.Checked);
-                    dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                    dataGridView.AllowUserToResizeColumns = true;
-                    dataGridView.Columns["ID"].Visible = false;
-
-                    dataGridView.ResumeLayout();
-
-                    // if on Mono - don't try this
-                    if (!Program.RunningInMono())
-                    {
-                        //dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
-                        //dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                        dataGridView.Columns["Value"].DefaultCellStyle.FormatProvider = ci;
-                        dataGridView.Columns["Value"].DefaultCellStyle.Format = "C0";
-                        dataGridView.Columns[1].Width -= 20;
-                        for (int i = 8; i < dataGridView.Columns.Count; i++)
-                            dataGridView.Columns[i].Width -= 20;
-                    }
-
-                    RefreshGrid();
-                    ret = true;
-                }
+                if (saveReader != null)
+                    saveReader.Dispose();
+                saveReader = new SaveReader(saveFileName);
+                saveReader.LoadPlayers();
+                ShowPlayers(saveReader.CreateDataTable(checkBoxShowIntrinstics.Checked));
+                return true;
             }
             catch (Exception ex)
             {
                 ExceptionMsgBox.Show(ex);
+                return false;
             }
-            return ret;
         }
 
         private void ScoutGrid_Resize(object sender, EventArgs e)
@@ -246,6 +232,8 @@ namespace CM0102Patcher.Scouter
             buttonColumns.Location = new Point(dataGridView.Location.X + 0,
                                                          dataGridView.Location.Y + (dataGridView.Height + 8));
             buttonFilter.Location = new Point(buttonColumns.Location.X + buttonColumns.Width + 5, buttonColumns.Location.Y);
+            if (buttonBestPotential != null)
+                buttonBestPotential.Location = new Point(buttonFilter.Location.X + buttonFilter.Width + 5, buttonFilter.Location.Y);
 
             buttonSaveToScoutFile.Location = new Point(buttonCopyToClipboard.Location.X - (buttonSaveToScoutFile.Width + 5), buttonCopyToClipboard.Location.Y);
         }
@@ -254,6 +242,7 @@ namespace CM0102Patcher.Scouter
         {
             if (saveReader != null)
                 dataGridView.DataSource = saveReader.CreateDataTable(checkBoxShowIntrinstics.Checked);
+            SortByPotential();
             RefreshGrid();
         }
 
@@ -272,6 +261,85 @@ namespace CM0102Patcher.Scouter
             ps.ShowDialog();
             dataGridView.CellFormatting += DataGridView_CellFormatting;
             RefreshGrid();
+        }
+
+        private void buttonBestPotential_Click(object sender, EventArgs e)
+        {
+            if (dataGridView.DataSource == null)
+            {
+                MessageBox.Show("Open a save or the game's Data\\index.dat first.", "Player search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            ps.ApplyBestPotential();
+            RefreshGrid();
+            SortByPotential();
+        }
+
+        private void openGameData_Click(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog();
+            ofd.Filter = "CM0102 data index|index.dat|All files (*.*)|*.*";
+            ofd.Title = "Select Data\\index.dat from the game folder";
+            ofd.FileName = "index.dat";
+            try
+            {
+                if (!string.IsNullOrEmpty(RegString.GetRegString()))
+                {
+                    var path = (string)Registry.GetValue(RegString.GetRegString(), "Location", "");
+                    if (!string.IsNullOrEmpty(path))
+                        ofd.InitialDirectory = Path.Combine(path, "Data");
+                }
+            }
+            catch { }
+            if (ofd.ShowDialog() != DialogResult.OK)
+                return;
+            LoadDatabase(ofd.FileName);
+        }
+
+        private void LoadDatabase(string indexFile)
+        {
+            try
+            {
+                if (saveReader != null)
+                    saveReader.Dispose();
+                saveReader = SaveReader.FromDatabase(indexFile);
+                ShowPlayers(saveReader.CreateDataTable(checkBoxShowIntrinstics.Checked));
+                lastGoodPath = Path.GetDirectoryName(indexFile);
+            }
+            catch (Exception ex)
+            {
+                ExceptionMsgBox.Show(ex);
+            }
+        }
+
+        private void ShowPlayers(DataTable table)
+        {
+            if (!Program.RunningInMono())
+                dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            dataGridView.AllowUserToResizeColumns = true;
+            dataGridView.SuspendLayout();
+            dataGridView.DataSource = table;
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dataGridView.AllowUserToResizeColumns = true;
+            dataGridView.Columns["ID"].Visible = false;
+            dataGridView.ResumeLayout();
+            if (!Program.RunningInMono())
+            {
+                dataGridView.Columns["Value"].DefaultCellStyle.FormatProvider = ci;
+                dataGridView.Columns["Value"].DefaultCellStyle.Format = "C0";
+                dataGridView.Columns[1].Width -= 20;
+                for (int i = 8; i < dataGridView.Columns.Count; i++)
+                    dataGridView.Columns[i].Width -= 20;
+            }
+            SortByPotential();
+            RefreshGrid();
+        }
+
+        private void SortByPotential()
+        {
+            if (dataGridView.DataSource == null)
+                return;
+            ((DataTable)dataGridView.DataSource).DefaultView.Sort = string.IsNullOrEmpty(ps.Sort) ? "PA DESC" : ps.Sort;
         }
 
         private void RefreshGrid()

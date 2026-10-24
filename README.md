@@ -12,6 +12,10 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
+## Player search
+
+Tools → Player search reads a save, or the game's `Data\index.dat`, and lists every player with current ability and potential. The grid opens sorted by potential. **Best potential** keeps players aged 21 or under with potential of at least 150, still sorted by potential. **Room** is potential minus current ability. Filter still works the way CM Scout's search does (name, club, position, attributes, ability). This does not add a new screen inside `cm0102.exe`. The attributes window in the game has no player-search list to extend, so the search runs in this program against the same data files the game loads.
+
 ![alt text](https://i.imgur.com/QtmWs5O.png)
 
 An unfinished scouter, based on CM Scout, but allows you to view and sort by the "intrinsic" skills value (can load compressed and uncompressed saves)
