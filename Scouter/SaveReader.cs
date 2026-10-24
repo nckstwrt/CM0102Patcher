@@ -442,6 +442,7 @@ namespace CM0102Scout
             dataTable.Columns.Add("Position", typeof(string));
             dataTable.Columns.Add("CA", typeof(int));
             dataTable.Columns.Add("PA", typeof(int));
+            dataTable.Columns.Add("Room", typeof(int));
             dataTable.Columns.Add("Value", typeof(int));
             dataTable.Columns.Add("Acceleration", typeof(sbyte));
             dataTable.Columns.Add("Aggression", typeof(sbyte));
@@ -729,7 +730,7 @@ namespace CM0102Scout
                         }
                     }
 
-                    dataTable.Rows.Add(staff.staffId, name, age, club, nationality, second_nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, staff.value,
+                    dataTable.Rows.Add(staff.staffId, name, age, club, nationality, second_nationality, player.ShortPosition(), player.CurrentAbility, player.PotentialAbility, player.PotentialAbility - player.CurrentAbility, staff.value,
                         player.Acceleration,
                         player.Aggression,
                         player.Agility,
@@ -798,7 +799,253 @@ namespace CM0102Scout
 
         public void Dispose()
         {
-            cfs.Dispose();
+            if (cfs != null)
+            {
+                cfs.Dispose();
+                cfs = null;
+            }
+        }
+
+        /// <summary>
+        /// Read the installed game's Data folder (index.dat and the .dat files next to it),
+        /// the same records a save contains, so the scouter can rank players without a save.
+        /// </summary>
+        public static SaveReader FromDatabase(string indexFile)
+        {
+            var reader = new SaveReader(false);
+            reader.LoadFromDatabase(indexFile);
+            return reader;
+        }
+
+        private SaveReader(bool unused)
+        {
+        }
+
+        void LoadFromDatabase(string indexFile)
+        {
+            var history = new HistoryLoader();
+            history.Load(indexFile, true, true);
+            var dir = Path.GetDirectoryName(indexFile);
+
+            foreach (var name in history.first_names)
+                firstNames.Add(TextOf(name.Name));
+            foreach (var name in history.second_names)
+                secondNames.Add(TextOf(name.Name));
+            foreach (var name in history.common_names)
+                commonNames.Add(TextOf(name.Name));
+
+            gameDate = ReadGameDate(dir);
+
+            foreach (var club in history.club)
+            {
+                clubs[club.ID] = new Club
+                {
+                    clubID = club.ID,
+                    name = TextOf(club.Name),
+                    shortName = TextOf(club.ShortName)
+                };
+            }
+
+            foreach (var nation in history.nation)
+            {
+                nations[nation.ID] = new Nation
+                {
+                    nationID = nation.ID,
+                    name = TextOf(nation.Name),
+                    shortName = TextOf(nation.ShortName),
+                    nationality = TextOf(nation.Nationality)
+                };
+            }
+
+            var contractFile = Path.Combine(dir, "contract.dat");
+            if (File.Exists(contractFile))
+            {
+                foreach (var contract in ReadContracts(contractFile))
+                {
+                    if (!contracts.ContainsKey(contract.ID))
+                        contracts[contract.ID] = contract;
+                }
+            }
+
+            foreach (var member in history.staff)
+            {
+                if (member.Player < 0)
+                    continue;
+                var staff = new Staff();
+                staff.staffId = member.ID;
+                staff.firstName = member.FirstName;
+                staff.secondName = member.SecondName;
+                staff.commonName = member.CommonName;
+                staff.playerId = member.Player;
+                staff.value = member.Value;
+                staff.determination = member.Determination;
+                staff.dob = member.DateOfBirth == null
+                    ? new DateTime(1900, 1, 1)
+                    : CMDate(member.DateOfBirth.Day, member.DateOfBirth.Year, member.DateOfBirth.LeapYear);
+                staff.nationID = member.Nation;
+                staff.second_nationID = member.SecondNation;
+                staff.clubID = member.ClubJob;
+                playerToStaffList[staff.playerId] = staff;
+                staffList[staff.staffId] = staff;
+            }
+
+            foreach (var player in history.players)
+                players.Add(CopyPlayer(player));
+        }
+
+        static string TextOf(byte[] bytes)
+        {
+            if (bytes == null)
+                return "";
+            int length = Array.IndexOf(bytes, (byte)0);
+            if (length < 0)
+                length = bytes.Length;
+            return Encoding.GetEncoding("ISO-8859-1").GetString(bytes, 0, length);
+        }
+
+        static DateTime ReadGameDate(string dir)
+        {
+            var fallback = new DateTime(2001, 7, 1);
+            var path = Path.Combine(dir, "general.dat");
+            if (!File.Exists(path))
+                return fallback;
+            var bytes = File.ReadAllBytes(path);
+            if (bytes.Length < 3950)
+                return fallback;
+            try
+            {
+                var day = BitConverter.ToInt16(bytes, 3944);
+                var year = BitConverter.ToInt16(bytes, 3946);
+                var leap = BitConverter.ToInt16(bytes, 3948);
+                if (year < 1900 || year > 2200)
+                    return fallback;
+                return new DateTime(year, 1, 1).AddDays(day);
+            }
+            catch
+            {
+                return fallback;
+            }
+        }
+
+        static List<Contract> ReadContracts(string fileName)
+        {
+            var bytes = File.ReadAllBytes(fileName);
+            var list = new List<Contract>();
+            if (bytes.Length < 8)
+                return list;
+            int preamble = BitConverter.ToInt32(bytes, 0);
+            int count = BitConverter.ToInt32(bytes, 4);
+            int start = 8;
+            if (preamble > 0 && preamble < 100000)
+            {
+                start = 8 + preamble * 21;
+                if (start >= 4 && start <= bytes.Length)
+                    count = BitConverter.ToInt32(bytes, start - 4);
+            }
+            if (count <= 0 || start < 0)
+                return list;
+            for (int i = 0; i < count; i++)
+            {
+                int offset = start + i * ContractSize;
+                if (offset + ContractSize > bytes.Length)
+                    break;
+                var slice = new byte[ContractSize];
+                Buffer.BlockCopy(bytes, offset, slice, 0, ContractSize);
+                var ptr = Marshal.AllocHGlobal(ContractSize);
+                try
+                {
+                    Marshal.Copy(slice, 0, ptr, ContractSize);
+                    list.Add((Contract)Marshal.PtrToStructure(ptr, typeof(Contract)));
+                }
+                finally
+                {
+                    Marshal.FreeHGlobal(ptr);
+                }
+            }
+            return list;
+        }
+
+        static Player CopyPlayer(TPlayer source)
+        {
+            return new Player
+            {
+                ID = source.ID,
+                SquadNumber = source.SquadNumber,
+                CurrentAbility = (short)source.CurrentAbility,
+                PotentialAbility = source.PotentialAbility,
+                HomeReputation = (short)source.HomeReputation,
+                CurrentReputation = (short)source.CurrentReputation,
+                WorldReputation = (short)source.WorldReputation,
+                Goalkeeper = source.Goalkeeper,
+                Sweeper = source.Sweeper,
+                Defender = source.Defender,
+                DefensiveMidfielder = source.DefensiveMidfielder,
+                Midfielder = source.Midfielder,
+                AttackingMidfielder = source.AttackingMidfielder,
+                Attacker = source.Attacker,
+                WingBack = source.WingBack,
+                RightSide = source.RightSide,
+                LeftSide = source.LeftSide,
+                Central = source.Central,
+                FreeRole = source.FreeRole,
+                Acceleration = source.Acceleration,
+                Aggression = source.Aggression,
+                Agility = source.Agility,
+                Anticipation = source.Anticipation,
+                Balance = source.Balance,
+                Bravery = source.Bravery,
+                Consistency = source.Consistency,
+                Corners = source.Corners,
+                Crossing = source.Crossing,
+                Decisions = source.Decisions,
+                Dirtiness = source.Dirtiness,
+                Dribbling = source.Dribbling,
+                Finishing = source.Finishing,
+                Flair = source.Flair,
+                FreeKicks = source.FreeKicks,
+                Handling = source.Handling,
+                Heading = source.Heading,
+                ImportantMatches = source.ImportantMatches,
+                InjuryProneness = source.InjuryProneness,
+                Jumping = source.Jumping,
+                Leadership = source.Leadership,
+                LeftFoot = source.LeftFoot,
+                LongShots = source.LongShots,
+                Marking = source.Marking,
+                Movement = source.Movement,
+                NaturalFitness = source.NaturalFitness,
+                OneOnOnes = source.OneOnOnes,
+                PlayerPace = source.PlayerPace,
+                Passing = source.Passing,
+                Penalties = source.Penalties,
+                Positioning = source.Positioning,
+                Reflexes = source.Reflexes,
+                RightFoot = source.RightFoot,
+                Stamina = source.Stamina,
+                Strength = source.Strength,
+                Tackling = source.Tackling,
+                Teamwork = source.Teamwork,
+                Technique = source.Technique,
+                ThrowIns = source.ThrowIns,
+                Versatility = source.Versatility,
+                Vision = source.Vision,
+                WorkRate = source.WorkRate,
+                PlayerMorale = source.PlayerMorale
+            };
+        }
+
+        static DateTime CMDate(short day, short year, int leapYear)
+        {
+            if (year < 1900 || year > 2200)
+                return new DateTime(1900, 1, 1);
+            try
+            {
+                return new DateTime(year, 1, 1).AddDays(day);
+            }
+            catch
+            {
+                return new DateTime(year, 1, 1);
+            }
         }
 
         List<byte[]> ReadBlocks(string blockName, int blockSize, bool contractSpecific = false)

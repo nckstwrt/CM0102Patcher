@@ -95,7 +95,7 @@
             this.buttonSaveScouter.Name = "buttonSaveScouter";
             this.buttonSaveScouter.Size = new System.Drawing.Size(166, 24);
             this.buttonSaveScouter.TabIndex = 4;
-            this.buttonSaveScouter.Text = "Save Scouter...";
+            this.buttonSaveScouter.Text = "Player search...";
             this.buttonSaveScouter.UseVisualStyleBackColor = true;
             this.buttonSaveScouter.Click += new System.EventHandler(this.buttonSaveScouter_Click);
             // 

@@ -12,6 +12,7 @@ namespace CM0102Patcher.Scouter
     public partial class PlayerSearch : Form
     {
         public string RowFilter = "";
+        public string Sort = "PA DESC";
 
         public PlayerSearch()
         {
@@ -19,7 +20,7 @@ namespace CM0102Patcher.Scouter
 
             AddEnterKeyHook(this);
 
-            var filterCols = new string[] { "", "Acceleration", "Aggression", "Agility", "Anticipation", "Balance", "Bravery", "Consistency", "Corners", "Creativity", "Crossing", "Decisions", "Determination",
+            var filterCols = new string[] { "", "Room", "Acceleration", "Aggression", "Agility", "Anticipation", "Balance", "Bravery", "Consistency", "Corners", "Creativity", "Crossing", "Decisions", "Determination",
                                             "Dirtiness", "Dribbling", "Finishing", "Flair", "Free Kicks", "Handling", "Heading", "Important Matches", "Influence", "Injury Proneness", "Jumping", "Left Foot",
                                             "Long Shots", "Marking", "Natural Fitness", "Off The Ball", "One On Ones", "Pace", "Passing", "Penalties", "Positioning", "Reflexes", "Right Foot", "Stamina", "Strength",
                                             "Tackling", "Teamwork", "Technique", "Throw Ins", "Versatility","Work Rate", "Player Morale" };
@@ -269,6 +270,16 @@ namespace CM0102Patcher.Scouter
                 RowFilter += string.Format(") ");
             }
             Hide();
+        }
+
+        // Wonderkids: high potential, still young. Same kind of cut CM Scout is used for.
+        public void ApplyBestPotential()
+        {
+            ResetControls(this);
+            numericUpDownPAMin.Value = 150;
+            numericUpDownMaxAge.Value = 21;
+            Sort = "PA DESC";
+            buttonApply_Click(this, new EventArgs());
         }
 
         private void buttonReset_Click(object sender, EventArgs e)
