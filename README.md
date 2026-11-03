@@ -1,4 +1,4 @@
-# CM0102Patcher v2.31
+# CM0102Patcher v2.32
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -8,33 +8,36 @@ https://github.com/nckstwrt/CM0102Patcher/releases
 
 ## Description
 
-![alt text](https://images2.imgbox.com/27/8e/3BVCthel_o.png)
+![](WebImages/Version.png)
 
 It also has a tools section with things like a patch applier that can apply .patch files from things like Flex 2 or patch files made with "fc /b cm0102_original.exe cm0102_patched.exe > newpatch.patch"
 
-![alt text](https://i.imgur.com/QtmWs5O.png)
+![](WebImages/Tools.png)
 
 An unfinished scouter, based on CM Scout, but allows you to view and sort by the "intrinsic" skills value (can load compressed and uncompressed saves)
 
-![alt text](https://i.imgur.com/w5E8SGO.png)
+![](WebImages/Scouter.png)
 
 Also there is a little officials.dat patcher for patching up referees as per recent discussions on getting too many red cards from recent updates:
 
-![alt text](https://i.imgur.com/xdWqNTy.png)
+![](WebImages/RefPatcher.png)
 
 The RGN Image Converter:
 
-![alt text](https://i.imgur.com/10X4RvP.png)
+![](WebImages/ImageConverter.png)
 
 Competition History Editor:
 
-![alt text](https://i.imgur.com/BKAvFzB.png)
+![](WebImages/CompHistoryEditor.png)
 
 Also allows you to add a fourth column to the attributes screen to show a players hidden attributes:
 
-![alt text](https://i.imgur.com/4LD4Gnu.png)
+![](WebImages/Bartez.png)
 
 ## Updates
+
+v2.32:
+* Quick updates for October 2026 Data Update
 
 v2.31:
 * Quick updates for 2025
