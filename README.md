@@ -1,4 +1,4 @@
-# CM0102Patcher v2.32
+# CM0102Patcher v2.33
 
 https://champman0102.co.uk/showthread.php?t=11661
 
@@ -35,6 +35,9 @@ Also allows you to add a fourth column to the attributes screen to show a player
 ![](WebImages/Bartez.png)
 
 ## Updates
+
+v2.33:
+* International Cup Fixes for 2026 
 
 v2.32:
 * Quick updates for October 2026 Data Update
